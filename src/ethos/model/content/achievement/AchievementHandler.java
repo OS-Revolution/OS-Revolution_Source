@@ -187,6 +187,10 @@ public class AchievementHandler {
             Achievements.increase(player, AchievementType.SLAY_BABY_DRAGONS, 1);
         else if (name.contains("crab"))
             Achievements.increase(player, AchievementType.SLAY_ROCK_CRABS, 1);
+        else if (name.contains("cow"))
+            Achievements.increase(player, AchievementType.SLAY_COWS, 1);
+        else if (name.contains("chaos"))
+            Achievements.increase(player, AchievementType.SLAY_CHAOS_DRUIDS, 1);
         else if (name.contains("chicken"))
             Achievements.increase(player, AchievementType.SLAY_CHICKENS, 1);
         List<String> checked = new ArrayList<>();

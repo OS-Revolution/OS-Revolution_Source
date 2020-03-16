@@ -14,7 +14,7 @@ public class Rules extends Command {
 
 	@Override
 	public void execute(Player c, String input) {
-		c.getPA().sendFrame126("https://discord.io/mysticps", 12000);
+		c.getPA().sendFrame126("https://www.os-revolution.com/forum", 12000);
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class MysteryBox extends CycleEvent {
                 Arrays.asList(
                 		new GameItem(4566),
                         new GameItem(452, 45),
-                        new GameItem(6739, 1),
+                        //new GameItem(6739, 1), Dragon Hatchet
                         new GameItem(71, 20),
                         new GameItem(12439),
                         new GameItem(12397),
@@ -198,7 +198,7 @@ public class MysteryBox extends CycleEvent {
         items.put(Rarity.RARE,
                 Arrays.asList(
                         new GameItem(11818, 1),
-                        new GameItem(995, 10000000),
+                        new GameItem(995, 10000000),//gp
                         new GameItem(2996, 600),
                         new GameItem(12437, 1),
                         new GameItem(12424, 1),

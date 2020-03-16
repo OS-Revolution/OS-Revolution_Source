@@ -27,7 +27,7 @@ public class DailyLogin {
 		c.LoginStreak++;
 		switch(c.LoginStreak) {
 		case 1: //1 login
-			c.getItems().addItem(995, 50000);
+			c.getItems().addItem(995, 100000);
 			c.sendMessage("You have logged in for the first time! Log in tomorrow for a better reward");
 			break;
 		case 2: //2 logins

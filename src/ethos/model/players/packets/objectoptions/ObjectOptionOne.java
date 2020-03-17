@@ -408,6 +408,27 @@ public class ObjectOptionOne {
 			}
 			c.getShops().openShop(116);
 			break;
+		case 9368:
+			c.getPA().movePlayer(1693, 3794, 0);
+			break;
+			
+			//Dzone doors
+		case 12719://First grass zone
+			c.getPA().movePlayer(2923, 5473, 0);
+			break;
+		case 11987://Second grass zone
+			c.getPA().movePlayer(2910, 5482, 0);
+			break;
+		case 12617://Ice zone
+			c.getPA().movePlayer(2901, 5470, 0);
+			break;
+		case 12639://Rock zone
+			c.getPA().movePlayer(2913, 5460, 0);
+			break;
+			
+			
+			
+			
 		case 4150:
 			c.getPA().spellTeleport(2855, 3543, 0, false);
 		case 23115:// from bobs

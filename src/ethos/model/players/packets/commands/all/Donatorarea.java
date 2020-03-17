@@ -11,7 +11,7 @@ import ethos.model.players.packets.commands.Command;
  * 
  * @author Emiel
  */
-public class Dice extends Command {
+public class Donatorarea extends Command {
 
 	@Override
 	public void execute(Player c, String input) {
@@ -26,13 +26,13 @@ public class Dice extends Command {
 			c.sendMessage("You can't use this command in the wilderness.");
 			return;
 		}
-		c.getPA().spellTeleport(3165, 3483, 0, false);
+		c.getPA().spellTeleport(2910, 5468, 0, false);
 
 	}
 
 	@Override
 	public Optional<String> getDescription() {
-		return Optional.of("Shows a list of all available dice hosts");
+		return Optional.of("Teleports you to the new Donator Zone");
 	}
 
 }

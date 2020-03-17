@@ -11,7 +11,7 @@ import ethos.model.players.packets.commands.Command;
  * 
  * @author Emiel
  */
-public class Dice extends Command {
+public class Funpk extends Command {
 
 	@Override
 	public void execute(Player c, String input) {
@@ -26,7 +26,7 @@ public class Dice extends Command {
 			c.sendMessage("You can't use this command in the wilderness.");
 			return;
 		}
-		c.getPA().spellTeleport(3165, 3483, 0, false);
+		c.getPA().spellTeleport(1671, 3793, 0, false);
 
 	}
 

@@ -1,4 +1,4 @@
-package ethos.model.players.packets.commands.all;
+package ethos.model.players.packets.commands.owner;
 
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ import ethos.model.players.packets.commands.Command;
  * 
  * @author Emiel
  */
-public class Funpk extends Command {
+public class Donatorarea extends Command {
 
 	@Override
 	public void execute(Player c, String input) {
@@ -26,13 +26,13 @@ public class Funpk extends Command {
 			c.sendMessage("You can't use this command in the wilderness.");
 			return;
 		}
-		c.getPA().spellTeleport(1671, 3793, 0, false);
+		c.getPA().spellTeleport(2910, 5468, 0, false);
 
 	}
 
 	@Override
 	public Optional<String> getDescription() {
-		return Optional.of("Takes you to Funpk area");
+		return Optional.of("Teleports you to the new Donator Zone");
 	}
 
 }

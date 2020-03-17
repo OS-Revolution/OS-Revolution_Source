@@ -1,4 +1,4 @@
-package ethos.model.players.packets.commands.all;
+package ethos.model.players.packets.commands.donator;
 
 import java.util.Optional;
 

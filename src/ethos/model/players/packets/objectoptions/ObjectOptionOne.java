@@ -434,9 +434,9 @@ public class ObjectOptionOne {
 			c.getPA().spellTeleport(2855, 3543, 0, false);
 		case 23115:// from bobs
 			if (c.absY == 2795 || c.absY == 2794 || c.absY == 2793 || c.absY == 2792 || c.absY == 2791) {
-				c.getPA().spellTeleport(3167, 5097, 0, false);
+				c.getPA().spellTeleport(2910, 5468, 0, false);
 			} else
-			c.getPA().spellTeleport(3092, 3485, 0, false);
+			c.getPA().spellTeleport(1644, 3673, 0, false);
 			break;
 		case 4950:
 			case 23095:

@@ -425,6 +425,7 @@ public class ObjectOptionOne {
 		case 12639://Rock zone
 			c.getPA().movePlayer(2913, 5460, 0);
 			break;
+			//End of new donator zone
 			
 			
 			

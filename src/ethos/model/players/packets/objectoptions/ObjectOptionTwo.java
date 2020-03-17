@@ -111,6 +111,20 @@ public class ObjectOptionTwo {
 			c.getPA().movePlayer(3507, 9494, 0);
 			break;
 			
+			//Donator Area doors
+		case 12617:
+			c.getPA().movePlayer(2905, 5470, 0);
+			break;
+		case 11987:
+			c.getPA().movePlayer(2910, 5478, 0);
+			break;
+		case 12719:
+			c.getPA().movePlayer(2918, 5473, 0);
+			break;
+		case 12639:
+			c.getPA().movePlayer(2913, 5465, 0);
+			break;
+			
 		case 2558:
 		case 8356://streequid
 			c.getPA().movePlayer(1255, 3568, 0);

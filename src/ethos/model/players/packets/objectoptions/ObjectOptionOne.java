@@ -55,7 +55,6 @@ import ethos.model.players.skills.Skill;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.crafting.JewelryMaking;
 import ethos.model.players.skills.hunter.Hunter;
-import ethos.model.players.skills.necromancy.Necromancy;
 import ethos.model.players.skills.runecrafting.Runecrafting;
 import ethos.model.players.skills.woodcutting.Tree;
 import ethos.model.players.skills.woodcutting.Woodcutting;
@@ -275,8 +274,8 @@ public class ObjectOptionOne {
 			c.getPA().resetAutocast();
 			return;
 		case 29241:
-			if (c.amDonated == 0 && !c.getRights().isOrInherits(Right.DONATOR)
-					&& !c.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+			if (c.amDonated == 0 && !c.getRightGroup().isOrInherits(Right.DONATOR)
+					&& !c.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
 				c.sendMessage("@red@You need to be a donator to use this feature.");
 				return;
 			}
@@ -1154,7 +1153,7 @@ public class ObjectOptionOne {
 		 * Dagannoth king entrance
 		 */
 		case 10230:
-			if (c.getRights().isOrInherits(Right.IRONMAN) || c.getRights().isOrInherits(Right.ULTIMATE_IRONMAN)) {
+			if (c.getRightGroup().isOrInherits(Right.IRONMAN) || c.getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN)) {
 				c.getPA().movePlayer(2899, 4449, 4);
 			} else {
 				c.getPA().movePlayer(2899, 4449, 0);
@@ -1345,7 +1344,7 @@ public class ObjectOptionOne {
 			break;
 		case 21578: // Stairs up
 		case 10:
-			if (!c.getRights().isOrInherits(Right.DONATOR)) {
+			if (!c.getRightGroup().isOrInherits(Right.DONATOR)) {
 				c.sendMessage("You must be <img=8><col=FFCC24>Donator</col> to enter the top floor.");
 				return;
 			}
@@ -1382,13 +1381,13 @@ public class ObjectOptionOne {
 			c.getPA().startTeleport(3092, 3485, 0, "modern", false);
 			break;
 		case 11803:
-			if (c.getRights().isOrInherits(Right.CONTRIBUTOR)) {
+			if (c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)) {
 				AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3577, 9927, 0, 2);
 				c.sendMessage("<img=4> Welcome to the donators only slayer cave.");
 			}
 			break;
 		case 17387:
-			if (c.getRights().isOrInherits(Right.CONTRIBUTOR)) {
+			if (c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)) {
 				AgilityHandler.delayEmote(c, "CLIMB_UP", 3092, 3485, 0, 2);
 			}
 			break;
@@ -2248,7 +2247,7 @@ public class ObjectOptionOne {
 					c.sendMessage("You have to wait another " + seconds + " seconds to use this altar.");
 					return;
 				}
-				if (c.getRights().isOrInherits(Right.CONTRIBUTOR)) {
+				if (c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)) {
 					c.specRestore = 120;
 					c.specAmount = 10.0;
 					c.getItems().addSpecialBar(c.playerEquipment[c.playerWeapon]);

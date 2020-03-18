@@ -37,7 +37,7 @@ public class Ipban extends Command {
 					c.sendMessage("You cannot IP Ban yourself.");
 					return;
 				}
-				if (c2.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+				if (c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
 					c.sendMessage("You cannot ban this player.");
 					return;
 				}

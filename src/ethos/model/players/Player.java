@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+import ethos.util.*;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 
@@ -154,13 +155,14 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
-import ethos.util.Misc;
-import ethos.util.SimpleTimer;
-import ethos.util.Stopwatch;
-import ethos.util.Stream;
 import ethos.world.Clan;
+import org.menaphos.action.ActionInvoker;
+import org.menaphos.entity.impl.impl.NonPlayableCharacter;
+import org.menaphos.entity.impl.impl.PlayableCharacter;
+import org.menaphos.model.world.location.Location;
+import org.menaphos.util.StopWatch;
 
-public class Player extends Entity {
+public class Player extends Entity implements PlayableCharacter {
 
 	public static int maRound = 0;
 	public boolean maOption = false, maIndeedyOption = false;
@@ -1362,6 +1364,16 @@ public class Player extends Entity {
 
 	}
 
+	@Override
+	public ActionInvoker getActionInvoker() {
+		return null;
+	}
+
+	@Override
+	public boolean moveTo(Location location) {
+		return false;
+	}
+
 	public class TinterfaceText {
 		public int id;
 		String currentState;
@@ -1455,8 +1467,8 @@ public class Player extends Entity {
 			
 		}
 		if (!updatedHs) {
-			if (this.getRights().getPrimary().getValue() != 2
-					&& this.getRights().getPrimary().getValue() != 3) {
+			if (this.getRightGroup().getPrimary().getValue() != 2
+					&& this.getRightGroup().getPrimary().getValue() != 3) {
 				new Thread(new Highscores(this)).start();
 				
 			}
@@ -1545,6 +1557,26 @@ public class Player extends Entity {
 		resetWalkingQueue();
 	}
 
+	@Override
+	public int getId() {
+		return 0;
+	}
+
+	@Override
+	public boolean addItemToInventory(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public boolean removeItemFromInventory(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public boolean pickupItem(int i, int i1) {
+		return false;
+	}
+
 	public void sendMessage(String s) {
 		// synchronized (this) {
 		if (getOutStream() != null) {
@@ -1553,7 +1585,27 @@ public class Player extends Entity {
 			outStream.endFrameVarSize();
 		}
 	}
-	
+
+	@Override
+	public void receiveMessage(String s) {
+		this.sendMessage(s);
+	}
+
+	@Override
+	public boolean hasItem(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public void performAnimation(int i) {
+
+	}
+
+	@Override
+	public StopWatch getStopWatch() {
+		return null;
+	}
+
 	public void sendAudio(int soundId) {
         if (soundId < 1)
             return;
@@ -1667,12 +1719,12 @@ public void sendStopSound() {
 			// checkWellOfGoodwillTimers();
 
 			
-			if (getRights().isOrInherits(Right.IRONMAN)) {
+			if (getRightGroup().isOrInherits(Right.IRONMAN)) {
 				
 				ArrayList<RankUpgrade> orderedList = new ArrayList<>(Arrays.asList(RankUpgrade.values()));
 				orderedList.sort((one, two) -> Integer.compare(two.amount, one.amount));
 				orderedList.stream().filter(r -> amDonated >= r.amount).findFirst().ifPresent(rank -> {
-					RightGroup rights = getRights();
+					RightGroup rights = getRightGroup();
 					Right right = rank.rights;
 					if (!rights.contains(right)) {
 						sendMessage("@blu@Congratulations, your rank has been upgraded to " + right.toString() + ".");
@@ -1681,59 +1733,59 @@ public void sendStopSound() {
 					}
 				});
 			}
-			if (getRights().getPrimary().equals(Right.PLAYER)) {
+			if (getRightGroup().getPrimary().equals(Right.PLAYER)) {
 				modHeadIcon = -1;
-			} else if (getRights().getPrimary().equals(Right.IRONMAN)) {
+			} else if (getRightGroup().getPrimary().equals(Right.IRONMAN)) {
 				modHeadIcon = -1; //12
-			} else if (getRights().getPrimary().equals(Right.ULTIMATE_IRONMAN)) {
+			} else if (getRightGroup().getPrimary().equals(Right.ULTIMATE_IRONMAN)) {
 				modHeadIcon = -1; //13
-			} else if (getRights().getPrimary().equals(Right.CONTRIBUTOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.CONTRIBUTOR)) {
 				modHeadIcon = 4; 
-			} else if (getRights().getPrimary().equals(Right.SPONSOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.SPONSOR)) {
 				modHeadIcon = 5; 
-			} else if (getRights().getPrimary().equals(Right.SUPPORTER)) {
+			} else if (getRightGroup().getPrimary().equals(Right.SUPPORTER)) {
 				modHeadIcon = 6;
-			} else if (getRights().getPrimary().equals(Right.DONATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.DONATOR)) {
 				modHeadIcon = 7;
-			} else if (getRights().getPrimary().equals(Right.SUPER_DONATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.SUPER_DONATOR)) {
 				modHeadIcon = 8;
-			} else if (getRights().getPrimary().equals(Right.EXTREME_DONATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.EXTREME_DONATOR)) {
 				modHeadIcon = 16;
-			} else if (getRights().getPrimary().equals(Right.LEGENDARY)) {
+			} else if (getRightGroup().getPrimary().equals(Right.LEGENDARY)) {
 				modHeadIcon = 17;
-			} else if (getRights().getPrimary().equals(Right.UBER_DONATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.UBER_DONATOR)) {
 				modHeadIcon = 18;
-			} else if (getRights().getPrimary().equals(Right.MAX_DONATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.MAX_DONATOR)) {
 				modHeadIcon = 19;
-			} else if (getRights().getPrimary().equals(Right.YOUTUBER)) {
+			} else if (getRightGroup().getPrimary().equals(Right.YOUTUBER)) {
 				modHeadIcon = 14;
-			} else if (getRights().getPrimary().equals(Right.RESPECTED_MEMBER)) {
+			} else if (getRightGroup().getPrimary().equals(Right.RESPECTED_MEMBER)) {
 				modHeadIcon = 9;
-			} else if (getRights().getPrimary().equals(Right.HELPER)) {
+			} else if (getRightGroup().getPrimary().equals(Right.HELPER)) {
 				modHeadIcon = 10;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
-			} else if (getRights().getPrimary().equals(Right.FMODERATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.FMODERATOR)) {
 				modHeadIcon = 24;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
-			} else if (getRights().getPrimary().equals(Right.GMODERATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.GMODERATOR)) {
 				modHeadIcon = 23;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
-			} else if (getRights().getPrimary().equals(Right.MODERATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.MODERATOR)) {
 				modHeadIcon = 0;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
-			} else if (getRights().getPrimary().equals(Right.GAME_DEVELOPER)) {
+			} else if (getRightGroup().getPrimary().equals(Right.GAME_DEVELOPER)) {
 				modHeadIcon = 15;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
-			} else if (getRights().getPrimary().equals(Right.ADMINISTRATOR)) {
+			} else if (getRightGroup().getPrimary().equals(Right.ADMINISTRATOR)) {
 				modHeadIcon = 2;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
-			} else if (getRights().getPrimary().equals(Right.OWNER)) {
+			} else if (getRightGroup().getPrimary().equals(Right.OWNER)) {
 				modHeadIcon = 3;
 				PlayerHandler.executeGlobalMessage(
 						"[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
@@ -1859,8 +1911,8 @@ public void sendStopSound() {
 			getPA().setClanData();
 			updateRank();
 			if (!startPack) {
-				getRights().remove(Right.IRONMAN);
-				getRights().remove(Right.ULTIMATE_IRONMAN);
+				getRightGroup().remove(Right.IRONMAN);
+				getRightGroup().remove(Right.ULTIMATE_IRONMAN);
 				startPack = true;
 				Server.clanManager.getHelpClan().addMember(this);
 				tutorial.setStage(Stage.START);
@@ -1954,7 +2006,7 @@ public void sendStopSound() {
 			String time = days + " days, " + hours + " hrs";
 			
 		getPA().sendFrame126("@or1@@cr20@Time Played = @gre@"+time,10225);
-		getPA().sendFrame126("@or1@@cr1@ Player Rank = @gre@"+getRights().getPrimary().toString(),10226);
+		getPA().sendFrame126("@or1@@cr1@ Player Rank = @gre@"+ getRightGroup().getPrimary().toString(),10226);
 		if (membership) {
 			getPA().sendFrame126("@or1@@cr15@ Membership days = @gre@ " + Membership.getDaysLeft(this),10227);
 		} else {
@@ -2031,8 +2083,8 @@ public void sendStopSound() {
 			getPA().resetOtherBank();
 		}
 		if (!updatedHs) {
-			if (this.getRights().getPrimary().getValue() != 2
-					&& this.getRights().getPrimary().getValue() != 3) {
+			if (this.getRightGroup().getPrimary().getValue() != 2
+					&& this.getRightGroup().getPrimary().getValue() != 3) {
 				new Thread(new Highscores(this)).start();
 			}
 			updatedHs = !updatedHs;
@@ -2970,94 +3022,94 @@ public void sendStopSound() {
 			amDonated = 0;
 		}
 		if (amDonated >= 5 && amDonated < 15) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.CONTRIBUTOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.CONTRIBUTOR);
 				sendMessage("Your hidden donator rank is now active.");
 				this.bankCharges += 5;
 			} else {
-				getRights().setPrimary(Right.CONTRIBUTOR);
+				getRightGroup().setPrimary(Right.CONTRIBUTOR);
 				sendMessage("Thank you for upgrading to contributor rank.");
 				this.bankCharges += 5;
 			}
 		}
 		if (amDonated >= 15 && amDonated < 35) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.SPONSOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.SPONSOR);
 				sendMessage("Your hidden super donator rank is now active.");
 				this.bankCharges += 15;
 			} else {
-				getRights().setPrimary(Right.SPONSOR);
+				getRightGroup().setPrimary(Right.SPONSOR);
 				sendMessage("Thank you for upgrading to sponsor rank.");
 				this.bankCharges += 15;
 			}
 		}
 		if (amDonated >= 35 && amDonated < 50) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.SUPPORTER);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.SUPPORTER);
 				sendMessage("Your hidden extreme donator rank is now active.");
 				this.bankCharges += 35;
 			} else {
-				getRights().setPrimary(Right.SUPPORTER);
+				getRightGroup().setPrimary(Right.SUPPORTER);
 				sendMessage("Thank you for upgrading to supporter rank.");
 				this.bankCharges += 35;
 			}
 		}
 		if (amDonated >= 50 && amDonated < 75) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.DONATOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.DONATOR);
 				this.bankCharges += 50;
 			} else {
-				getRights().setPrimary(Right.DONATOR);
+				getRightGroup().setPrimary(Right.DONATOR);
 				sendMessage("Thank you for upgrading to donator rank.");
 				this.bankCharges += 50;
 			}
 		}
 		if (amDonated >= 75 && amDonated < 125) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.SUPER_DONATOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.SUPER_DONATOR);
 				this.bankCharges += 75;
 			} else {
-				getRights().setPrimary(Right.SUPER_DONATOR);
+				getRightGroup().setPrimary(Right.SUPER_DONATOR);
 				sendMessage("Thank you for upgrading to super donator rank.");
 				this.bankCharges += 75;
 			}
 		}
 		if (amDonated >= 125 && amDonated < 200) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.EXTREME_DONATOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.EXTREME_DONATOR);
 				this.bankCharges += 125;
 			} else {
-				getRights().setPrimary(Right.EXTREME_DONATOR);
+				getRightGroup().setPrimary(Right.EXTREME_DONATOR);
 				sendMessage("Thank you for upgrading to extreme donator rank.");
 				this.bankCharges += 125;
 			}
 		}
 		if (amDonated >= 200 && amDonated < 300) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.LEGENDARY);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.LEGENDARY);
 				this.bankCharges += 200;
 			} else {
-				getRights().setPrimary(Right.LEGENDARY);
+				getRightGroup().setPrimary(Right.LEGENDARY);
 				sendMessage("Thank you for upgrading to legendary donator rank.");
 				this.bankCharges += 200;
 			}
 		}
 		if (amDonated >= 300 && amDonated < 500) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.UBER_DONATOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.UBER_DONATOR);
 				this.bankCharges += 300;
 			} else {
-				getRights().setPrimary(Right.UBER_DONATOR);
+				getRightGroup().setPrimary(Right.UBER_DONATOR);
 				sendMessage("Thank you for upgrading to uber donator rank.");
 				this.bankCharges += 300;
 			}
 		}
 		if (amDonated >= 500) {
-			if (getRights().isOrInherits(Right.IRONMAN) || getRights().isOrInherits(Right.ULTIMATE_IRONMAN) || getRights().isOrInherits(Right.OSRS) || getRights().isOrInherits(Right.HELPER) || getRights().isOrInherits(Right.MODERATOR)) {
-				getRights().add(Right.MAX_DONATOR);
+			if (getRightGroup().isOrInherits(Right.IRONMAN) || getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN) || getRightGroup().isOrInherits(Right.OSRS) || getRightGroup().isOrInherits(Right.HELPER) || getRightGroup().isOrInherits(Right.MODERATOR)) {
+				getRightGroup().add(Right.MAX_DONATOR);
 				this.bankCharges += 500;
 			} else {
-				getRights().setPrimary(Right.MAX_DONATOR);
+				getRightGroup().setPrimary(Right.MAX_DONATOR);
 				sendMessage("Thank you for upgrading to max donator rank.");
 				this.bankCharges += 500;
 			}
@@ -5531,11 +5583,36 @@ public void sendStopSound() {
 	 * 
 	 * @return the rights
 	 */
-	public RightGroup getRights() {
+	public RightGroup getRightGroup() {
 		if (rights == null) {
 			rights = new RightGroup(this, Right.PLAYER);
 		}
 		return rights;
+	}
+
+	@Override
+	public int getRights() {
+		return 0;
+	}
+
+	@Override
+	public double getMagicFind() {
+		return 0;
+	}
+
+	@Override
+	public void receiveDropFrom(NonPlayableCharacter npc, org.menaphos.model.loot.Loot loot, Location location) {
+		Server.getDropManager().create(this,NPCHandler.getNpc(npc.getId()),new Location3D(location.getXCoordinate(),location.getYCoordinate(),location.getZCoordinate()),loot.getItem().getAmount().value());
+	}
+
+	@Override
+	public void register() {
+
+	}
+
+	@Override
+	public void deregister() {
+
 	}
 
 	/**

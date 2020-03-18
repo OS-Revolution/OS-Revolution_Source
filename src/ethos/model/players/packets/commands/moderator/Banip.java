@@ -43,7 +43,7 @@ public class Banip extends Command {
 			}
 
 			for (Player c2 : clientList) {
-				if (c2.getRights().isOrInherits(Right.ADMINISTRATOR) && !c.getRights().isOrInherits(Right.OWNER)) {
+				if (c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR) && !c.getRightGroup().isOrInherits(Right.OWNER)) {
 					continue;
 				}
 				punishments.add(new Punishment(PunishmentType.BAN, Long.MAX_VALUE, c2.playerName));

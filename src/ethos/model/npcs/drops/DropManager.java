@@ -579,23 +579,23 @@ public class DropManager {
 		} else if (player.summonId == 13326) {
 			modifier -= .15;
 		}
-		if (player.getRights().contains(Right.MAX_DONATOR)) {
+		if (player.getRightGroup().contains(Right.MAX_DONATOR)) {
 			modifier -= .15;
-		} else if (player.getRights().contains(Right.UBER_DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.UBER_DONATOR)) {
 			modifier -= .12;
-		} else if (player.getRights().contains(Right.LEGENDARY)) {
+		} else if (player.getRightGroup().contains(Right.LEGENDARY)) {
 			modifier -= .10;
-		} else if (player.getRights().contains(Right.EXTREME_DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.EXTREME_DONATOR)) {
 			modifier -= .08;
-		} else if (player.getRights().contains(Right.SUPER_DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.SUPER_DONATOR)) {
 			modifier -= .07;
-		} else if (player.getRights().contains(Right.DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.DONATOR)) {
 			modifier -= .06;
-		} else if (player.getRights().contains(Right.SUPPORTER)) {
+		} else if (player.getRightGroup().contains(Right.SUPPORTER)) {
 			modifier -= .05;
-		} else if (player.getRights().contains(Right.SPONSOR)) {
+		} else if (player.getRightGroup().contains(Right.SPONSOR)) {
 			modifier -= .04;
-		} else if (player.getRights().contains(Right.CONTRIBUTOR)) {
+		} else if (player.getRightGroup().contains(Right.CONTRIBUTOR)) {
 			modifier -= .03;
 		}
 		return modifier;
@@ -660,23 +660,23 @@ public class DropManager {
 		} else if (player.summonId == 13326) {
 			modifier += 15;
 		}
-		if (player.getRights().contains(Right.MAX_DONATOR)) {
+		if (player.getRightGroup().contains(Right.MAX_DONATOR)) {
 			modifier += 15;
-		} else if (player.getRights().contains(Right.UBER_DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.UBER_DONATOR)) {
 			modifier += 12;
-		} else if (player.getRights().contains(Right.LEGENDARY)) {
+		} else if (player.getRightGroup().contains(Right.LEGENDARY)) {
 			modifier += 10;
-		} else if (player.getRights().contains(Right.EXTREME_DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.EXTREME_DONATOR)) {
 			modifier += 8;
-		} else if (player.getRights().contains(Right.SUPER_DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.SUPER_DONATOR)) {
 			modifier += 7;
-		} else if (player.getRights().contains(Right.DONATOR)) {
+		} else if (player.getRightGroup().contains(Right.DONATOR)) {
 			modifier += 6;
-		} else if (player.getRights().contains(Right.SUPPORTER)) {
+		} else if (player.getRightGroup().contains(Right.SUPPORTER)) {
 			modifier += 5;
-		} else if (player.getRights().contains(Right.SPONSOR)) {
+		} else if (player.getRightGroup().contains(Right.SPONSOR)) {
 			modifier += 4;
-		} else if (player.getRights().contains(Right.CONTRIBUTOR)) {
+		} else if (player.getRightGroup().contains(Right.CONTRIBUTOR)) {
 			modifier += 3;
 		}
 		return modifier;

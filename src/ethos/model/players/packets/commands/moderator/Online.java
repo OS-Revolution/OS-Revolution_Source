@@ -18,7 +18,7 @@ public class Online extends Command {
 			c.sendMessage("There are no players online with the ip: " + input);
 			return;
 		}
-		if (matches.stream().anyMatch(player -> player.getRights().isOrInherits(Right.MODERATOR))) {
+		if (matches.stream().anyMatch(player -> player.getRightGroup().isOrInherits(Right.MODERATOR))) {
 			c.sendMessage("One of the players that match the credentials is a staff member.");
 			return;
 		}

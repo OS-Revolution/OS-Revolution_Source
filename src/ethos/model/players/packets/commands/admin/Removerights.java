@@ -34,12 +34,12 @@ public class Removerights extends Command {
 			player.sendMessage("The level of rights you've requested is unknown.");
 			return;
 		}
-		if (!player.getRights().isOrInherits(Right.OWNER) && player2.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+		if (!player.getRightGroup().isOrInherits(Right.OWNER) && player2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
 			player.sendMessage("Only owners can change the rights of admins and owners.");
 			return;
 		}
-		if (player2.getRights().contains(right)) {
-			player2.getRights().remove(right);
+		if (player2.getRightGroup().contains(right)) {
+			player2.getRightGroup().remove(right);
 			player.sendMessage("You have removed " + right.name() + " rights from " + player2.playerName);
 		} else {
 			player.sendMessage("This player does not have " + right.name() + " rights.");

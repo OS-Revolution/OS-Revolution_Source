@@ -19,7 +19,7 @@ public class Info extends Command {
 		Optional<Player> optionalPlayer = PlayerHandler.getOptionalPlayer(input);
 		if (optionalPlayer.isPresent()) {
 			Player c2 = optionalPlayer.get();
-			if (c2.getRights().contains(Right.MODERATOR)) {
+			if (c2.getRightGroup().contains(Right.MODERATOR)) {
 				c.sendMessage("You cannot do this to a member of staff.");
 				return;
 			}

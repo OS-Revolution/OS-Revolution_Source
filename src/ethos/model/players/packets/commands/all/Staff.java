@@ -22,8 +22,8 @@ public class Staff extends Command {
 		for (int i = 0; i < PlayerHandler.players.length; i++) {
 			if (PlayerHandler.players[i] != null) {
 				Player c2 = PlayerHandler.players[i];
-				if (c2.getRights().isOrInherits(Right.HELPER) || c2.getRights().isOrInherits(Right.MODERATOR) || c2.getRights().isOrInherits(Right.ADMINISTRATOR)
-						|| c2.getRights().isOrInherits(Right.OWNER)) {
+				if (c2.getRightGroup().isOrInherits(Right.HELPER) || c2.getRightGroup().isOrInherits(Right.MODERATOR) || c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)
+						|| c2.getRightGroup().isOrInherits(Right.OWNER)) {
 					sb.append(c2.playerName).append(", ");
 				}
 			}

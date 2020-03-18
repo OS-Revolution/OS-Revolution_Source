@@ -22,7 +22,6 @@ import ethos.model.minigames.rfd.RecipeForDisaster;
 import ethos.model.minigames.warriors_guild.WarriorsGuild;
 import ethos.model.npcs.NPC;
 import ethos.model.npcs.NPCHandler;
-import ethos.model.npcs.bosses.CorporealBeast;
 import ethos.model.npcs.bosses.Scorpia;
 import ethos.model.npcs.bosses.raids.Tekton;
 import ethos.model.npcs.bosses.skotizo.Skotizo;
@@ -1264,7 +1263,7 @@ public class AttackNPC {
 			if (c.getX() == NPCHandler.npcs[i].getX() && c.getY() == NPCHandler.npcs[i].getY()) {
 				c.getPA().walkTo(0, 1);
 			}
-			if (c.isInvisible() && !c.getRights().isOrInherits(Right.OWNER)) {
+			if (c.isInvisible() && !c.getRightGroup().isOrInherits(Right.OWNER)) {
 				c.sendMessage("You cannot attack npcs while being invisible.");
 				c.getCombat().resetPlayerAttack();
 				return;

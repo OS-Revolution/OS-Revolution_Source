@@ -141,7 +141,7 @@ public class Firemaking {
 				if (player.getItems().getItemCount(20693, false) > 0 || player.summonId == 20693) {
 					return;
 				}
-				int rights = player.getRights().getPrimary().getValue() - 1;
+				int rights = player.getRightGroup().getPrimary().getValue() - 1;
 				player.getItems().addItemUnderAnyCircumstance(20693, 1);
 				PlayerHandler.executeGlobalMessage("[@red@PET@bla@] @cr20@<col=255> <img="+rights+">" + player.playerName + "</col> received a Phoenix pet.");
 				DiscordMessager.sendLootations("[PET] " + player.playerName + " received a Phoenix pet.");

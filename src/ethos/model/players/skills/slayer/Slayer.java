@@ -222,7 +222,7 @@ public class Slayer {
 							this.consecutiveTasks == 100 ? m.getPointReward(4) : 
 							this.consecutiveTasks == 150 ? m.getPointReward(5) : 0;
 
-						RightGroup rights = player.getRights();
+						RightGroup rights = player.getRightGroup();
 						bonusPoints+= rights.contains(Right.LEGENDARY) ? 30 : 0 ;
 						bonusPoints+= rights.contains(Right.EXTREME_DONATOR) ? 15 : 0 ;
 						bonusPoints+= rights.contains(Right.SUPER_DONATOR) ? 10 : 0 ;
@@ -465,8 +465,8 @@ public class Slayer {
 	}
 	public void cancelTask() {
 		int rankPoints = 
-			player.getRights().isOrInherits(Right.CONTRIBUTOR) ? 10 : 
-			player.getRights().isOrInherits(Right.DONATOR) ? 0 : 1;
+			player.getRightGroup().isOrInherits(Right.CONTRIBUTOR) ? 10 :
+			player.getRightGroup().isOrInherits(Right.DONATOR) ? 0 : 1;
 		
 		if (!task.isPresent()) {
 			player.sendMessage("You must have a task to cancel first.");
@@ -489,8 +489,8 @@ public class Slayer {
 	}
 
 	public void removeTask() {
-		int rankPoints = player.getRights().getPrimary() == Right.EXTREME_DONATOR ? 70
-				: player.getRights().getPrimary() == Right.LEGENDARY ? 50 : 100;
+		int rankPoints = player.getRightGroup().getPrimary() == Right.EXTREME_DONATOR ? 70
+				: player.getRightGroup().getPrimary() == Right.LEGENDARY ? 50 : 100;
 		if (!task.isPresent()) {
 			player.sendMessage("You must have a task to remove first.");
 			return;

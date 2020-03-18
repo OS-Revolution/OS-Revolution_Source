@@ -23,7 +23,6 @@ import ethos.event.impl.WheatPortalEvent;
 import ethos.model.content.RunePouch;
 import ethos.model.content.LootingBag.LootingBag;
 import ethos.model.content.achievement_diary.wilderness.WildernessDiaryEntry;
-import ethos.model.content.bonus.DoubleExperience;
 import ethos.model.content.instances.InstancedArea;
 import ethos.model.content.instances.InstancedAreaManager;
 import ethos.model.content.kill_streaks.Killstreak;
@@ -1348,7 +1347,7 @@ public void sendFrame107() {
 		else
 			sendFrame36(116, 0);
 
-		if (c.inWild() && !(c.getRights().isOrInherits(Right.ADMINISTRATOR))) {
+		if (c.inWild() && !(c.getRightGroup().isOrInherits(Right.ADMINISTRATOR))) {
 			c.sendMessage("You can't bank in the wilderness!");
 			return;
 		}
@@ -1830,7 +1829,7 @@ public void sendFrame107() {
 												: Config.DOUBLE_PKP ? 8 : 4;
 										playerKiller.refreshQuestTab(0);
 									}
-									RightGroup rights = playerKiller.getRights();
+									RightGroup rights = playerKiller.getRightGroup();
 									int bonuspkp = 0;
 									bonuspkp+= rights.contains(Right.LEGENDARY) ? 4 : 0 ;
 									bonuspkp+= rights.contains(Right.EXTREME_DONATOR) ? 3 : 0 ;
@@ -2345,7 +2344,7 @@ public void sendFrame107() {
 			c.sendMessage("You must finish what you're doing before you can teleport.");
 			return false;
 		}
-		if (c.isInJail() && !(c.getRights().isOrInherits(Right.MODERATOR))) {
+		if (c.isInJail() && !(c.getRightGroup().isOrInherits(Right.MODERATOR))) {
 			c.sendMessage("You cannot teleport out of jail.");
 			return false;
 		}
@@ -2426,14 +2425,14 @@ public void sendFrame107() {
 			c.sendMessage("The cold from the ice-path is preventing you from teleporting.");
 			return;
 		}
-		if (c.isInJail() && !(c.getRights().isOrInherits(Right.MODERATOR))) {
+		if (c.isInJail() && !(c.getRightGroup().isOrInherits(Right.MODERATOR))) {
 			c.sendMessage("You cannot teleport out of jail.");
 			return;
 		}
 		if (c.isDead) {
 			return;
 		}
-		if (c.inWild() && !(c.getRights().isOrInherits(Right.MODERATOR))) {
+		if (c.inWild() && !(c.getRightGroup().isOrInherits(Right.MODERATOR))) {
 			if (!teleportType.equals("glory") && !teleportType.equals("obelisk")) {
 				if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
 					c.sendMessage(
@@ -3586,13 +3585,13 @@ public void sendFrame107() {
 
 		// If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
 		// off
-		if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRights().isOrInherits(Right.CONTRIBUTOR)
+		if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
 				&& Config.BONUS_WEEKEND == false) {
 			amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED;
 
 			// If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
 			// on
-		} else if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRights().isOrInherits(Right.CONTRIBUTOR)
+		} else if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
 				&& Config.BONUS_WEEKEND == true) {
 			amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED + Config.SERVER_EXP_BONUS;
 
@@ -4646,7 +4645,7 @@ public void sendFrame107() {
 			player.sendMessage("You can only note items that are resources obtained from skilling in this area.");
 			return;
 		}
-		if (!player.getRights().isOrInherits(Right.CONTRIBUTOR) && !player.getRechargeItems().hasItem(13111)) {
+		if (!player.getRightGroup().isOrInherits(Right.CONTRIBUTOR) && !player.getRechargeItems().hasItem(13111)) {
 			int inventoryAmount = player.getItems().getItemAmount(item);
 			if (inventoryAmount < 4) {
 				player.sendMessage("You need at least 4 of this item to note it.");
@@ -4665,7 +4664,7 @@ public void sendFrame107() {
 				player.getItems().addItem(item + 1, amount);
 			}
 		}
-		if (!player.getRights().isOrInherits(Right.CONTRIBUTOR)) {
+		if (!player.getRightGroup().isOrInherits(Right.CONTRIBUTOR)) {
 			player.getDH().sendStatement(
 					"You note most of your " + definition.getName() + " at the cost of " + cost + " resources.");
 		} else {

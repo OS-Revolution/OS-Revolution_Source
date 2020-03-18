@@ -39,7 +39,7 @@ public class Stuck extends Command {
 
 		if (!c.isStuck) {
 			c.isStuck = true;
-			List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRights().isOrInherits(Right.MODERATOR)).collect(Collectors.toList());
+			List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRightGroup().isOrInherits(Right.MODERATOR)).collect(Collectors.toList());
 			
 			if (staff.size() > 0) {
 				PlayerHandler.sendMessage("@blu@[Stuck] " + WordUtils.capitalize(c.playerName) + "" + " is stuck, teleport and help them.", staff);

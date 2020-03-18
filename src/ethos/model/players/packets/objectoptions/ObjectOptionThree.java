@@ -22,7 +22,7 @@ public class ObjectOptionThree {
 			return;
 		}
 		
-		if (c.getRights().isOrInherits(Right.OWNER))
+		if (c.getRightGroup().isOrInherits(Right.OWNER))
 			c.sendMessage("Clicked Object Option 3:  "+objectType+"");
 		
 		switch (objectType) {

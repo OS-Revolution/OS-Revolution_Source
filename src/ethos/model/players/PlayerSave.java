@@ -324,9 +324,9 @@ public class PlayerSave {
 					} else if (token.equals("character-posy")) {
 						p.teleportToY = (Integer.parseInt(token2) <= 0 ? 3424 : Integer.parseInt(token2));
 					} else if (token.equals("character-rights")) {
-						p.getRights().setPrimary(Right.get(Integer.parseInt(token2)));
+						p.getRightGroup().setPrimary(Right.get(Integer.parseInt(token2)));
 					} else if (token.equals("character-rights-secondary")) { // sound like an activist group
-						Arrays.stream(token3).forEach(right -> p.getRights().add(Right.get(Integer.parseInt(right))));
+						Arrays.stream(token3).forEach(right -> p.getRightGroup().add(Right.get(Integer.parseInt(right))));
 					} else if (token.equals("revert-option")) {
 						p.setRevertOption(token2);
 					} else if (token.equals("revert-delay")) {
@@ -1230,10 +1230,10 @@ public class PlayerSave {
 			/* CHARACTER */
 			characterfile.write("[CHARACTER]", 0, 11);
 			characterfile.newLine();
-			characterfile.write("character-rights = " + p.getRights().getPrimary().getValue());
+			characterfile.write("character-rights = " + p.getRightGroup().getPrimary().getValue());
 			characterfile.newLine();
 			StringBuilder sb = new StringBuilder();
-			p.getRights().getSet().stream().forEach(r -> sb.append(r.getValue()).append("\t"));
+			p.getRightGroup().getSet().stream().forEach(r -> sb.append(r.getValue()).append("\t"));
 			characterfile.write("character-rights-secondary = " + sb.substring(0, sb.length() - 1));
 			characterfile.newLine();
 			characterfile.write("character-mac-address = " + p.getMacAddress());

@@ -269,7 +269,7 @@ public class ItemOptionThree implements PacketType {
 			break;
 
 		default:
-			if (c.getRights().isOrInherits(Right.OWNER)) {
+			if (c.getRightGroup().isOrInherits(Right.OWNER)) {
 				Misc.println("[DEBUG] Item Option #3-> Item id: " + itemId);
 			}
 			break;

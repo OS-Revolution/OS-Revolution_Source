@@ -45,7 +45,7 @@ public class Reset extends Command {
 			c.getPA().sendFrame126("", 36013);
 			c.getPA().sendFrame126("", 36014);
 			c.getPA().sendFrame126("", 36015);
-			if (!c.getRights().isOrInherits(Right.MODERATOR)) {
+			if (!c.getRightGroup().isOrInherits(Right.MODERATOR)) {
 				c.getItems().deleteItem(6713, 10);
 				return;
 			}

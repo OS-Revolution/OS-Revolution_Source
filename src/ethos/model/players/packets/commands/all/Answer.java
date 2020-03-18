@@ -26,7 +26,7 @@ public class Answer extends Command {
 		
 		player.sendMessage("You answered: " + input);
 		
-		int right = player.getRights().getPrimary().getValue() - 1;
+		int right = player.getRightGroup().getPrimary().getValue() - 1;
 
 		if (input.contains(Config.ANSWER)) {
 			PlayerHandler.executeGlobalMessage("[@red@Quiz@bla@] <img=" + right + ">@blu@" + player.playerName + "@bla@ answered the question correctly!");
@@ -35,7 +35,7 @@ public class Answer extends Command {
 			//player.sendMessage("Your answer was correct! A staff-member will contact you shortly.");
 			player.getItems().addItemUnderAnyCircumstance(995, 250000);
 			
-			List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRights().isOrInherits(Right.ADMINISTRATOR)).collect(Collectors.toList());
+			List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRightGroup().isOrInherits(Right.ADMINISTRATOR)).collect(Collectors.toList());
 			
 			if (staff.size() > 0) {
 				PlayerHandler.sendMessage("@blu@[Quiz] " + WordUtils.capitalize(player.playerName) + "" + " answered the question correctly, contact them.", staff);

@@ -86,7 +86,7 @@ public class Friends {
 				send = false;
 			}
 			if (send) {
-				friend.getPA().sendPM(client.getNameAsLong(), (byte) client.getRights().getPrimary().getValue(), packed);
+				friend.getPA().sendPM(client.getNameAsLong(), (byte) client.getRightGroup().getPrimary().getValue(), packed);
 			}
 		} else {
 			send = false;

@@ -264,7 +264,7 @@ public class ItemOptionTwo implements PacketType {
 			player.sendMessage("I currently have@blu@ " + player.getSlayer().getPoints() + "@bla@ slayer points.");
 			break;
 		default:
-			if (player.getRights().isOrInherits(Right.OWNER)) {
+			if (player.getRightGroup().isOrInherits(Right.OWNER)) {
 				Misc.println("[DEBUG] Item Option #2-> Item id: " + itemId);
 			}
 			break;

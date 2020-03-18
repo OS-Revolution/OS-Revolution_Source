@@ -69,7 +69,7 @@ public class Test extends Command {
 			ArrayList<RankUpgrade> orderedList = new ArrayList<>(Arrays.asList(RankUpgrade.values()));
 			orderedList.sort((one, two) -> Integer.compare(two.amount, one.amount));
 			orderedList.stream().filter(r -> player.amDonated >= r.amount).findFirst().ifPresent(rank -> {
-				RightGroup rights = player.getRights();
+				RightGroup rights = player.getRightGroup();
 				Right right = rank.rights;
 				if (!rights.contains(right)) {
 					player.sendMessage("Congratulations, your rank has been upgraded to " + right.toString() + ".");

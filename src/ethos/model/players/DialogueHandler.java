@@ -364,7 +364,7 @@ public class DialogueHandler {
 			break;
 			
 		case 9042:
-			sendNpcChat1("Touché", 6637, "Kalphite Princess");
+			sendNpcChat1("Touchï¿½", 6637, "Kalphite Princess");
 			c.nextChat = -1;
 			break;
 			
@@ -404,7 +404,7 @@ public class DialogueHandler {
 			break;
 			
 		case 9049:
-			sendNpcChat1("Touché", 6638, "Kalphite Princess");
+			sendNpcChat1("Touchï¿½", 6638, "Kalphite Princess");
 			c.nextChat = -1;
 			break;
 			
@@ -897,7 +897,7 @@ public class DialogueHandler {
 			break;
 		case 701:
 			int randomReward = Misc.random(UNSIRED_REWARDS.length - 1);
-			int rights = c.getRights().getPrimary().getValue() - 1;
+			int rights = c.getRightGroup().getPrimary().getValue() - 1;
 			int reward = UNSIRED_REWARDS[randomReward];
 			if (c.getItems().playerHasItem(13273)) {
 				/*

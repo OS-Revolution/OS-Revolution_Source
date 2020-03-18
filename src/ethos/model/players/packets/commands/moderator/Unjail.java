@@ -27,7 +27,7 @@ public class Unjail extends Command {
 				c.sendMessage("The player is in a trade, or duel. You cannot do this at this time.");
 				return;
 			}
-			if (!c.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+			if (!c.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
 				if (c2.inClanWars() || c2.inClanWarsSafe()) {
 					c.sendMessage("This player is currently in pk district.");
 					return;

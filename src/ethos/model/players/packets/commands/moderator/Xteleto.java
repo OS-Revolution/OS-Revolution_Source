@@ -19,7 +19,7 @@ public class Xteleto extends Command {
 		Optional<Player> optionalPlayer = PlayerHandler.getOptionalPlayer(input);
 		if (optionalPlayer.isPresent()) {
 			Player c2 = optionalPlayer.get();
-			if (!c.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+			if (!c.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
 				if (c2.inClanWars() || c2.inClanWarsSafe()) {
 					c.sendMessage("@cr10@This player is currently at the pk district.");
 					return;

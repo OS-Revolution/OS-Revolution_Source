@@ -567,7 +567,7 @@ public class PetHandler {
                 return;
             }
 
-            int rights = player.getRights().getPrimary().getValue() - 1;
+            int rights = player.getRightGroup().getPrimary().getValue() - 1;
             if (RandomUtils.nextInt(0, p.droprate) == 1) {
                 player.getItems().addItemUnderAnyCircumstance(p.itemId, 1);
                 spawn(player, p, false, false);

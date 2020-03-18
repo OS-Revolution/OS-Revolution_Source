@@ -27,7 +27,7 @@ public class Bank extends Command {
 }
 
 		private long getDelay(Player player) {
-			RightGroup rights = player.getRights();
+			RightGroup rights = player.getRightGroup();
 
 			if (rights.isOrInherits(Right.MODERATOR)) {
 				return 0;

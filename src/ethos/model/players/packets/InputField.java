@@ -18,7 +18,6 @@ import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.Right;
-import ethos.model.players.skills.necromancy.Necromancy;
 import ethos.util.Misc;
 
 public class InputField implements PacketType {
@@ -175,7 +174,7 @@ public class InputField implements PacketType {
 				player.sendMessage("Your help request must contain 25 characters for the description.");
 				return;
 			}
-			List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRights().isOrInherits(Right.HELPER)).collect(Collectors.toList());
+			List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRightGroup().isOrInherits(Right.HELPER)).collect(Collectors.toList());
 			if (HelpDatabase.getDatabase().requestable(player)) {
 				HelpDatabase.getDatabase().add(new HelpRequest(player.playerName, player.connectedFrom, text));
 				if (staff.size() > 0) {

@@ -33,7 +33,7 @@ public class Giveitem extends Command {
 				Player c2 = optionalPlayer.get();
 
 				if (c2.getMode().isIronman() || c2.getMode().isUltimateIronman()) {
-					if (!c.getRights().isOrInherits(Right.OWNER)) {
+					if (!c.getRightGroup().isOrInherits(Right.OWNER)) {
 						c.sendMessage("You cannot give items to these players because of their respective game modes.");
 						return;
 					}

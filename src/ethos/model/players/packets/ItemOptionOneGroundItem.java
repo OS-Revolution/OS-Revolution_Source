@@ -55,7 +55,7 @@ public class ItemOptionOneGroundItem implements PacketType {
 		 */
 
 		default:
-			if (c.getRights().isOrInherits(Right.OWNER))
+			if (c.getRightGroup().isOrInherits(Right.OWNER))
 				Misc.println("ItemUsed " + itemUsed + " on Ground Item " + groundItem);
 			break;
 		}

@@ -46,7 +46,7 @@ public class Ban extends Command {
 			Optional<Player> optionalPlayer = PlayerHandler.getOptionalPlayer(name);
 			if (optionalPlayer.isPresent()) {
 				Player c2 = optionalPlayer.get();
-				if (!c.getRights().isOrInherits(Right.OWNER) && c2.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+				if (!c.getRightGroup().isOrInherits(Right.OWNER) && c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
 					c.sendMessage("You cannot ban this player.");
 					return;
 				}

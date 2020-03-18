@@ -34,7 +34,7 @@ public class Yell extends Command {
 
 	@Override
 	public void execute(Player player, String input) {
-		RightGroup rights = player.getRights();
+		RightGroup rights = player.getRightGroup();
 
 		
 
@@ -74,8 +74,8 @@ public class Yell extends Command {
 				return;
 			}
 		}
-		String message = formatMessage(player.getTitles().getCurrentTitle(), StringUtils.capitalize(player.playerName.toLowerCase()), player.getRights().getPrimary().getColor(),
-				player.getRights().getPrimary().getValue() - 1, StringUtils.capitalize(input));
+		String message = formatMessage(player.getTitles().getCurrentTitle(), StringUtils.capitalize(player.playerName.toLowerCase()), player.getRightGroup().getPrimary().getColor(),
+				player.getRightGroup().getPrimary().getValue() - 1, StringUtils.capitalize(input));
 		player.lastYell = System.currentTimeMillis();
 		PlayerHandler.executeGlobalMessage(message);
 	}
@@ -88,7 +88,7 @@ public class Yell extends Command {
 	}
 
 	private long getDelay(Player player) {
-		RightGroup rights = player.getRights();
+		RightGroup rights = player.getRightGroup();
 
 		if (rights.isOrInherits(Right.MODERATOR)) {
 			return 0;

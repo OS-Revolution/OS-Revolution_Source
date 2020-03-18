@@ -1,6 +1,7 @@
 package ethos.model.npcs;
 
 import java.awt.Point;
+import java.util.List;
 
 import ethos.Server;
 import ethos.model.entity.Entity;
@@ -12,11 +13,20 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
+import ethos.rshd.loot.CustomLootFactory;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
+import org.menaphos.action.ActionInvoker;
+import org.menaphos.entity.impl.impl.NonPlayableCharacter;
+import org.menaphos.entity.impl.impl.PlayableCharacter;
+import org.menaphos.model.loot.Loot;
+import org.menaphos.model.loot.LootableContainer;
+import org.menaphos.model.loot.factory.LootFactory;
+import org.menaphos.model.world.location.Location;
+import org.menaphos.util.StopWatch;
 
-public class NPC extends Entity {
+public class NPC extends Entity implements NonPlayableCharacter {
 	// private Hitmark hitmark = null;
 	// private Hitmark secondHitmark = null;
 	public int npcType;
@@ -748,5 +758,93 @@ public class NPC extends Entity {
 
 	public void setRandomWalkDelay(long randomWalkDelay) {
 		this.randomWalkDelay = randomWalkDelay;
+	}
+
+	@Override
+	public void dropLootFor(PlayableCharacter player) {
+		final int RARE_DROP_TABLE_ID = 701;
+		final int HERB_DROP_TABLE_ID = 2;
+		final int SEED_DROP_TABLE_ID = 3;
+		final LootableContainer lootable = CustomLootFactory.getLootableNpc(this.getId());
+		if (lootable != null) {
+			final List<Loot> constants = lootable.receiveConstants();
+			final Loot loot = lootable.open(player.getMagicFind());
+			final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
+			constants.forEach(constant -> player.receiveDropFrom(this, constant, dropLocation));
+			if (loot.getItem().getId() == RARE_DROP_TABLE_ID) {
+				final Loot rareDrop = LootFactory.getLootableItem(701).open();
+				player.receiveDropFrom(this, rareDrop, dropLocation);
+				player.receiveMessage("You've received a drop from the rare drop table!");
+			} else if (loot.getItem().getId() == HERB_DROP_TABLE_ID) {
+				final Loot rareDrop = LootFactory.getLootableItem(HERB_DROP_TABLE_ID).open();
+				player.receiveDropFrom(this, rareDrop, dropLocation);
+				player.receiveMessage("You've received a drop from the herb drop table!");
+			} else if (loot.getItem().getId() == SEED_DROP_TABLE_ID) {
+				final Loot rareDrop = LootFactory.getLootableItem(SEED_DROP_TABLE_ID).open();
+				player.receiveDropFrom(this, rareDrop, dropLocation);
+				player.receiveMessage("You've received a drop from the seed drop table!");
+			} else {
+				player.receiveDropFrom(this, loot, dropLocation);
+
+			}
+		} else {
+			player.receiveMessage("Missing Drop Data [" + this.getId() + "]"  );
+			throw new NullPointerException("Missing Drop Data");
+		}
+	}
+
+	@Override
+	public int getId() {
+		return npcType;
+	}
+
+	@Override
+	public boolean addItemToInventory(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public boolean removeItemFromInventory(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public boolean pickupItem(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public void sendMessage(String s) {
+
+	}
+
+	@Override
+	public void receiveMessage(String s) {
+
+	}
+
+	@Override
+	public boolean hasItem(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public void performAnimation(int i) {
+
+	}
+
+	@Override
+	public StopWatch getStopWatch() {
+		return null;
+	}
+
+	@Override
+	public ActionInvoker getActionInvoker() {
+		return null;
+	}
+
+	@Override
+	public boolean moveTo(Location location) {
+		return false;
 	}
 }

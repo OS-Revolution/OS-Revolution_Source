@@ -1035,7 +1035,7 @@ public class AttackPlayer {
 					return;
 				}
 				Player c2 = PlayerHandler.players[i];
-				if (c.connectedFrom.equals(c2.connectedFrom) && !c.getRights().isOrInherits(Right.MODERATOR) && Server.serverlistenerPort != 5555) {
+				if (c.connectedFrom.equals(c2.connectedFrom) && !c.getRightGroup().isOrInherits(Right.MODERATOR) && Server.serverlistenerPort != 5555) {
 					c.sendMessage("You cannot attack same ip address.");
 					c.getCombat().resetPlayerAttack();
 					return;

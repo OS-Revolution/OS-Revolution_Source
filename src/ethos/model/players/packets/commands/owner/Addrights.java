@@ -31,12 +31,12 @@ public class Addrights extends Command {
 			c.sendMessage("The level of rights you've requested is unknown.");
 			return;
 		}
-		if (player.getRights().isOrInherits(right)) {
+		if (player.getRightGroup().isOrInherits(right)) {
 			c.sendMessage("That player already has this level of rights.");
 			return;
 		}
-		player.getRights().add(right);
-		player.getRights().updatePrimary();
+		player.getRightGroup().add(right);
+		player.getRightGroup().updatePrimary();
 		c.sendMessage("You have promoted " + args[0] + " to " + right.name() + ".");
 	}
 

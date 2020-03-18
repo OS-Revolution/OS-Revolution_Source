@@ -33,7 +33,7 @@ public class ObjectOptionTwo {
 			c.sendAudio(1877);
 			c.getPA().openUpBank();
 		}
-		if (c.getRights().isOrInherits(Right.OWNER))
+		if (c.getRightGroup().isOrInherits(Right.OWNER))
 			c.sendMessage("Clicked Object Option 2:  "+objectType+"");
 		switch (objectType) {
 		case 29778:

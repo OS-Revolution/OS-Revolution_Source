@@ -28,7 +28,7 @@ public class OperateItem implements PacketType {
 		int slot = c.getInStream().readSignedWordA(); // the row of the action
 		int itemId = c.getInStream().readSignedWordA(); //the item's id
 
-		if(c.getRights().isOrInherits(Right.OWNER)) {
+		if(c.getRightGroup().isOrInherits(Right.OWNER)) {
 			c.sendMessage("Operate Item - itemId: " + itemId + " slot: " + slot);
 		}
 		if (c.isFrozen == true) {

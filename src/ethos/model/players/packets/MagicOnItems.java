@@ -49,7 +49,7 @@ public class MagicOnItems implements PacketType {
 		c.getPA().magicOnItems(slot, itemId, spellId);
 		c.usingMagic = false;
 
-		if (c.getRights().isOrInherits(Right.OWNER)) {
+		if (c.getRightGroup().isOrInherits(Right.OWNER)) {
 			Misc.println(c.playerName + " - Magic on item spellId: " + spellId);
 		}
 

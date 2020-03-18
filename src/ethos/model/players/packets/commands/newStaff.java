@@ -141,7 +141,7 @@ public class newStaff {
                 Optional<Player> optionalPlayer = PlayerHandler.getOptionalPlayer(username_being_punished);
                 if (optionalPlayer.isPresent()) {
                     Player c2 = optionalPlayer.get();
-                    if (!player.getRights().isOrInherits(Right.OWNER) && c2.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+                    if (!player.getRightGroup().isOrInherits(Right.OWNER) && c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
                         player.sendMessage("You cannot ban this player.");
                         return true;
                     }
@@ -169,7 +169,7 @@ public class newStaff {
                 Optional<Player> optional3Player = PlayerHandler.getOptionalPlayer(username_being_punished);
                 if (optional3Player.isPresent()) {
                     Player c2 = optional3Player.get();
-                    if (!player.getRights().isOrInherits(Right.OWNER) && c2.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+                    if (!player.getRightGroup().isOrInherits(Right.OWNER) && c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
                         player.sendMessage("You cannot ban this player.");
                         return true;
                     }
@@ -197,7 +197,7 @@ public class newStaff {
                 Optional<Player> optional4Player = PlayerHandler.getOptionalPlayer(username_being_punished);
                 if (optional4Player.isPresent()) {
                     Player c2 = optional4Player.get();
-                    if (!player.getRights().isOrInherits(Right.OWNER) && c2.getRights().isOrInherits(Right.ADMINISTRATOR)) {
+                    if (!player.getRightGroup().isOrInherits(Right.OWNER) && c2.getRightGroup().isOrInherits(Right.ADMINISTRATOR)) {
                         player.sendMessage("You cannot ban this player.");
                         return true;
                     }

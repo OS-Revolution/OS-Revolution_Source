@@ -11,7 +11,7 @@ public class ObjectOptionFive {
 			return;
 		}
 		c.clickObjectType = 0;
-		if (c.getRights().isOrInherits(Right.OWNER))
+		if (c.getRightGroup().isOrInherits(Right.OWNER))
 			c.sendMessage("Clicked Object Option 5:  "+objectType+"");
 		
 		switch (objectType) {		

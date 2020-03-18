@@ -36,7 +36,7 @@ public class TableGroup extends ArrayList<Table> {
 	 * @return
 	 */
 	public List<GameItem> access(Player player, double modifier, int repeats) {
-		int rights = player.getRights().getPrimary().getValue() - 1;
+		int rights = player.getRightGroup().getPrimary().getValue() - 1;
 		List<GameItem> items = new ArrayList<>();
 		for (Table table : this) {
 			TablePolicy policy = table.getPolicy();

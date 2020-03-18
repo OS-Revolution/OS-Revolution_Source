@@ -113,12 +113,12 @@ public class Commands implements PacketType {
 			c.sendMessage("@red@You've disrupted stuck command, you will no longer be moved home.");
 			return;
 		}
-		if (Server.getMultiplayerSessionListener().inAnySession(c) && !c.getRights().isOrInherits(Right.OWNER)) {
+		if (Server.getMultiplayerSessionListener().inAnySession(c) && !c.getRightGroup().isOrInherits(Right.OWNER)) {
 			c.sendMessage("You cannot execute a command whilst trading, or dueling.");
 			return;
 		}
 
-		boolean isManagment = c.getRights().isOrInherits(Right.ADMINISTRATOR, Right.OWNER, Right.GAME_DEVELOPER);
+		boolean isManagment = c.getRightGroup().isOrInherits(Right.ADMINISTRATOR, Right.OWNER, Right.GAME_DEVELOPER);
 
 		if (playerCommand.startsWith("glow")) {
 			String[] args = playerCommand.split(" ");
@@ -314,11 +314,11 @@ public class Commands implements PacketType {
 		}
 
 		if (playerCommand.equals("rights")) {
-			c.sendMessage("isOwner: " + c.getRights().contains(Right.OWNER));
-			c.sendMessage("isAdmin: " + c.getRights().contains(Right.ADMINISTRATOR));
+			c.sendMessage("isOwner: " + c.getRightGroup().contains(Right.OWNER));
+			c.sendMessage("isAdmin: " + c.getRightGroup().contains(Right.ADMINISTRATOR));
 			c.sendMessage("isManagment: " + isManagment);
-			c.sendMessage("isMod: " + c.getRights().contains(Right.MODERATOR));
-			c.sendMessage("isPlayer: " + c.getRights().contains(Right.PLAYER));
+			c.sendMessage("isMod: " + c.getRightGroup().contains(Right.MODERATOR));
+			c.sendMessage("isPlayer: " + c.getRightGroup().contains(Right.PLAYER));
 		}
 
 		// we already have an interface command btw *facepalm*
@@ -334,7 +334,7 @@ public class Commands implements PacketType {
 		 */
 
 		if (playerCommand.startsWith("giverights")) {
-			if (!c.getRights().isOrInherits(Right.OWNER)) {
+			if (!c.getRightGroup().isOrInherits(Right.OWNER)) {
 				c.sendMessage(NO_ACCESS);
 				return;
 			}
@@ -351,7 +351,7 @@ public class Commands implements PacketType {
 						continue;
 
 					if (p.playerName.equalsIgnoreCase(target)) {
-						p.getRights().setPrimary(Right.get(right));
+						p.getRightGroup().setPrimary(Right.get(right));
 						p.sendMessage("Your rights have changed. Please relog.");
 						found = true;
 						break;
@@ -574,15 +574,15 @@ public class Commands implements PacketType {
 		PlayerLogging.write(LogType.COMMAND, c,
 				c.playerName + " typed command " + playerCommand + " at X: " + c.absX + " Y:" + c.absY);
 
-		if (c.getRights().isOrInherits(Right.OWNER) && executeCommand(c, playerCommand, "owner")) {
+		if (c.getRightGroup().isOrInherits(Right.OWNER) && executeCommand(c, playerCommand, "owner")) {
 			return;
-		} else if (c.getRights().isOrInherits(Right.ADMINISTRATOR) && executeCommand(c, playerCommand, "admin")) {
+		} else if (c.getRightGroup().isOrInherits(Right.ADMINISTRATOR) && executeCommand(c, playerCommand, "admin")) {
 			return;
-		} else if (c.getRights().isOrInherits(Right.MODERATOR) && executeCommand(c, playerCommand, "moderator")) {
+		} else if (c.getRightGroup().isOrInherits(Right.MODERATOR) && executeCommand(c, playerCommand, "moderator")) {
 			return;
-		} else if (c.getRights().isOrInherits(Right.HELPER) && executeCommand(c, playerCommand, "helper")) {
+		} else if (c.getRightGroup().isOrInherits(Right.HELPER) && executeCommand(c, playerCommand, "helper")) {
 			return;
-		} else if (c.getRights().isOrInherits(Right.CONTRIBUTOR) && executeCommand(c, playerCommand, "donator")) {
+		} else if (c.getRightGroup().isOrInherits(Right.CONTRIBUTOR) && executeCommand(c, playerCommand, "donator")) {
 			return;
 		} else if (executeCommand(c, playerCommand, "all")) {
 			return;

@@ -23,10 +23,10 @@ public class Players extends Command {
 		for (int i = 0; i < PlayerHandler.players.length; i++) {
 			Player c2 = PlayerHandler.players[i];
 			if (PlayerHandler.players[i] != null) {
-				if (c2.getRights().isOrInherits(Right.PLAYER)) {
-					int rights = c2.getRights().getPrimary().getValue() - 1;
+				if (c2.getRightGroup().isOrInherits(Right.PLAYER)) {
+					int rights = c2.getRightGroup().getPrimary().getValue() - 1;
 					String line = String.format("%n");
-					sb.append("<img="+rights+"> " + "<col=" + c2.getRights().getPrimary().getColor() + ">" + Misc.capitalize(c2.playerName)).append(line);
+					sb.append("<img="+rights+"> " + "<col=" + c2.getRightGroup().getPrimary().getColor() + ">" + Misc.capitalize(c2.playerName)).append(line);
 				}
 			}
 		}

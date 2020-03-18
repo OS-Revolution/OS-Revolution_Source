@@ -82,7 +82,7 @@ public class WoodcuttingEvent extends Event<Player> {
 			}
 			Server.getGlobalObjects().add(new GlobalObject(tree.equals(Tree.REDWOOD) ? stumpId : tree.getStumpId(), x, y, attachment.heightLevel, face, 10, tree.getRespawnTime(), objectId));
 			attachment.getItems().addItem(tree.getWood(), 1);
-			attachment.getPA().addSkillXP((int) (attachment.getRights().isOrInherits(Right.OSRS) ? osrsExperience : experience) , Skill.WOODCUTTING.getId(), true);
+			attachment.getPA().addSkillXP((int) (attachment.getRightGroup().isOrInherits(Right.OSRS) ? osrsExperience : experience) , Skill.WOODCUTTING.getId(), true);
 			Achievements.increase(attachment, AchievementType.WOODCUT, 1);
 			handleRewards();
 			attachment.prestigeNumber = 8;
@@ -171,7 +171,7 @@ public class WoodcuttingEvent extends Event<Player> {
 			if (Misc.random(chopChance) == 0 || chops >= tree.getChopsRequired()) {
 				chops = 0;
 				int random = Misc.random(4);
-				attachment.getPA().addSkillXP((int) (attachment.getRights().isOrInherits(Right.OSRS) ? osrsExperience : experience) , Skill.WOODCUTTING.getId(), true);
+				attachment.getPA().addSkillXP((int) (attachment.getRightGroup().isOrInherits(Right.OSRS) ? osrsExperience : experience) , Skill.WOODCUTTING.getId(), true);
 				Achievements.increase(attachment, AchievementType.WOODCUT, 1);
 				if ((attachment.getItems().isWearingItem(13241) || attachment.getItems().playerHasItem(13241)) && random == 2) {
 					Firemaking.lightFire(attachment, tree.getWood(), "infernal_axe");

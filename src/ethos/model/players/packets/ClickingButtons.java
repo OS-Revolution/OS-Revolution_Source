@@ -1144,7 +1144,7 @@ public class ClickingButtons implements PacketType {
 				}
 				break;
 			case 185142:
-				List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRights().isOrInherits(Right.HELPER)).collect(Collectors.toList());
+				List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRightGroup().isOrInherits(Right.HELPER)).collect(Collectors.toList());
 				c.sendMessage("@red@You can also type ::help to report something.");
 				if (staff.size() > 0) {
 					PlayerHandler.sendMessage("@blu@[Help] " + WordUtils.capitalize(c.playerName) + "" + " needs help, PM or TELEPORT and help them.", staff);

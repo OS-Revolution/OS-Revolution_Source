@@ -12,7 +12,7 @@ public class RightComparator implements Comparator<Right> {
 
 		@Override
 		public int compare(Player o1, Player o2) {
-			return RIGHT_COMPARATOR.compare(o1.getRights().getPrimary(), o2.getRights().getPrimary());
+			return RIGHT_COMPARATOR.compare(o1.getRightGroup().getPrimary(), o2.getRightGroup().getPrimary());
 		}
 	};
 

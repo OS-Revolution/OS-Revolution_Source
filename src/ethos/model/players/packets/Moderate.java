@@ -10,8 +10,8 @@ public class Moderate implements PacketType {
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
 		int playerId = c.getInStream().readInteger();
-		if (!c.getRights().isOrInherits(Right.MODERATOR)) {
-			PlayerHandler.nonNullStream().filter(p -> p.getRights().isOrInherits(Right.MODERATOR))
+		if (!c.getRightGroup().isOrInherits(Right.MODERATOR)) {
+			PlayerHandler.nonNullStream().filter(p -> p.getRightGroup().isOrInherits(Right.MODERATOR))
 					.forEach(p -> p.sendMessage("WARNING: " + c.playerName + " just attempted to operate the moderate option."));
 			return;
 		}
@@ -26,7 +26,7 @@ public class Moderate implements PacketType {
 			c.sendMessage("Please finish what you're doing.");
 			return;
 		}
-		if (target.getRights().isOrInherits(Right.MODERATOR) && !c.getRights().isOrInherits(Right.OWNER)) {
+		if (target.getRightGroup().isOrInherits(Right.MODERATOR) && !c.getRightGroup().isOrInherits(Right.OWNER)) {
 			target.sendMessage(c.playerName + " just attempted to use the punishment panel on you.");
 			c.sendMessage("You cannot punish " + target.playerName + ", they are staff.");
 			return;

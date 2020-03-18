@@ -7,7 +7,7 @@ import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
 
 /**
- * Teleport the player to the mage bank.
+ * Teleport the new dzone.
  * 
  * @author Emiel
  */

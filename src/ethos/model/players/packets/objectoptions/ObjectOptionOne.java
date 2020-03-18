@@ -416,11 +416,13 @@ public class ObjectOptionOne {
 		case 12719://First grass zone
 			c.getPA().movePlayer(2923, 5473, 0);
 			break;
+			
 		case 11987://Second grass zone
 			c.getPA().movePlayer(2910, 5482, 0);
 			break;
 		case 12617://Ice zone
 			c.getPA().movePlayer(2901, 5470, 0);
+			
 			break;
 		case 12639://Rock zone
 			c.getPA().movePlayer(2913, 5460, 0);

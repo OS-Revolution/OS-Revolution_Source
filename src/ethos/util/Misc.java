@@ -265,7 +265,7 @@ public class Misc {
 	 * @return A String which is safe to show to other staff members.
 	 */
 	public static String getIP(Player player) {
-		return player == null ? "Unknown" : player.getRights().isOrInherits(Right.MODERATOR) ? "Private" : player.connectedFrom;
+		return player == null ? "Unknown" : player.getRightGroup().isOrInherits(Right.MODERATOR) ? "Private" : player.connectedFrom;
 	}
 
 	/**

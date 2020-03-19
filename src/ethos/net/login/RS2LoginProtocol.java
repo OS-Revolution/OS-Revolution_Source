@@ -242,7 +242,7 @@ public class RS2LoginProtocol extends FrameDecoder {
 			player.packetSize = 0;
 			final PacketBuilder bldr = new PacketBuilder();
 			bldr.put((byte) 2);
-			bldr.put((byte) player.getRights().getPrimary().getValue());
+			bldr.put((byte) player.getRightGroup().getPrimary().getValue());
 			bldr.put((byte) 0);
 			channel.write(bldr.toPacket());
 		} else {

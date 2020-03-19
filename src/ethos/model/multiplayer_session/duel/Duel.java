@@ -58,7 +58,7 @@ public class Duel extends Multiplayer {
 			player.sendMessage("The server is currently being updated.");
 			return false;
 		}
-		if (player.connectedFrom.equalsIgnoreCase(requested.connectedFrom) && !player.getRights().isOrInherits(Right.MODERATOR)) {
+		if (player.connectedFrom.equalsIgnoreCase(requested.connectedFrom) && !player.getRightGroup().isOrInherits(Right.MODERATOR)) {
 			player.sendMessage("You cannot request a duel from someone on the same network.");
 			return false;
 		}

@@ -84,7 +84,7 @@ public class CrystalChest {
 			c.getItems().deleteItem(KEY, 1);
 			c.startAnimation(ANIMATION);
 			c.getItems().addItem(DRAGONSTONE, 1);
-			GameItem reward = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRights().isOrInherits(Right.DONATOR) ? randomChestRewards(2) : randomChestRewards(9);
+			GameItem reward = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.DONATOR) ? randomChestRewards(2) : randomChestRewards(9);
 			if (!c.getItems().addItem(reward.getId(), reward.getAmount())) {
 				Server.itemHandler.createGroundItem(c, reward.getId(), c.getX(), c.getY(), c.heightLevel, reward.getAmount());
 			}

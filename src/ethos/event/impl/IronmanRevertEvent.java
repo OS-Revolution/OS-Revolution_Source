@@ -37,8 +37,8 @@ public class IronmanRevertEvent extends Event<Player> {
 		}
 
 		if (System.currentTimeMillis() > attachment.getRevertModeDelay()) {
-			attachment.getRights().remove(Right.IRONMAN);
-			attachment.getRights().remove(Right.ULTIMATE_IRONMAN);
+			attachment.getRightGroup().remove(Right.IRONMAN);
+			attachment.getRightGroup().remove(Right.ULTIMATE_IRONMAN);
 			attachment.setMode(Mode.forType(ModeType.REGULAR));
 			attachment.sendMessage("Your mode has been reverted to regular upon request.");
 			attachment.getPA().requestUpdates();

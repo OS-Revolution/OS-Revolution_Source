@@ -45,7 +45,7 @@ public class PunishmentPanel {
 	}
 
 	public boolean clickButton(int buttonId) {
-		if (!player.getRights().isOrInherits(Right.MODERATOR)) {
+		if (!player.getRightGroup().isOrInherits(Right.MODERATOR)) {
 			return false;
 		}
 		for (Punishment punishment : Punishment.values()) {
@@ -54,7 +54,7 @@ public class PunishmentPanel {
 					player.sendMessage("You can only operate this panel after selecting 'moderate' when right clicking.");
 					return true;
 				}
-				if (!player.getRights().isOrInherits(punishment.rights)) {
+				if (!player.getRightGroup().isOrInherits(punishment.rights)) {
 					player.sendMessage("You do not have the rights to operate this.");
 					return true;
 				}

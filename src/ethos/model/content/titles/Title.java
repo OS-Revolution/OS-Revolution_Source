@@ -26,112 +26,112 @@ public enum Title implements Comparator<Title> {
 	CUSTOM("Custom", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.CONTRIBUTOR) || player.getRights().isOrInherits(Right.MODERATOR);
+			return player.getRightGroup().isOrInherits(Right.CONTRIBUTOR) || player.getRightGroup().isOrInherits(Right.MODERATOR);
 		}
 	}, "Have the option of choosing your own 16-character title. You must be a donator of any rank to display this title."),
 
 	CONTRIBUTOR("Contributor", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.CONTRIBUTOR);
+			return player.getRightGroup().isOrInherits(Right.CONTRIBUTOR);
 		}
 	}, "This title is for contributors. You must be a contributor to purchase and display this title."),
 
 	SPONSOR("Sponsor", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.SPONSOR);
+			return player.getRightGroup().isOrInherits(Right.SPONSOR);
 		}
 	}, "This title is for sponsors. You must be a sponsor to purchase and display this title."),
 
 	SUPPORTER("Supporter", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.SUPPORTER);
+			return player.getRightGroup().isOrInherits(Right.SUPPORTER);
 		}
 	}, "This title is for supporters. You must be a supporter to purchase and display this title."),
 
 	DONATOR("Donator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.DONATOR);
+			return player.getRightGroup().isOrInherits(Right.DONATOR);
 		}
 	}, "This title is for donators. You must be a donator to purchase and display this title."),
 
 	SUPER_DONATOR("Super Donator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.SUPER_DONATOR);
+			return player.getRightGroup().isOrInherits(Right.SUPER_DONATOR);
 		}
 	}, "This title is for super donators. You must be a super donators to purchase and display this title."),
 	
 	LEGENDARY("Legendary Donator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.LEGENDARY);
+			return player.getRightGroup().isOrInherits(Right.LEGENDARY);
 		}
 	}, "This title is for legendary donators. You must be a legendary donator to purchase and display this title."),
 	
 	UBER_DONATOR("Uber Donator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.UBER_DONATOR);
+			return player.getRightGroup().isOrInherits(Right.UBER_DONATOR);
 		}
 	}, "This title is for uber donators. You must be a uber donator to purchase and display this title."),
 	
 	MAX_DONATOR("Max Donator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.MAX_DONATOR);
+			return player.getRightGroup().isOrInherits(Right.MAX_DONATOR);
 		}
 	}, "This title is for max donators. You must be a max donator to purchase and display this title."),
 	
 	RESPECTED_MEMBER("Respected Member", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.RESPECTED_MEMBER);
+			return player.getRightGroup().isOrInherits(Right.RESPECTED_MEMBER);
 		}
 	}, "This title is for respected members. You must be a respected member to purchase and display this title."),
 
 	HELPER("Helper", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.HELPER);
+			return player.getRightGroup().isOrInherits(Right.HELPER);
 		}
 	}, "This title represents the helper rank. You must be a helper to purchase or display this title."),
 
 	MODERATOR("Moderator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.MODERATOR);
+			return player.getRightGroup().isOrInherits(Right.MODERATOR);
 		}
 	}, "A unique and powerful title that when displayed represents the high level of power the owner has." + "Only moderators on the staff team may display this."),
 
 	FMODERATOR("Forum Mod", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.FMODERATOR);
+			return player.getRightGroup().isOrInherits(Right.FMODERATOR);
 		}
 	}, "A unique and powerful title that when displayed represents the high level of power the owner has." + "Only moderators on the staff team may display this."),
 	
 	GMODERATOR("Global Mod", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.GMODERATOR);
+			return player.getRightGroup().isOrInherits(Right.GMODERATOR);
 		}
 	}, "A unique and powerful title that when displayed represents the high level of power the owner has." + "Only moderators on the staff team may display this."),
 
 	ADMINISTRATOR("Administrator", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.ADMINISTRATOR);
+			return player.getRightGroup().isOrInherits(Right.ADMINISTRATOR);
 		}
 	}, "A unique and powerful title that when displayed represents the high level of power the owner has." + "Only administrators on the staff team may display this."),
 
 	EXECUTIVE_OFFICER("Executive Officer", 0, TitleCurrency.NONE, new TitleRequirement() {
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.ADMINISTRATOR);
+			return player.getRightGroup().isOrInherits(Right.ADMINISTRATOR);
 		}
 	}, "The highest ranking title any person may have. This title can only be worn by those who truly deserve it."),
 
@@ -243,7 +243,7 @@ public enum Title implements Comparator<Title> {
 
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.IRONMAN);
+			return player.getRightGroup().isOrInherits(Right.IRONMAN);
 		}
 	}, "To receive access to this title, a player must be on the ironman game-mode."),
 
@@ -251,7 +251,7 @@ public enum Title implements Comparator<Title> {
 
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getRights().isOrInherits(Right.ULTIMATE_IRONMAN);
+			return player.getRightGroup().isOrInherits(Right.ULTIMATE_IRONMAN);
 		}
 	}, "To receive access to this title, a player must be on the ultimate ironman game-mode."),
 

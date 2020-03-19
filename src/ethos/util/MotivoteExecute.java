@@ -31,8 +31,8 @@ public class MotivoteExecute implements Runnable {
 				
 				if (success) {
 					authAmount++;
-					if (!player.getItems().addItem(1464, player.getRights().isOrInherits(Right.EXTREME_DONATOR) ? 2 : Config.DOUBLE_VOTE_INCENTIVES ? 2 : 1)) {
-						Server.itemHandler.createGroundItem(player, 1464, player.getX(), player.getY(), player.heightLevel, player.getRights().isOrInherits(Right.EXTREME_DONATOR) ? 2 : Config.DOUBLE_VOTE_INCENTIVES ? 2 : 1);
+					if (!player.getItems().addItem(1464, player.getRightGroup().isOrInherits(Right.EXTREME_DONATOR) ? 2 : Config.DOUBLE_VOTE_INCENTIVES ? 2 : 1)) {
+						Server.itemHandler.createGroundItem(player, 1464, player.getX(), player.getY(), player.heightLevel, player.getRightGroup().isOrInherits(Right.EXTREME_DONATOR) ? 2 : Config.DOUBLE_VOTE_INCENTIVES ? 2 : 1);
 					}
 					player.setLastIncentive(System.currentTimeMillis());
 					player.sendMessage("@cr10@Auth redeemed, thanks for voting!");

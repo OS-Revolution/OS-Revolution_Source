@@ -59,7 +59,7 @@ public class Highscores implements Runnable {
 			
 			PreparedStatement stmt2 = prepare(generateQuery());
 			stmt2.setString(1, player.getName());
-			stmt2.setInt(2, player.getRights().getPrimary().getValue());
+			stmt2.setInt(2, player.getRightGroup().getPrimary().getValue());
 			
 			
 			stmt2.setInt(3, player.getMode() != null ? player.getMode().getType().ordinal() : 0);

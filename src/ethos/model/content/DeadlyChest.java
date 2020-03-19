@@ -222,9 +222,9 @@ public class DeadlyChest {
 			c.getItems().deleteItem(KEY2, 1);
 			c.startAnimation(ANIMATION);
 			c.getItems().addItem(PKTicket, 3);
-			GameItem reward2 = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRights().isOrInherits(Right.DONATOR) ? randomChestRewards2(2) : randomChestRewards2(9);
-			GameItem reward3 = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRights().isOrInherits(Right.DONATOR) ? randomChestRewards3(2) : randomChestRewards3(20);
-			GameItem reward4 = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRights().isOrInherits(Right.DONATOR) ? randomChestRewards4(2) : randomChestRewards4(40);
+			GameItem reward2 = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.DONATOR) ? randomChestRewards2(2) : randomChestRewards2(9);
+			GameItem reward3 = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.DONATOR) ? randomChestRewards3(2) : randomChestRewards3(20);
+			GameItem reward4 = Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.DONATOR) ? randomChestRewards4(2) : randomChestRewards4(40);
 			if (!c.getItems().addItem(reward2.getId(), reward2.getAmount())) {
 				Server.itemHandler.createGroundItem(c, reward2.getId(), c.getX(), c.getY(), c.heightLevel, reward2.getAmount());
 			}

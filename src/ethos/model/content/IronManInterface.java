@@ -142,19 +142,19 @@ public class IronManInterface {
 			switch (modeAction) {
 			case STANDARD_IRON_MAN:
 				player.setMode(Mode.forType(ModeType.IRON_MAN));
-				player.getRights().setPrimary(Right.IRONMAN);
+				player.getRightGroup().setPrimary(Right.IRONMAN);
 				player.setRevertOption(revertAction.name());
 				break;
 				
 			case ULTIMATE_IRON_MAN:
 				player.setMode(Mode.forType(ModeType.ULTIMATE_IRON_MAN));
-				player.getRights().setPrimary(Right.ULTIMATE_IRONMAN);
+				player.getRightGroup().setPrimary(Right.ULTIMATE_IRONMAN);
 				player.setRevertOption(revertAction.name());
 				break;
 				
 			case OSRS:
 				player.setMode(Mode.forType(ModeType.OSRS));
-				player.getRights().setPrimary(Right.OSRS);
+				player.getRightGroup().setPrimary(Right.OSRS);
 				break;
 				
 			default:

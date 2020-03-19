@@ -162,7 +162,7 @@ public class Clan {
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
 				Player c = PlayerHandler.players[j];
-				String icon = paramClient.getRights().getPrimary().getValue() > 0 ? "<img=" + (paramClient.getRights().getPrimary().getValue() - 1) + ">" : "";
+				String icon = paramClient.getRightGroup().getPrimary().getValue() > 0 ? "<img=" + (paramClient.getRightGroup().getPrimary().getValue() - 1) + ">" : "";
 				if ((c != null) && (this.activeMembers.contains(c.playerName)))
 					c.sendMessage("/@bla@[@blu@" + getTitle() + "@bla@] " + icon + "@bla@" + Misc.optimizeText(paramClient.playerName) + ": @dre@"
 							+ paramString.substring(1, 2).toUpperCase() + paramString.substring(2));

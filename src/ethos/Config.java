@@ -9,7 +9,7 @@ public class Config {
 	public static int PLAYERMODIFIER = 0;
 
 	// Make sure this matches client version
-	public static final int CLIENT_VERSION = 4;
+	public static final int CLIENT_VERSION = 1;
 
 	/**
 	 * Defines which port is being used (see {@link ServerState})

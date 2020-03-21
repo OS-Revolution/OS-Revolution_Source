@@ -1133,7 +1133,11 @@ public class ObjectOptionOne {
 		case 10226:
 			c.getPA().movePlayer(1932, 4380, 2);
 			break;
-
+			
+		case 4380:
+			c.getPA().movePlayer(2518, 4648, 0);
+			break;
+			
 		case 10227:
 			if (c.getX() == 1961 && c.getY() == 4392)
 				c.getPA().movePlayer(1961, 4392, 2);

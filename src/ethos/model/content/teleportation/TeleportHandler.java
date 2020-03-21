@@ -271,7 +271,7 @@ public class TeleportHandler {
 			} else if (player.teleSelected == 5) { // Donator - Donator Lobby
 				player.getPA().startTeleport(1661, 10049, 0, "modern", false);
 			} else if (player.teleSelected == 6) { // Other - Slayer Masters
-				player.getPA().startTeleport(3107, 3507, 0, "modern", false); // change
+				player.getPA().startTeleport(1631, 3695, 0, "modern", false); // change
 				// player.sendMessage("Teleporting to "+otherNames[1]+".");
 			}
 			break;

@@ -708,10 +708,10 @@ public class ObjectOptionOne {
 			AgilityHandler.delayEmote(c, "CLIMB_UP", 3105, 3162, 0, 2);
 			break;
 		case 1579:
-			AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3096, 9867, 0, 2);
+			AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3097, 9868, 0, 2);
 			break;
 		case 17385:
-			AgilityHandler.delayEmote(c, "CLIMB_UP", 3094, 3485, 0, 2);
+			AgilityHandler.delayEmote(c, "CLIMB_UP", 3096, 3468, 0, 2);
 			break;
 
 		case 27785:
@@ -1133,11 +1133,7 @@ public class ObjectOptionOne {
 		case 10226:
 			c.getPA().movePlayer(1932, 4380, 2);
 			break;
-			
-		case 4380:
-			c.getPA().movePlayer(2518, 4648, 0);
-			break;
-			
+
 		case 10227:
 			if (c.getX() == 1961 && c.getY() == 4392)
 				c.getPA().movePlayer(1961, 4392, 2);

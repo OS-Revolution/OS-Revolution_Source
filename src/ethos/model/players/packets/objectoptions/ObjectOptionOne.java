@@ -708,7 +708,7 @@ public class ObjectOptionOne {
 			AgilityHandler.delayEmote(c, "CLIMB_UP", 3105, 3162, 0, 2);
 			break;
 		case 1579:
-			AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3094, 3486, 0, 2);
+			AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3096, 9867, 0, 2);
 			break;
 		case 17385:
 			AgilityHandler.delayEmote(c, "CLIMB_UP", 3094, 3485, 0, 2);

@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+import ethos.model.players.packets.commands.owner.Npc;
 import ethos.util.*;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
@@ -5602,7 +5603,9 @@ public void sendStopSound() {
 
 	@Override
 	public void receiveDropFrom(NonPlayableCharacter npc, org.menaphos.model.loot.Loot loot, Location location) {
-		Server.getDropManager().create(this,NPCHandler.getNpc(npc.getId()),new Location3D(location.getXCoordinate(),location.getYCoordinate(),location.getZCoordinate()),loot.getItem().getAmount().value());
+		System.out.println("DROPPING: " + loot);
+		System.out.println("DROPPING: " + ItemAssistant.getItemName(loot.getItem().getId()));
+		Server.getDropManager().create(this,new Location3D(location.getXCoordinate(),location.getYCoordinate(),location.getZCoordinate()),loot);
 	}
 
 	@Override

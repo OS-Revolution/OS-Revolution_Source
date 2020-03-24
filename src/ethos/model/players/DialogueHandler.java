@@ -3578,7 +3578,7 @@ public class DialogueHandler {
 			break;
 
 		case 672:
-			sendOptions("Yes, show me the tutorial.", "No thanks, I know what I'm doing.");
+			sendOptions("Yes, show me the tutorial.", "No thanks, I'm not a Scrub..");
 			c.dialogueAction = 673;
 			break;
 
@@ -3589,34 +3589,34 @@ public class DialogueHandler {
 			break;
 
 		case 674:
-			c.getPA().movePlayer(3090, 3495, 0);
+			c.getPA().movePlayer(1636, 3681, 0);
 			sendNpcChat("This is where all the shopping happens when", "you first start out! You can buy combat gear,",
 					"foods and pots, and much more!");
 			c.nextChat = 676;
 			break;
 
 		case 676:
-			c.getPA().movePlayer(3124, 3481, 0);
+			c.getPA().movePlayer(1616, 3673, 0);
 			sendNpcChat("Slayer masters are located here.", "Doing slayer early is a good way to start off.");
 			c.nextChat = 677;
 			break;
 
 		case 677:
-			c.getPA().movePlayer(3093, 3477, 0);
+			c.getPA().movePlayer(1644, 3673, 0);
 			sendNpcChat("This is the main home area.", "You can find useful npcs and tools",
-					"all around the home area, just gotta look", "There's even a beginner skilling area north east!");
+					"all around the home area, just gotta look");
 			c.nextChat = 678;
 			break;
 
 		case 678:
-			c.getPA().movePlayer(3098, 3494, 0);
+			c.getPA().movePlayer(1651, 3681, 0);
 			sendNpcChat("This is where you can prestige your skills.", "Prestiging provides perks throughout your gameplay.",
 					"One of which is experience boost.", "The other is increased drop rate.");
 			c.nextChat = 679;
 			break;
 
 		case 679:
-			c.getPA().movePlayer(3092, 3485, 0);
+			c.getPA().movePlayer(1629, 3673, 0);
 			sendNpcChat("Finally you can start your adventure,", "type ::discord to recieve alerts when events happen.",
 					"Also ::forums to keep up-to-date with OS-Revolution, Enjoy!.");
 			c.nextChat = 645;

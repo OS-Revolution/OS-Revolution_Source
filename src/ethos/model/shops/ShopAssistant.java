@@ -245,6 +245,10 @@ public class ShopAssistant {
 			c.sendMessage(ItemAssistant.getItemName(removeId) + ": currently costs [ @blu@" + getSpecialItemValue(removeId) + " @bla@ ] Trading Sticks.");
 			return;
 		}
+		if (c.myShopId == 112) {
+			c.sendMessage(ItemAssistant.getItemName(removeId) + ": currently costs [ @blu@" + getSpecialItemValue(removeId) + " @bla@ ] Blood Money.");
+			return;
+		}
 		if (c.myShopId == 18) {
 			c.sendMessage(ItemAssistant.getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId) + " marks of grace.");
 			return;
@@ -494,7 +498,12 @@ public class ShopAssistant {
 								
 			}
 			break;
-			
+		case 112: //Blood Money Shop
+			switch(id) {
+			case 13307:
+				return 1;
+			}
+			break;
 		case 119: //Blood Money Shop
 			switch(id) {
 			case 13307:
@@ -1559,6 +1568,8 @@ public class ShopAssistant {
 								addShopItem(itemID, amount);
 							}  else if (c.myShopId == 116) {
 								c.getItems().addItem(13307, (int) Math.ceil(TotPrice3 *= 0.60));
+							}  else if (c.myShopId == 112) {
+								c.getItems().addItem(13307, TotPrice2);
 							} else if (c.myShopId == 44) {
 								if (!Item.getItemName(itemID).contains("head")) {
 									return false;
@@ -1585,6 +1596,8 @@ public class ShopAssistant {
 							} else if (c.myShopId == 118) {
 								c.getItems().addItem(11179, TotPrice2);
 							} else if (c.myShopId == 119) {
+								c.getItems().addItem(13307, TotPrice2);
+							} else if (c.myShopId == 112) {
 								c.getItems().addItem(13307, TotPrice2);
 							} else if (c.myShopId == 83) {
 								c.getItems().addItem(995, TotPrice4);
@@ -2111,7 +2124,7 @@ public class ShopAssistant {
 			c.getItems().resetItems(3823);
 			return;
 		}
-		if (c.myShopId == 116/* || c.myShopId == 117*/) {
+		if (c.myShopId == 116 || c.myShopId == 112) {
 			int itemValue = getSpecialItemValue(itemID) * amount;
 			if (!c.getItems().playerHasItem(13307, itemValue)) {
 				c.sendMessage("You do not have enough blood money to purchase this.");
@@ -2134,6 +2147,17 @@ public class ShopAssistant {
 			return;
 		}
 		if (c.myShopId == 119) {
+			int itemValue = getSpecialItemValue(itemID) * amount;
+			if (!c.getItems().playerHasItem(13307, itemValue)) {
+				c.sendMessage("You do not have enough blood money to purchase this.");
+				return;
+			}
+			c.getItems().deleteItem(13307, itemValue);
+			c.getItems().addItem(itemID, amount);
+			c.getItems().resetItems(3823);
+			return;
+		}
+		if (c.myShopId == 112) {
 			int itemValue = getSpecialItemValue(itemID) * amount;
 			if (!c.getItems().playerHasItem(13307, itemValue)) {
 				c.sendMessage("You do not have enough blood money to purchase this.");
@@ -2251,7 +2275,21 @@ public class ShopAssistant {
 				c.getItems().resetItems(3823);
 				return;
 			}
-		} else if (c.myShopId == 10) {
+		}else if (c.myShopId == 112) {
+			int itemValue = getSpecialItemValue(itemID) * amount;
+			if (!c.getItems().playerHasItem(13307, itemValue)) {
+				c.sendMessage("You do not have enough Blood Money to purchase this.");
+				return;
+			} else {
+				c.getItems().deleteItem(13307, itemValue);
+				c.getItems().addItem(itemID, amount);
+				c.amDonated += itemValue;
+				c.updateRank();
+				c.getItems().resetItems(3823);
+				return;
+			}
+		}
+		else if (c.myShopId == 10) {
 			if (c.getSlayer().getPoints() >= getSpecialItemValue(itemID) * amount) {
 				if (c.getItems().freeSlots() > 0) {
 					c.getSlayer().setPoints(c.getSlayer().getPoints() - (getSpecialItemValue(itemID) * amount));
@@ -2300,7 +2338,13 @@ public class ShopAssistant {
 				c.sendMessage("You do not have enough raid points to purchase this.");
 				return;
 			}
-		} else if (c.myShopId == 119) {
+		} else if (c.myShopId == 112) {
+			int itemValue = getSpecialItemValue(itemID) * amount;
+			if (!c.getItems().playerHasItem(13307, itemValue)) {
+				c.sendMessage("You do not have enough blood money to purchase this.");
+				return;
+			}
+		}else if (c.myShopId == 119) {
 			int itemValue = getSpecialItemValue(itemID) * amount;
 			if (!c.getItems().playerHasItem(13307, itemValue)) {
 				c.sendMessage("You do not have enough blood money to purchase this.");

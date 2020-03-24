@@ -1,1 +1,1 @@
-{"entries":{"1":{"id":1,"name":"Molanisk","lootList":[{"item":{"id":995,"amount":{"value":500}},"percentDrop":1.0},{"item":{"id":526,"amount":{"value":1}},"percentDrop":1.0}]}}}
+{"entries":{"100":{"id":100,"name":"Rock crab","lootList":[{"item":{"id":2859,"amount":{"value":1}},"percentDrop":1.0},{"item":{"id":995,"amount":{"value":150}},"percentDrop":0.86}]},"2593":{"id":2593,"name":"Werewolf","lootList":[{"item":{"id":2859,"amount":{"value":1}},"percentDrop":1.0},{"item":{"id":995,"amount":{"value":150}},"percentDrop":0.86}]}}}

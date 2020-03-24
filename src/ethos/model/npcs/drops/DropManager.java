@@ -24,6 +24,8 @@ import ethos.model.players.skills.slayer.Task;
 import ethos.net.discord.DiscordMessager;
 import ethos.util.Location3D;
 import ethos.util.Misc;
+import org.menaphos.model.loot.Loot;
+import org.menaphos.model.loot.factory.LootFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -129,6 +131,11 @@ public class DropManager {
 		}
 
 		player.getPA().showInterface(33000);
+	}
+
+	public void create(Player player, Location3D location, Loot loot) {
+		Server.itemHandler.createGroundItem(player, loot.getItem().getId(), location.getX(), location.getY(),
+				location.getZ(), loot.getItem().getAmount().value(), player.getIndex());
 	}
 	
 	public void create(Player player, NPC npc, Location3D location, int repeats) {

@@ -73,7 +73,7 @@ public class Config {
 	/**
 	 * Determines whether or not the server is in a beta state.
 	 */
-	public static final boolean BETA_MODE = false;
+	public static final boolean BETA_MODE = true;
 
 	/**
 	 * Items that cannot be sold in any stores.
@@ -314,9 +314,9 @@ public class Config {
 	/**
 	 * Combat experience rates.
 	 */
-	public static final int MELEE_EXP_RATE = 250;
-	public static final int RANGE_EXP_RATE = 250;
-	public static final int MAGIC_EXP_RATE = 250;
+	public static final int MELEE_EXP_RATE = 15;
+	public static final int RANGE_EXP_RATE = 15;
+	public static final int MAGIC_EXP_RATE = 15;
 	/**
 	 * Special server experience bonus rates. (Double experience weekend etc)
 	 */
@@ -409,7 +409,7 @@ public class Config {
 	/**
 	 * How often the server saves data.
 	 */
-	public static final int SAVE_TIMER = 60; // Saves every one minute.
+	public static final int SAVE_TIMER = 30; // Saves every one minute.
 
 	/**
 	 * How far NPCs can walk.
@@ -422,14 +422,14 @@ public class Config {
 	/**
 	 * The starting location of your server.
 	 */
-	public static final int START_LOCATION_X = 3092;
-	public static final int START_LOCATION_Y = 3485;
+	public static final int START_LOCATION_X = 1629;
+	public static final int START_LOCATION_Y = 3673;
 
 	/**
 	 * The re-spawn point of when someone dies.
 	 */
-	public static final int RESPAWN_X = 3092;
-	public static final int RESPAWN_Y = 3485;
+	public static final int RESPAWN_X = 1602;
+	public static final int RESPAWN_Y = 3673;
 
 	/**
 	 * The re-spawn point of when a duel ends.
@@ -551,20 +551,20 @@ public class Config {
 	/**
 	 * Skill experience multipliers.
 	 */
-	public static final int WOODCUTTING_EXPERIENCE = 14;
-	public static final int MINING_EXPERIENCE = 19;
-	public static final int SMITHING_EXPERIENCE = 24;
-	public static final int FARMING_EXPERIENCE = 12;
-	public static final int FIREMAKING_EXPERIENCE = 13;
-	public static final int HERBLORE_EXPERIENCE = 15;
-	public static final int FISHING_EXPERIENCE = 25;
-	public static final int AGILITY_EXPERIENCE = 25;
-	public static final int PRAYER_EXPERIENCE = 25;
-	public static final int RUNECRAFTING_EXPERIENCE = 30;
-	public static final int CRAFTING_EXPERIENCE = 12;
-	public static final int THIEVING_EXPERIENCE = 20;
+	public static final int WOODCUTTING_EXPERIENCE = 10;
+	public static final int MINING_EXPERIENCE = 15;
+	public static final int SMITHING_EXPERIENCE = 25;
+	public static final int FARMING_EXPERIENCE = 25;
+	public static final int FIREMAKING_EXPERIENCE = 9;
+	public static final int HERBLORE_EXPERIENCE = 10;
+	public static final int FISHING_EXPERIENCE = 10;
+	public static final int AGILITY_EXPERIENCE = 15;
+	public static final int PRAYER_EXPERIENCE = 15;
+	public static final int RUNECRAFTING_EXPERIENCE = 12;
+	public static final int CRAFTING_EXPERIENCE = 9;
+	public static final int THIEVING_EXPERIENCE = 12;
 	public static final int SLAYER_EXPERIENCE = 15;
-	public static final int COOKING_EXPERIENCE = 25;
-	public static final int FLETCHING_EXPERIENCE = 22;
-	public static final int HUNTER_EXPERIENCE = 20;
+	public static final int COOKING_EXPERIENCE = 9;
+	public static final int FLETCHING_EXPERIENCE = 10;
+	public static final int HUNTER_EXPERIENCE = 10;
 }

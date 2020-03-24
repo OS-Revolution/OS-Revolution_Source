@@ -167,7 +167,7 @@ public class NPCHandler {
                 c.getItems().deleteEquipment(2570, c.playerRing);
                 c.sendMessage("Your ring of life saved you!");
             }
-            c.getPA().spellTeleport(3092, 3485, 0, false);
+            c.getPA().spellTeleport(1629, 3673, 0, false);
             return true;
         }
         return false;
@@ -3492,6 +3492,7 @@ public class NPCHandler {
             try {
                 npcs[i].dropLootFor(c);
             } catch (NullPointerException e) {
+                System.out.println(e.getMessage());
                 Server.getDropManager().create(c, npcs[i], location, amountOfDrops);
             }
 

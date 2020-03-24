@@ -428,7 +428,8 @@ public class ObjectOptionOne {
 			break;
 			//End of new donator zone
 			
-			
+		case 27095://Ice zone
+			c.getPA().movePlayer(1644, 3673, 0);
 			
 			
 		case 4150:

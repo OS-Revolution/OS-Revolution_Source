@@ -47,7 +47,7 @@ public class TeleportHandler {
 			"@yel@Taverley Dungeon", "@yel@Skeletal Wyverns", "@yel@Asgarnian Ice Dungeon", "@yel@Brimhaven Dungeon", "", "", "", "", "",
 			"", "", "", "", "", "", "", "", "" };
 	String[] otherNames = { "@yel@Select Your Skilling Teleport", "@yel@Slayer Masters", "@yel@Crafting/Gem Rocks", "@yel@Fishing/Cooking/Mining/Smithing",
-			"@yel@Woodcutting", "@yel@Farming", "@yel@Agility @or1@(Gnome)", "@yel@Hunter @or1@(Animals)", "@yel@Hunter @or1@(Implings)", "@yel@Mining Guild", "", "",
+			"@yel@Woodcutting", "@yel@Farming", "@yel@Agility @or1@(Gnome)", "@yel@Hunter @or1@(Animals)", "@yel@Hunter @or1@(Implings)", "@yel@Mining Guild", "@yel@Thieving", "",
 			"", "", "", "", "", "", "", "", "" };
 
 	public void loadMonsterTab() {
@@ -379,6 +379,8 @@ public class TeleportHandler {
 				player.getPA().startTeleport(3048, 9582, 0, "modern", false);
 			} else if (player.teleSelected == 6) { // Other - Farming Patches
 				player.getPA().startTeleport(3003, 3376, 0, "modern", false);
+			} else if (player.teleSelected == 6) { // Theiving
+				player.getPA().startTeleport(2662, 3308, 0, "modern", false);
 				// player.sendMessage("Teleporting to "+otherNames[5]+".");
 			}
 			break;

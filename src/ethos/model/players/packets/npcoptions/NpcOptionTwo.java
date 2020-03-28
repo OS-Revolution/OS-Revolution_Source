@@ -236,6 +236,22 @@ public class NpcOptionTwo {
 		case 6094:
 			player.getThieving().steal(Pickpocket.GNOME, NPCHandler.npcs[player.rememberNpcIndex]);
 			break;
+		case 3086:
+		case 3087:
+		case 3088:
+		case 3089:
+		case 3090:
+		case 3091:
+		case 3258:
+		case 3672:
+		case 6947:
+		case 6948:
+		case 6949:
+		case 6950:
+		case 6951:
+		case 6952:
+			player.getThieving().steal(Pickpocket.FARMER, NPCHandler.npcs[player.rememberNpcIndex]);
+			break;
 		case 3106:
 			player.getThieving().steal(Pickpocket.HERO, NPCHandler.npcs[player.rememberNpcIndex]);
 			break;

@@ -9,8 +9,8 @@ public class Membership {
 
 	public static void checkDate(Player c) {
 		 if (getDaysLeft(c) >= 1) {
-			c.sendMessage("You are a member, You have "
-					+ getDaysLeft(c) + " days left.");
+			c.sendMessage("You're A Member, You Currenlty Have "
+					+ getDaysLeft(c) + " Days Left.");
 
 		} else if (c.membership && c.startDate <= 0) {
 
@@ -19,7 +19,7 @@ public class Membership {
 		} else if (getDaysLeft(c) <= 0) {
 			c.membership = false;
 			c.startDate = -1;
-			c.sendMessage("Your membership has expired, you may renew at the in-game donation store.");
+			c.sendMessage("Your Membership Subscription Is Currently Inactive, Speak To Party Pete For Membership.");
 			PlayerSave.saveGame(c);
 		}
 	}

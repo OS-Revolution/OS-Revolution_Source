@@ -1473,7 +1473,7 @@ public class DialogueHandler {
 
 		// Start Zeah Guards and Throw-aways
 		case 55864:
-			sendNpcChat2("Welcome and enjoy OS-Revolution!", "Feel free to ask for help in the Help cc.",
+			sendNpcChat2("Welcome and enjoy Os-Revolution!", "Feel free to ask for help in the Help cc.",
 					c.talkingNpc, "Shayzien Guard");
 			c.nextChat = 0;
 			break;
@@ -1483,14 +1483,14 @@ public class DialogueHandler {
 			c.nextChat = 0;
 			break;
 		case 55866:
-			sendNpcChat2("Welcome and enjoy OS-Revolution!", "Feel free to ask for help in the Help cc.", c.talkingNpc,
+			sendNpcChat2("Welcome and enjoy Os-Revolution!", "Feel free to ask for help in the Help cc.", c.talkingNpc,
 					"Shayzien Guard");
 			c.nextChat = 0;
 			break;
 
 		case 5998:
 			sendNpcChat3("Only <img=4>@red@Donators @bla@can access the Donator Zone.",
-					"Interested in becoming an OS-Revolution <img=4>@red@Donator@bla@?",
+					"Interested in becoming an Os-Revolution <img=4>@red@Donator@bla@?",
 					"Go to the bottom of your quest tab and click the <img=19>@yel@Store.", c.talkingNpc,
 					"<img=4>Donation Informative<img=4>");
 			c.nextChat = 0;
@@ -1534,7 +1534,7 @@ public class DialogueHandler {
 			c.nextChat = 0;
 			break;
 		case 55873:
-			sendNpcChat2("Hello, my name is Banky.", "I was hired by OS-Revolution to be a travelling banker!", c.talkingNpc,
+			sendNpcChat2("Hello, my name is Banky.", "I was hired by Os-Revolution to be a travelling banker!", c.talkingNpc,
 					"Banky The Banker");
 			c.nextChat = 0;
 			break;
@@ -1704,7 +1704,7 @@ public class DialogueHandler {
 			break;
 		case 14012:
 			sendPlayerChat3("Yeah! I've never seen one before.", "I guess it's one small step for NPC's,",
-					"one giant leap for OS-Revolution!");
+					"one giant leap for Os-Revolution!");
 			c.nextChat = 14013;
 			break;
 		case 14013:
@@ -3618,7 +3618,7 @@ public class DialogueHandler {
 		case 679:
 			c.getPA().movePlayer(1629, 3673, 0);
 			sendNpcChat("Finally you can start your adventure,", "type ::discord to recieve alerts when events happen.",
-					"Also ::forums to keep up-to-date with OS-Revolution, Enjoy!.");
+					"Also ::forums to keep up-to-date with Os-Revolution, Enjoy!.");
 			c.nextChat = 645;
 			break;
 

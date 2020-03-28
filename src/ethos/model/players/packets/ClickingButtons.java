@@ -1087,7 +1087,7 @@ public class ClickingButtons implements PacketType {
 			long days = TimeUnit.MILLISECONDS.toDays(milliseconds);
 			long hours = TimeUnit.MILLISECONDS.toHours(milliseconds - TimeUnit.DAYS.toMillis(days));
 			String time = days + " days, " + hours + " hours.";
-			c.forcedChat("I've played OS-Revolution for a total of : " + time);
+			c.forcedChat("I've played Os-Revolution for a total of : " + time);
 			break;
 		case 39246:
 			c.forcedChat("I currently have: " + c.pkp + " PK Points.");
@@ -1102,19 +1102,19 @@ public class ClickingButtons implements PacketType {
 			c.forcedChat("I currently have: " + c.pcPoints + " PC Points.");
 			break;
 		case 185154: // forums
-			c.getPA().sendFrame126("https://OS-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
 			break;
 		case 185155: // vote
-			c.getPA().sendFrame126("http://mysticps.everythingrs.com/services/vote", 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
 			break;
 		case 185156: // donate
-			c.getPA().sendFrame126("http://mysticps.everythingrs.com/services/store", 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
 			break;
 			case 185157: // Store
-				c.getPA().sendFrame126("http://mysticps.everythingrs.com/services/store", 12000);
+				c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
 				break;
 			case 185158: // Store
-				c.getPA().sendFrame126("http://mysticps.everythingrs.com/services/store", 12000);
+				c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
 				break;
 			case 185150:
 				for (int i = 8144; i < 8195; i++) {

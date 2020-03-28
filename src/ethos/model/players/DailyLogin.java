@@ -79,7 +79,7 @@ public class DailyLogin {
 	void LoggedIn() {
 		RefreshDates();
 		if ((c.LastLoginYear == year) && (c.LastLoginMonth == month) && (c.LastLoginDate == date)) {
-			c.sendMessage("You have already recieved your daily reward for today.");
+			//c.sendMessage("You have already recieved your daily reward for today.");
 			return;
 		}
 		if ((c.LastLoginYear == year) && (c.LastLoginMonth == month) && (c.LastLoginDate == (date - 1)))

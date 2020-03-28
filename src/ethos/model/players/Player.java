@@ -1447,7 +1447,7 @@ public class Player extends Entity implements PlayableCharacter {
 	}
 
 	public void highscores() {
-		getPA().sendFrame126("OS-Revolution - Top PKers Online", 6399); // Title
+		getPA().sendFrame126("Os-Revolution - Top PKers Online", 6399); // Title
 		for (int i = 0; i < 10; i++) {
 			if (ranks[i] > 0) {
 				getPA().sendFrame126("Rank " + (i + 1) + ": " + rankPpl[i] + " - Kills: " + ranks[i] + "", 6402 + i);
@@ -2253,7 +2253,7 @@ public void sendStopSound() {
 		if (this.playTime % 3600 == 0 && !isIdle && !trading){
 			if (getHourlyBoxToggle()) {
 				getItems().addItemToBank(11739, 1);
-				sendMessage("[ @red@Reward @bla@] <img=1>@blu@Thank you for continuing to play OS-Revolution, here is an @red@Hourly Reward Box@bla@!");
+				sendMessage("[ @red@Reward @bla@] <img=1>@blu@Thank you for continuing to play Os-Revolution, here is an @red@Hourly Reward Box@bla@!");
 			} else {
 				sendMessage("You currently have hourly boxes toggled @red@off@bla@. Type '::toggle hourly' to enable them.");
 			}
@@ -3115,7 +3115,7 @@ public void sendStopSound() {
 				this.bankCharges += 500;
 			}
 		}
-		sendMessage("Your updated total amount donated is now $" + amDonated + ".");
+		//sendMessage("Your updated total amount donated is now $" + amDonated + "."); DONATION TOTAL MESSAGE
 	}
 
 	int getPrivateChat() {

@@ -48,8 +48,8 @@ public class Clan {
 		player.getPA().sendString("Leave chat", 18135);
 		player.getPA().sendString("Talking in: <col=FDFF38>" + getTitle() + "</col>", 18139);
 		player.getPA().sendString("Owner: <col=FFFFFF>" + Misc.formatPlayerName(getFounder()) + "</col>", 18140);
-		player.sendMessage("Now talking in: " + getTitle() + ".");
-		player.sendMessage("To talk, start each line of chat with the / symbol.");
+		//player.sendMessage("Now talking in: " + getTitle() + ".");
+		//player.sendMessage("To talk, start each line of chat with the / symbol.");
 		updateMembers();
 	}
 

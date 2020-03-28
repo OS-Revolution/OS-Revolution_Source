@@ -161,7 +161,7 @@ public class ClanManager {
 	public void joinOnLogin(Player client) {
 		String lastChannel = client.getLastClanChat();
 		if (lastChannel != null && lastChannel.length() > 0) {
-			client.sendMessage("Attempting to join " + lastChannel + "...");
+			//client.sendMessage("Attempting to join " + lastChannel + "...");
 			Clan localClan = getClan(lastChannel);
 			if (localClan != null) {
 				localClan.addMember(client);

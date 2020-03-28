@@ -189,7 +189,8 @@ public class AchievementHandler {
             Achievements.increase(player, AchievementType.SLAY_ROCK_CRABS, 1);
         else if (name.contains("cow"))
             Achievements.increase(player, AchievementType.SLAY_COWS, 1);
-        
+        else if (name.contains("devil") && name.contains("smoke"))
+            Achievements.increase(player, AchievementType.SLAY_SMOKE_DEVILS, 1); 
         else if (name.contains("chaos"))
             Achievements.increase(player, AchievementType.SLAY_CHAOS_DRUIDS, 1);
         else if (name.contains("chicken"))

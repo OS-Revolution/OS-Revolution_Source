@@ -157,7 +157,7 @@ public class ClickObject implements PacketType {
 				c.getPA().startTeleport(2202, 3056, 0, "modern", false);
 				break;
 			case 9398:// deposit
-				c.getPA().sendFrame126("The Bank of OS-Revolution - Deposit Box", 7421);
+				c.getPA().sendFrame126("The Bank of Os-Revolution - Deposit Box", 7421);
 				c.getPA().sendFrame248(4465, 197);// 197 just because you can't
 				// see it =\
 				c.getItems().resetItems(7423);

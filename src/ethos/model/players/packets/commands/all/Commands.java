@@ -22,7 +22,7 @@ public class Commands extends Command {
 			return;
 		}
 		int counter = 8144;
-		c.getPA().sendFrame126("@dre@OS-Revolution Commands", counter++);
+		c.getPA().sendFrame126("@dre@Os-Revolution Commands", counter++);
 		c.getPA().sendFrame126("", counter++);
 		counter++; // 8146 is already being used
 		counter = sendCommands(c, "all", counter);

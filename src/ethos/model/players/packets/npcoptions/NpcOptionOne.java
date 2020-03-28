@@ -356,13 +356,13 @@ case 4625:
 			}  if (Config.BONUS_PC_WOGW = true) {
 				player.getDH().sendNpcChat1(
 						"Well of Goodwill is currently @red@active@bla@! \\n It is granting 1 hour of @red@+ 10 Pc Points@bla@!",
-						276, "OS-Revolution Crier");
+						276, "Os-Revolution Crier");
 			}  if (Config.DOUBLE_DROPS = true) {
 				player.getDH().sendNpcChat1(
 						"Well of Goodwill is currently @red@active@bla@! \\n It is granting 1 hour of @red@Double Drops@bla@!",
-						276, "OS-Revolution Crier");
+						276, "Os-Revolution Crier");
 			} else {
-				player.getDH().sendNpcChat1("Well of Goodwill is currently @red@inactive@bla@!", 276, "OS-Revolution Crier");
+				player.getDH().sendNpcChat1("Well of Goodwill is currently @red@inactive@bla@!", 276, "Os-Revolution Crier");
 			}
 			break;
 		case 5520:

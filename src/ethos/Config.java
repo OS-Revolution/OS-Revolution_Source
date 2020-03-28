@@ -4,7 +4,7 @@ public class Config {
 
 	public static boolean local = false;
 
-	public static String SERVER_NAME = "OS-Revolution";
+	public static String SERVER_NAME = "Os-Revolution";
 
 	public static int PLAYERMODIFIER = 0;
 

@@ -50,7 +50,7 @@ public class DonationHandler implements Runnable {
                 switch (item_number) {// add products according to their ID in the ACP
 
                     case 86: // example
-                        player.getItems().addItem(6306, quantity);
+                        player.getItems().addItem(7478, quantity);
                         break;
 
                 }

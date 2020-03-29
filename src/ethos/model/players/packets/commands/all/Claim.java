@@ -19,7 +19,7 @@ public class Claim extends Command {
 			public void run() {
 				try {
 					com.everythingrs.donate.Donation[] donations = com.everythingrs.donate.Donation
-							.donations("MUeVACBh3HoXNx61Ot7x8512wZRV9gGMTPoexuTwkLkIyTEPPuUid3WABRDz3vgvZUM0QJ5c", player.playerName);
+							.donations("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb", player.playerName);
 					if (donations.length == 0) {
 						player.sendMessage("You currently don't have any items waiting. You must donate first!");
 						return;

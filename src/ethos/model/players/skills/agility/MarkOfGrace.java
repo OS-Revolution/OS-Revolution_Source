@@ -27,7 +27,7 @@ public class MarkOfGrace {
 			{ 3193, 3393, 3 }, 
 			{ 3205, 3403, 3 }, 
 			{ 3218, 3395, 3 }, 
-			{ 3240, 3411, 3 } 
+			{ 3236, 3417, 0 } 
 	};
 	private static int[][] ARDOUGNE_COORDINATES = { 
 			{ 2671, 3303, 3 }, 

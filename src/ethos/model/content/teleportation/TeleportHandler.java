@@ -100,7 +100,7 @@ public class TeleportHandler {
 
 	public void loadOtherTab() {
 		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
+				40518, 40519, 40520, 40521, 40522, 40523/* , 65085, 65087, 65089 */ };
 		for (int j = 0; j <= 17; j++) {
 			c.getPA().sendFrame126(otherNames[j], ids[j]);
 		}
@@ -301,7 +301,7 @@ public class TeleportHandler {
 			}
 			break;
 
-		case 180188:
+		case 180188: //button 3
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monster - Chaos Druids
@@ -327,7 +327,7 @@ public class TeleportHandler {
 				// player.sendMessage("Teleporting to "+otherNames[3]+".");
 			}
 			break;
-		case 180191:
+		case 180191: //button 4
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Yaks
@@ -356,7 +356,7 @@ public class TeleportHandler {
 				// player.sendMessage("Teleporting to "+otherNames[4]+".");
 			}
 			break;
-		case 180194:
+		case 180194: //button 5
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Skeletons
@@ -379,12 +379,9 @@ public class TeleportHandler {
 				player.getPA().startTeleport(3048, 9582, 0, "modern", false);
 			} else if (player.teleSelected == 6) { // Other - Farming Patches
 				player.getPA().startTeleport(3003, 3376, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Theiving
-				player.getPA().startTeleport(2662, 3308, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[5]+".");
-			}
+			} 
 			break;
-		case 180197:
+		case 180197: //button 6
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Hill Giants
@@ -409,7 +406,7 @@ public class TeleportHandler {
 				// player.sendMessage("Teleporting to "+otherNames[6]+".");
 			}
 			break;
-		case 180200:
+		case 180200://button 7
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Desert Bandits
@@ -434,7 +431,7 @@ public class TeleportHandler {
 				// player.sendMessage("Teleporting to "+otherNames[7]+".");
 			}
 			break;
-		case 180203:
+		case 180203: //button 8
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Dagannoths
@@ -465,7 +462,7 @@ public class TeleportHandler {
 				}
 			}
 			break;
-		case 180206:
+		case 180206: //button 9
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Elf Warriors
@@ -488,9 +485,9 @@ public class TeleportHandler {
 			} else if (player.teleSelected == 6) { // Other - Mining Guild
 				player.getPA().startTeleport(3046, 9756, 0, "modern", false);
 				// player.sendMessage("Teleporting to "+otherNames[9]+".");
-			}
+			} 
 			break;
-		case 180212:
+		case 180212: //button 10
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Demonic Gorillas
@@ -501,7 +498,7 @@ public class TeleportHandler {
 				player.getPA().startTeleport(1310, 1237, 0, "modern", false);
 			} else if (player.teleSelected == 4) {
 				player.getPA().startTeleport(2804, 3432, 0, "modern", false);
-			}
+			} 
 			break;
 		case 180215:
 			if (!teleportCheck(player))
@@ -545,7 +542,7 @@ public class TeleportHandler {
 				player.getPA().startTeleport(3293, 3179, 0, "modern", false);
 			}
 			break;
-		case 180209:
+		case 180209: //button 10
 			if (!teleportCheck(player))
 				return;
 			if (player.teleSelected == 0) { // Monsters - Smoke Devils
@@ -561,7 +558,10 @@ public class TeleportHandler {
 				// player.sendMessage("Teleporting to "+cityNames[10]+".");
 				c.getDiaryManager().getKandarinDiary().progress(KandarinDiaryEntry.CAMELOT_TELEPORT);
 			} else if (player.teleSelected == 5) { // Legendary - Skeletal Wyverns
-
+				
+			}else if (player.teleSelected == 6) { // Other - Theiving
+				player.getPA().startTeleport(3079, 3477, 0, "modern", false);
+				// player.sendMessage("Teleporting to "+otherNames[9]+".");
 			}
 			break;
 		case 254046:

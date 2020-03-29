@@ -2264,11 +2264,11 @@ public class ShopAssistant {
 			}
 		} else if (c.myShopId == 9) {
 			int itemValue = getSpecialItemValue(itemID) * amount;
-			if (!c.getItems().playerHasItem(6306, itemValue)) {
+			if (!c.getItems().playerHasItem(7478, itemValue)) {
 				c.sendMessage("You do not have enough trading sticks to buy this item.");
 				return;
 			} else {
-				c.getItems().deleteItem(6306, itemValue);
+				c.getItems().deleteItem(7478, itemValue);
 				c.getItems().addItem(itemID, amount);
 				c.amDonated += itemValue;
 				c.updateRank();

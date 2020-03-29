@@ -306,11 +306,11 @@ public class Commands implements PacketType {
 
 		if (playerCommand.startsWith("topic")) {
 			String args = playerCommand.substring(7);
-			c.getPA().sendFrame126("https://Os-Revolution.com/" + args, 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/forum/" + args, 12000);
 		}
 		if (playerCommand.startsWith("thread")) {
 			String args = playerCommand.substring(7);
-			c.getPA().sendFrame126("https://Os-Revolution.com/" + args, 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/forum/" + args, 12000);
 		}
 
 		if (playerCommand.equals("rights")) {

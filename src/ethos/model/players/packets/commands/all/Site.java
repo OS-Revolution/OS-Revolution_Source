@@ -17,16 +17,16 @@ public class Site extends Command {
 			c.sendMessage("Usage: ::site forums");
 			break;
 		case "home":
-			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/forum", 12000);
 			break;
 		case "forums":
-			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://Os-Revolution.com/forum", 12000);
 			break;
 		case "discord":
 			c.getPA().sendString("https://discord.gg/EeTMWJe", 12000);
 			break;	
 		case "donate":
-			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
 			break;
 
 		}

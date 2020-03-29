@@ -14,7 +14,7 @@ public class Donate extends Command {
 
 	@Override
 	public void execute(Player c, String input) {
-		c.getPA().sendFrame126("https://Os-Revolution.com/forum", 12000);
+		c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
 	}
 
 	@Override

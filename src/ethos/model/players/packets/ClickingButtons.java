@@ -1102,19 +1102,19 @@ public class ClickingButtons implements PacketType {
 			c.forcedChat("I currently have: " + c.pcPoints + " PC Points.");
 			break;
 		case 185154: // forums
-			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://os-revolution.com/forum/", 12000);
 			break;
 		case 185155: // vote
-			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/vote/", 12000);
 			break;
 		case 185156: // donate
-			c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
 			break;
 			case 185157: // Store
-				c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+				c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
 				break;
 			case 185158: // Store
-				c.getPA().sendFrame126("https://Os-Revolution.com/", 12000);
+				c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
 				break;
 			case 185150:
 				for (int i = 8144; i < 8195; i++) {

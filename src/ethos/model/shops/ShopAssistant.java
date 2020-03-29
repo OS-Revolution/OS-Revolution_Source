@@ -242,7 +242,7 @@ public class ShopAssistant {
 			return;
 		}
 		if (c.myShopId == 9) {
-			c.sendMessage(ItemAssistant.getItemName(removeId) + ": currently costs [ @blu@" + getSpecialItemValue(removeId) + " @bla@ ] Trading Sticks.");
+			c.sendMessage(ItemAssistant.getItemName(removeId) + ": currently costs [ @blu@" + getSpecialItemValue(removeId) + " @bla@ ] Donator Tokens.");
 			return;
 		}
 		if (c.myShopId == 112) {
@@ -2265,7 +2265,7 @@ public class ShopAssistant {
 		} else if (c.myShopId == 9) {
 			int itemValue = getSpecialItemValue(itemID) * amount;
 			if (!c.getItems().playerHasItem(7478, itemValue)) {
-				c.sendMessage("You do not have enough trading sticks to buy this item.");
+				c.sendMessage("You do not have enough Donator Tokens to buy this item.");
 				return;
 			} else {
 				c.getItems().deleteItem(7478, itemValue);

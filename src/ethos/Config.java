@@ -4,7 +4,7 @@ public class Config {
 
 	public static boolean local = false;
 
-	public static String SERVER_NAME = "Os-Revolution";
+	public static String SERVER_NAME = "<col=00781a>Os-Revolution</col>";
 
 	public static int PLAYERMODIFIER = 0;
 
@@ -73,7 +73,7 @@ public class Config {
 	/**
 	 * Determines whether or not the server is in a beta state.
 	 */
-	public static final boolean BETA_MODE = true;
+	public static final boolean BETA_MODE = false;
 
 	/**
 	 * Items that cannot be sold in any stores.
@@ -314,9 +314,9 @@ public class Config {
 	/**
 	 * Combat experience rates.
 	 */
-	public static final int MELEE_EXP_RATE = 15;
-	public static final int RANGE_EXP_RATE = 15;
-	public static final int MAGIC_EXP_RATE = 15;
+	public static final int MELEE_EXP_RATE = 50;
+	public static final int RANGE_EXP_RATE = 50;
+	public static final int MAGIC_EXP_RATE = 50;
 	/**
 	 * Special server experience bonus rates. (Double experience weekend etc)
 	 */
@@ -536,7 +536,7 @@ public class Config {
 	/**
 	 * Timeout time.
 	 */
-	public static final int TIMEOUT = 20;
+	public static final int TIMEOUT = 5;
 
 	/**
 	 * Cycle time.
@@ -551,20 +551,20 @@ public class Config {
 	/**
 	 * Skill experience multipliers.
 	 */
-	public static final int WOODCUTTING_EXPERIENCE = 10;
-	public static final int MINING_EXPERIENCE = 15;
-	public static final int SMITHING_EXPERIENCE = 25;
-	public static final int FARMING_EXPERIENCE = 25;
-	public static final int FIREMAKING_EXPERIENCE = 9;
-	public static final int HERBLORE_EXPERIENCE = 10;
-	public static final int FISHING_EXPERIENCE = 10;
-	public static final int AGILITY_EXPERIENCE = 15;
-	public static final int PRAYER_EXPERIENCE = 15;
-	public static final int RUNECRAFTING_EXPERIENCE = 12;
-	public static final int CRAFTING_EXPERIENCE = 9;
-	public static final int THIEVING_EXPERIENCE = 12;
-	public static final int SLAYER_EXPERIENCE = 15;
-	public static final int COOKING_EXPERIENCE = 9;
-	public static final int FLETCHING_EXPERIENCE = 10;
+	public static final int WOODCUTTING_EXPERIENCE = 4;
+	public static final int MINING_EXPERIENCE = 4;
+	public static final int SMITHING_EXPERIENCE = 4;
+	public static final int FARMING_EXPERIENCE = 4;
+	public static final int FIREMAKING_EXPERIENCE = 4;
+	public static final int HERBLORE_EXPERIENCE = 4;
+	public static final int FISHING_EXPERIENCE = 4;
+	public static final int AGILITY_EXPERIENCE = 4;
+	public static final int PRAYER_EXPERIENCE = 4;
+	public static final int RUNECRAFTING_EXPERIENCE = 4;
+	public static final int CRAFTING_EXPERIENCE = 4;
+	public static final int THIEVING_EXPERIENCE = 4;
+	public static final int SLAYER_EXPERIENCE = 4;
+	public static final int COOKING_EXPERIENCE = 4;
+	public static final int FLETCHING_EXPERIENCE = 4;
 	public static final int HUNTER_EXPERIENCE = 10;
 }

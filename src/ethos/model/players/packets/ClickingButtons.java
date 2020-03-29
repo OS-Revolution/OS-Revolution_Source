@@ -1166,7 +1166,7 @@ public class ClickingButtons implements PacketType {
 			break;
 		case 39243:
 			if (c.membership == true) {
-				c.forcedChat("I'm a monthly supporter for OS-Revolution. " + Membership.getDaysLeft(c) + " days of membership left");
+				c.forcedChat("I'm a monthly supporter for Os-Revolution. " + Membership.getDaysLeft(c) + " days of membership left");
 			} else {
 				c.sendMessage("You're currently do not have membership, head over to the store to pick it up!");
 			}
@@ -1225,6 +1225,7 @@ public class ClickingButtons implements PacketType {
 			break;
 		case 47002:
 			c.sendMessage("Sorry, but you can not select Slayer.");
+			c.sendMessage("Maybe if you weren't such a noob you could.");
 			break;
 		case 54090:
 			c.antiqueSelect = 19;
@@ -1262,13 +1263,13 @@ public class ClickingButtons implements PacketType {
 			if (c.usingLamp) {
 				if (c.antiqueLamp && !c.normalLamp) {
 					c.usingLamp = false;
-					c.getPA().addSkillXP(13100000, c.antiqueSelect, true);
+					c.getPA().addSkillXP(3500, c.antiqueSelect, true);
 					c.getItems().deleteItem2(4447, 1);
 					c.sendMessage("The lamp mysteriously vanishes...");
 					c.getPA().closeAllWindows();
 				}
 				if (c.normalLamp && !c.antiqueLamp) {
-					int EXP_AWARDED = (int) (7500 + Misc.random(10000) * c.prestige());
+					int EXP_AWARDED = (int) (3500 + Misc.random(100) * c.prestige());
 					
 					if (Config.BETA_MODE) {
 						EXP_AWARDED += EXP_AWARDED/2;

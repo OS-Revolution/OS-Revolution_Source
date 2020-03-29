@@ -19,7 +19,7 @@ public class Membership {
 		} else if (getDaysLeft(c) <= 0) {
 			c.membership = false;
 			c.startDate = -1;
-			c.sendMessage("Your Membership Subscription Is Currently Inactive, Speak To Party Pete For Membership.");
+			c.sendMessage("Your Membership Subscription Is Currently Inactive, Speak To Party Pete At Home.");
 			PlayerSave.saveGame(c);
 		}
 	}

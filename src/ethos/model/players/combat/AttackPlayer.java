@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import org.apache.commons.lang3.ArrayUtils;
 
 import ethos.Config;
@@ -260,6 +262,7 @@ public class AttackPlayer {
 		case MAGE:
 			skills.add(Skill.HITPOINTS.getId());
 			skills.add(Skill.MAGIC.getId());
+			Achievements.increase(c, AchievementType.MAGIC,1);
 			experience += ((damage * (c.getMode().getType().equals(ModeType.OSRS) ? 4 : Config.MAGIC_EXP_RATE * c.prestige())) / 3) + (damage * (c.getMode().getType().equals(ModeType.OSRS) ? 4 : Config.MAGIC_EXP_RATE));
 			c.getPA().addSkillXP((int) ((damage * (c.getMode().getType().equals(ModeType.OSRS) ? 4 : Config.MAGIC_EXP_RATE * c.prestige())) / 3), 3, false);
 			c.getPA().addSkillXP((int) (damage * (c.getMode().getType().equals(ModeType.OSRS) ? 4 : Config.MAGIC_EXP_RATE * c.prestige())), 6, false);

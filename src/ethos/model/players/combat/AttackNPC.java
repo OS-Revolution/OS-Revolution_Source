@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import org.apache.commons.lang3.RandomUtils;
 
 import ethos.Config;
@@ -893,6 +895,7 @@ public class AttackNPC {
 					c.usingMagic = true;
 					if (c.getCombat().getEndGfxHeight() == 100 && damage.getAmount() > 0) { // end
 						// GFX
+						Achievements.increase(c, AchievementType.MAGIC,1);
 						NPCHandler.npcs[i].gfx100(MagicData.MAGIC_SPELLS[c.oldSpellId][5]);
 						if (Server.npcHandler.getNPCs()[i].attackTimer > 3) {
 							if (npc.npcType != 2042 && npc.npcType != 2043 & npc.npcType != 2044 && npc.npcType != 3127 && npc.npcType != 7413) {

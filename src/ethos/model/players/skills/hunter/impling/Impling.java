@@ -3,6 +3,8 @@ package ethos.model.players.skills.hunter.impling;
 import java.util.HashMap;
 import java.util.Random;
 
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.items.ItemAssistant;
 import ethos.model.npcs.NPC;
 import ethos.model.npcs.NPCHandler;
@@ -77,6 +79,7 @@ public class Impling {
 			}
 			player.getItems().deleteItem(11260, 1);
 			player.getItems().addItem(data.jar, 1);
+			Achievements.increase(player, AchievementType.HUNTER, 1);
 			player.sendMessage("You successfully caught the " + data.name + ".");
 			player.getPA().addSkillXP(data.experience * 30, 21, true);
 		} else {

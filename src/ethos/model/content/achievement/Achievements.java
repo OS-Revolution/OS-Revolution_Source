@@ -43,6 +43,7 @@ public class Achievements {
         Jad_Task(24, AchievementTier.TIER_1, AchievementType.FIGHT_CAVES_ROUNDS, null, "Complete Fightcaves 3 Times", 3, 1, new GameItem(995, 50000), new GameItem(2677), new GameItem(6570)),
         Barrows_Task_I(25, AchievementTier.TIER_1, AchievementType.BARROWS_RUNS, null, "Loot 100 Barrows Chests", 100, 1, new GameItem(995, 50000), new GameItem(2677)),
         ClueScroll_Task(26, AchievementTier.TIER_1, AchievementType.CLUES, null, "Loot 50 Clue Caskets", 50, 1, new GameItem(995, 50000)),
+        Prayer_Task_I(27, AchievementTier.TIER_1, AchievementType.PRAYER, null, "Bury 500 Bones", 500, 1, new GameItem(995, 50000), new GameItem(20710)),
         /**
          * Tier 2 Achievement Start
          */

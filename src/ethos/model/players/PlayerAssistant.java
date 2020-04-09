@@ -833,7 +833,16 @@ public void sendFrame107() {
 		}
 
 	}
+	public void sendNpcToInterface(int MainFrame, int SubFrame) {
+		// synchronized(c) {
+		if (c.getOutStream() != null && c != null) {
+			c.getOutStream().createFrame(75);
+			c.getOutStream().writeWordBigEndianA(MainFrame);
+			c.getOutStream().writeWordBigEndianA(SubFrame);
+			c.flushOutStream();
+		}
 
+	}
 	public void sendFrame75(int MainFrame, int SubFrame) {
 		// synchronized(c) {
 		if (c.getOutStream() != null && c != null) {
@@ -968,6 +977,15 @@ public void sendFrame107() {
 			c.flushOutStream();
 		}
 
+	}
+	public void sendNPCOnInterface(int interfaceId, int npcId) {
+		// synchronized(c) {
+		if (c.getOutStream() != null && c != null) {
+			c.getOutStream().createFrame(75);
+			c.getOutStream().writeByte(6);
+			c.getOutStream().writeWord(npcId);
+			c.getOutStream().writeDWord(interfaceId);
+		}
 	}
 
 	public void shakeScreen(int verticleAmount, int verticleSpeed, int horizontalAmount, int horizontalSpeed) {
@@ -1205,6 +1223,7 @@ public void sendFrame107() {
 		c.isOperate = false;
 		c.itemUsing = -1;
 	}
+	
 
 	public void stillGfx(int id, int x, int y, int height, int time, byte face) {
 		// synchronized(c) {

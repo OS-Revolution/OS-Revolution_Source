@@ -3,6 +3,8 @@ package ethos.model.players.skills.runecrafting;
 import java.util.stream.IntStream;
 
 import ethos.Config;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.content.achievement_diary.ardougne.ArdougneDiaryEntry;
 import ethos.model.content.achievement_diary.falador.FaladorDiaryEntry;
 import ethos.model.content.achievement_diary.karamja.KaramjaDiaryEntry;
@@ -130,6 +132,7 @@ public class Runecrafting extends SkillHandler {
 				}
 				if (name.equals("law"))
 					DailyTasks.increase(player, PossibleTasks.LAW_RUNES);
+				
 				/*if (name.equals("astral")) {
 					if (multiply > 50) {
 						player.getDiaryManager().getFremennikDiary().progress(FremennikDiaryEntry.CRAFT_ASTRAL);

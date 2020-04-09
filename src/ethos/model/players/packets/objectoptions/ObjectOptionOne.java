@@ -422,11 +422,16 @@ public class ObjectOptionOne {
 		case 12617://Ice zone
 			c.getPA().movePlayer(2901, 5470, 0);
 			
+			
 			break;
 		case 12639://Rock zone
 			c.getPA().movePlayer(2913, 5460, 0);
 			break;
 			//End of new donator zone
+			
+			//Teleport tablets
+		case 19629://Barrows
+			c.getPA().movePlayer(3565, 3316, 0);
 			
 		case 27095://Ice zone
 			c.getPA().movePlayer(1644, 3673, 0);

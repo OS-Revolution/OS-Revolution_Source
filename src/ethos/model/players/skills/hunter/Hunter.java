@@ -9,6 +9,8 @@ import ethos.Config;
 import ethos.Server;
 import ethos.clip.Region;
 import ethos.event.CycleEventHandler;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.content.dailytasks.DailyTasks;
 import ethos.model.content.dailytasks.DailyTasks.PossibleTasks;
 import ethos.model.players.Player;
@@ -292,7 +294,7 @@ public final class Hunter {
 		}
 
 		player.getPA().addSkillXP((int) ((int) trap.experience() * (player.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.HUNTER_EXPERIENCE * player.prestige()) + (player.getItems().isWearingItem(10071) ? percentOfXp : 0)), 21, true);
-
+		Achievements.increase(player, AchievementType.HUNTER, 1);
 		GLOBAL_TRAPS.get(player).getTraps().remove(trap);
 		
 		if(GLOBAL_TRAPS.get(player).getTraps().isEmpty()) {

@@ -85,7 +85,7 @@ public class Achievements {
         JAD_SLAYER_II(27, AchievementTier.TIER_2, AchievementType.FIGHT_CAVES_ROUNDS, null, "Complete Fightcaves 5 Times", 5, 2, new GameItem(995, 900000), new GameItem(2801)),
         BARROW_RUN_II(28, AchievementTier.TIER_2, AchievementType.BARROWS_RUNS, null, "Loot 50 Barrows Chests", 50, 2, new GameItem(995, 700000), new GameItem(2801)),
         CLUE_MASTER_II(29, AchievementTier.TIER_2, AchievementType.CLUES, null, "Loot 120 Clue Caskets", 120, 2, new GameItem(995, 600000), new GameItem(2801)),
-        /**
+   /**
          * Tier 3 Achievement Start
          */
         

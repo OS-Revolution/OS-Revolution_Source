@@ -17,7 +17,7 @@ public enum AchievementType {
 	/*
 	 * Skill
 	 */
-	FISH, COOK, MINE, SMITH, FARM, HERB, WOODCUT, FLETCH, FIRE, THIEV, AGIL, ROOFTOP, SLAY,
+	FISH, COOK, MINE, SMITH, FARM, HERB, WOODCUT, FLETCH, FIRE, THIEV, AGIL, ROOFTOP, SLAY, RUNECRAFTING,HUNTER,PRAYER,MAGIC,
 
 	/*
 	 * Complete minigames/Crystal chest

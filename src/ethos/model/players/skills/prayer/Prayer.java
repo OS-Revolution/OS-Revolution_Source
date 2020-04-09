@@ -11,6 +11,8 @@ import com.google.common.base.Stopwatch;
 import ethos.Config;
 import ethos.Server;
 import ethos.event.Event;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.items.ItemDefinition;
 import ethos.model.players.Boundary;
 import ethos.model.players.Player;
@@ -103,6 +105,7 @@ public class Prayer {
 			}
 			player.getPA().refreshSkill(5);
 		}
+		Achievements.increase(player, AchievementType.PRAYER, 1);
 		player.sendMessage("You bury the " + (definition == null ? "bone" : definition.getName()) + ".");
 		player.getPA().addSkillXP((int) (bone.getExperience() * (Boundary.isIn(player, Boundary.LAVA_DRAGON_ISLE) && bone.getItemId() == 11943 ? (player.getMode().getType().equals(ModeType.OSRS) ? 4 * 4 : (Config.PRAYER_EXPERIENCE * player.prestige()) * 4) : (player.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.PRAYER_EXPERIENCE * player.prestige()))), Skill.PRAYER.getId(), true);
 		player.getItems().deleteItem2(bone.getItemId(), 1);
@@ -133,6 +136,7 @@ public class Prayer {
 		lastAction.reset();
 		lastAction.start();
 		player.getSkilling().setSkill(Skill.PRAYER);
+		Achievements.increase(player, AchievementType.PRAYER, 1);
 		Server.getEventHandler().submit(new Event<Player>("skilling", player, 3) {
 			int remaining = amount - 1;
 

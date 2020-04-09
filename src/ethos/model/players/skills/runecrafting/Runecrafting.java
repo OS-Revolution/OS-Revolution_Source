@@ -147,7 +147,7 @@ public class Runecrafting extends SkillHandler {
 				player.getItems().addItem(data.getRuneId(), multiply);
 				player.sendMessage("You bind the temple's power into " + essence + " " + name + " runes.");
 				player.getPA().requestUpdates();
-				
+				Achievements.increase(player, AchievementType.RUNECRAFTING, 1);
 					boolean hasGuardian = IntStream.range(20665, 20691).anyMatch(id -> player.getItems().getItemCount(id) > 0);
 					boolean hasGuardianItem = IntStream.range(20665, 20691).anyMatch(id -> player.getItems().playerHasItem(id));
 					if (hasGuardianItem) {

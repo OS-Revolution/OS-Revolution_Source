@@ -211,7 +211,7 @@ public enum Title implements Comparator<Title> {
 
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getAchievements().isComplete(AchievementTier.TIER_2.ordinal(), Achievement.EXPERT_FISHER.getId());
+			return player.getAchievements().isComplete(AchievementTier.TIER_2.ordinal(), Achievement.FISHER_II.getId());
 		}
 	}, "A Fisherman is a player that has fished at least 2,500 fish."),
 
@@ -219,15 +219,15 @@ public enum Title implements Comparator<Title> {
 
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getAchievements().isComplete(AchievementTier.TIER_2.ordinal(), Achievement.EXPERT_CHOPPER.getId());
+			return player.getAchievements().isComplete(AchievementTier.TIER_2.ordinal(), Achievement.WOODCUTTER_II.getId());
 		}
-	}, "A Lumberjack is a player that has cut down trees and has accumulated at least 2,500 logs."),
+	}, "A Lumberjack is a player that has cut down trees and has accumulated at least 1000 logs."),
 
 	MASTER_SLAYER("Master Slayer", 0, TitleCurrency.NONE, new TitleRequirement() {
 
 		@Override
 		public boolean meetsStandard(Player player) {
-			return player.getAchievements().isComplete(AchievementTier.TIER_3.ordinal(), Achievement.SLAYER_EXPERT.getId());
+			return player.getAchievements().isComplete(AchievementTier.TIER_3.ordinal(), Achievement.SLAYER_MASTER_III.getId());
 		}
 	}, "To receive access to this title, a player must complete at least 150 slayer tasks."),
 

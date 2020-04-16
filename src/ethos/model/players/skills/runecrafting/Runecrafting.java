@@ -132,6 +132,7 @@ public class Runecrafting extends SkillHandler {
 				}
 				if (name.equals("law"))
 					DailyTasks.increase(player, PossibleTasks.LAW_RUNES);
+				
 				/*if (name.equals("astral")) {
 					if (multiply > 50) {
 						player.getDiaryManager().getFremennikDiary().progress(FremennikDiaryEntry.CRAFT_ASTRAL);

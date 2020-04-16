@@ -181,20 +181,61 @@ public class AchievementHandler {
             name = name.toLowerCase().replaceAll("_", " ");
         }
         Achievements.increase(player, AchievementType.SLAY_ANY_NPCS, 1);
+        
         if (name.contains("dragon") && !name.contains("baby"))
             Achievements.increase(player, AchievementType.SLAY_DRAGONS, 1);
+        
         else if (name.contains("dragon") && name.contains("baby"))
             Achievements.increase(player, AchievementType.SLAY_BABY_DRAGONS, 1);
-        else if (name.contains("crab"))
+        
+        else if (name.contains("crab") && name.contains("rock"))
             Achievements.increase(player, AchievementType.SLAY_ROCK_CRABS, 1);
+        
         else if (name.contains("cow"))
             Achievements.increase(player, AchievementType.SLAY_COWS, 1);
+        
         else if (name.contains("devil") && name.contains("smoke"))
-            Achievements.increase(player, AchievementType.SLAY_SMOKE_DEVILS, 1); 
-        else if (name.contains("chaos"))
+            Achievements.increase(player, AchievementType.SLAY_SMOKE_DEVILS, 1);
+        
+        else if (name.contains("gorilla") && name.contains("demonic"))
+            Achievements.increase(player, AchievementType.SLAY_DEMONIC_GORILLA, 1);
+        
+        else if (name.contains("druid") && name.contains("chaos"))
             Achievements.increase(player, AchievementType.SLAY_CHAOS_DRUIDS, 1);
+        
+        else if (name.contains("barrelchest"))
+            Achievements.increase(player, AchievementType.SLAY_BARREL_CHEST, 1);
+        
+        else if (name.contains("dragon") && name.contains("mithril"))
+            Achievements.increase(player, AchievementType.MITHRIL_DRAGON, 1);
+        
+        else if (name.contains("mole") && name.contains("giant"))
+            Achievements.increase(player, AchievementType.SLAY_GIANT_MOLE, 1);
+        
         else if (name.contains("chicken"))
             Achievements.increase(player, AchievementType.SLAY_CHICKENS, 1);
+        
+        else if (name.contains("archaeologist") && name.contains("crazy"))
+            Achievements.increase(player, AchievementType.MAD_SCIENTIST, 1);
+        
+        else if (name.contains("fanatic") && name.contains("chaos"))
+            Achievements.increase(player, AchievementType.CHAOS_FANATIC, 1);
+        
+        else if (name.contains("venenatis"))
+            Achievements.increase(player, AchievementType.VENENATIS, 1);
+        
+        else if (name.contains("vet'ion"))
+            Achievements.increase(player, AchievementType.VETION, 1);
+        
+        else if (name.contains("cave") && name.contains("kraken"))
+            Achievements.increase(player, AchievementType.KRAKEN, 1);
+        
+        else if (name.contains("zulrah"))
+            Achievements.increase(player, AchievementType.ZULRAH, 1);
+        
+        else if (name.contains("lizardman"))
+            Achievements.increase(player, AchievementType.LIZARD_SHAMAN, 1);
+        
         List<String> checked = new ArrayList<>();
         for (Achievement achievement : Achievement.ACHIEVEMENTS) {
             if (!achievement.getType().name().toLowerCase().contains("kill"))

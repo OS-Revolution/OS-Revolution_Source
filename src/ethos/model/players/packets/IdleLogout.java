@@ -9,7 +9,7 @@ public class IdleLogout implements PacketType {
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
 		System.out.println("LOGOUT");
-		if (c.underAttackBy > 0) {
+		if (c.underAttackBy > 0 || c.underAttackBy2 > 0 ) {
 			return;
 		}
 		try {

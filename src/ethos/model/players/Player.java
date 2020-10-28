@@ -1,18 +1,15 @@
 package ethos.model.players;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 import ethos.model.players.packets.commands.owner.Npc;
+import ethos.phantasye.job.Employee;
+import ethos.phantasye.job.Job;
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.entity.player.PlayerCharacterAttribute;
+import ethos.runehub.entity.player.PlayerCharacterContext;
 import ethos.util.*;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
@@ -160,10 +157,21 @@ import ethos.world.Clan;
 import org.menaphos.action.ActionInvoker;
 import org.menaphos.entity.impl.impl.NonPlayableCharacter;
 import org.menaphos.entity.impl.impl.PlayableCharacter;
+import org.menaphos.model.loot.Loot;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
+import org.rhd.api.StringUtils;
+import org.rhd.api.action.Action;
+import org.rhd.api.action.ActionScheduler;
+import org.rhd.api.action.impl.interaction.Interactable;
+import org.rhd.api.action.impl.interaction.Interaction;
+import org.rhd.api.entity.EntityContext;
+import org.rhd.api.entity.user.character.CharacterEntityAttribute;
+import org.rhd.api.entity.user.character.player.PlayerCharacterEntity;
+import org.rhd.api.entity.user.character.player.impl.PlayerCharacter;
+import org.rhd.api.item.container.ItemContainer;
 
-public class Player extends Entity implements PlayableCharacter {
+public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
 	public static int maRound = 0;
 	public boolean maOption = false, maIndeedyOption = false;
@@ -1312,6 +1320,9 @@ public class Player extends Entity implements PlayableCharacter {
 		inStream.currentOffset = 0;
 		buffer = new byte[Config.BUFFER_SIZE];
 		// }
+		this.attributes = new PlayerCharacterAttribute(this);
+		this.actionQueue = new ActionScheduler(1, 10);
+		this.context = PlayerCharacterContextDataAccessObject.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
 	}
 
 	public Player getClient(String name) {
@@ -1363,16 +1374,6 @@ public class Player extends Entity implements PlayableCharacter {
 		session.write(packet);
 		outStream.currentOffset = 0;
 
-	}
-
-	@Override
-	public ActionInvoker getActionInvoker() {
-		return null;
-	}
-
-	@Override
-	public boolean moveTo(Location location) {
-		return false;
 	}
 
 	public class TinterfaceText {
@@ -1558,26 +1559,6 @@ public class Player extends Entity implements PlayableCharacter {
 		resetWalkingQueue();
 	}
 
-	@Override
-	public int getId() {
-		return 0;
-	}
-
-	@Override
-	public boolean addItemToInventory(int i, int i1) {
-		return false;
-	}
-
-	@Override
-	public boolean removeItemFromInventory(int i, int i1) {
-		return false;
-	}
-
-	@Override
-	public boolean pickupItem(int i, int i1) {
-		return false;
-	}
-
 	public void sendMessage(String s) {
 		// synchronized (this) {
 		if (getOutStream() != null) {
@@ -1585,26 +1566,6 @@ public class Player extends Entity implements PlayableCharacter {
 			outStream.writeString(s);
 			outStream.endFrameVarSize();
 		}
-	}
-
-	@Override
-	public void receiveMessage(String s) {
-		this.sendMessage(s);
-	}
-
-	@Override
-	public boolean hasItem(int i, int i1) {
-		return false;
-	}
-
-	@Override
-	public void performAnimation(int i) {
-
-	}
-
-	@Override
-	public StopWatch getStopWatch() {
-		return null;
 	}
 
 	public void sendAudio(int soundId) {
@@ -2116,6 +2077,7 @@ public void sendStopSound() {
 			disconnected = true;
 			ConnectedFrom.addConnectedFrom(this, connectedFrom);
 		}
+		PlayerCharacterContextDataAccessObject.getInstance().update(context);
 	}
 
 	int totalRaidsFinished;
@@ -5591,32 +5553,19 @@ public void sendStopSound() {
 		return rights;
 	}
 
-	@Override
-	public int getRights() {
-		return 0;
-	}
-
-	@Override
-	public double getMagicFind() {
-		return 0;
-	}
-
-	@Override
-	public void receiveDropFrom(NonPlayableCharacter npc, org.menaphos.model.loot.Loot loot, Location location) {
-		System.out.println("DROPPING: " + loot);
-		System.out.println("DROPPING: " + ItemAssistant.getItemName(loot.getItem().getId()));
-		Server.getDropManager().create(this,new Location3D(location.getXCoordinate(),location.getYCoordinate(),location.getZCoordinate()),loot);
-	}
-
-	@Override
-	public void register() {
-
-	}
-
-	@Override
-	public void deregister() {
-
-	}
+	//TODO Convert to new system
+//	public void receiveDropFrom(NonPlayableCharacter npc, int itemId, int amount, Location location) {
+//		System.out.println("DROPPING: " + itemId + "\nLocation: " + location);
+//		Server.itemHandler.createGroundItem(this, itemId, location.getXCoordinate(), location.getYCoordinate(),
+//				location.getZCoordinate(), amount, this.getIndex());
+//	}
+//
+//	@Override
+//	public void receiveDropFrom(NonPlayableCharacter npc, org.menaphos.model.loot.Loot loot, Location location) {
+//		System.out.println("DROPPING: " + loot);
+//		System.out.println("DROPPING: " + ItemAssistant.getItemName(loot.getItem().getId()));
+//		Server.getDropManager().create(this,new Location3D(location.getXCoordinate(),location.getYCoordinate(),location.getZCoordinate()),loot);
+//	}
 
 	/**
 	 * Returns a single instance of the Titles class for this player
@@ -5712,6 +5661,65 @@ public void sendStopSound() {
 		}
 		return lostItemsSkotizo;
 	}
+
+	@Override
+	public void assignJob(Job job) {
+
+	}
+
+	@Override
+	public void updateJob(int itemId) {
+
+	}
+
+	@Override
+	public void completeJob() {
+
+	}
+
+	@Override
+	public void quit() {
+
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+	}
+
+	@Override
+	public ItemContainer inventory() {
+		return null;
+	}
+
+	@Override
+	public PlayerCharacterContext getContext() {
+		return context;
+	}
+
+	@Override
+	public CharacterEntityAttribute getAttributes() {
+		return null;
+	}
+
+	@Override
+	public void perform(Action<?> action) {
+		actionQueue.queue(action);
+	}
+
+	@Override
+	public void interact(Interactable interactable) {
+		actionQueue.queue(interactable.onInteraction());
+	}
+
+	@Override
+	public Interaction onInteraction() {
+		return null;
+	}
+
+	private final ActionScheduler actionQueue;
+	private final PlayerCharacterAttribute attributes;
+	private final PlayerCharacterContext context;
 
 	public int getArcLightCharge() {
 		return arcLightCharge;

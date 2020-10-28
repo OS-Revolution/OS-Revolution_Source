@@ -13,7 +13,6 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
-import ethos.rshd.loot.CustomLootFactory;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -25,6 +24,8 @@ import org.menaphos.model.loot.LootableContainer;
 import org.menaphos.model.loot.factory.LootFactory;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
+import org.rhd.api.model.LootTableContainer;
+import org.runehub.app.editor.loot.LootEditor;
 
 public class NPC extends Entity implements NonPlayableCharacter {
     // private Hitmark hitmark = null;
@@ -758,37 +759,62 @@ public class NPC extends Entity implements NonPlayableCharacter {
         this.randomWalkDelay = randomWalkDelay;
     }
 
+    public void dropLootFor(Player player) {
+        final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
+        final LootTableContainer container = LootEditor.getInstance().getLootContainerAccessObject().read(this.getId());
+        if (container != null) {
+            player.getContext().getJobScore().increment();
+            container.roll().roll() //TODO add magic find
+                    .forEach(loot -> {
+
+                        Server.getDropManager().create(player,new Location3D(dropLocation.getXCoordinate(),dropLocation.getYCoordinate(),dropLocation.getZCoordinate()),loot);
+                    });
+        }
+//        final LootTableContainer container = LootTableContainerFactory.getInstance(LootSourceType.NPC)
+//                .getContainer(this.getId()).orElse(null);
+//        System.out.println("ROLLING CONTAINER: " + container);
+//        if (container != null) {
+//            final List<org.menaphos.loot.model.Loot> lootList = LootTableFactory.getLootTable(container
+//                    .roll(0))
+//                    .roll(0); //TODO replace with real magic find variables
+//            lootList.forEach(loot -> {
+//                player.receiveDropFrom(this, loot.getItemId(), loot.getAmount(), dropLocation);
+//            });
+//        }
+    }
+
     @Override
     public void dropLootFor(PlayableCharacter player) {
-		final int RARE_DROP_TABLE_ID = 701;
-		final int HERB_DROP_TABLE_ID = 2;
-		final int SEED_DROP_TABLE_ID = 3;
-		final LootableContainer lootable = CustomLootFactory.getLootableNpc(this.getId());
-		if (lootable != null) {
-			final List<Loot> constants = lootable.receiveConstants();
-			final Loot loot = lootable.open(player.getMagicFind());
-			final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
-			constants.forEach(constant -> player.receiveDropFrom(this, constant, dropLocation));
-			if (loot.getItem().getId() == RARE_DROP_TABLE_ID) {
-				final Loot rareDrop = LootFactory.getLootableItem(701).open();
-				player.receiveDropFrom(this, rareDrop, dropLocation);
-				player.receiveMessage("You've received a drop from the rare drop table!");
-			} else if (loot.getItem().getId() == HERB_DROP_TABLE_ID) {
-				final Loot rareDrop = LootFactory.getLootableItem(HERB_DROP_TABLE_ID).open();
-				player.receiveDropFrom(this, rareDrop, dropLocation);
-				player.receiveMessage("You've received a drop from the herb drop table!");
-			} else if (loot.getItem().getId() == SEED_DROP_TABLE_ID) {
-				final Loot rareDrop = LootFactory.getLootableItem(SEED_DROP_TABLE_ID).open();
-				player.receiveDropFrom(this, rareDrop, dropLocation);
-				player.receiveMessage("You've received a drop from the seed drop table!");
-			} else {
-				player.receiveDropFrom(this, loot, dropLocation);
-
-			}
-		} else {
-			player.receiveMessage("Missing Drop Data [" + this.getId() + "]"  );
-			throw new NullPointerException("Missing Drop Data");
-		}
+        //TODO update this to new system
+//		final int RARE_DROP_TABLE_ID = 701;
+//		final int HERB_DROP_TABLE_ID = 2;
+//		final int SEED_DROP_TABLE_ID = 3;
+//		final LootableContainer lootable = CustomLootFactory.getLootableNpc(this.getId());
+//		if (lootable != null) {
+//			final List<Loot> constants = lootable.receiveConstants();
+//			final Loot loot = lootable.open(player.getMagicFind());
+//			final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
+//			constants.forEach(constant -> player.receiveDropFrom(this, constant, dropLocation));
+//			if (loot.getItem().getId() == RARE_DROP_TABLE_ID) {
+//				final Loot rareDrop = LootFactory.getLootableItem(701).open();
+//				player.receiveDropFrom(this, rareDrop, dropLocation);
+//				player.receiveMessage("You've received a drop from the rare drop table!");
+//			} else if (loot.getItem().getId() == HERB_DROP_TABLE_ID) {
+//				final Loot rareDrop = LootFactory.getLootableItem(HERB_DROP_TABLE_ID).open();
+//				player.receiveDropFrom(this, rareDrop, dropLocation);
+//				player.receiveMessage("You've received a drop from the herb drop table!");
+//			} else if (loot.getItem().getId() == SEED_DROP_TABLE_ID) {
+//				final Loot rareDrop = LootFactory.getLootableItem(SEED_DROP_TABLE_ID).open();
+//				player.receiveDropFrom(this, rareDrop, dropLocation);
+//				player.receiveMessage("You've received a drop from the seed drop table!");
+//			} else {
+//				player.receiveDropFrom(this, loot, dropLocation);
+//
+//			}
+//		} else {
+//			player.receiveMessage("Missing Drop Data [" + this.getId() + "]"  );
+//			throw new NullPointerException("Missing Drop Data");
+//		}
     }
 
 

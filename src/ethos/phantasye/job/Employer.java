@@ -1,5 +1,7 @@
 package ethos.phantasye.job;
 
+import ethos.Server;
+import ethos.model.items.ItemAssistant;
 import ethos.model.players.Player;
 import ethos.model.players.skills.Skill;
 import ethos.phantasye.job.pay.Payment;
@@ -7,6 +9,10 @@ import ethos.phantasye.job.pay.PaymentFactory;
 import ethos.phantasye.job.pay.impl.CoinPaymentFactory;
 import ethos.phantasye.job.pay.impl.RandomPaymentModifier;
 import ethos.phantasye.trans.impl.deposit.CurrencyDeposit;
+import ethos.util.Location3D;
+import org.rhd.api.model.LootTableContainer;
+import org.runehub.app.editor.loot.LootEditor;
+import org.runehub.app.editor.loot.model.loot.LootContainerType;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,7 +38,7 @@ public class Employer {
             final Job.Difficulty difficulty = this.assignDifficulty(skillId);
             final int targetId = this.assignTarget(difficulty, skillId);
             final int quota = this.assignQuota(difficulty);
-            final Job job = new Job.JobBuilder(employee)
+            final Job job = new Job.JobBuilder()
                     .forSkill(skillId)
                     .withDifficulty(difficulty)
                     .withTargetId(targetId)
@@ -51,7 +57,7 @@ public class Employer {
         final Job.Difficulty difficulty = Job.Difficulty.EASY;
         final int targetId = 1513;
         final int quota = this.assignQuota(difficulty);
-        final Job job = new Job.JobBuilder(employee)
+        final Job job = new Job.JobBuilder()
                 .forSkill(skillId)
                 .withDifficulty(difficulty)
                 .withTargetId(targetId)
@@ -73,7 +79,7 @@ public class Employer {
                     .filter(jobTarget -> jobTarget.getDifficulty() == difficulty)
                     .filter(jobTarget -> jobTarget.getSkillId() == skill)
                     .collect(Collectors.toList());
-            if(availableJobs.isEmpty()) {
+            if(availableJobs.isEmpty() && difficulty.ordinal() > 0) {
                 return assignTarget(Job.Difficulty.previous(difficulty),skill);
             }
             final int index = new Random().nextInt(availableJobs.size());
@@ -154,6 +160,15 @@ public class Employer {
 
 //        employee.transact(new CurrencyDeposit(employee, amount)); TODO Fix this
         employee.getPA().addSkillXP(xp,job.getSkillId(),true);
+        //TODO roll job
+        final LootTableContainer container = LootEditor.getInstance().getLootContainerAccessObject(LootContainerType.MISC).read(job.getSkillId());
+        if (container != null) {
+            employee.getContext().getJobScore().increment();
+            container.roll(job.getDifficulty().getMagicFindBonus()).roll() //TODO add magic find
+                    .forEach(loot -> {
+                        employee.getItems().addItem(loot.getItemId(),loot.getAmount());
+                    });
+        }
         employee.sendMessage("You've received " + NumberFormat.getInstance().format(amount) + " Coins and " +
                 NumberFormat.getInstance().format(xp) + " XP!");
     }

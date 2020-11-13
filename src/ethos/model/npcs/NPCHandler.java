@@ -3490,10 +3490,8 @@ public class NPCHandler {
                 amountOfDrops++;
             }
             try {
-                System.out.println("NPC DROPPING: " + npcs[i].getId());
                 npcs[i].dropLootFor(c);
             } catch (NullPointerException e) {
-                System.out.println(e.getMessage());
                 Server.getDropManager().create(c, npcs[i], location, amountOfDrops);
             }
 

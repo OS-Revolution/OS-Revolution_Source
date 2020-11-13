@@ -1,22 +1,20 @@
 package ethos.runehub.db;
 
+import ethos.phantasye.job.Job;
 import ethos.runehub.ServerFileSystem;
 import ethos.runehub.entity.player.PlayerCharacterContext;
-import org.rhd.api.Range;
 import org.rhd.api.io.db.DatabaseAcessManager;
 import org.rhd.api.io.db.Query;
 import org.rhd.api.io.db.QueryParameter;
 import org.rhd.api.io.db.SqlDataType;
 import org.rhd.api.io.db.impl.AbstractDataAcessObject;
 import org.rhd.api.io.fs.ApplicationFileSystem;
-import org.rhd.api.model.PotentialItem;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +43,13 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
             while (rs.next()) {
                 items.add(
                         new PlayerCharacterContext.PlayerCharacterContextBuilder(rs.getLong("id"))
+                                .withJobScore(rs.getInt("jobScore"))
+                                .withJob(new Job.JobBuilder()
+                                        .forSkill(rs.getInt("jobSkillId"))
+                                        .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
+                                        .withQuota(rs.getInt("jobQuota"))
+                                        .withTargetId(rs.getInt("jobTargetId"))
+                                        .build())
                                 .build()
                 );
             }
@@ -57,27 +62,36 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
 
     @Override
     public void update(PlayerCharacterContext context) {
-        final Query query = new Query.QueryBuilder().addQuery("UPDATE")
-                .addQuery(TABLE_NAME)
-                .addQuery("SET "
-                        + "jobScore='" + context.getJobScore().value() + "'"
-                )
-                .addQuery("WHERE id='" + context.getId() + "'")
-                .build();
-        try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
-             PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("PROBLEM");
-            if(this.getCachedEntries().containsKey(context.getId())) {
-                this.delete(context);
+        try {
+            final Query query = new Query.QueryBuilder().addQuery("UPDATE")
+                    .addQuery(TABLE_NAME)
+                    .addQuery("SET "
+                            + "jobScore='" + context.getJobScore().value() + "'"
+                            + ",jobSkillId='" + context.getActiveJob().getSkillId() + "'"
+                            + ",jobQuota='" + context.getActiveJob().getQuota().value() + "'"
+                            + ",jobDifficultyId='" + context.getActiveJob().getDifficulty().ordinal() + "'"
+                            + ",jobTargetId='" + context.getActiveJob().getTargetId() + "'"
+                    )
+
+                    .addQuery("WHERE id='" + context.getId() + "'")
+                    .build();
+            try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
+                 PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                System.out.println("PROBLEM");
+                if (this.getCachedEntries().containsKey(context.getId())) {
+                    this.delete(context);
+                }
+                this.create(context);
             }
-            this.create(context);
-        }
-        if(!this.getCachedEntries().containsKey(context.getId())) {
-            this.getCachedEntries().putIfAbsent(context.getId(), context);
-        } else {
-            this.getCachedEntries().replace(context.getId(), context);
+            if (!this.getCachedEntries().containsKey(context.getId())) {
+                this.getCachedEntries().putIfAbsent(context.getId(), context);
+            } else {
+                this.getCachedEntries().replace(context.getId(), context);
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 
@@ -85,18 +99,18 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
     public void create(PlayerCharacterContext context) {
         final Query query = new Query.QueryBuilder().addQuery("INSERT INTO")
                 .addQuery(TABLE_NAME)
-                .addQuery("(id,jobScore)")
-                .addQuery("VALUES(?,?)")
+                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId)")
+                .addQuery("VALUES(?,?,?,?,?,?)")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
             pstmt.setLong(1, context.getId());
-            pstmt.setInt(2,context.getJobScore().value());
+            pstmt.setInt(2, context.getJobScore().value());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(!this.getCachedEntries().containsKey(context.getId())) {
+        if (!this.getCachedEntries().containsKey(context.getId())) {
             this.getCachedEntries().putIfAbsent(context.getId(), context);
         } else {
             this.getCachedEntries().replace(context.getId(), context);
@@ -139,6 +153,12 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 PlayerCharacterContext.PlayerCharacterContextBuilder builder = new PlayerCharacterContext.PlayerCharacterContextBuilder(rs.getLong("id"));
                 while (rs.next()) {
                     builder.withJobScore(rs.getInt("jobScore"));
+                    builder.withJob(new Job.JobBuilder()
+                            .forSkill(rs.getInt("jobSkillId"))
+                            .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
+                            .withQuota(rs.getInt("jobQuota"))
+                            .withTargetId(rs.getInt("jobTargetId"))
+                            .build());
                 }
                 context = builder.build();
                 this.getCachedEntries().putIfAbsent(l, context);
@@ -167,17 +187,26 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 .getAbsolutePath());
         this.getDatabaseServiceProvider().createTable(TABLE_NAME,
                 new QueryParameter("id", SqlDataType.BIGINT, QueryParameter.PRIMARY_KEY),
-                new QueryParameter("jobScore", SqlDataType.INTEGER)
+                new QueryParameter("jobScore", SqlDataType.INTEGER),
+                new QueryParameter("jobQuota", SqlDataType.INTEGER),
+                new QueryParameter("jobSkillId", SqlDataType.INTEGER),
+                new QueryParameter("jobTargetId", SqlDataType.INTEGER),
+                new QueryParameter("jobDifficultyId", SqlDataType.INTEGER)
         );
 
         final Query query = new Query.QueryBuilder()
                 .addQuery("ALTER TABLE")
                 .addQuery(TABLE_NAME)
-                .addQuery("ADD jobScore INTEGER")
+                .addQuery("ADD")
+                .addQuery(" jobQuota INTEGER")
+                .addQuery(" jobSkillId INTEGER")
+                .addQuery(" jobTargetId INTEGER")
+                .addQuery(" jobDifficultyId INTEGER")
+                .addQuery(" jobScore INTEGER")
                 .build();
-        System.out.println(query.getSql());
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
+            System.out.println(query.getSql());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

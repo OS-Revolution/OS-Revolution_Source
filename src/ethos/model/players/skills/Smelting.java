@@ -254,6 +254,7 @@ public class Smelting {
 						c.sendMessage("The ore is too impure and you fail to refine it.");
 					else {
 						c.getItems().addItem(c.bar.getBar(), 1);
+						c.updateJob(c.bar.bar);
 						c.getPA().addSkillXP((int) (usage == "INFERNAL" ? c.bar.getExp() * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.SMITHING_EXPERIENCE / 2) : c.bar.getExp() * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.SMITHING_EXPERIENCE * c.prestige()) + (goldSmithGaunts ? percentOfXp : 0)), Player.playerSmithing, true);
 					}
 				}

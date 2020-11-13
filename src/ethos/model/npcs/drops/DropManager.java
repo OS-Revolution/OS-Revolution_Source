@@ -26,7 +26,9 @@ import ethos.util.Location3D;
 import ethos.util.Misc;
 import org.menaphos.model.loot.factory.LootFactory;
 import org.rhd.api.model.Loot;
+import org.rhd.api.model.LootTable;
 import org.rhd.api.model.PotentialItem;
+import org.runehub.app.editor.loot.LootEditor;
 
 import java.io.FileReader;
 import java.io.IOException;

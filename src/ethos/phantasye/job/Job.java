@@ -1,10 +1,9 @@
 package ethos.phantasye.job;
 
-import org.menaphos.Menaphos;
-import org.menaphos.io.fs.Extension;
-import org.menaphos.io.fs.FileRequest;
-import org.menaphos.io.fs.impl.DefaultFileSystem;
+import ethos.runehub.ServerFileSystem;
 import org.phantasye.RepositoryManager;
+import org.rhd.api.io.fs.ApplicationFileSystem;
+import org.rhd.api.io.fs.Extension;
 import org.rhd.api.math.impl.AdjustableInteger;
 
 import java.util.Observable;
@@ -12,25 +11,32 @@ import java.util.Observable;
 public final class Job extends Observable {
 
     public static final RepositoryManager<JobTarget,JobRepository> JOB_REPOSITORY =
-            new RepositoryManager<>(new FileRequest.FileRequestBuilder(Menaphos.getInstance().getFileSystem())
-                    .inDirectory(DefaultFileSystem.SERVER)
-                    .inDirectory(DefaultFileSystem.DATA)
-                    .inDirectory(DefaultFileSystem.REPOSITORY)
+            new RepositoryManager<>(ServerFileSystem.getInstance().buildFileRequest()
+                    .inDirectory(ApplicationFileSystem.APP_DIRECTORY)
+                    .inDirectory(ServerFileSystem.APP_HOME)
+                    .inDirectory(ServerFileSystem.RESOURCE_HOME)
+                    .inDirectory(ServerFileSystem.DATABASE_HOME)
                     .withFileName("job-data")
                     .withExtension(Extension.JSON)
                     .build().getFile().getAbsolutePath(),JobRepository.class);
 
     public static enum Difficulty {
-        EASY(50,500,20000),MEDIUM(100,5000,50000),HARD(250,10000, 100000),LEGENDARY(500,50000, 500000);
+        EASY(50,500,20000,0),MEDIUM(100,5000,50000,0.1),HARD(250,10000, 100000,0.3),LEGENDARY(500,50000, 500000,0.5);
 
         private final int quotaMin;
         private final int xpMin;
         private final int basePay;
+        private final double containerId;
 
-        private Difficulty(int min, int mod, int basePay) {
+        private Difficulty(int min, int mod, int basePay,double containerId) {
             this.quotaMin = min;
             this.xpMin = mod;
             this.basePay = basePay;
+            this.containerId = containerId;
+        }
+
+        public double getMagicFindBonus() {
+            return containerId;
         }
 
         public int getBasePay() {
@@ -54,13 +60,11 @@ public final class Job extends Observable {
     private final AdjustableInteger quota;
     private final int targetId;
     private final Difficulty difficulty;
-    private transient final Employee employee;
 
     private Job(JobBuilder builder) {
         this.skillId = builder.skillId;
         this.quota = new AdjustableInteger(builder.quota);
         this.targetId = builder.targetId;
-        this.employee = builder.employee;
         this.difficulty = builder.difficulty;
     }
 
@@ -87,10 +91,8 @@ public final class Job extends Observable {
         private int quota;
         private int targetId;
         private Difficulty difficulty;
-        private final Employee employee;
 
-        public JobBuilder(Employee employee) {
-            this.employee = employee;
+        public JobBuilder() {
         }
 
         public JobBuilder forSkill(int skillId) {

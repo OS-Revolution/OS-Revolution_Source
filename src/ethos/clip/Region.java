@@ -148,7 +148,7 @@ public class Region {
 			new WorldObject(6150, 2859, 2967, 0, 0), // Anvi
 
 			new WorldObject(24101, 2854, 2967, 0, 0),
-
+			new WorldObject(-1, 3096, 3244, 0, 0),
 			//2nd bank room, other side
 			new WorldObject(24101, 2834, 2981, 0, 0), //Banks
 			new WorldObject(24101, 2835, 2981, 0, 0),

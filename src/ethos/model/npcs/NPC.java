@@ -26,6 +26,7 @@ import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
 import org.rhd.api.model.LootTableContainer;
 import org.runehub.app.editor.loot.LootEditor;
+import org.runehub.app.editor.loot.model.loot.LootContainerType;
 
 public class NPC extends Entity implements NonPlayableCharacter {
     // private Hitmark hitmark = null;
@@ -761,7 +762,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     public void dropLootFor(Player player) {
         final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
-        final LootTableContainer container = LootEditor.getInstance().getLootContainerAccessObject().read(this.getId());
+        final LootTableContainer container = LootEditor.getInstance().getLootContainerAccessObject(LootContainerType.NPC).read(this.getId());
         if (container != null) {
             player.getContext().getJobScore().increment();
             container.roll().roll() //TODO add magic find

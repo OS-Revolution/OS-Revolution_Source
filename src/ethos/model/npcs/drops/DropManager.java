@@ -1,6 +1,5 @@
 package ethos.model.npcs.drops;
 
-import ethos.runehub.loot.LootProvider;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -25,11 +24,8 @@ import ethos.model.players.skills.slayer.Task;
 import ethos.net.discord.DiscordMessager;
 import ethos.util.Location3D;
 import ethos.util.Misc;
-import org.rhd.api.model.Loot;
-import org.rhd.api.model.LootTableContainer;
-import org.rhd.api.model.PotentialItem;
-import org.rhd.api.model.Tier;
-import org.runehub.app.editor.l.gui.control.choicebox.TierChoiceBox;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.*;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -844,7 +840,7 @@ public class DropManager {
 
         double modifier = getModifier(player);
 
-        LootTableContainer container = LootProvider.getInstance().getLootContainer(npcId, LootProvider.NPC);
+        LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(npcId, LootContainerType.NPC);
         List<PotentialItem> potentialItems = new ArrayList<>();
         container.getLootTables().getMap().values().forEach(lootTable -> potentialItems.addAll(lootTable.getPotentialItems()));
         this.updateAmounts(player, potentialItems);

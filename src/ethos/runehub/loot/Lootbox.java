@@ -3,8 +3,8 @@ package ethos.runehub.loot;
 import com.google.common.base.Preconditions;
 import ethos.model.items.ItemDefinition;
 import ethos.model.players.Player;
+import org.rhd.api.io.loader.LootContainerContextProducer;
 import org.rhd.api.model.*;
-import org.runehub.app.editor.l.model.entity.loot.container.LootContainerType;
 
 import java.util.*;
 
@@ -102,7 +102,7 @@ public class Lootbox extends LootTableContainer {
         // Reset interface
         this.clearWheel();
         // Open
-        player.getPA().sendString(LootProvider.getInstance().getLootContainerContext(this.getId(), LootProvider.ITEM).getName(), 47002);
+        player.getPA().sendString(LootContainerContextProducer.getInstance(LootContainerType.ITEM).get(this.getId()).getName(), 47002);
         player.getPA().showInterface(INTERFACE_ID);
     }
 

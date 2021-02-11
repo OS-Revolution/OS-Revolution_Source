@@ -11,9 +11,6 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
-import ethos.runehub.loot.LootMetric;
-import ethos.runehub.loot.LootMetricDAO;
-import ethos.runehub.loot.LootProvider;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -24,14 +21,16 @@ import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
 import org.necrotic.client.world.WorldController;
+import org.rhd.api.io.db.LootMetricDAO;
+import org.rhd.api.io.loader.LootContainerContextProducer;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.io.loader.LootMetricProducer;
 import org.rhd.api.math.AdjustableNumber;
 import org.rhd.api.math.impl.AdjustableLong;
+import org.rhd.api.model.LootContainerType;
+import org.rhd.api.model.LootMetric;
 import org.rhd.api.model.LootTable;
 import org.rhd.api.model.LootTableContainer;
-import org.rhd.api.model.Tier;
-import org.runehub.app.editor.l.model.entity.loot.LootMetricProvider;
-import org.runehub.app.editor.l.model.entity.loot.container.LootContainerProvider;
-import org.runehub.app.editor.l.model.entity.loot.container.LootContainerType;
 
 import java.awt.*;
 
@@ -769,13 +768,13 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     public void dropLootFor(Player player) {
         final Location3D dropLocation = new Location3D(this.getX(), this.getY(), this.getHeight());
-        final LootTableContainer container = LootProvider.getInstance().getLootContainer(this.getId(), LootProvider.NPC);
+        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(this.getId(), LootContainerType.NPC);
         if (container != null && container.getLootTables().size() > 0) {
             final LootTable lootTable = container.roll(player.getContext().getMagicFind().value());
-            final long metricId = LootContainerProvider.getInstance().getLootContainerContext(container.getId(), LootContainerType.NPC).getMetricId();
+            final long metricId = LootContainerContextProducer.getInstance(LootContainerType.NPC).get(container.getId()).getMetricId();
             final AdjustableNumber<Long> rolls = new AdjustableLong(
-                    LootMetricProvider.getInstance().getMetric(metricId) != null ?
-                            LootMetricProvider.getInstance().getMetric(metricId).getRolls().value() :
+                    LootMetricProducer.getInstance().get(metricId) != null ?
+                            LootMetricProducer.getInstance().get(metricId).getRolls().value() :
                             0L
             );
             rolls.increment();
@@ -787,7 +786,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
                         || lootTable.getTableId() == 5) {
                             player.sendMessage("You received a drop from the rare drop table!");
                         }
-                        LootMetricDAO.getInstance().create(
+                        Server.getLootMetrics().add(
                                 new LootMetric(
                                         metricId,
                                         System.currentTimeMillis(),
@@ -808,6 +807,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
             throw new NullPointerException("Missing Drop");
         }
     }
+
 
     @Override
     public void dropLootFor(PlayableCharacter player) {

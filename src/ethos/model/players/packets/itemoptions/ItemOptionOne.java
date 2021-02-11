@@ -26,10 +26,11 @@ import ethos.model.players.skills.prayer.Prayer;
 import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
 import ethos.net.discord.DiscordMessager;
-import ethos.runehub.loot.LootProvider;
 import ethos.runehub.loot.Lootbox;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.LootContainerType;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -178,7 +179,7 @@ public class ItemOptionOne implements PacketType {
             return;
         }
         if(Lootbox.isLootbox(itemId)) {
-                final Lootbox lootbox = new Lootbox(LootProvider.getInstance().getLootContainer(itemId, LootProvider.ITEM), c);
+                final Lootbox lootbox = new Lootbox(LootContainerLoader.getInstance().getLootContainer(itemId, LootContainerType.ITEM), c);
                 lootbox.open();
         }
         switch (itemId) {

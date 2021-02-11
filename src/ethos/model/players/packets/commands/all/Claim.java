@@ -4,8 +4,8 @@ import com.everythingrs.donate.Donation;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.packets.commands.Command;
-import ethos.runehub.loot.LootProvider;
 import ethos.util.Misc;
+import org.rhd.api.io.loader.LootTableLoader;
 
 /**
  * Auto Donation System / https://EverythingRS.com
@@ -33,7 +33,7 @@ public class Claim extends Command {
 					for (Donation donate : donations) {
 						if(donate.product_name.contains("Bundle")) {
 							for (int i = 0; i < donate.product_amount; i++) {
-								LootProvider.getInstance().getLootTable(donate.product_id).roll().forEach(loot ->
+								LootTableLoader.getInstance().get(donate.product_id).roll().forEach(loot ->
 										player.getItems().addItem(loot.getItemId(), loot.getAmount())
 								);
 							}

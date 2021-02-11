@@ -4,6 +4,7 @@ import org.rhd.api.io.fs.ApplicationFileSystem;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -34,14 +35,14 @@ public class ServerFileSystem extends ApplicationFileSystem {
     @Override
     protected void initialize() {
         super.initialize();
-        this.requireFile(Path.of(
+        this.requireFile(Paths.get(
                 this.buildFileRequest()
                         .inDirectory(ApplicationFileSystem.APP_DIRECTORY)
                         .withFileName(APP_HOME)
                         .build()
                         .getAbsolutePath()
         ));
-        this.requireFile(Path.of(
+        this.requireFile(Paths.get(
                 this.buildFileRequest()
                         .inDirectory(ApplicationFileSystem.APP_DIRECTORY)
                         .inDirectory(APP_HOME)
@@ -49,7 +50,7 @@ public class ServerFileSystem extends ApplicationFileSystem {
                         .build()
                         .getAbsolutePath()
         ));
-        this.requireFile(Path.of(
+        this.requireFile(Paths.get(
                 this.buildFileRequest()
                         .inDirectory(ApplicationFileSystem.APP_DIRECTORY)
                         .inDirectory(APP_HOME)
@@ -57,7 +58,7 @@ public class ServerFileSystem extends ApplicationFileSystem {
                         .build()
                         .getAbsolutePath()
         ));
-        this.requireFile(Path.of(
+        this.requireFile(Paths.get(
                 this.buildFileRequest()
                         .inDirectory(ApplicationFileSystem.APP_DIRECTORY)
                         .inDirectory(APP_HOME)

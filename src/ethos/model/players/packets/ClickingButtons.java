@@ -33,10 +33,11 @@ import ethos.model.players.skills.crafting.*;
 import ethos.model.players.skills.crafting.CraftingData.tanningData;
 import ethos.model.shops.ShopAssistant;
 import ethos.net.discord.DiscordMessager;
-import ethos.runehub.loot.LootProvider;
 import ethos.runehub.loot.Lootbox;
 import ethos.util.Misc;
 import org.apache.commons.lang3.text.WordUtils;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.LootContainerType;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -254,7 +255,7 @@ public class ClickingButtons implements PacketType {
 				break;
 			case 183156:
 				if(Lootbox.isLootbox(c.boxCurrentlyUsing)) {
-						final Lootbox lootbox = new Lootbox(LootProvider.getInstance().getLootContainer(c.boxCurrentlyUsing, LootProvider.ITEM),c);
+						final Lootbox lootbox = new Lootbox(LootContainerLoader.getInstance().getLootContainer(c.boxCurrentlyUsing, LootContainerType.ITEM),c);
 						lootbox.open();
 				}
 				break;

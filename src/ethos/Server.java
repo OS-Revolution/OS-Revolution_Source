@@ -2,6 +2,8 @@ package ethos;
 
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -46,6 +48,8 @@ import ethos.world.ClanManager;
 import ethos.world.ItemHandler;
 import ethos.world.ShopHandler;
 import ethos.world.objects.GlobalObjects;
+import org.rhd.api.io.db.LootMetricDAO;
+import org.rhd.api.model.LootMetric;
 
 /**
  * The main class needed to start the server.
@@ -77,6 +81,8 @@ public class Server {
 	private static MultiplayerSessionListener multiplayerSessionListener = new MultiplayerSessionListener();
 
 	private static GlobalObjects globalObjects = new GlobalObjects();
+
+	private static List<LootMetric> lootMetrics = new ArrayList<>();
 
 	/**
 	 * ClanChat Added by Valiant
@@ -191,6 +197,8 @@ public class Server {
 
 	private static final Runnable IO_TASKS = () -> {
 		try {
+			lootMetrics.forEach(metric -> LootMetricDAO.getInstance().create(metric));
+			lootMetrics.clear();
 			// TODO tasks(players online, etc)
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -227,7 +235,7 @@ public class Server {
 			long elapsed = endTime - startTime;
 			System.out.println(Config.SERVER_NAME + " has successfully started up in " + elapsed + " milliseconds.");
 			GAME_THREAD.scheduleAtFixedRate(SERVER_TASKS, 0, 600, TimeUnit.MILLISECONDS);
-			IO_THREAD.scheduleAtFixedRate(IO_TASKS, 0, 30, TimeUnit.SECONDS);
+			IO_THREAD.scheduleAtFixedRate(IO_TASKS, 0, 60, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -289,5 +297,9 @@ public class Server {
 	public static String getStatus() {
 		return "IO_THREAD\n" + "\tShutdown? " + IO_THREAD.isShutdown() + "\n" + "\tTerminated? "
 				+ IO_THREAD.isTerminated();
+	}
+
+	public static List<LootMetric> getLootMetrics() {
+		return lootMetrics;
 	}
 }

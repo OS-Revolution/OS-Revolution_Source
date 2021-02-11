@@ -6,7 +6,8 @@ import ethos.phantasye.job.pay.Payment;
 import ethos.phantasye.job.pay.PaymentFactory;
 import ethos.phantasye.job.pay.impl.CoinPaymentFactory;
 import ethos.phantasye.job.pay.impl.RandomPaymentModifier;
-import ethos.runehub.loot.LootProvider;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.LootContainerType;
 import org.rhd.api.model.LootTableContainer;
 
 import java.text.NumberFormat;
@@ -156,7 +157,7 @@ public class Employer {
 //        employee.transact(new CurrencyDeposit(employee, amount)); TODO Fix this
         employee.getPA().addSkillXP(xp,job.getSkillId(),true);
         //TODO roll job
-        final LootTableContainer container = LootProvider.getInstance().getLootContainer(job.getSkillId(), LootProvider.MISC);
+        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(job.getSkillId(), LootContainerType.MISC);
         if (container != null) {
             employee.getContext().getJobScore().increment();
             container.roll(job.getDifficulty().getMagicFindBonus()).roll() //TODO add magic find

@@ -50,6 +50,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                                         .withQuota(rs.getInt("jobQuota"))
                                         .withTargetId(rs.getInt("jobTargetId"))
                                         .build())
+                                .setMagicFind(rs.getDouble("magicFind"))
                                 .build()
                 );
             }
@@ -71,6 +72,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                             + ",jobQuota='" + context.getActiveJob().getQuota().value() + "'"
                             + ",jobDifficultyId='" + context.getActiveJob().getDifficulty().ordinal() + "'"
                             + ",jobTargetId='" + context.getActiveJob().getTargetId() + "'"
+                            + ",magicFind='" + context.getMagicFind().value() + "'"
                     )
 
                     .addQuery("WHERE id='" + context.getId() + "'")
@@ -99,8 +101,8 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
     public void create(PlayerCharacterContext context) {
         final Query query = new Query.QueryBuilder().addQuery("INSERT INTO")
                 .addQuery(TABLE_NAME)
-                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId)")
-                .addQuery("VALUES(?,?,?,?,?,?)")
+                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind)")
+                .addQuery("VALUES(?,?,?,?,?,?,?)")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
@@ -153,6 +155,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 PlayerCharacterContext.PlayerCharacterContextBuilder builder = new PlayerCharacterContext.PlayerCharacterContextBuilder(rs.getLong("id"));
                 while (rs.next()) {
                     builder.withJobScore(rs.getInt("jobScore"));
+                    builder.setMagicFind(rs.getDouble("magicFind"));
                     builder.withJob(new Job.JobBuilder()
                             .forSkill(rs.getInt("jobSkillId"))
                             .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
@@ -191,7 +194,8 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 new QueryParameter("jobQuota", SqlDataType.INTEGER),
                 new QueryParameter("jobSkillId", SqlDataType.INTEGER),
                 new QueryParameter("jobTargetId", SqlDataType.INTEGER),
-                new QueryParameter("jobDifficultyId", SqlDataType.INTEGER)
+                new QueryParameter("jobDifficultyId", SqlDataType.INTEGER),
+                new QueryParameter("magicFind", SqlDataType.DOUBLE)
         );
 
         final Query query = new Query.QueryBuilder()
@@ -203,10 +207,11 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 .addQuery(" jobTargetId INTEGER")
                 .addQuery(" jobDifficultyId INTEGER")
                 .addQuery(" jobScore INTEGER")
+                .addQuery(" magicFind DOUBLE")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
-            System.out.println(query.getSql());
+//            System.out.println(query.getSql());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

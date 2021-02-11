@@ -18,7 +18,7 @@ public class ServerFileSystem extends ApplicationFileSystem {
     private static ServerFileSystem instance = null;
 
     private final Map<String, File> cachedFileMap;
-    private final Properties searchExceptions,tableExceptions,settings;
+    private final Properties settings;
 
     public static ServerFileSystem getInstance() {
         if (instance == null)
@@ -28,8 +28,6 @@ public class ServerFileSystem extends ApplicationFileSystem {
 
     private ServerFileSystem() {
         this.cachedFileMap = new HashMap<>();
-        this.searchExceptions = new Properties();
-        this.tableExceptions = new Properties();
         this.settings = new Properties();
     }
 
@@ -86,14 +84,6 @@ public class ServerFileSystem extends ApplicationFileSystem {
         File file = getFile(path);
         cachedFileMap.put(path.toAbsolutePath().toString(), file);
         return file;
-    }
-
-    public Properties getSearchExceptions() {
-        return searchExceptions;
-    }
-
-    public Properties getTableExceptions() {
-        return tableExceptions;
     }
 
     public Properties getSettings() {

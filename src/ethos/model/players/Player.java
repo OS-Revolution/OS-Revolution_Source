@@ -5708,8 +5708,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     }
 
     @Override
-    public CharacterEntityAttribute getAttributes() {
-        return null;
+    public PlayerCharacterAttribute getAttributes() {
+        return attributes;
     }
 
     @Override

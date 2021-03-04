@@ -24,6 +24,7 @@ public class MagicOnFloorItems implements PacketType {
 		int spellId = c.getInStream().readUnsignedWordA();
 
 		if (!Server.itemHandler.itemExists(itemId, itemX, itemY, c.heightLevel)) {
+			Server.itemHandler.getGroundItem(itemId,itemX,itemY,c.heightLevel).getAmount();
 			c.stopMovement();
 			return;
 		}

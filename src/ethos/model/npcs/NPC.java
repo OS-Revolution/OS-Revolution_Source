@@ -21,17 +21,16 @@ import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
 import org.necrotic.client.world.WorldController;
+import org.rhd.api.Range;
 import org.rhd.api.io.db.LootMetricDAO;
 import org.rhd.api.io.loader.LootContainerContextProducer;
 import org.rhd.api.io.loader.LootContainerLoader;
 import org.rhd.api.io.loader.LootMetricProducer;
 import org.rhd.api.math.AdjustableNumber;
 import org.rhd.api.math.impl.AdjustableLong;
-import org.rhd.api.model.LootContainerType;
-import org.rhd.api.model.LootMetric;
-import org.rhd.api.model.LootTable;
-import org.rhd.api.model.LootTableContainer;
+import org.rhd.api.model.*;
 
+import javax.rmi.CORBA.Tie;
 import java.awt.*;
 
 public class NPC extends Entity implements NonPlayableCharacter {
@@ -786,6 +785,14 @@ public class NPC extends Entity implements NonPlayableCharacter {
                         || lootTable.getTableId() == 5) {
                             player.sendMessage("You received a drop from the rare drop table!");
                         }
+                        switch (Tier.getRarityForValue(tier)) {
+                            case VERY_RARE:
+                                break;
+                            case LEGENDARY:
+                                break;
+                            case MYTHIC:
+                                break;
+                        }
                         Server.getLootMetrics().add(
                                 new LootMetric(
                                         metricId,
@@ -798,7 +805,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
                                         tier,
                                         rolls.value(),
                                         LootContainerType.NPC.ordinal(),
-                                        0.0D //TODO replace with mf variable
+                                        player.getContext().getMagicFind().value() //TODO replace with mf variable
                                 )
                         );
                         Server.getDropManager().create(player,new Location3D(dropLocation.getX(),dropLocation.getY(),dropLocation.getZ()),loot);

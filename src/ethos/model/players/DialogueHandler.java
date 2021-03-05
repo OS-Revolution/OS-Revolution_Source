@@ -3578,47 +3578,45 @@ public class DialogueHandler {
 			break;
 
 		case 672:
-			c.getPA().movePlayer(3100, 3254, 0);
 			sendOptions("Yes, show me the tutorial.", "No thanks, I'm not a Scrub..");
 			c.dialogueAction = 673;
 			break;
 
 		case 673:
-			c.getPA().movePlayer(3100, 3254, 0);
 			sendNpcChat("Hello there " + c.playerName, "To start, this is our lovely home area.",
 					"Let me show you around!");
 			c.nextChat = 674;
 			break;
 
 		case 674:
-			c.getPA().movePlayer(3093, 3244, 0);
+			c.getPA().movePlayer(1636, 3681, 0);
 			sendNpcChat("This is where all the shopping happens when", "you first start out! You can buy combat gear,",
 					"foods and pots, and much more!");
 			c.nextChat = 676;
 			break;
 
 		case 676:
-			c.getPA().movePlayer(3093, 3244, 0);
-			sendNpcChat("Slayer masters are located in their respective", "spots. Doing slayer early is a good way to start off.");
+			c.getPA().movePlayer(1616, 3673, 0);
+			sendNpcChat("Slayer masters are located here.", "Doing slayer early is a good way to start off.");
 			c.nextChat = 677;
 			break;
 
 		case 677:
-			c.getPA().movePlayer(3092, 3249, 0);
+			c.getPA().movePlayer(1644, 3673, 0);
 			sendNpcChat("This is the main home area.", "You can find useful npcs and tools",
 					"all around the home area, just gotta look");
 			c.nextChat = 678;
 			break;
 
 		case 678:
-			c.getPA().movePlayer(3085, 3251, 0);
+			c.getPA().movePlayer(1651, 3681, 0);
 			sendNpcChat("This is where you can prestige your skills.", "Prestiging provides perks throughout your gameplay.",
 					"One of which is experience boost.", "The other is increased drop rate.");
 			c.nextChat = 679;
 			break;
 
 		case 679:
-			c.getPA().movePlayer(3100, 3254, 0);
+			c.getPA().movePlayer(1629, 3673, 0);
 			sendNpcChat("Finally you can start your adventure,", "type ::discord to recieve alerts when events happen.",
 					"Also ::forums to keep up-to-date with Os-Revolution, Enjoy!.");
 			c.nextChat = 645;

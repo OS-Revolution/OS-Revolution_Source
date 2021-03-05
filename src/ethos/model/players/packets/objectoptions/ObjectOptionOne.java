@@ -434,7 +434,7 @@ public class ObjectOptionOne {
 			c.getPA().movePlayer(3565, 3316, 0);
 			
 		case 27095://Ice zone
-			c.getPA().movePlayer(3092, 3249, 0);
+			c.getPA().movePlayer(1644, 3673, 0);
 			
 			
 		case 4150:
@@ -443,7 +443,7 @@ public class ObjectOptionOne {
 			if (c.absY == 2795 || c.absY == 2794 || c.absY == 2793 || c.absY == 2792 || c.absY == 2791) {
 				c.getPA().spellTeleport(2910, 5468, 0, false);
 			} else
-			c.getPA().spellTeleport(3092, 3249, 0, false);
+			c.getPA().spellTeleport(1644, 3673, 0, false);
 			break;
 		case 4950:
 			case 23095:

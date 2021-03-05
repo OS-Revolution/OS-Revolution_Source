@@ -99,10 +99,10 @@ public class Thieving {
 			player.sendMessage("You need at least one free slot to steal from this.");
 			return;
 		}
-		if (!Server.getGlobalObjects().exists(objectId, location.getX(), location.getY()) || Server.getGlobalObjects().exists(4797, location.getX(), location.getY())) {
+		/*if (!Server.getGlobalObjects().exists(objectId, location.getX(), location.getY()) || Server.getGlobalObjects().exists(4797, location.getX(), location.getY())) {
 			player.sendMessage("The stall has been depleted.");
 			return;
-		}
+		}*/
 		if (player.playerLevel[Skill.THIEVING.getId()] < stall.level) {
 			player.sendMessage("You need a thieving level of " + stall.level + " to steal from this.");
 			return;
@@ -127,6 +127,8 @@ public class Thieving {
 			if (Boundary.isIn(player, Boundary.FALADOR_BOUNDARY)) {
 				player.getDiaryManager().getFaladorDiary().progress(FaladorDiaryEntry.STEAL_GEM_FAL);
 			}
+			break;
+		case Wine:
 			break;
 		case General:
 			DailyTasks.increase(player, PossibleTasks.SILVER_SICKLES);
@@ -371,12 +373,13 @@ public class Thieving {
 	}
 
 	public enum Stall {
-		Crafting(new GameItem(995, Misc.random(250) + 500), 1, 16, 20, 45000),
-		Food(new GameItem(995, Misc.random(750) + 1000), 25, 30, 10, 42500), 
-		General(new GameItem(995, Misc.random(1000) + 1500), 50, 54, 10, 40000), 
-		Magic(new GameItem(995, Misc.random(1250) + 2000), 75, 80, 10, 38000), 
-		Scimitar(new GameItem(995, Misc.random(1500) + 2500), 90, 100, 10, 36500),
-		Fur(new GameItem(995, Misc.random(1000) + 1000), 50, 54, 10, 40000);
+		Crafting(new GameItem(1625), 1, 16, 20, 45000),
+		Food(new GameItem(1963), 25, 30, 10, 42500), 
+		General(new GameItem(590), 50, 54, 10, 40000), 
+		Magic(new GameItem(7936), 75, 80, 10, 38000),
+		Wine(new GameItem(7936), 75, 80, 100, 38000), 
+		Scimitar(new GameItem(1331), 90, 100, 10, 36500),
+		Fur(new GameItem(6814), 50, 54, 10, 40000);
 
 		/**
 		 * The item received from the stall

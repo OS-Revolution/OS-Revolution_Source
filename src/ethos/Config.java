@@ -422,14 +422,14 @@ public class Config {
 	/**
 	 * The starting location of your server.
 	 */
-	public static final int START_LOCATION_X = 1629;
-	public static final int START_LOCATION_Y = 3673;
+	public static final int START_LOCATION_X = 3100;
+	public static final int START_LOCATION_Y = 3254;
 
 	/**
 	 * The re-spawn point of when someone dies.
 	 */
-	public static final int RESPAWN_X = 1602;
-	public static final int RESPAWN_Y = 3673;
+	public static final int RESPAWN_X = 3093;
+	public static final int RESPAWN_Y = 3249;
 
 	/**
 	 * The re-spawn point of when a duel ends.

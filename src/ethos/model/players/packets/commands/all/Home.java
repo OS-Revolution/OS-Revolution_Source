@@ -23,10 +23,10 @@ public class Home extends Command {
 			return;
 		}
 		if (c.inWild()) {
-			c.sendMessage("You can't use this command in the wilderness.");
+			c.sendMessage("C'mon... You thought that would really work?");
 			return;
 		}
-		c.getPA().spellTeleport(1644, 3673, 0, false);
+		c.getPA().spellTeleport(3092, 3249, 0, false);
 	}
 
 	@Override

@@ -298,7 +298,7 @@ public class OperateItem implements PacketType {
 						c.getPA().startTeleport(2925, 3173, 0, "glory",false);
 						break;
 					case 3:
-						c.getPA().startTeleport(3079, 3250, 0, "glory",false);
+						c.getPA().startTeleport(3092, 3249, 0, "glory",false);
 						break;
 					case 4:
 						c.getPA().startTeleport(3293, 3176, 0,"glory", false);

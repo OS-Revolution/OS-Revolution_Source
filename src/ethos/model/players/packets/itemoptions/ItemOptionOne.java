@@ -1,13 +1,10 @@
 package ethos.model.players.packets.itemoptions;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import ethos.Server;
 import ethos.model.content.DiceHandler;
+import ethos.model.content.LootingBag.LootingBag;
 import ethos.model.content.Packs;
 import ethos.model.content.RunePouch;
-import ethos.model.content.LootingBag.LootingBag;
 import ethos.model.content.achievement.AchievementType;
 import ethos.model.content.achievement.Achievements;
 import ethos.model.content.barrows.Barrows;
@@ -17,11 +14,7 @@ import ethos.model.content.trails.RewardLevel;
 import ethos.model.multiplayer_session.MultiplayerSessionType;
 import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.multiplayer_session.duel.DuelSessionRules.Rule;
-import ethos.model.players.Boundary;
-import ethos.model.players.Membership;
-import ethos.model.players.PacketType;
-import ethos.model.players.Player;
-import ethos.model.players.PlayerHandler;
+import ethos.model.players.*;
 import ethos.model.players.combat.Hitmark;
 import ethos.model.players.combat.magic.NonCombatSpells;
 import ethos.model.players.skills.agility.AgilityHandler;
@@ -33,8 +26,14 @@ import ethos.model.players.skills.prayer.Prayer;
 import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
 import ethos.net.discord.DiscordMessager;
+import ethos.runehub.loot.Lootbox;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.LootContainerType;
+
+import java.util.Objects;
+import java.util.Optional;
 
 import static ethos.model.content.DiceHandler.DICING_AREA;
 
@@ -178,6 +177,10 @@ public class ItemOptionOne implements PacketType {
         if (RunePouch.isRunePouch(c, itemId)) {
             c.getRunePouch().openRunePouch();
             return;
+        }
+        if(Lootbox.isLootbox(itemId)) {
+                final Lootbox lootbox = new Lootbox(LootContainerLoader.getInstance().getLootContainer(itemId, LootContainerType.ITEM), c);
+                lootbox.open();
         }
         switch (itemId) {
         
@@ -546,11 +549,11 @@ public class ItemOptionOne implements PacketType {
                 c.getMysteryBox().open();
                 return;
             }
-        if (itemId == 11739)
-            if (c.getItems().playerHasItem(11739)) {
-                c.getHourlyRewardBox().open();
-                return;
-            }
+//        if (itemId == 11739)
+//            if (c.getItems().playerHasItem(11739)) {
+//                c.getHourlyRewardBox().open();
+//                return;
+//            }
         if (itemId == 405) //Pvm Casket
             if (c.getItems().playerHasItem(405)) {
                 c.getPvmCasket().open();

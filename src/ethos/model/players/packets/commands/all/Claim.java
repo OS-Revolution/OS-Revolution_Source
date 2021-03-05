@@ -1,9 +1,11 @@
 package ethos.model.players.packets.commands.all;
 
+import com.everythingrs.donate.Donation;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.packets.commands.Command;
 import ethos.util.Misc;
+import org.rhd.api.io.loader.LootTableLoader;
 
 /**
  * Auto Donation System / https://EverythingRS.com
@@ -15,11 +17,11 @@ public class Claim extends Command {
 
 	@Override
 	public void execute(Player player, String input) {
-		new java.lang.Thread() {
+		new Thread() {
 			public void run() {
 				try {
-					com.everythingrs.donate.Donation[] donations = com.everythingrs.donate.Donation
-							.donations("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb", player.playerName);
+					Donation[] donations = Donation
+							.donations("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", player.playerName);
 					if (donations.length == 0) {
 						player.sendMessage("You currently don't have any items waiting. You must donate first!");
 						return;
@@ -28,8 +30,16 @@ public class Claim extends Command {
 						player.sendMessage(donations[0].message);
 						return;
 					}
-					for (com.everythingrs.donate.Donation donate : donations) {
-						player.getItems().addItem(donate.product_id, donate.product_amount);
+					for (Donation donate : donations) {
+						if(donate.product_name.contains("Bundle")) {
+							for (int i = 0; i < donate.product_amount; i++) {
+								LootTableLoader.getInstance().get(donate.product_id).roll().forEach(loot ->
+										player.getItems().addItem(loot.getItemId(), loot.getAmount())
+								);
+							}
+						} else {
+							player.getItems().addItem(donate.product_id, donate.product_amount);
+						}
 					}
 					PlayerHandler.executeGlobalMessage("[@red@DONATE@bla@] Thank you @red@ " + Misc.capitalize(player.playerName) + " @bla@for donating!");
 				} catch (Exception e) {

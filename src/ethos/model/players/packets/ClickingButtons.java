@@ -1,15 +1,5 @@
 package ethos.model.players.packets;
 
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.text.WordUtils;
-
 import ethos.Config;
 import ethos.Server;
 import ethos.model.content.PlayerEmotes;
@@ -26,12 +16,7 @@ import ethos.model.multiplayer_session.MultiplayerSessionStage;
 import ethos.model.multiplayer_session.MultiplayerSessionType;
 import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.multiplayer_session.duel.DuelSessionRules.Rule;
-import ethos.model.players.Boundary;
-import ethos.model.players.Membership;
-import ethos.model.players.PacketType;
-import ethos.model.players.Player;
-import ethos.model.players.PlayerHandler;
-import ethos.model.players.Right;
+import ethos.model.players.*;
 import ethos.model.players.combat.Special;
 import ethos.model.players.combat.Specials;
 import ethos.model.players.combat.magic.LunarSpells;
@@ -44,15 +29,23 @@ import ethos.model.players.packets.dialogueoptions.ThreeOptions;
 import ethos.model.players.packets.dialogueoptions.TwoOptions;
 import ethos.model.players.skills.Cooking;
 import ethos.model.players.skills.Smelting;
-import ethos.model.players.skills.crafting.BattlestaveMaking;
-import ethos.model.players.skills.crafting.BraceletMaking;
+import ethos.model.players.skills.crafting.*;
 import ethos.model.players.skills.crafting.CraftingData.tanningData;
-import ethos.model.players.skills.crafting.GlassBlowing;
-import ethos.model.players.skills.crafting.LeatherMaking;
-import ethos.model.players.skills.crafting.Tanning;
 import ethos.model.shops.ShopAssistant;
 import ethos.net.discord.DiscordMessager;
+import ethos.runehub.loot.Lootbox;
 import ethos.util.Misc;
+import org.apache.commons.lang3.text.WordUtils;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.LootContainerType;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Clicking most buttons
@@ -63,6 +56,7 @@ public class ClickingButtons implements PacketType {
 	@Override
 	public void processPacket(final Player c, int packetType, int packetSize) {
 		int actionButtonId = Misc.hexToInt(c.getInStream().buffer, 0, packetSize);
+		System.out.println(actionButtonId);
 		if (c.debugMessage) {
 			c.sendMessage("actionbutton: " + actionButtonId + ", DialogueID: " + c.dialogueAction);
 		}
@@ -260,10 +254,9 @@ public class ClickingButtons implements PacketType {
 				c.sendMessage("@red@Under Development");
 				break;
 			case 183156:
-				switch(c.boxCurrentlyUsing) {
-					case 13346: //ultra rare
-						c.getUltraMysteryBox().spin();
-						break;
+				if(Lootbox.isLootbox(c.boxCurrentlyUsing)) {
+						final Lootbox lootbox = new Lootbox(LootContainerLoader.getInstance().getLootContainer(c.boxCurrentlyUsing, LootContainerType.ITEM),c);
+						lootbox.open();
 				}
 				break;
 		case 4146:
@@ -427,6 +420,10 @@ public class ClickingButtons implements PacketType {
 
 			c.wogwOption = "drops";
 			break;
+//			case 185152:
+//				final Lootbox lootbox = new Lootbox(LootEditor.getInstance().getLootContainerAccessObject(LootContainerType.ITEM).read(11739),c);
+//				lootbox.open();
+//				break;
 			case 185151:
 			case 166048:
 				c.getTitles().display();
@@ -1318,7 +1315,7 @@ public class ClickingButtons implements PacketType {
 			c.getPA().showInterface(36000);
 			c.getAchievements().drawInterface(0);
 				break;
-			case 185149:
+			case 185149://TODO NPC DROPS
 				c.getPA().showInterface(39500);
 				break;
 				

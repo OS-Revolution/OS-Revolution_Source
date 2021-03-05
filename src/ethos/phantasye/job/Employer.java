@@ -1,18 +1,14 @@
 package ethos.phantasye.job;
 
-import ethos.Server;
-import ethos.model.items.ItemAssistant;
 import ethos.model.players.Player;
 import ethos.model.players.skills.Skill;
 import ethos.phantasye.job.pay.Payment;
 import ethos.phantasye.job.pay.PaymentFactory;
 import ethos.phantasye.job.pay.impl.CoinPaymentFactory;
 import ethos.phantasye.job.pay.impl.RandomPaymentModifier;
-import ethos.phantasye.trans.impl.deposit.CurrencyDeposit;
-import ethos.util.Location3D;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.model.LootContainerType;
 import org.rhd.api.model.LootTableContainer;
-import org.runehub.app.editor.loot.LootEditor;
-import org.runehub.app.editor.loot.model.loot.LootContainerType;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -161,7 +157,7 @@ public class Employer {
 //        employee.transact(new CurrencyDeposit(employee, amount)); TODO Fix this
         employee.getPA().addSkillXP(xp,job.getSkillId(),true);
         //TODO roll job
-        final LootTableContainer container = LootEditor.getInstance().getLootContainerAccessObject(LootContainerType.MISC).read(job.getSkillId());
+        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(job.getSkillId(), LootContainerType.MISC);
         if (container != null) {
             employee.getContext().getJobScore().increment();
             container.roll(job.getDifficulty().getMagicFindBonus()).roll() //TODO add magic find

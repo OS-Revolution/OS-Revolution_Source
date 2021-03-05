@@ -1,11 +1,9 @@
 package ethos.model.npcs;
 
-import java.awt.Point;
-import java.util.List;
-
 import ethos.Server;
 import ethos.model.entity.Entity;
 import ethos.model.entity.HealthStatus;
+import ethos.model.items.ItemDefinition;
 import ethos.model.npcs.bosses.zulrah.Zulrah;
 import ethos.model.players.Boundary;
 import ethos.model.players.Player;
@@ -16,17 +14,24 @@ import ethos.model.players.combat.Hitmark;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
+import org.apache.commons.lang3.text.WordUtils;
 import org.menaphos.action.ActionInvoker;
 import org.menaphos.entity.impl.impl.NonPlayableCharacter;
 import org.menaphos.entity.impl.impl.PlayableCharacter;
-import org.menaphos.model.loot.Loot;
-import org.menaphos.model.loot.LootableContainer;
-import org.menaphos.model.loot.factory.LootFactory;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
-import org.rhd.api.model.LootTableContainer;
-import org.runehub.app.editor.loot.LootEditor;
-import org.runehub.app.editor.loot.model.loot.LootContainerType;
+import org.necrotic.client.world.WorldController;
+import org.rhd.api.Range;
+import org.rhd.api.io.db.LootMetricDAO;
+import org.rhd.api.io.loader.LootContainerContextProducer;
+import org.rhd.api.io.loader.LootContainerLoader;
+import org.rhd.api.io.loader.LootMetricProducer;
+import org.rhd.api.math.AdjustableNumber;
+import org.rhd.api.math.impl.AdjustableLong;
+import org.rhd.api.model.*;
+
+import javax.rmi.CORBA.Tie;
+import java.awt.*;
 
 public class NPC extends Entity implements NonPlayableCharacter {
     // private Hitmark hitmark = null;
@@ -761,61 +766,59 @@ public class NPC extends Entity implements NonPlayableCharacter {
     }
 
     public void dropLootFor(Player player) {
-        final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
-        final LootTableContainer container = LootEditor.getInstance().getLootContainerAccessObject(LootContainerType.NPC).read(this.getId());
-        if (container != null) {
-            player.getContext().getJobScore().increment();
-            container.roll().roll() //TODO add magic find
+        final Location3D dropLocation = new Location3D(this.getX(), this.getY(), this.getHeight());
+        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(this.getId(), LootContainerType.NPC);
+        if (container != null && container.getLootTables().size() > 0) {
+            final LootTable lootTable = container.roll(player.getContext().getMagicFind().value());
+            final long metricId = LootContainerContextProducer.getInstance(LootContainerType.NPC).get(container.getId()).getMetricId();
+            final AdjustableNumber<Long> rolls = new AdjustableLong(
+                    LootMetricProducer.getInstance().get(metricId) != null ?
+                            LootMetricProducer.getInstance().get(metricId).getRolls().value() :
+                            0L
+            );
+            rolls.increment();
+            lootTable.roll(player.getContext().getMagicFind().value())
                     .forEach(loot -> {
-
-                        Server.getDropManager().create(player,new Location3D(dropLocation.getXCoordinate(),dropLocation.getYCoordinate(),dropLocation.getZCoordinate()),loot);
+                        final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
+                                potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll();
+                        if(lootTable.getTableId() == 1 || lootTable.getTableId() == 2 || lootTable.getTableId() == 3 || lootTable.getTableId() == 4
+                        || lootTable.getTableId() == 5) {
+                            player.sendMessage("You received a drop from the rare drop table!");
+                        }
+                        switch (Tier.getRarityForValue(tier)) {
+                            case VERY_RARE:
+                                break;
+                            case LEGENDARY:
+                                break;
+                            case MYTHIC:
+                                break;
+                        }
+                        Server.getLootMetrics().add(
+                                new LootMetric(
+                                        metricId,
+                                        System.currentTimeMillis(),
+                                        player.getName(),
+                                        container.getId(),
+                                        lootTable.getTableId(),
+                                        loot.getItemId(),
+                                        loot.getAmount(),
+                                        tier,
+                                        rolls.value(),
+                                        LootContainerType.NPC.ordinal(),
+                                        player.getContext().getMagicFind().value() //TODO replace with mf variable
+                                )
+                        );
+                        Server.getDropManager().create(player,new Location3D(dropLocation.getX(),dropLocation.getY(),dropLocation.getZ()),loot);
                     });
+        } else {
+            throw new NullPointerException("Missing Drop");
         }
-//        final LootTableContainer container = LootTableContainerFactory.getInstance(LootSourceType.NPC)
-//                .getContainer(this.getId()).orElse(null);
-//        System.out.println("ROLLING CONTAINER: " + container);
-//        if (container != null) {
-//            final List<org.menaphos.loot.model.Loot> lootList = LootTableFactory.getLootTable(container
-//                    .roll(0))
-//                    .roll(0); //TODO replace with real magic find variables
-//            lootList.forEach(loot -> {
-//                player.receiveDropFrom(this, loot.getItemId(), loot.getAmount(), dropLocation);
-//            });
-//        }
     }
+
 
     @Override
     public void dropLootFor(PlayableCharacter player) {
         //TODO update this to new system
-//		final int RARE_DROP_TABLE_ID = 701;
-//		final int HERB_DROP_TABLE_ID = 2;
-//		final int SEED_DROP_TABLE_ID = 3;
-//		final LootableContainer lootable = CustomLootFactory.getLootableNpc(this.getId());
-//		if (lootable != null) {
-//			final List<Loot> constants = lootable.receiveConstants();
-//			final Loot loot = lootable.open(player.getMagicFind());
-//			final Location dropLocation = new Location(this.getX(), this.getY(), this.getHeight());
-//			constants.forEach(constant -> player.receiveDropFrom(this, constant, dropLocation));
-//			if (loot.getItem().getId() == RARE_DROP_TABLE_ID) {
-//				final Loot rareDrop = LootFactory.getLootableItem(701).open();
-//				player.receiveDropFrom(this, rareDrop, dropLocation);
-//				player.receiveMessage("You've received a drop from the rare drop table!");
-//			} else if (loot.getItem().getId() == HERB_DROP_TABLE_ID) {
-//				final Loot rareDrop = LootFactory.getLootableItem(HERB_DROP_TABLE_ID).open();
-//				player.receiveDropFrom(this, rareDrop, dropLocation);
-//				player.receiveMessage("You've received a drop from the herb drop table!");
-//			} else if (loot.getItem().getId() == SEED_DROP_TABLE_ID) {
-//				final Loot rareDrop = LootFactory.getLootableItem(SEED_DROP_TABLE_ID).open();
-//				player.receiveDropFrom(this, rareDrop, dropLocation);
-//				player.receiveMessage("You've received a drop from the seed drop table!");
-//			} else {
-//				player.receiveDropFrom(this, loot, dropLocation);
-//
-//			}
-//		} else {
-//			player.receiveMessage("Missing Drop Data [" + this.getId() + "]"  );
-//			throw new NullPointerException("Missing Drop Data");
-//		}
     }
 
 

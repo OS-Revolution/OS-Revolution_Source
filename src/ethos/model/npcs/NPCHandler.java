@@ -167,7 +167,7 @@ public class NPCHandler {
                 c.getItems().deleteEquipment(2570, c.playerRing);
                 c.sendMessage("Your ring of life saved you!");
             }
-            c.getPA().spellTeleport(1629, 3673, 0, false);
+            c.getPA().spellTeleport(3101, 3254, 0, false);
             return true;
         }
         return false;

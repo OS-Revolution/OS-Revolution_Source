@@ -30,7 +30,7 @@ import org.rhd.api.math.AdjustableNumber;
 import org.rhd.api.math.impl.AdjustableLong;
 import org.rhd.api.model.*;
 
-import javax.rmi.CORBA.Tie;
+//import javax.rmi.CORBA.Tie;
 import java.awt.*;
 
 public class NPC extends Entity implements NonPlayableCharacter {

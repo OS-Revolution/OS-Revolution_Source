@@ -105,10 +105,10 @@ public class Thieving {
             player.sendMessage("You need at least one free slot to steal from this.");
             return;
         }
-        if (!Server.getGlobalObjects().exists(objectId, location.getX(), location.getY()) || Server.getGlobalObjects().exists(4797, location.getX(), location.getY())) {
+        /* if (!Server.getGlobalObjects().exists(objectId, location.getX(), location.getY()) || Server.getGlobalObjects().exists(4797, location.getX(), location.getY())) {
             player.sendMessage("The stall has been depleted.");
             return;
-        }
+        } */
         if (player.playerLevel[Skill.THIEVING.getId()] < stall.level) {
             player.sendMessage("You need a thieving level of " + stall.level + " to steal from this.");
             return;
@@ -138,6 +138,8 @@ public class Thieving {
                 DailyTasks.increase(player, PossibleTasks.SILVER_SICKLES);
                 break;
             case Scimitar:
+                break;
+            case Wine:
                 break;
             case Fur:
                 if (Boundary.isIn(player, Boundary.ARDOUGNE_BOUNDARY)) {
@@ -426,8 +428,9 @@ public class Thieving {
         General(new GameItem(995, Misc.random(1000) + 1500), 50, 54, 10, 40000),
         Magic(new GameItem(995, Misc.random(1250) + 2000), 75, 80, 10, 38000),
         Scimitar(new GameItem(995, Misc.random(1500) + 2500), 90, 100, 10, 36500),
+        Wine(new GameItem(1), 90, 100, 10, 36500),
         Fur(new GameItem(995, Misc.random(1000) + 1000), 50, 54, 10, 40000);
-
+  
         /**
          * The item received from the stall
          */

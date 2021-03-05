@@ -94,6 +94,9 @@ public class ObjectOptionTwo {
 		case 11731:
 			c.getThieving().steal(Stall.Magic, objectType, location);
 			break;
+		case 14011:
+			c.getThieving().steal(Stall.Wine, objectType, location);
+			break;
 		case 4876:
 			c.getThieving().steal(Stall.General, objectType, location);
 			break;

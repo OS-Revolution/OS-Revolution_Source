@@ -141,6 +141,18 @@ public class Thieving {
                 break;
             case Wine:
                 break;
+            case Fish:
+                break;
+            case Gem:
+                break;
+            case Toys:
+                break;
+            case Silver:
+                break;
+            case Silk:
+                break;
+            case Seeds:
+                break;
             case Fur:
                 if (Boundary.isIn(player, Boundary.ARDOUGNE_BOUNDARY)) {
                     player.getDiaryManager().getArdougneDiary().progress(ArdougneDiaryEntry.STEAL_FUR);
@@ -423,14 +435,33 @@ public class Thieving {
     }
 
     public enum Stall {
+    	//
         Crafting(new GameItem(995, Misc.random(250) + 500), 1, 16, 20, 45000),
-        Food(new GameItem(995, Misc.random(750) + 1000), 25, 30, 10, 42500),
+        //
+        Food(new GameItem(995, Misc.random(750) + 1000), 1, 30, 10, 42500),
+        //
         General(new GameItem(995, Misc.random(1000) + 1500), 50, 54, 10, 40000),
+        //
         Magic(new GameItem(995, Misc.random(1250) + 2000), 75, 80, 10, 38000),
+        //
         Scimitar(new GameItem(995, Misc.random(1500) + 2500), 90, 100, 10, 36500),
-        Wine(new GameItem(1), 90, 100, 10, 36500),
+        //
+        Wine(new GameItem(1), 30, 23, 0, 0),
+        //
+        Toys(new GameItem(1), 99, 1000, 0, 0),
+        //
+        Silk(new GameItem(1), 45, 500, 0, 0),
+        //
+        Silver(new GameItem(1), 25, 42, 0, 0),
+        //
+        Gem(new GameItem(1), 82, 780, 0, 0),
+        //
+        Fish(new GameItem(1), 1, 16, 0, 0),
+        //
+        Seeds(new GameItem(1), 30, 23, 0, 0),
+        //
         Fur(new GameItem(995, Misc.random(1000) + 1000), 50, 54, 10, 40000);
-  
+    	//
         /**
          * The item received from the stall
          */

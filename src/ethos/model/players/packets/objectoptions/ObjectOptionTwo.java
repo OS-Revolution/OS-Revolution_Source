@@ -91,12 +91,30 @@ public class ObjectOptionTwo {
 			c.getThieving().steal(Stall.Crafting, objectType, location);
 			break;
 		case 4877:
-		case 11731:
+	/*	case 11731:
 			c.getThieving().steal(Stall.Magic, objectType, location);
-			break;
-		case 14011:
+			break; */
+		case 14011: 
 			c.getThieving().steal(Stall.Wine, objectType, location);
 			break;
+		// STALLS ADDED 3/4/21
+		case 4277:
+			c.getThieving().steal(Stall.Fish, objectType, location);
+			break;
+		case 11734:
+			c.getThieving().steal(Stall.Silver, objectType, location);
+			break;
+
+		case 7053:
+			c.getThieving().steal(Stall.Seeds, objectType, location);
+			break;
+		case 629:
+			c.getThieving().steal(Stall.Toys, objectType, location);
+			break;
+		case 631:
+			c.getThieving().steal(Stall.Silk, objectType, location);
+			break;
+		// END
 		case 4876:
 			c.getThieving().steal(Stall.General, objectType, location);
 			break;
@@ -193,6 +211,9 @@ public class ObjectOptionTwo {
 				c.playerMagicBook = 0;
 				c.sendMessage("You feel a drain on your memory.");
 			}
+			break;
+		case 11731:
+			c.getThieving().steal(Stall.Gem, objectType, location);
 			break;
 		case 17010:
 			if (c.playerMagicBook == 0) {

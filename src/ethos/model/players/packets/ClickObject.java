@@ -439,7 +439,6 @@ public class ClickObject implements PacketType {
 				break;
 			case 10229:
 			case 6522:
-			case 11734:
 			case 11833:
 			case 11834:
 				c.objectDistance = 7;
@@ -683,6 +682,11 @@ public class ClickObject implements PacketType {
 			case 11734:
 			case 11731:
 			case 14011:
+			case 4277:
+			case 5595:
+			case 7053:
+			case 629:
+			case 631:
 			case 11732:
 			case 4874:
 			case 23104:

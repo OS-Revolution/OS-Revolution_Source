@@ -1,5 +1,6 @@
 package ethos.model.players.packets.objectoptions;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -27,6 +28,7 @@ import ethos.model.content.godwars.God;
 import ethos.model.entity.HealthStatus;
 import ethos.model.holiday.halloween.HalloweenRandomOrder;
 import ethos.model.items.EquipmentSet;
+import ethos.model.items.ItemAssistant;
 import ethos.model.minigames.lighthouse.DagannothMother;
 import ethos.model.minigames.lighthouse.DisposeType;
 import ethos.model.minigames.pest_control.PestControl;
@@ -58,6 +60,8 @@ import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.runecrafting.Runecrafting;
 import ethos.model.players.skills.woodcutting.Tree;
 import ethos.model.players.skills.woodcutting.Woodcutting;
+import ethos.runehub.building.Hotspot;
+import ethos.runehub.building.HotspotDefinition;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
@@ -155,7 +159,25 @@ public class ObjectOptionOne {
 		}
 
 		switch (objectType) {
-
+			case -1: //TODO Make Construction Hotspot ID
+				//TODO Send Dialogue prompting player if they want to upgrade and listing cost using below method
+				/*
+				*Hotspots are indexed for example the Workbench is index 0 so assuming this is a workbench
+				 */
+				HotspotDefinition.WORKBENCH.getUpgrades()[0].getMaterials().forEach(material -> { //This loops through the materials of the selected upgrade
+					c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
+				});
+				c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal())
+						.setId(HotspotDefinition.WORKBENCH.getUpgrades()[0].getUpgradedObjectId());//Changes the specified index's object id to the specified upgrades object ID
+				c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal()).setId(100);//Changes the spawned object ID
+				c.getContext().getHotspotMap().put(HotspotDefinition.WORKBENCH.ordinal(), new Hotspot(69,1000,1000,0)); //Adds a new Hotspot with index = to enum ordinal at the specified coords with the specified object ID
+				for (int i = 0; i < HotspotDefinition.WORKBENCH.getUpgrades().length; i++) { //This loops through all upgrades for bench
+					c.sendMessage("The Workbench's " + i + " upgrade will require the following materials:") ;
+					HotspotDefinition.WORKBENCH.getUpgrades()[i].getMaterials().forEach(material -> {
+						c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
+					});
+				}
+				break;
 		case 31990:
 			if (c.absY == 4054) {
 				Vorkath.exit(c);

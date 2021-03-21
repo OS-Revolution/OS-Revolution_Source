@@ -10,7 +10,9 @@ public enum Tree {
 	YEW(new int[] { 1753, 1754, 11758, 27255 }, 1356, 1515, 60, 15, 100, 175, 60, 9000), 
 	MAGIC(new int[] { 1761, 11764 }, 9713, 1513, 75, 20, 125, 250, 75, 8600), 
 	REDWOOD(new int[] { 29668, 29670 }, 29669, 19669, 90, 35, 150, 380, 150, 8400),
-	SAPLING(new int[] { 29763 }, 29764, 20799, 65, 13, 75, 25, 15, 100000);
+	SAPLING(new int[] { 29763 }, 29764, 20799, 65, 13, 75, 25, 15, 100000),
+	MAHOGANY(new int[] { 9034 }, 1356, 6332, 50, 35, 60, 80, 150, 8400),
+	SCRAPEY(new int[] { 15970  }, 15971, 8934, 70, 35, 65, 100, 180, 8400);
 
 	private int[] treeIds;
 	private int stumpId, wood, levelRequired, chopsRequired, deprecationChance, respawn, petChance;

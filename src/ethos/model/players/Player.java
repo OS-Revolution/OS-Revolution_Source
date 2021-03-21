@@ -154,6 +154,7 @@ import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.loot.Loot;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
+import org.necrotic.client.world.ObjectManager;
 import org.rhd.api.StringUtils;
 import org.rhd.api.action.Action;
 import org.rhd.api.action.ActionScheduler;
@@ -1782,6 +1783,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             setSidebarInterface(5, 15608);
             setSidebarInterface(13, 47500);
 
+
+
             switch (playerMagicBook) {
                 case 0:
                     setSidebarInterface(6, 938); // modern
@@ -1924,6 +1927,15 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
                     getPA().sendConfig(QuickPrayers.CONFIG + i, 0);
                 }
             }
+
+            this.getContext().getHotspotMap().keySet().forEach(key -> {
+                System.out.println("SPAWNING: " + key);
+                getPA().object(this.getContext().getHotspotMap().get(key).getId(), //TODO replace with method that actually spawns object
+                        this.getContext().getHotspotMap().get(key).getX(),
+                        this.getContext().getHotspotMap().get(key).getY(),
+                        0, 10);
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Player login - Check for error");
@@ -5667,7 +5679,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (this.getContext().getActiveJob() == null || this.getContext().getActiveJob().getQuota().value() <= 0) {
             this.getContext().setActiveJob(job);
             this.sendMessage("You've been assigned a " + Skill.forId(job.getSkillId()).name()
-            + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
+                    + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
         } else {
             this.sendMessage("You already have an active job.");
         }
@@ -5675,8 +5687,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
     @Override
     public void updateJob(int itemId) {
-        if(this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
-            if(itemId == this.getContext().getActiveJob().getTargetId()) {
+        if (this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
+            if (itemId == this.getContext().getActiveJob().getTargetId()) {
                 this.getContext().getActiveJob().getQuota().decrement();
             }
         }

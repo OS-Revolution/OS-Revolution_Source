@@ -3,7 +3,6 @@ package ethos.model.npcs;
 import ethos.Server;
 import ethos.model.entity.Entity;
 import ethos.model.entity.HealthStatus;
-import ethos.model.items.ItemDefinition;
 import ethos.model.npcs.bosses.zulrah.Zulrah;
 import ethos.model.players.Boundary;
 import ethos.model.players.Player;
@@ -14,15 +13,11 @@ import ethos.model.players.combat.Hitmark;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
-import org.apache.commons.lang3.text.WordUtils;
 import org.menaphos.action.ActionInvoker;
 import org.menaphos.entity.impl.impl.NonPlayableCharacter;
 import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
-import org.necrotic.client.world.WorldController;
-import org.rhd.api.Range;
-import org.rhd.api.io.db.LootMetricDAO;
 import org.rhd.api.io.loader.LootContainerContextProducer;
 import org.rhd.api.io.loader.LootContainerLoader;
 import org.rhd.api.io.loader.LootMetricProducer;
@@ -30,7 +25,6 @@ import org.rhd.api.math.AdjustableNumber;
 import org.rhd.api.math.impl.AdjustableLong;
 import org.rhd.api.model.*;
 
-//import javax.rmi.CORBA.Tie;
 import java.awt.*;
 
 public class NPC extends Entity implements NonPlayableCharacter {
@@ -781,8 +775,8 @@ public class NPC extends Entity implements NonPlayableCharacter {
                     .forEach(loot -> {
                         final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
                                 potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll();
-                        if(lootTable.getTableId() == 1 || lootTable.getTableId() == 2 || lootTable.getTableId() == 3 || lootTable.getTableId() == 4
-                        || lootTable.getTableId() == 5) {
+                        if (lootTable.getTableId() == 1 || lootTable.getTableId() == 2 || lootTable.getTableId() == 3 || lootTable.getTableId() == 4
+                                || lootTable.getTableId() == 5) {
                             player.sendMessage("You received a drop from the rare drop table!");
                         }
                         switch (Tier.getRarityForValue(tier)) {
@@ -808,7 +802,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
                                         player.getContext().getMagicFind().value() //TODO replace with mf variable
                                 )
                         );
-                        Server.getDropManager().create(player,new Location3D(dropLocation.getX(),dropLocation.getY(),dropLocation.getZ()),loot);
+                        Server.getDropManager().create(player, new Location3D(dropLocation.getX(), dropLocation.getY(), dropLocation.getZ()), loot);
                     });
         } else {
             throw new NullPointerException("Missing Drop");

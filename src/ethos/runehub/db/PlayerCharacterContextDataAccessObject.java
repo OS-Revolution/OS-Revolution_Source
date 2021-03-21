@@ -44,6 +44,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 items.add(
                         new PlayerCharacterContext.PlayerCharacterContextBuilder(rs.getLong("id"))
                                 .withJobScore(rs.getInt("jobScore"))
+                                .withHotspots(rs.getString("hotspots"))
                                 .withJob(new Job.JobBuilder()
                                         .forSkill(rs.getInt("jobSkillId"))
                                         .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
@@ -73,6 +74,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                             + ",jobDifficultyId='" + context.getActiveJob().getDifficulty().ordinal() + "'"
                             + ",jobTargetId='" + context.getActiveJob().getTargetId() + "'"
                             + ",magicFind='" + context.getMagicFind().value() + "'"
+                            + ",hotspots='" + context.getHotspotsAsJson() + "'"
                     )
 
                     .addQuery("WHERE id='" + context.getId() + "'")
@@ -101,13 +103,14 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
     public void create(PlayerCharacterContext context) {
         final Query query = new Query.QueryBuilder().addQuery("INSERT INTO")
                 .addQuery(TABLE_NAME)
-                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind)")
-                .addQuery("VALUES(?,?,?,?,?,?,?)")
+                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind,hotspots)")
+                .addQuery("VALUES(?,?,?,?,?,?,?,?)")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
             pstmt.setLong(1, context.getId());
             pstmt.setInt(2, context.getJobScore().value());
+            pstmt.setString(8, context.getHotspotsAsJson());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -156,6 +159,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 while (rs.next()) {
                     builder.withJobScore(rs.getInt("jobScore"));
                     builder.setMagicFind(rs.getDouble("magicFind"));
+                    builder.withHotspots(rs.getString("hotspots"));
                     builder.withJob(new Job.JobBuilder()
                             .forSkill(rs.getInt("jobSkillId"))
                             .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
@@ -195,19 +199,21 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 new QueryParameter("jobSkillId", SqlDataType.INTEGER),
                 new QueryParameter("jobTargetId", SqlDataType.INTEGER),
                 new QueryParameter("jobDifficultyId", SqlDataType.INTEGER),
-                new QueryParameter("magicFind", SqlDataType.DOUBLE)
+                new QueryParameter("magicFind", SqlDataType.DOUBLE),
+                new QueryParameter("hotspots", SqlDataType.TEXT)
         );
 
         final Query query = new Query.QueryBuilder()
                 .addQuery("ALTER TABLE")
                 .addQuery(TABLE_NAME)
                 .addQuery("ADD")
-                .addQuery(" jobQuota INTEGER")
-                .addQuery(" jobSkillId INTEGER")
-                .addQuery(" jobTargetId INTEGER")
-                .addQuery(" jobDifficultyId INTEGER")
-                .addQuery(" jobScore INTEGER")
-                .addQuery(" magicFind DOUBLE")
+//                .addQuery(" jobQuota INTEGER")
+//                .addQuery(" jobSkillId INTEGER")
+//                .addQuery(" jobTargetId INTEGER")
+//                .addQuery(" jobDifficultyId INTEGER")
+//                .addQuery(" jobScore INTEGER")
+//                .addQuery(" magicFind DOUBLE")
+                .addQuery(" hotspots TEXT")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {

@@ -4,14 +4,18 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+import ethos.clip.Region;
+import ethos.clip.WorldObject;
 import ethos.model.players.packets.commands.owner.Npc;
 import ethos.model.players.skills.*;
 import ethos.phantasye.job.Employee;
 import ethos.phantasye.job.Job;
+import ethos.runehub.building.Hotspot;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.player.PlayerCharacterAttribute;
 import ethos.runehub.entity.player.PlayerCharacterContext;
 import ethos.util.*;
+import ethos.world.objects.GlobalObject;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 
@@ -1927,14 +1931,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
                     getPA().sendConfig(QuickPrayers.CONFIG + i, 0);
                 }
             }
+            playerAssistant.object(1,getX(),getY(),0,10);
 
-            this.getContext().getHotspotMap().keySet().forEach(key -> {
-                System.out.println("SPAWNING: " + key);
-                getPA().object(this.getContext().getHotspotMap().get(key).getId(), //TODO replace with method that actually spawns object
-                        this.getContext().getHotspotMap().get(key).getX(),
-                        this.getContext().getHotspotMap().get(key).getY(),
-                        0, 10);
-            });
 
         } catch (Exception e) {
             e.printStackTrace();

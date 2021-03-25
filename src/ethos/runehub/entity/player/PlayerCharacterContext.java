@@ -75,6 +75,7 @@ public class PlayerCharacterContext extends EntityContext {
         public PlayerCharacterContextBuilder withHotspots(String json) {
             Gson gson = new Gson();
             Type token = new TypeToken<Map<Integer, Hotspot>>() {}.getType();
+            System.out.println(json);
             this.hotspotMap = gson.fromJson(json,token);
             return this;
         }

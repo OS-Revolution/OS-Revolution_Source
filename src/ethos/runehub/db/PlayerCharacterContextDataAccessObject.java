@@ -145,8 +145,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
 
     @Override
     public PlayerCharacterContext read(long l) {
-        PlayerCharacterContext context = this.getCachedEntries().get(l);
-        if (context == null) {
+        System.out.println("READING: " + l);
             final Query query = new Query.QueryBuilder()
                     .addQuery("SELECT * FROM")
                     .addQuery(TABLE_NAME)
@@ -158,24 +157,21 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 PlayerCharacterContext.PlayerCharacterContextBuilder builder = new PlayerCharacterContext.PlayerCharacterContextBuilder(rs.getLong("id"));
                 while (rs.next()) {
                     builder.withJobScore(rs.getInt("jobScore"));
-                    builder.setMagicFind(rs.getDouble("magicFind"));
-                    builder.withHotspots(rs.getString("hotspots"));
                     builder.withJob(new Job.JobBuilder()
                             .forSkill(rs.getInt("jobSkillId"))
                             .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
                             .withQuota(rs.getInt("jobQuota"))
                             .withTargetId(rs.getInt("jobTargetId"))
                             .build());
+                    builder.setMagicFind(rs.getDouble("magicFind"));
+                    builder.withHotspots(rs.getString("hotspots"));
                 }
-                context = builder.build();
-                this.getCachedEntries().putIfAbsent(l, context);
-                return context;
+                return builder.build();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } catch (IndexOutOfBoundsException e) {
 
             }
-        }
         final PlayerCharacterContext ctx = new PlayerCharacterContext.PlayerCharacterContextBuilder(l)
                 .build();
         this.create(ctx);

@@ -4,14 +4,18 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
+import ethos.clip.Region;
+import ethos.clip.WorldObject;
 import ethos.model.players.packets.commands.owner.Npc;
 import ethos.model.players.skills.*;
 import ethos.phantasye.job.Employee;
 import ethos.phantasye.job.Job;
+import ethos.runehub.building.Hotspot;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.player.PlayerCharacterAttribute;
 import ethos.runehub.entity.player.PlayerCharacterContext;
 import ethos.util.*;
+import ethos.world.objects.GlobalObject;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 
@@ -154,6 +158,7 @@ import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.loot.Loot;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
+import org.necrotic.client.world.ObjectManager;
 import org.rhd.api.StringUtils;
 import org.rhd.api.action.Action;
 import org.rhd.api.action.ActionScheduler;
@@ -1782,6 +1787,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             setSidebarInterface(5, 15608);
             setSidebarInterface(13, 47500);
 
+
+
             switch (playerMagicBook) {
                 case 0:
                     setSidebarInterface(6, 938); // modern
@@ -1924,6 +1931,9 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
                     getPA().sendConfig(QuickPrayers.CONFIG + i, 0);
                 }
             }
+            playerAssistant.object(1,getX(),getY(),0,10);
+
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Player login - Check for error");
@@ -5673,7 +5683,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (this.getContext().getActiveJob() == null || this.getContext().getActiveJob().getQuota().value() <= 0) {
             this.getContext().setActiveJob(job);
             this.sendMessage("You've been assigned a " + Skill.forId(job.getSkillId()).name()
-            + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
+                    + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
         } else {
             this.sendMessage("You already have an active job.");
         }
@@ -5681,8 +5691,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
     @Override
     public void updateJob(int itemId) {
-        if(this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
-            if(itemId == this.getContext().getActiveJob().getTargetId()) {
+        if (this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
+            if (itemId == this.getContext().getActiveJob().getTargetId()) {
                 this.getContext().getActiveJob().getQuota().decrement();
             }
         }

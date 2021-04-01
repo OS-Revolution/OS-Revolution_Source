@@ -36,7 +36,7 @@ public class Tutorial {
 	private final IronManInterface ironManInterface;
 
 	/**
-	 * h Creates a new tutorial for the player
+	 * Creates a new tutorial for the player
 	 * 
 	 * @param player the player the tutorial is created for
 	 */
@@ -143,8 +143,8 @@ public class Tutorial {
 			@Override
 			public void display(Player player) {
 				//player.getDH().sendDialogues(645, 311);
-				player.getDH().sendDialogues(673, 311);
-				//PlayerHandler.executeGlobalMessage("[@blu@New Player@bla@] " + Misc.capitalizeJustFirst(player.playerName) + " @bla@has logged in! Welcome!");
+				player.getDH().sendDialogues(673, 2123);
+				PlayerHandler.executeGlobalMessage("[@blu@New Player@bla@] " + Misc.capitalizeJustFirst(player.playerName) + " @bla@has logged in! Welcome!");
 			}
 
 		}), MODE_SELECTION(1, new Scene() {
@@ -159,7 +159,7 @@ public class Tutorial {
 
 			@Override
 			public void display(Player player) {
-				player.getDH().sendDialogues(647, 311);
+				player.getDH().sendDialogues(647, 2123);
 			}
 		}), APPEND_STARTER(3, new Scene() {
 
@@ -213,7 +213,7 @@ public class Tutorial {
 
 			@Override
 			public void display(Player player) {
-				player.getDH().sendDialogues(649, 311);
+				player.getDH().sendDialogues(649, 2123);
 			}
 
 		}), END(5, new Scene() {

@@ -46,7 +46,7 @@ public class TeleportHandler {
 	String[] donatorNames = { "@yel@Select Your Dungeon Teleport", "@yel@Catacombs", "@yel@Fremennik Slayer Dungeon",
 			"@yel@Taverley Dungeon", "@yel@Skeletal Wyverns", "@yel@Asgarnian Ice Dungeon", "@yel@Brimhaven Dungeon", "", "", "", "", "",
 			"", "", "", "", "", "", "", "", "" };
-	String[] otherNames = { "@yel@Select Your Skilling Teleport", "@yel@Slayer Masters", "@yel@Crafting/Gem Rocks", "@yel@Fishing/Cooking/Mining/Smithing",
+	String[] otherNames = { "@yel@Select Your Skilling Teleport", "@yel@Slayer Master's House", "@yel@Crafting/Gem Rocks", "@yel@Fishing/Cooking/Mining/Smithing",
 			"@yel@Woodcutting", "@yel@Farming", "@yel@Agility @or1@(Gnome)", "@yel@Hunter @or1@(Animals)", "@yel@Hunter @or1@(Implings)", "@yel@Mining Guild", "@yel@Thieving", "",
 			"", "", "", "", "", "", "", "", "" };
 
@@ -271,7 +271,7 @@ public class TeleportHandler {
 			} else if (player.teleSelected == 5) { // Donator - Donator Lobby
 				player.getPA().startTeleport(1661, 10049, 0, "modern", false);
 			} else if (player.teleSelected == 6) { // Other - Slayer Masters
-				player.getPA().startTeleport(1697, 4575, 0, "modern", false); // change
+				player.getPA().startTeleport(3094, 3267, 0, "modern", false); // change
 				// player.sendMessage("Teleporting to "+otherNames[1]+".");
 			}
 			break;

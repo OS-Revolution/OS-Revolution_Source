@@ -77,10 +77,18 @@ public class DialogueHandler {
 		switch (dialogue) {
 		
 		case 15000:
-			sendNpcChat1("Are you looking for something?", 5419, "Estate Agent");
-			c.nextChat = 15001;
+			sendNpcChat4("Hello, are you looking to buy a House?", "DUH!, of course you are... Well i'll tell you what", "there isn't anything on the housing market at the", "current moment. You know how it is.", 5419, "Estate Agent");
+			c.nextChat = 10003;
+			//c.nextChat = 15001; *REPLACE THIS FOR THE ABOVE LINE ONCE CONSTRUCTION IS AVAILABLE TO PLAYERS*
+			break;
+		// Estate Agent Temp Dialouge
+		case 10003:
+			sendNpcChat4("Check back with me later on. You'll know I have something", "when I put an ad out in the papers for available properties.", "In the meanwhile you can train your construction around", "the home area and various places around the world.", 5419, "Estate Agent");
+			c.nextChat = 0;
+			//c.nextChat = 15001; *REPLACE THIS FOR THE ABOVE LINE ONCE CONSTRUCTION IS AVAILABLE TO PLAYERS*
 			break;
 			
+		// End
 		case 15001:
 			sendOption4("I'm looking to buy a house", "Can I be teleported to my house?", "Can I delete my house?", "Nevermind.");
 			c.dialogueAction = 15001;
@@ -1598,7 +1606,17 @@ public class DialogueHandler {
 			sendNpcChat2("Hello Brave Warrior", "What would you like to do?", c.talkingNpc, "Combat Instructor");
 			c.nextChat = 1391;
 			break;
-
+		// Npc's New Home
+		case 10001:
+			sendNpcChat3("Hello there, I don't have much time to talk.", "Right now my Agency is in the process of moving here.", "Talk to me after we settle in. Good day.", c.talkingNpc, "CEO");
+			c.nextChat = 0;
+			break;
+		case 10002:
+			sendNpcChat2("Ah.. I am far too busy", "Please let me get back to my work. Thank you", c.talkingNpc, "Regional Director");
+			c.nextChat = 0;
+			break;
+			
+		// End
 		case 1391:
 			sendOption2("I'd like to reset a Combat skill", "I'd like to configure my dropvalue");
 			c.dialogueAction = 1391;
@@ -3341,7 +3359,7 @@ public class DialogueHandler {
 
 		case 648:
 			c.getTutorial().proceed();
-			c.nextChat = -1;
+			c.nextChat = 0;
 			break;
 
 		case 649:
@@ -3585,53 +3603,99 @@ public class DialogueHandler {
 
 		case 673:
 			c.getPA().movePlayer(3100, 3254, 0);
-			sendNpcChat("Hello there " + c.playerName, "To start, this is our lovely home area.",
-					"Let me show you around!");
+			sendNpcChat("Hello there " + c.playerName, "We are glad to have you around,", "Thank you for joining our community!",
+					"Let me show you around! It will be quick.");
 			c.nextChat = 674;
 			break;
 
 		case 674:
-			c.getPA().movePlayer(3093, 3244, 0);
-			sendNpcChat("This is where all the shopping happens when", "you first start out! You can buy combat gear,",
-					"foods and pots, and much more!");
+			c.getPA().movePlayer(3093, 3242, 0);
+			sendNpcChat("When you are ready or need to visit the available shops", "they can be found here, just slightly south of the", "::home teleport. Most items can be obtained through",
+					"training or skilling so the shops are just the basics.");
+			c.nextChat = 675;
+			break;
+		case 675:
+			sendNpcChat("There are various build-able objects around the world" , "Like this centrepiece. For example: Each member gets to build", "and customize the home area to their liking through the available object spaces." , "Doing so will save to your account specifically, not all homes are the same.");
 			c.nextChat = 676;
 			break;
-
 		case 676:
-			c.getPA().movePlayer(3093, 3244, 0);
-			sendNpcChat("Slayer masters are located in their respective", "spots. Doing slayer early is a good way to start off.");
+			c.getPA().movePlayer(3089, 3246, 0);
+			sendNpcChat("I'll show you what I mean.", "For starters here are a few of the build-able objects around the home.",  "Like these 3 portals found in the shops", "or that Centrepiece which is used to charge the portals.");
 			c.nextChat = 677;
 			break;
-
 		case 677:
-			c.getPA().movePlayer(3092, 3249, 0);
-			sendNpcChat("This is the main home area.", "You can find useful npcs and tools",
-					"all around the home area, just gotta look");
+			c.getPA().movePlayer(3097, 3255, 0);
+			sendNpcChat("Here is a Jewellery box you can build", "This allows you to charge your Rings & Amulets.");
 			c.nextChat = 678;
 			break;
-
 		case 678:
-			c.getPA().movePlayer(3085, 3251, 0);
-			sendNpcChat("This is where you can prestige your skills.", "Prestiging provides perks throughout your gameplay.",
-					"One of which is experience boost.", "The other is increased drop rate.");
+			c.getPA().movePlayer(3090, 3259, 0);
+			sendNpcChat("A Keg to fill your alcoholic desires...", "I'm kidding of course! I'm only joking...", "GEEZ!", "You really can build this for fill-able brews though.");
 			c.nextChat = 679;
 			break;
-
 		case 679:
+			c.getPA().movePlayer(3081, 3257, 0);
+			sendNpcChat("Building a Combat dummy allows you to see your max hit.", "When you find the boat space down south that can be" ," used to fast", "travel to various Islands around the world.");
+			c.nextChat = 680;
+			break;
+		case 680:
+			c.getPA().movePlayer(3077, 3255, 0);
+			sendNpcChat("Tired of Grinding? Want to kick back? Want some clout?", "Call out a friend or box another member of the community in a 1v1", "4v4, 50x50, you name it!");
+			c.nextChat = 681;
+			break;
+		case 681:
+			c.getPA().movePlayer(3085, 3251, 0);
+			sendNpcChat("Talk to this guy for the option to prestige your skills.", "Prestiging provides perks throughout your gameplay.",
+					"One of which is experience boost.", "The other is increased drop rate.");
+			c.nextChat = 682;
+			break;
+		case 682:
+			c.getPA().movePlayer(3094, 3267, 0);
+			sendNpcChat("This is the Slayer House", "Here you will find all of the Slayer Masters", "Slayer is a great way to start off for money and XP.");
+			c.nextChat = 683;
+			break;
+		case 683:
+			c.getPA().movePlayer(3096, 3267, 0);
+			sendNpcChat("As you saw our server does feature a unique Construction system.", "In certain areas you can build around the world or", "you can buy houses here when they are on the market.",
+					"Just check in with this guy for details and availabilty.");
+			c.nextChat = 684;
+			break;
+	
+		
+		// Already In
+		case 684:
 			c.getPA().movePlayer(3100, 3254, 0);
-			sendNpcChat("Finally you can start your adventure,", "type ::discord to recieve alerts when events happen.",
-					"Also ::forums to keep up-to-date with Os-Revolution, Enjoy!.");
+			sendNpcChat("Finally you are ready to start your adventure!", "Type ::discord & ::forum to get more familiar with the community.", "We do host events, giveaways, challenges, and tournaments!" , "We sincerely value your feedback as we are community driven");
+			c.nextChat = 685;
+			break;
+		case 685:
+			sendNpcChat("With that said, please feel free to express yourself! The Founders", "Og Panda & Phantasye are always happy to talk with you and hear your ideas.", "Anyway, on behalf of Os-Revolution I again want to welcome you aboard." , "We hope you enjoy your time with us!");
+			c.nextChat = 686;
+			break;
+		case 686:
+			sendNpcChat("OH! One last thing... eh, hehe... uh..", "I've been stuck up here for years... decades even!", "Can you PLEASE! get me out of this damned Tree?");
+			c.nextChat = 687;
+			break;
+		case 687:
+			c.getDH().sendOption2("No" , "Definitely Not");
+			c.dialogueAction = 687;
 			c.nextChat = 645;
 			break;
-
+			
+			
+			
 		case 11824:
 			c.getDH().sendOption2("Yes i want to create a Zamorakian hasta", "Never mind");
 			c.dialogueAction = 11824;
 			break;
-
+		case 77700:
+			c.getDH().sendOption2("I'm ok with losing what I have if I die *Climb In*", "I won or am getting my ass kicked *Climb Out*");
+			c.dialogueAction = 77700;
+			break;
+			
 		case 11889:
 			c.getDH().sendOption2("Yes i want to create a Zamorakian spear", "Never mind");
-			c.dialogueAction = 11889;
+			
 			break;
 
 		/*

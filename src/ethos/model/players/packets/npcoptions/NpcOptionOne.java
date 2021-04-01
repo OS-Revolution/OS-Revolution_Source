@@ -474,6 +474,18 @@ case 4625:
 		case 6071: // Achievement cape
 			player.getAchievements().claimCape();
 			break;
+			
+		//New Home Npc's
+			
+		case 7924: // Regional Director
+			player.getDH().sendDialogues(10002, npcType);
+			break;
+		case 7330: // CEO
+			player.getDH().sendDialogues(10001, npcType);
+			break;
+			
+		//End	
+			
 		case 394:
 			player.getDH().sendDialogues(669, npcType);
 			break;

@@ -90,7 +90,14 @@ public class TwoOptions {
                 c.sendMessage("@red@You need a key to open this chest!");
             }
             break;
-            
+		case 77700:
+		if (c.dialogueAction == 77700) {
+			c.getPA().movePlayer(3076, 3256, 0);
+			c.startAnimation(839);
+			c.getPA().removeAllWindows();
+			c.sendMessage("@red@On death you only keep 3 items! Combat lvl differences don't apply. Prepare to fight!");
+			break;
+			}
 		case 1001:
 			if (StarterCrate.inUse == 1 || DragonBox.inUse == 1) {
 				c.sendMessage("@red@Chest is currently in use!");
@@ -594,6 +601,7 @@ public class TwoOptions {
 			}
 			c.getSlayer().createNewTask(c.talkingNpc);
 		}
+	
 		if (c.dialogueAction == 100) {
 			c.getPoints().giveReward();
 		}
@@ -982,6 +990,13 @@ public class TwoOptions {
 			spot1++;
 			c.getPA().itemOnInterface(-1, -1, 64503, spot1);
 			break;
+		case 77700:
+		if (c.dialogueAction == 77700) {
+			c.getPA().movePlayer(3076, 3255, 0);
+			c.startAnimation(839);
+			c.getPA().removeAllWindows();
+			}
+		break;
 		case 1001:
 			int spot2 = 0;
 			c.getPA().showInterface(64500);
@@ -1147,6 +1162,7 @@ public class TwoOptions {
 		if (c.dialogueAction == 3308) {
 			c.getPA().removeAllWindows();
 		}
+		
 		if (c.dialogueAction == 100 || c.dialogueAction == 120) {
 			c.getPA().closeAllWindows();
 		}

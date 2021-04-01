@@ -79,8 +79,14 @@ public class ObjectOptionTwo {
 			c.getDH().sendDialogues(55874, -1);
 			break;
 		case 14896:
-			c.turnPlayerTo(obX, obY);
+			
 			FlaxPicking.getInstance().pick(c, new Location3D(obX, obY, c.heightLevel));
+			break; 
+		//bar stool test
+		case 2312:
+			c.turnPlayerTo(obX, obY);
+			c.getPA().movePlayer(3086, 3259, 0);
+			c.startAnimation(2939);
 			break;
 		
 		case 3840: // Compost Bin
@@ -99,6 +105,8 @@ public class ObjectOptionTwo {
 			break;
 		// STALLS ADDED 3/4/21
 		case 4277:
+		case 3860:
+		case 4275:
 			c.getThieving().steal(Stall.Fish, objectType, location);
 			break;
 		case 11734:
@@ -108,10 +116,10 @@ public class ObjectOptionTwo {
 		case 7053:
 			c.getThieving().steal(Stall.Seeds, objectType, location);
 			break;
-		case 629:
+		case 5595:
 			c.getThieving().steal(Stall.Toys, objectType, location);
 			break;
-		case 631:
+		case 629:
 			c.getThieving().steal(Stall.Silk, objectType, location);
 			break;
 		// END
@@ -225,6 +233,7 @@ public class ObjectOptionTwo {
 				c.getPA().resetAutocast();
 				break;
 			}
+			
 			if (c.playerMagicBook == 1) {
 				c.sendMessage("You switch spellbook to lunar magic.");
 				c.setSidebarInterface(6, 29999);
@@ -243,6 +252,15 @@ public class ObjectOptionTwo {
 				c.getPA().resetAutocast();
 				break;
 			}
+			break;
+			// Boxing mat txt
+		case 13129: 
+			c.turnPlayerTo(obX, obY);
+			c.getDH().sendDialogues(77700, -1);
+			//c.sendMessage("I'm really not about that life. I should come back...");
+			break;
+		case 16670: 
+			c.sendMessage("I don't think there's anything up there yet.");
 			break;
 		/*
 		 * One stall that will give different amount of money depending on your thieving level, also different amount of xp.

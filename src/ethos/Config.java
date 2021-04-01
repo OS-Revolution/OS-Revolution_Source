@@ -278,7 +278,7 @@ public class Config {
 	/**
 	 * Wilderness levels and combat level differences. Used when attacking players.
 	 */
-	public static final boolean COMBAT_LEVEL_DIFFERENCE = true;
+	public static final boolean COMBAT_LEVEL_DIFFERENCE = false;
 
 	/**
 	 * Skill names and id's

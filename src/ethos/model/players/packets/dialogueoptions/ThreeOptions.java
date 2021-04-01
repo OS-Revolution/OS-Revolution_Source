@@ -102,6 +102,7 @@ public class ThreeOptions {
 			c.getDH().sendDialogues(1030, 925);
 			return;
 		}
+
 		if (c.teleAction == 2) {
 			// brim
 			c.getPA().spellTeleport(1571, 3656, 0, false);
@@ -142,7 +143,6 @@ public class ThreeOptions {
 				c.getPA().closeAllWindows();
 			}
 			break;
-			
 		case 1428:
 			c.getDH().sendNpcChat3("Prestiging will increase your drop rate.", "Experience rate: " + (c.prestige() * 100) + "%", "Your current prestige points: " + c.prestigePoints, 2989, "Ak-Haranu");
 			c.nextChat = -1;
@@ -246,7 +246,7 @@ public class ThreeOptions {
 		case 7800:
 			c.getPA().closeAllWindows();
 			break;
-			
+
 		case 809: // Withdraw
 			// TODO: withdraw all
 			break;

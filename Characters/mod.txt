@@ -1,11 +1,11 @@
 [ACCOUNT]
-character-username = xczczx
-character-password = 652931c9e00b2164bed308beb774a870
+character-username = mod
+character-password = f9fbb9423108ccfc8432e10971ccae55
 
 [CHARACTER]
 character-rights = 0
 character-rights-secondary = 0
-character-mac-address = 40-B0-76-44-8B-26
+character-mac-address = 04-D9-F5-F6-FF-02
 character-ip-address = 127.0.0.1
 revert-option = 
 mode = REGULAR
@@ -15,8 +15,8 @@ character-hp = 10
 play-time = 150
 last-clan = Help
 character-specRestore = 0
-character-posx = 3092
-character-posy = 3485
+character-posx = 3100
+character-posy = 3254
 bank-pin = 
 bank-pin-cancellation = false
 bank-pin-unlock-delay = 0
@@ -79,9 +79,9 @@ trident-of-the-seas = 0
 trident-of-the-swamp = 0
 arclight-charge = 0
 slayerPoints = 0
-LastLoginYear = 2020
+LastLoginYear = 2021
 LastLoginMonth = 3
-LastLoginDate = 2
+LastLoginDate = 21
 LoginStreak = 1
 crystal-bow-shots = 0
 skull-timer = 0
@@ -92,7 +92,7 @@ guthan = false
 karil = false
 torag = false
 verac = false
-barrows-final-brother = Verac
+barrows-final-brother = Guthan
 barrows-monsters-killcount = 0
 barrows-completed = false
 special-amount = 2.0
@@ -240,23 +240,23 @@ character-skill = 23	1	0	false	0
 character-skill = 24	1	0	false	0
 
 [ITEMS]
-character-item = 0	996	50000
+character-item = 0	996	100000
 
 [RECHARGEITEMS]
-item = 	0	3	2020-03-02 00:46:51
-item = 	13120	2	2020-03-02 00:46:51
-item = 	1	3	2020-03-02 00:46:51
-item = 	2	150	2020-03-02 00:46:51
-item = 	13125	2	2020-03-02 00:46:51
-item = 	13126	3	2020-03-02 00:46:51
-item = 	13127	4	2020-03-02 00:46:51
-item = 	13128	3	2020-03-02 00:46:51
-item = 	13143	1	2020-03-02 00:46:51
-item = 	13111	5	2020-03-02 00:46:51
-item = 	13144	1	2020-03-02 00:46:51
-item = 	13117	1	2020-03-02 00:46:51
-item = 	13118	1	2020-03-02 00:46:51
-item = 	13119	1	2020-03-02 00:46:51
+item = 	0	3	2021-03-21 08:34:25
+item = 	13120	2	2021-03-21 08:34:25
+item = 	1	3	2021-03-21 08:34:25
+item = 	2	150	2021-03-21 08:34:25
+item = 	13125	2	2021-03-21 08:34:25
+item = 	13126	3	2021-03-21 08:34:25
+item = 	13127	4	2021-03-21 08:34:25
+item = 	13128	3	2021-03-21 08:34:25
+item = 	13143	1	2021-03-21 08:34:25
+item = 	13111	5	2021-03-21 08:34:25
+item = 	13144	1	2021-03-21 08:34:25
+item = 	13117	1	2021-03-21 08:34:25
+item = 	13118	1	2021-03-21 08:34:25
+item = 	13119	1	2021-03-21 08:34:25
 
 [BANK]
 bank-tab = 0	11740	1

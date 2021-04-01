@@ -1528,7 +1528,7 @@ public class SkillInterfaces {
 
 		else if (screen == 3) {
 			clearMenu();
-			menuLine("1-99", "All of the slayer masters are \\nLocated in edgeville, south of the bank.", 4155, 0);
+			menuLine("1-99", "All of the slayer masters are located in the home area.", 4155, 0);
 			optionTab("Slayer", "Masters", "Equipment", "Monsters", "Masters", "Milestones", "", "", "", "", "", "", "", "", "");
 		}
 

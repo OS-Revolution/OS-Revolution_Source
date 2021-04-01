@@ -3870,6 +3870,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     }
 
     public boolean inWild() {
+    	if (inFunPk())
+    		return true;
         if (inClanWars())
             return true;
         if (Boundary.isIn(this, Boundary.EDGEVILLE_PERIMETER) && !Boundary.isIn(this, Boundary.EDGE_BANK) && getHeight() == 8) {
@@ -3938,7 +3940,11 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     private boolean inRevs() {
         return (absX > 3143 && absX < 3262 && absY > 10053 && absY < 10231);
     }
-
+    
+    public boolean inFunPk() { // Michael - FunPK
+		return absX > 3072 && absX < 3080 && absY > 3255 && absY < 3262;
+	
+	}
     public boolean inMulti() {
         if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
                 || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)

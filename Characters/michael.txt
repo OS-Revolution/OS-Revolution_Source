@@ -12,11 +12,11 @@ mode = REGULAR
 tutorial-stage = END
 character-height = 0
 character-hp = 99
-play-time = 25451
-last-clan = Help
+play-time = 58610
+last-clan = michael
 character-specRestore = 0
-character-posx = -1
-character-posy = -1
+character-posx = 3077
+character-posy = 3256
 bank-pin = 
 bank-pin-cancellation = false
 bank-pin-unlock-delay = 0
@@ -37,7 +37,7 @@ lootvalue = 0
 raidPoints = 0
 maRound = 0
 raidCount = 0
-experience-counter = 124069
+experience-counter = 615250
 character-title-updated = 
 removed-slayer-tasks = 			
 last-incentive = 0
@@ -81,10 +81,10 @@ arclight-charge = 0
 slayerPoints = 0
 LastLoginYear = 2021
 LastLoginMonth = 3
-LastLoginDate = 6
-LoginStreak = 3
+LastLoginDate = 29
+LoginStreak = 1
 crystal-bow-shots = 0
-skull-timer = -1
+skull-timer = 1521
 magic-book = 0
 ahrim = false
 dharok = false
@@ -110,7 +110,7 @@ zerkAmount =
 pkp = 0
 donP =0
 donA =44
-bank-charges = 1220
+bank-charges = 2130
 augury = 0
 rigour = 0
 prestige-points = 65
@@ -131,7 +131,7 @@ LumbridgeClaimedDiaries =
 MorytaniaClaimedDiaries = 
 WesternClaimedDiaries = 
 WildernessClaimedDiaries = 
-diaries = POTION_DECANT,PURCHASE_KITTEN,TELEPORT_ARDOUGNE,HANS,PICKPOCKET_MAN_LUM,LUMBRIDGE_TELEPORT
+diaries = PURCHASE_KITTEN,POTION_DECANT,TELEPORT_ARDOUGNE,LUMBRIDGE_TELEPORT,HANS,PICKPOCKET_MAN_LUM
 partialDiaries = PICKPOCKET_HERO:1
 necromancy-level = 1
 necromancy-xp = 0
@@ -182,20 +182,20 @@ lost-items-cerberus =
 lost-items-skotizo = 
 
 [EQUIPMENT]
-character-equip = 0	-1	1	
-character-equip = 1	-1	1	
+character-equip = 0	10828	1	
+character-equip = 1	21295	1	
 character-equip = 2	-1	1	
-character-equip = 3	-1	0	
-character-equip = 4	-1	1	
+character-equip = 3	4566	1	
+character-equip = 4	11832	1	
 character-equip = 5	-1	1	
 character-equip = 6	-1	0	
-character-equip = 7	-1	1	
+character-equip = 7	11834	1	
 character-equip = 8	-1	0	
 character-equip = 9	-1	1	
-character-equip = 10	-1	1	
+character-equip = 10	11840	1	
 character-equip = 11	-1	0	
-character-equip = 12	-1	1	
-character-equip = 13	-1	0	
+character-equip = 12	773	1	
+character-equip = 13	9144	2146999996	
 
 [LOOK]
 character-look = 0	0
@@ -213,24 +213,24 @@ character-look = 11	3
 character-look = 12	0
 
 [SKILLS]
-character-skill = 0	99	13078886	false	10
+character-skill = 0	99	13226760	false	10
 character-skill = 1	99	13034432	false	0
 character-skill = 2	99	13034432	false	0
-character-skill = 3	99	13049240	false	0
-character-skill = 4	99	13034432	false	0
+character-skill = 3	99	13106838	false	0
+character-skill = 4	99	13059390	false	0
 character-skill = 5	99	13034432	false	0
 character-skill = 6	99	13034432	false	0
 character-skill = 7	99	13034432	false	0
 character-skill = 8	99	13034432	false	0
 character-skill = 9	99	13034432	false	0
-character-skill = 10	99	13034432	false	0
+character-skill = 10	99	13055086	false	0
 character-skill = 11	99	13034432	false	0
 character-skill = 12	99	13041568	false	0
 character-skill = 13	99	13034432	false	0
 character-skill = 14	99	13034432	false	0
 character-skill = 15	99	13034432	false	0
 character-skill = 16	99	13034432	false	0
-character-skill = 17	99	13212176	false	0
+character-skill = 17	99	13943454	false	0
 character-skill = 18	99	13034432	false	0
 character-skill = 19	99	13034432	false	0
 character-skill = 20	99	13034432	false	0
@@ -240,6 +240,17 @@ character-skill = 23	99	13034436	false	0
 character-skill = 24	99	13034436	false	0
 
 [ITEMS]
+character-item = 0	1628	1
+character-item = 1	1628	1
+character-item = 2	996	50304205
+character-item = 3	5292	7
+character-item = 4	5344	1
+character-item = 5	5344	1
+character-item = 6	21013	1
+character-item = 7	4567	1
+character-item = 8	1465	3
+character-item = 9	314	5
+character-item = 10	527	1
 
 [RECHARGEITEMS]
 item = 	0	3	2019-11-20 00:21:54
@@ -258,7 +269,7 @@ item = 	13118	1	2019-11-20 00:21:54
 item = 	13119	1	2019-11-20 00:21:54
 
 [BANK]
-bank-tab = 0	996	2962973
+bank-tab = 0	996	3073993
 bank-tab = 0	3848	1
 bank-tab = 0	8014	49
 bank-tab = 0	380	100
@@ -280,30 +291,58 @@ bank-tab = 0	1064	1
 bank-tab = 0	864	100
 bank-tab = 0	883	100
 bank-tab = 0	3452	2
-bank-tab = 0	11740	6
-bank-tab = 0	1465	4
+bank-tab = 0	11740	15
+bank-tab = 0	1465	8
 bank-tab = 0	13661	1
 bank-tab = 0	12238	1
 bank-tab = 0	12733	5
 bank-tab = 0	386	6
 bank-tab = 0	2529	2
 bank-tab = 0	5294	3
-bank-tab = 0	5296	1
+bank-tab = 0	5296	3
 bank-tab = 0	774	1
 bank-tab = 0	7479	1956
 bank-tab = 0	13191	1
-bank-tab = 0	21296	1
 bank-tab = 0	22328	1
 bank-tab = 0	1560	1
-bank-tab = 0	314	35
-bank-tab = 0	328	2
-bank-tab = 0	1628	3
-bank-tab = 0	1626	4
+bank-tab = 0	314	116
+bank-tab = 0	328	4
+bank-tab = 0	1628	6
+bank-tab = 0	1626	11
 bank-tab = 0	2350	1
-bank-tab = 0	336	3
+bank-tab = 0	336	6
 bank-tab = 0	342	2
 bank-tab = 0	6572	1
-bank-tab = 0	2356	2
+bank-tab = 0	2356	3
+bank-tab = 0	11710	1
+bank-tab = 0	12728	1
+bank-tab = 0	2527	2
+bank-tab = 0	2525	1
+bank-tab = 0	11709	1
+bank-tab = 0	11708	1
+bank-tab = 0	1108	1
+bank-tab = 0	13189	1
+bank-tab = 0	1049	1
+bank-tab = 0	5292	12
+bank-tab = 0	5344	5
+bank-tab = 0	651	3
+bank-tab = 0	2933	3
+bank-tab = 0	2927	1
+bank-tab = 0	649	2
+bank-tab = 0	304	1
+bank-tab = 0	308	1
+bank-tab = 0	310	1
+bank-tab = 0	312	1
+bank-tab = 0	13432	58
+bank-tab = 0	322	1
+bank-tab = 0	360	6
+bank-tab = 0	372	3
+bank-tab = 0	637	2
+bank-tab = 0	647	1
+bank-tab = 0	643	2
+bank-tab = 0	639	1
+bank-tab = 0	2897	1
+bank-tab = 0	6860	1
 
 
 [LOOTBAG]
@@ -327,19 +366,22 @@ claim-state = false	false	false	false	false	false	false	false	false	false	false	
 
 
 [ACHIEVEMENTS-TIER-1]
-pvm_i = 1	false
-thief_i = 139	false
+pvm_i = 3	false
+fisher_i = 23	false
+thief_i = 326	false
 
 
 [ACHIEVEMENTS-TIER-2]
-pvm_ii = 1	false
-thief_ii = 139	false
+pvm_ii = 3	false
+fisher_ii = 23	false
+thief_ii = 326	false
 
 
 [ACHIEVEMENTS-TIER-3]
-pvm_iii = 1	false
-slaughter = 1	false
-thief_iii = 139	false
+pvm_iii = 3	false
+slaughter = 3	false
+fisher_iii = 23	false
+thief_iii = 326	false
 
 [IGNORES]
 

@@ -301,6 +301,9 @@ public class ClickObject implements PacketType {
 			case 14911:
 			case 1759:
 			case 1761:
+			case 15970:
+			case 9034:
+			case 9036:
 			case 1753:
 			case 14918:
 			case 1754:
@@ -586,7 +589,6 @@ public class ClickObject implements PacketType {
 			case 1758:
 			case 1760:
 			case 1750:
-			case 9036:
 			case 3037:
 			case 29763:
 			case 11761:

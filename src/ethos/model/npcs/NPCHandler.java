@@ -367,6 +367,8 @@ public class NPCHandler {
 
         if (searching) {
             switch (i) {
+                case 4708:
+                    return npcs[i].summonedBy > 0;
                 case 5916:
                 case 690:
                 case 963:
@@ -1049,6 +1051,8 @@ public class NPCHandler {
      */
     public int getNpcDelay(int i) {
         switch (npcs[i].npcType) {
+            case 4708:
+                return 1;
             case 499:
                 return 4;
             case 498:

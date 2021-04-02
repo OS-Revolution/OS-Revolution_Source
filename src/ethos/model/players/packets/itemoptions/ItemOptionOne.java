@@ -4,6 +4,7 @@ import ethos.Server;
 import ethos.model.content.DiceHandler;
 import ethos.model.content.LootingBag.LootingBag;
 import ethos.model.content.Packs;
+import ethos.model.content.PlayerEmotes;
 import ethos.model.content.RunePouch;
 import ethos.model.content.achievement.AchievementType;
 import ethos.model.content.achievement.Achievements;
@@ -14,9 +15,13 @@ import ethos.model.content.trails.RewardLevel;
 import ethos.model.multiplayer_session.MultiplayerSessionType;
 import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.multiplayer_session.duel.DuelSessionRules.Rule;
+import ethos.model.npcs.NPC;
+import ethos.model.npcs.NPCHandler;
 import ethos.model.players.*;
 import ethos.model.players.combat.Hitmark;
 import ethos.model.players.combat.magic.NonCombatSpells;
+import ethos.model.players.packets.commands.admin.Emote;
+import ethos.model.players.packets.commands.owner.Npc;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.hunter.trap.impl.BirdSnare;
@@ -32,6 +37,7 @@ import ethos.world.objects.GlobalObject;
 import org.rhd.api.io.loader.LootContainerLoader;
 import org.rhd.api.model.LootContainerType;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -183,7 +189,9 @@ public class ItemOptionOne implements PacketType {
                 lootbox.open();
         }
         switch (itemId) {
-        
+            case 716:
+                c.startAnimation(PlayerEmotes.PLAYER_ANIMATION_DATA.WAVE.getAnimation());
+                break;
         case 11171:
         	c.hasHouse = false;
         	c.isInHouse = false;

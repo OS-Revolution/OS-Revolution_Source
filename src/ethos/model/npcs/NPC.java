@@ -95,6 +95,9 @@ public class NPC extends Entity implements NonPlayableCharacter {
         applyDead = false;
         actionTimer = 0;
         randomWalk = true;
+        if(_npcType == 2888) {
+            System.out.println(definition);
+        }
     }
 
     public Position getPosition() {

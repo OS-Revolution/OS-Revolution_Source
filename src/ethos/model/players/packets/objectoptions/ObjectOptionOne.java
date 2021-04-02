@@ -197,7 +197,17 @@ public class ObjectOptionOne {
 				c.getPA().movePlayer(3045, 3927, 0);
 			}
 			break;
-			
+		case 26884:
+            c.turnPlayerTo(obX, obY);
+            c.startAnimation(2270);
+            c.getPA().movePlayer(2899, 2937, 0);
+            break;
+		case 26886: 
+            c.turnPlayerTo(obX, obY);
+            c.startAnimation(530);
+            c.getPA().movePlayer(2899, 2942, 0);
+            break;
+		
 		case 1568:
 			if (c.absX == 3044) {
 				c.turnPlayerTo(obX, obY);

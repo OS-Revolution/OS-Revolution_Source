@@ -1774,11 +1774,17 @@ public class DialogueHandler {
 			c.dialogueAction = 4004;
 			c.nextChat = 0;
 			break;
-		case 4005:
-			sendOption2("Open Donation Shop.", "Check For A Donation Rank Update.");
-			c.dialogueAction = 4005;
+		case 4005: // DONATION NPC - MICHAEL 
+			c.getDH().sendNpcChat4("Hello Adventurer!", "I normally have items for sale, but for now please use our", "::shop or ::store for donations, perks / benefits & more!", "We really appreciate your support!",
+					c.talkingNpc, "Party Pete");			//sendOption2("Open Donation Shop.", "Check For A Donation Rank Update.");
+			//c.dialogueAction = 4005;
+			c.nextChat = 4010;
+			break;
+		case 4010: // DONATION NPC - MICHAEL 
+			sendPlayerChat2("Awesome, thanks for the info", "I'll go check out the web ::store");
 			c.nextChat = 0;
 			break;
+			
 		case 4006:
 			sendOption2("Yes, use this scroll on the selected player. @red@NO REFUNDS@bla@.", "No, don't use it.");
 			c.dialogueAction = 4006;

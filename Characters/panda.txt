@@ -12,11 +12,11 @@ mode = REGULAR
 tutorial-stage = END
 character-height = 0
 character-hp = 10
-play-time = 57134
+play-time = 60300
 last-clan = Help
 character-specRestore = 0
-character-posx = 3113
-character-posy = 3242
+character-posx = 3102
+character-posy = 3246
 bank-pin = 
 bank-pin-cancellation = false
 bank-pin-unlock-delay = 0
@@ -37,7 +37,7 @@ lootvalue = 0
 raidPoints = 0
 maRound = 0
 raidCount = 0
-experience-counter = 19174
+experience-counter = 20134
 character-title-updated = 
 removed-slayer-tasks = 			
 last-incentive = 0
@@ -81,8 +81,8 @@ arclight-charge = 0
 slayerPoints = 0
 LastLoginYear = 2021
 LastLoginMonth = 4
-LastLoginDate = 1
-LoginStreak = 5
+LastLoginDate = 6
+LoginStreak = 2
 crystal-bow-shots = 0
 skull-timer = -1
 magic-book = 0
@@ -230,7 +230,7 @@ character-skill = 13	9	1040	false	0
 character-skill = 14	39	36412	false	0
 character-skill = 15	1	0	false	0
 character-skill = 16	1	0	false	0
-character-skill = 17	8	896	false	0
+character-skill = 17	16	2816	false	0
 character-skill = 18	1	0	false	0
 character-skill = 19	1	0	false	0
 character-skill = 20	1	0	false	0
@@ -258,8 +258,8 @@ item = 	13118	1	2021-03-21 01:34:41
 item = 	13119	1	2021-03-21 01:34:41
 
 [BANK]
-bank-tab = 0	11740	16
-bank-tab = 0	996	572433
+bank-tab = 0	11740	17
+bank-tab = 0	996	672433
 bank-tab = 0	3848	1
 bank-tab = 0	8014	50
 bank-tab = 0	380	100
@@ -281,16 +281,16 @@ bank-tab = 0	1064	1
 bank-tab = 0	864	100
 bank-tab = 0	883	100
 bank-tab = 0	3452	2
-bank-tab = 0	1465	5
+bank-tab = 0	1465	6
 bank-tab = 0	13661	1
-bank-tab = 0	328	4
+bank-tab = 0	328	5
 bank-tab = 0	441	22
 bank-tab = 0	454	2
 bank-tab = 0	1272	1
 bank-tab = 0	437	3
-bank-tab = 0	314	30
-bank-tab = 0	342	2
-bank-tab = 0	336	1
+bank-tab = 0	314	105
+bank-tab = 0	342	7
+bank-tab = 0	336	10
 bank-tab = 0	1352	10
 bank-tab = 0	1276	1
 bank-tab = 0	439	1
@@ -320,21 +320,21 @@ claim-state = false	false	false	false	false	false	false	false	false	false	false	
 [ACHIEVEMENTS-TIER-1]
 miner_i = 64	false
 smith_i = 10	false
-thief_i = 7	false
+thief_i = 22	false
 clue_master_i = 1	false
 
 
 [ACHIEVEMENTS-TIER-2]
 miner_ii = 64	false
 smith_ii = 10	false
-thief_ii = 7	false
+thief_ii = 22	false
 clue_master_ii = 1	false
 
 
 [ACHIEVEMENTS-TIER-3]
 miner_iii = 64	false
 smith_iii = 10	false
-thief_iii = 7	false
+thief_iii = 22	false
 clue_master_iii = 1	false
 
 [IGNORES]

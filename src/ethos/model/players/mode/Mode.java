@@ -169,6 +169,9 @@ public abstract class Mode {
 	public boolean isOsrs() {
 		return type == ModeType.OSRS;
 	}
+	public boolean isStaffs() {
+		return type == ModeType.STAFFS;
+	}
 
 	/**
 	 * Returns a particular {@link Mode} for the given {@link ModeType}.

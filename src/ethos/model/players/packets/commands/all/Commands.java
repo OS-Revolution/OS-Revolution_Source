@@ -20,17 +20,44 @@ public class Commands extends Command {
 	public void execute(Player c, String input) {
 		if (Server.getMultiplayerSessionListener().inAnySession(c)) {
 			return;
-		}
+		} // 
 		int counter = 8144;
-		c.getPA().sendFrame126("@dre@Os-Revolution Commands", counter++);
-		c.getPA().sendFrame126("", counter++);
-		counter++; // 8146 is already being used
-		counter = sendCommands(c, "all", counter);
-		c.getPA().sendFrame126("", counter++);
-		c.getPA().sendFrame126("@dre@Donators Only", counter++);
-		//noinspection UnusedAssignment
-		counter = sendCommands(c, "donator", counter);
 		c.getPA().showInterface(8134);
+		// Section 1
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@gre@Os-Revolution Commands", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@dre@Community", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@blu@Rules & Guidelines: @bla@[rules]", counter++);
+		c.getPA().sendFrame126("@blu@Discord: @bla@[dc] - [discord] - [disc] - [connect]", counter++);
+		c.getPA().sendFrame126("@blu@Forums: @bla@[Forum]", counter++);
+		c.getPA().sendFrame126("@blu@Vote: @bla@[vote]", counter++);
+		c.getPA().sendFrame126("@blu@Hiscores: @bla@[hs] - [highscores] - [hiscores]", counter++);
+		// Section 2
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@dre@Donations", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@blu@Webstore: @bla@[store] - [shop]", counter++);
+		c.getPA().sendFrame126("@blu@Redeem Items: @bla@[claim]", counter++);
+		// Section 3
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@dre@YouTube & Social Media", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@blu@YouTube: @bla@[yt] - [youtube] - [videos]", counter++);
+		c.getPA().sendFrame126("@blu@Channels & Playlists: @bla@[devs] - [dd] - [devdiaries]", counter++);
+		// Section 4
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@dre@Tools", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@blu@Websearch: @bla@[google]", counter++);
+		c.getPA().sendFrame126("@blu@Password / Security: @bla@[changepass]", counter++);
+		// Section 5
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@dre@Navigation & Teleporting", counter++);
+		c.getPA().sendFrame126("", counter++);
+		c.getPA().sendFrame126("@blu@Cities: @bla@[home]", counter++);
 	}
 
 	public int sendCommands(Player player, String rank, int counter) {

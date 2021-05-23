@@ -31,7 +31,7 @@ public class Claimvotes extends Command {
             @Override
             public void run() {
                 try {
-                    com.everythingrs.vote.Vote[] reward = com.everythingrs.vote.Vote.reward("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb",
+                    com.everythingrs.vote.Vote[] reward = com.everythingrs.vote.Vote.reward("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw",
                             playerName, id, amount);
                     if (reward[0].message != null) {
                         player.sendMessage(reward[0].message);

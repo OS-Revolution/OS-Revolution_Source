@@ -3618,12 +3618,12 @@ public class DialogueHandler {
 			c.getPA().movePlayer(3093, 3242, 0);
 			sendNpcChat("When you are ready or need to visit the available shops", "they can be found here, just slightly south of the", "::home teleport. Most items can be obtained through",
 					"training or skilling so the shops are just the basics.");
-			c.nextChat = 675;
+			c.nextChat = 680;
 			break;
-		case 675:
-			sendNpcChat("There are various build-able objects around the world" , "Like this centrepiece. For example: Each member gets to build", "and customize the home area to their liking through the available object spaces." , "Doing so will save to your account specifically, not all homes are the same.");
+		/*case 675:
+			sendNpcChat("There are various build-able objects around the world" , "", "and customize the home area to their liking through the available object spaces." , "Doing so will save to your account specifically, not all homes are the same.");
 			c.nextChat = 676;
-			break;
+			break; 
 		case 676:
 			c.getPA().movePlayer(3089, 3246, 0);
 			sendNpcChat("I'll show you what I mean.", "For starters here are a few of the build-able objects around the home.",  "Like these 3 portals found in the shops", "or that Centrepiece which is used to charge the portals.");
@@ -3643,10 +3643,10 @@ public class DialogueHandler {
 			c.getPA().movePlayer(3081, 3257, 0);
 			sendNpcChat("Building a Combat dummy allows you to see your max hit.", "When you find the boat space down south that can be" ," used to fast", "travel to various Islands around the world.");
 			c.nextChat = 680;
-			break;
+			break; */
 		case 680:
 			c.getPA().movePlayer(3077, 3255, 0);
-			sendNpcChat("Tired of Grinding? Want to kick back? Want some clout?", "Call out a friend or box another member of the community in a 1v1", "4v4, 50x50, you name it!");
+			sendNpcChat("If you want to test your skills the combat ring is", "a great place to do just that. Be careful though", "this is a dangerous area, you don't want to die here.");
 			c.nextChat = 681;
 			break;
 		case 681:
@@ -3656,17 +3656,17 @@ public class DialogueHandler {
 			c.nextChat = 682;
 			break;
 		case 682:
+			c.getPA().movePlayer(3096, 3267, 0);
+			sendNpcChat("Here you may pray and change your spell castings.", "If you need there are Altars in various spots", "around the world of Gielinor.");
+			c.nextChat = 684;
+			break;
+		
+		case 683:
 			c.getPA().movePlayer(3094, 3267, 0);
 			sendNpcChat("This is the Slayer House", "Here you will find all of the Slayer Masters", "Slayer is a great way to start off for money and XP.");
 			c.nextChat = 683;
 			break;
-		case 683:
-			c.getPA().movePlayer(3096, 3267, 0);
-			sendNpcChat("As you saw our server does feature a unique Construction system.", "In certain areas you can build around the world or", "you can buy houses here when they are on the market.",
-					"Just check in with this guy for details and availabilty.");
-			c.nextChat = 684;
-			break;
-	
+		
 		
 		// Already In
 		case 684:

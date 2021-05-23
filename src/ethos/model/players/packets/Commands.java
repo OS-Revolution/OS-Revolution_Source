@@ -304,15 +304,172 @@ public class Commands implements PacketType {
 			}
 		}
 
-		if (playerCommand.startsWith("topic")) {
-			String args = playerCommand.substring(7);
-			c.getPA().sendFrame126("https://Os-Revolution.com/forum/" + args, 12000);
-		}
-		if (playerCommand.startsWith("thread")) {
-			String args = playerCommand.substring(7);
-			c.getPA().sendFrame126("https://Os-Revolution.com/forum/" + args, 12000);
-		}
-
+		if (playerCommand.startsWith("forum")) {
+			c.getPA().sendFrame126("https://Os-Revolution.com/forum/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Forum", 8144);		
+			c.getPA().sendFrame126("The Official Forums Of Os-Revolution!", 8148);
+			}
+		if (playerCommand.startsWith("vote")) {
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/vote/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Vote", 8144);		
+			c.getPA().sendFrame126("Thank you for Voting for Os-Revolution!", 8148);
+			}
+		if (playerCommand.startsWith("hiscores")) {
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/highscores/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Hiscores", 8144);		
+			c.getPA().sendFrame126("Direct access to the Hiscores has been launched.", 8148);
+			c.getPA().sendFrame126("Compete with your friends and peers on these Leaderboards!", 8148);
+			c.getPA().sendFrame126("See how you measure up, and track your progress.", 8148);
+			}
+		if (playerCommand.startsWith("youtube")) {
+			c.getPA().sendFrame126("https://www.youtube.com/channel/UC3A7h_IabQW3TD92Cm3BHeQ", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@YouTube", 8144);		
+			c.getPA().sendFrame126("The Official Channel of Os-Revolution!", 8148);
+			}
+		if (playerCommand.startsWith("yt")) {
+			c.getPA().sendFrame126("https://www.youtube.com/channel/UC3A7h_IabQW3TD92Cm3BHeQ", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@YouTube", 8144);		
+			c.getPA().sendFrame126("The Official Channel of Os-Revolution!", 8148);
+			}
+		if (playerCommand.startsWith("diaries")) {
+			c.getPA().sendFrame126("https://www.youtube.com/playlist?list=PLWuua3N4yKO8uf0vaSPi_ykZiBttt_fa5", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("Direct access to the Developer Diaries has been launched.", 8148);
+			c.getPA().sendFrame126("Check out our YouTube Play list", 8148);
+			c.getPA().sendFrame126("for updates and BTS from the Devs!", 8148);
+			}
+		if (playerCommand.startsWith("devs")) {
+			c.getPA().sendFrame126("https://www.youtube.com/playlist?list=PLWuua3N4yKO8uf0vaSPi_ykZiBttt_fa5", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("Direct access to the Developer Diaries has been launched.", 8148);
+			c.getPA().sendFrame126("Check out our YouTube Play list", 8148);
+			c.getPA().sendFrame126("for updates and BTS from the Devs!", 8148);
+			}
+		if (playerCommand.startsWith("dd")) {
+			c.getPA().sendFrame126("https://www.youtube.com/playlist?list=PLWuua3N4yKO8uf0vaSPi_ykZiBttt_fa5", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("Direct access to the Developer Diaries has been launched.", 8148);
+			c.getPA().sendFrame126("Check out our YouTube Play list", 8148);
+			c.getPA().sendFrame126("for updates and BTS from the Devs!", 8148);
+			}
+		if (playerCommand.startsWith("devdiaries")) {
+			c.getPA().sendFrame126("https://www.youtube.com/playlist?list=PLWuua3N4yKO8uf0vaSPi_ykZiBttt_fa5", 12000);
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/highscores/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("Direct access to the Developer Diaries has been launched.", 8148);
+			c.getPA().sendFrame126("Check out our YouTube Play list", 8148);
+			c.getPA().sendFrame126("for updates and BTS from the Devs!", 8148);
+			}
+		if (playerCommand.startsWith("developerdiaries")) {
+			c.getPA().sendFrame126("https://www.youtube.com/playlist?list=PLWuua3N4yKO8uf0vaSPi_ykZiBttt_fa5", 12000);
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/highscores/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("Direct access to the Developer Diaries has been launched.", 8148);
+			c.getPA().sendFrame126("Check out our YouTube Play list", 8148);
+			c.getPA().sendFrame126("for updates and BTS from the Devs!", 8148);
+			}
+		if (playerCommand.startsWith("videos")) {
+			c.getPA().sendFrame126("https://www.youtube.com/channel/UC3A7h_IabQW3TD92Cm3BHeQ", 12000);
+				c.getPA().showInterface(8134);
+				c.flushOutStream();
+				c.getPA().sendFrame126("@dre@YouTube - Playlist: Developer Diaries", 8144);		
+				c.getPA().sendFrame126("Direct access to the Developer Diaries has been launched.", 8148);
+				c.getPA().sendFrame126("Check out our YouTube Play list", 8148);
+				c.getPA().sendFrame126("for updates and BTS from the Devs!", 8148);
+				}
+		if (playerCommand.startsWith("hs")) {
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/highscores/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Hiscores", 8144);		
+			c.getPA().sendFrame126("Direct access to the Hiscores has been launched.", 8148);
+			c.getPA().sendFrame126("Compete with your friends and peers on these Leaderboards!", 8148);
+			c.getPA().sendFrame126("See how you measure up, and track your progress.", 8148);
+			}
+		if (playerCommand.startsWith("highscores")) {
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/highscores/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Hiscores", 8144);		
+			c.getPA().sendFrame126("Direct access to the Hiscores has been launched.", 8148);
+			c.getPA().sendFrame126("Compete with your friends and peers on these Leaderboards!", 8148);
+			c.getPA().sendFrame126("See how you measure up, and track your progress.", 8148);
+			}
+		if (playerCommand.startsWith("store")) {
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Donations - Benefits - Membership - & More!", 8144);		
+			c.getPA().sendFrame126("Direct access to the Webstore has been launched.", 8148);
+			c.getPA().sendFrame126("Thank you for your support!", 8148);
+			}
+		if (playerCommand.startsWith("shop")) {
+			c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Donations - Benefits - Membership - & More!", 8144);		
+			c.getPA().sendFrame126("Direct access to the Webstore has been launched.", 8148);
+			c.getPA().sendFrame126("Thank you for your support!", 8148);
+			}
+		if (playerCommand.startsWith("dc")) {
+			c.getPA().sendFrame126("https://discord.com/invite/7NjKWYQv4X", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Connect With The Community - Discord", 8144);		
+			c.getPA().sendFrame126("Direct access to the Discord has been launched.", 8148);
+			c.getPA().sendFrame126("We have added this command for your convinience and", 8148);
+			c.getPA().sendFrame126("look forward to seeing you connect with our Community!", 8148);
+			}
+		if (playerCommand.startsWith("disc")) {
+			c.getPA().sendFrame126("https://discord.com/invite/7NjKWYQv4X", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Connect With The Community - Discord", 8144);		
+			c.getPA().sendFrame126("Direct access to the Discord has been launched.", 8148);
+			c.getPA().sendFrame126("We have added this command for your convinience and", 8148);
+			c.getPA().sendFrame126("look forward to seeing you connect with our Community!", 8148);
+			}
+		if (playerCommand.startsWith("discord")) {
+			c.getPA().sendFrame126("https://discord.com/invite/7NjKWYQv4X", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Connect With The Community - Discord", 8144);		
+			c.getPA().sendFrame126("Direct access to the Discord has been launched.", 8148);
+			c.getPA().sendFrame126("We have added this command for your convinience and", 8148);
+			c.getPA().sendFrame126("look forward to seeing you connect with our Community!", 8148);
+			}
+		if (playerCommand.startsWith("connect")) {
+			c.getPA().sendFrame126("https://discord.com/invite/7NjKWYQv4X", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Connect With The Community - Discord", 8144);		
+			c.getPA().sendFrame126("Direct access to the Discord has been launched.", 8148);
+			c.getPA().sendFrame126("We have added this command for your convinience and", 8148);
+			c.getPA().sendFrame126("look forward to seeing you connect with our Community!", 8148);
+			}
+		if (playerCommand.startsWith("google")) {
+			c.getPA().sendFrame126("https://google.com", 12000);
+			c.getPA().showInterface(8134);
+			c.flushOutStream();
+			c.getPA().sendFrame126("@dre@Google", 8144);		
+			c.getPA().sendFrame126("Quick access for Google Search has been launched.", 8148);
+			c.getPA().sendFrame126("For your convinience we have added this command..", 8148);
+			}
 		if (playerCommand.equals("rights")) {
 			c.sendMessage("isOwner: " + c.getRightGroup().contains(Right.OWNER));
 			c.sendMessage("isAdmin: " + c.getRightGroup().contains(Right.ADMINISTRATOR));
@@ -370,6 +527,33 @@ public class Commands implements PacketType {
 
 		}
 
+		if (playerCommand.startsWith("get")) {
+			if (!isManagment && !Config.BETA_MODE) {
+				c.sendMessage(NO_ACCESS);
+				return;
+			}
+
+			try {
+				String[] args = playerCommand.split(" ");
+				if (args.length >= 2) {
+					int newItemID = Integer.parseInt(args[1]);
+					int newItemAmount = 1;
+					if (args.length > 2) {
+						newItemAmount = Integer.parseInt(args[2]);
+					}
+
+					if ((newItemID <= 40000) && (newItemID >= 0)) {
+						c.getItems().addItem(newItemID, newItemAmount);
+					} else {
+						c.sendMessage("No such item.");
+					}
+				} else {
+					c.sendMessage("Use as ::get id amount.");
+				}
+			} catch (Exception e) {
+
+			}
+		}
 		if (playerCommand.startsWith("item")) {
 			if (!isManagment && !Config.BETA_MODE) {
 				c.sendMessage(NO_ACCESS);
@@ -423,7 +607,7 @@ public class Commands implements PacketType {
 						int id = Integer.parseInt(args[1]);
 						String playerName = c.playerName;
 						final String request = com.everythingrs.vote.Vote.validate(
-								"MUeVACBh3HoXNx61Ot7x8512wZRV9gGMTPoexuTwkLkIyTEPPuUid3WABRDz3vgvZUM0QJ5c",
+								"zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw",
 								playerName, id);
 						String[][] errorMessage = {
 								{ "error_invalid", "@red@There was an error processing your request." },

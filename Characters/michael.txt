@@ -1,5 +1,5 @@
 [ACCOUNT]
-character-username = michael
+character-username = Michael
 character-password = f9fbb9423108ccfc8432e10971ccae55
 
 [CHARACTER]
@@ -12,11 +12,11 @@ mode = REGULAR
 tutorial-stage = END
 character-height = 0
 character-hp = 99
-play-time = 68138
+play-time = 81628
 last-clan = michael
 character-specRestore = 0
-character-posx = 2783
-character-posy = 2918
+character-posx = 3091
+character-posy = 3243
 bank-pin = 
 bank-pin-cancellation = false
 bank-pin-unlock-delay = 0
@@ -37,7 +37,7 @@ lootvalue = 0
 raidPoints = 0
 maRound = 0
 raidCount = 0
-experience-counter = 615250
+experience-counter = 639063
 character-title-updated = 
 removed-slayer-tasks = 			
 last-incentive = 0
@@ -80,9 +80,9 @@ trident-of-the-swamp = 0
 arclight-charge = 0
 slayerPoints = 0
 LastLoginYear = 2021
-LastLoginMonth = 4
-LastLoginDate = 1
-LoginStreak = 2
+LastLoginMonth = 5
+LastLoginDate = 23
+LoginStreak = 1
 crystal-bow-shots = 0
 skull-timer = -1
 magic-book = 0
@@ -110,7 +110,7 @@ zerkAmount =
 pkp = 0
 donP =0
 donA =44
-bank-charges = 2480
+bank-charges = 3320
 augury = 0
 rigour = 0
 prestige-points = 65
@@ -131,7 +131,7 @@ LumbridgeClaimedDiaries =
 MorytaniaClaimedDiaries = 
 WesternClaimedDiaries = 
 WildernessClaimedDiaries = 
-diaries = POTION_DECANT,PURCHASE_KITTEN,TELEPORT_ARDOUGNE,HANS,PICKPOCKET_MAN_LUM,LUMBRIDGE_TELEPORT
+diaries = PURCHASE_KITTEN,POTION_DECANT,TELEPORT_ARDOUGNE,PICKPOCKET_MAN_LUM,LUMBRIDGE_TELEPORT,HANS
 partialDiaries = PICKPOCKET_HERO:1
 necromancy-level = 1
 necromancy-xp = 0
@@ -213,12 +213,12 @@ character-look = 11	3
 character-look = 12	0
 
 [SKILLS]
-character-skill = 0	99	13226760	false	10
+character-skill = 0	99	13262126	false	10
 character-skill = 1	99	13034432	false	0
 character-skill = 2	99	13034432	false	0
-character-skill = 3	99	13106838	false	0
+character-skill = 3	99	13118624	false	0
 character-skill = 4	99	13059390	false	0
-character-skill = 5	99	13034432	false	0
+character-skill = 5	99	13034480	false	0
 character-skill = 6	99	13034432	false	0
 character-skill = 7	99	13034432	false	0
 character-skill = 8	99	13034432	false	0
@@ -230,27 +230,24 @@ character-skill = 13	99	13034432	false	0
 character-skill = 14	99	13034432	false	0
 character-skill = 15	99	13034432	false	0
 character-skill = 16	99	13034432	false	0
-character-skill = 17	99	13943454	false	0
+character-skill = 17	99	13943680	false	0
 character-skill = 18	99	13034432	false	0
 character-skill = 19	99	13034432	false	0
 character-skill = 20	99	13034432	false	0
 character-skill = 21	99	13034432	false	0
-character-skill = 22	99	13034436	false	0
+character-skill = 22	99	13034636	false	0
 character-skill = 23	99	13034436	false	0
 character-skill = 24	99	13034436	false	0
 
 [ITEMS]
-character-item = 0	1628	1
-character-item = 1	1628	1
-character-item = 2	996	50304205
-character-item = 3	5292	7
+character-item = 0	996	50714205
+character-item = 3	5292	8
 character-item = 4	5344	1
 character-item = 5	5344	1
-character-item = 6	21013	1
 character-item = 7	4567	1
 character-item = 8	1465	4
 character-item = 9	314	5
-character-item = 10	527	1
+character-item = 11	3124	1
 
 [RECHARGEITEMS]
 item = 	0	3	2019-11-20 00:21:54
@@ -291,7 +288,7 @@ bank-tab = 0	1064	1
 bank-tab = 0	864	100
 bank-tab = 0	883	100
 bank-tab = 0	3452	2
-bank-tab = 0	11740	17
+bank-tab = 0	11740	21
 bank-tab = 0	1465	8
 bank-tab = 0	13661	1
 bank-tab = 0	12238	1
@@ -366,22 +363,22 @@ claim-state = false	false	false	false	false	false	false	false	false	false	false	
 
 
 [ACHIEVEMENTS-TIER-1]
-pvm_i = 3	false
+pvm_i = 6	false
 fisher_i = 23	false
-thief_i = 326	false
+thief_i = 327	false
 
 
 [ACHIEVEMENTS-TIER-2]
-pvm_ii = 3	false
+pvm_ii = 6	false
 fisher_ii = 23	false
-thief_ii = 326	false
+thief_ii = 327	false
 
 
 [ACHIEVEMENTS-TIER-3]
-pvm_iii = 3	false
-slaughter = 3	false
+pvm_iii = 6	false
+slaughter = 6	false
 fisher_iii = 23	false
-thief_iii = 326	false
+thief_iii = 327	false
 
 [IGNORES]
 
@@ -417,6 +414,7 @@ hasHouse = false
 [TITLES]
 
 [NPC-TRACKER]
+the shaikahan = 1
 smoke devil = 5
 
 [EOF]

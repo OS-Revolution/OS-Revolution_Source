@@ -1529,16 +1529,19 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         CycleEventHandler.getSingleton().stopEvents(this);
         getFriends().notifyFriendsOfUpdate();
         if (getMode().isIronman()) {
-            com.everythingrs.hiscores.Hiscores.update("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb", "Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
+            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
         if (getMode().isUltimateIronman()) {
-            com.everythingrs.hiscores.Hiscores.update("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
+            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
         if (getMode().isRegular()) {
-            com.everythingrs.hiscores.Hiscores.update("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb", "Normal Mode", this.playerName, this.playerRank, this.playerXP, debugMessage);
+            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Normal Mode", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
         if (getMode().isOsrs()) {
-            com.everythingrs.hiscores.Hiscores.update("ArHIo9Y9hEX7Cs7Ev0l7mJyAwyo19a31NLIt9InEmv0ZpvojwkOybC0ERpvDAIrUQkEVRWQb", "Osrs", this.playerName, this.playerRank, this.playerXP, debugMessage);
+            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Osrs", this.playerName, this.playerRank, this.playerXP, debugMessage);
+        }
+        if (getMode().isStaffs()) {
+            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Staff List", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
         Misc.println("[Logged out]: " + playerName);
         disconnected = true;

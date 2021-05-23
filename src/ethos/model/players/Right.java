@@ -34,7 +34,7 @@ public enum Right implements Comparator<Right> {
 	LEGENDARY(18, "9E6405", EXTREME_DONATOR),
 	UBER_DONATOR(19, "9E6405", LEGENDARY),
 	MAX_DONATOR(20, "9E6405", UBER_DONATOR),
-	
+	//AREA51(51, "9E6405", AREA51),
 	RESPECTED_MEMBER(10, "272727"), 
 	HITBOX(12, "437100"), 
 	IRONMAN(13, "3A3A3A"), 
@@ -157,7 +157,9 @@ public enum Right implements Comparator<Right> {
 	public boolean isOwner() {
 		return equals(OWNER);
 	}
-
+	/* public boolean isArea51() {
+		return equals(AREA51);
+	} */
 	/**
 	 * Determines if the players right equal that of {@link MODERATOR}, {@link ADMINISTRATOR},
 	 * and {@link OWNER}

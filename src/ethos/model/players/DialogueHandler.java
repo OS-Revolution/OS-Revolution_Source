@@ -855,7 +855,6 @@ public class DialogueHandler {
 			break;
 		case 730:
 			sendNpcChat("You have chosen all the items, now come let me correct it!");
-			c.nextChat = -1;
 			break;
 
 		case 702:
@@ -3347,7 +3346,7 @@ public class DialogueHandler {
 
 		case 646:
 			c.getTutorial().proceed();
-			c.nextChat = -1;
+			c.nextChat = 0;
 			break;
 
 		case 647:
@@ -3656,38 +3655,40 @@ public class DialogueHandler {
 			c.nextChat = 682;
 			break;
 		case 682:
-			c.getPA().movePlayer(3096, 3267, 0);
+			c.getPA().movePlayer(3088, 3273, 0);
 			sendNpcChat("Here you may pray and change your spell castings.", "If you need there are Altars in various spots", "around the world of Gielinor.");
-			c.nextChat = 684;
+			c.nextChat = 683;
 			break;
 		
 		case 683:
 			c.getPA().movePlayer(3094, 3267, 0);
 			sendNpcChat("This is the Slayer House", "Here you will find all of the Slayer Masters", "Slayer is a great way to start off for money and XP.");
-			c.nextChat = 683;
+			c.nextChat = 684;
 			break;
 		
 		
 		// Already In
 		case 684:
 			c.getPA().movePlayer(3100, 3254, 0);
-			sendNpcChat("Finally you are ready to start your adventure!", "Type ::discord & ::forum to get more familiar with the community.", "We do host events, giveaways, challenges, and tournaments!" , "We sincerely value your feedback as we are community driven");
+			sendNpcChat("Finally you are ready to start your adventure!", "::discord & ::forum will get you familiar with the community.", "We do host events, giveaways, challenges, and tournaments!" , "We sincerely value your feedback, we are community driven");
 			c.nextChat = 685;
 			break;
 		case 685:
-			sendNpcChat("With that said, please feel free to express yourself! The Founders", "Og Panda & Phantasye are always happy to talk with you and hear your ideas.", "Anyway, on behalf of Os-Revolution I again want to welcome you aboard." , "We hope you enjoy your time with us!");
+			sendNpcChat("With that said, please feel free to express yourself!", "Anyway, on behalf of Os-Revolution I again welcome you." , "We hope you enjoy your time with us!");
 			c.nextChat = 686;
 			break;
 		case 686:
-			sendNpcChat("OH! One last thing... eh, hehe... uh..", "I've been stuck up here for years... decades even!", "Can you PLEASE! get me out of this damned Tree?");
+			sendNpcChat("OH! One last thing... eh, hehe... uh..", "I've been stuck up here for years... decades even!", "Can you PLEASE! Find me help!?");
 			c.nextChat = 687;
 			break;
 		case 687:
-			c.getDH().sendOption2("No" , "Definitely Not");
-			c.dialogueAction = 687;
-			c.nextChat = 645;
+			sendPlayerChat1("Uh.. Nah, you'll be fine! Ok Byeeeee!");
+			c.nextChat = 688;
 			break;
-			
+		case 688:
+			c.getTutorial().proceed();
+			c.nextChat = 0;
+			break;	
 			
 			
 		case 11824:

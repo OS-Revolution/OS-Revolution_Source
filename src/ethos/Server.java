@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import ethos.event.impl.DidYouKnowEvent;
+import ethos.runehub.WorldSettingsController;
 import ethos.runehub.building.Hotspot;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
@@ -197,6 +198,14 @@ public class Server {
 
 	private static final Runnable IO_TASKS = () -> {
 		try {
+			if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
+				WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().decrement();
+				WorldSettingsController.getInstance().saveSettings();
+			}
+			if(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0) {
+				WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().decrement();
+				WorldSettingsController.getInstance().saveSettings();
+			}
 			lootMetrics.forEach(metric -> LootMetricDAO.getInstance().create(metric));
 			lootMetrics.clear();
 			// TODO tasks(players online, etc)

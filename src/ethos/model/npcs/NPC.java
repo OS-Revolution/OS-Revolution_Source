@@ -10,6 +10,7 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
+import ethos.runehub.WorldSettingsController;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -774,7 +775,9 @@ public class NPC extends Entity implements NonPlayableCharacter {
                             0L
             );
             rolls.increment();
-            lootTable.roll(player.getContext().getMagicFind().value())
+            final double mf = WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0 ?
+                    player.getContext().getMagicFind().value() * 2 : player.getContext().getMagicFind().value();
+            lootTable.roll(mf)
                     .forEach(loot -> {
                         final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
                                 potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll();

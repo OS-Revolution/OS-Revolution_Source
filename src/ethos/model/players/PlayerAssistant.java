@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import ethos.runehub.WorldSettingsController;
 import org.apache.commons.lang3.ArrayUtils;
 
 import ethos.Config;
@@ -3607,7 +3608,8 @@ public void sendFrame107() {
 		if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
 				&& Config.BONUS_WEEKEND == false) {
 			amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED;
-
+		} else if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
+			amount *= 2.0;
 			// If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
 			// on
 		} else if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)

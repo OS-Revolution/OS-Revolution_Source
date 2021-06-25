@@ -10,6 +10,7 @@ import ethos.model.players.packets.commands.owner.Npc;
 import ethos.model.players.skills.*;
 import ethos.phantasye.job.Employee;
 import ethos.phantasye.job.Job;
+import ethos.runehub.WorldSettingsController;
 import ethos.runehub.building.Hotspot;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.player.PlayerCharacterAttribute;
@@ -1674,6 +1675,12 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
              * Welcome messages
              */
             sendMessage("Welcome to " + Config.SERVER_NAME + ".");
+            if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
+                getPA().sendGameTimer(ClientGameTimer.EXPERIENCE, TimeUnit.MINUTES, Math.toIntExact(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value()));
+            }
+            if(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0) {
+                getPA().sendGameTimer(ClientGameTimer.DROPS, TimeUnit.MINUTES, Math.toIntExact(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value()));
+            }
             Membership.checkDate(this);
             if (getSlayer().superiorSpawned) {
                 getSlayer().superiorSpawned = false;

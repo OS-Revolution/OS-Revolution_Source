@@ -159,53 +159,25 @@ public class ObjectOptionOne {
 		}
 
 		switch (objectType) {
-		// HOT SPOTS START
-		case 15439:
-            for (int i = 0; i < HotspotDefinition.WORKBENCH.getUpgrades().length; i++) { //This loops through all upgrades for bench
-                c.sendMessage("The Workbench's " + i + " upgrade will require the following materials:");
-                HotspotDefinition.WORKBENCH.getUpgrades()[i].getMaterials().forEach(material -> {
-                    c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
-                });
-                if (HotspotDefinition.WORKBENCH.getUpgrades()[i].getMaterials().stream()
-                        .allMatch(material -> c.getItems().playerHasItem(material.getItemId(), material.getAmount()))) {
-                    c.sendMessage("Removed Materials");
-                    c.getContext().getHotspotMap().put(HotspotDefinition.WORKBENCH.ordinal(), new Hotspot(1,obX,obY,0));
-                    c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal())
-                            .setId(HotspotDefinition.WORKBENCH.getUpgrades()[0].getUpgradedObjectId());
-
-                    Server.getGlobalObjects().updateRegionObjects(c);
-                } else {
-                    c.sendMessage("Missing Materials");
-                }
-            }
-
-            break;
-			
-		// Teleport Focus	
-	/*	case 15409: //TODO Make Construction Hotspot ID
-			//TODO Send Dialogue prompting player if they want to upgrade and listing cost using below method
-			
-			*Hotspots are indexed for example the CENTREPIECE is index 0 so assuming this is a CENTREPIECE
-			
-			HotspotDefinition.CENTREPIECE.getUpgrades()[0].getMaterials().forEach(material -> { //This loops through the materials of the selected upgrade
-				c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
-			});
-			c.getContext().getHotspotMap().get(HotspotDefinition.CENTREPIECE.ordinal())
-					.setId(HotspotDefinition.CENTREPIECE.getUpgrades()[0].getUpgradedObjectId());//Changes the specified index's object id to the specified upgrades object ID
-			c.getContext().getHotspotMap().get(HotspotDefinition.CENTREPIECE.ordinal()).setId(100);//Changes the spawned object ID
-			c.getContext().getHotspotMap().put(HotspotDefinition.CENTREPIECE.ordinal(), new Hotspot(69,1000,1000,0)); //Adds a new Hotspot with index = to enum ordinal at the specified coords with the specified object ID
-			for (int i = 0; i < HotspotDefinition.CENTREPIECE.getUpgrades().length; i++) { //This loops through all upgrades for bench
-				c.sendMessage("The CENTREPIECE's " + i + " upgrade will require the following materials:") ;
-				HotspotDefinition.CENTREPIECE.getUpgrades()[i].getMaterials().forEach(material -> {
+			case -1: //TODO Make Construction Hotspot ID
+				//TODO Send Dialogue prompting player if they want to upgrade and listing cost using below method
+				/*
+				*Hotspots are indexed for example the Workbench is index 0 so assuming this is a workbench
+				 */
+				HotspotDefinition.WORKBENCH.getUpgrades()[0].getMaterials().forEach(material -> { //This loops through the materials of the selected upgrade
 					c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
 				});
-			}
-			break;
-			*/	
-			// HOT SPOTS END
-				
-			
-			
+				c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal())
+						.setId(HotspotDefinition.WORKBENCH.getUpgrades()[0].getUpgradedObjectId());//Changes the specified index's object id to the specified upgrades object ID
+				c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal()).setId(100);//Changes the spawned object ID
+				c.getContext().getHotspotMap().put(HotspotDefinition.WORKBENCH.ordinal(), new Hotspot(69,1000,1000,0)); //Adds a new Hotspot with index = to enum ordinal at the specified coords with the specified object ID
+				for (int i = 0; i < HotspotDefinition.WORKBENCH.getUpgrades().length; i++) { //This loops through all upgrades for bench
+					c.sendMessage("The Workbench's " + i + " upgrade will require the following materials:") ;
+					HotspotDefinition.WORKBENCH.getUpgrades()[i].getMaterials().forEach(material -> {
+						c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
+					});
+				}
+				break;
 		case 31990:
 			if (c.absY == 4054) {
 				Vorkath.exit(c);

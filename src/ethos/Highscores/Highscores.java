@@ -9,7 +9,8 @@ import java.sql.Statement;
 
 import ethos.Config;
 import ethos.model.players.Player;
- 
+import ethos.model.players.Right;
+
 public class Highscores implements Runnable {
 	
 	public static void main(String[] args) {
@@ -53,6 +54,9 @@ public class Highscores implements Runnable {
 			if (Config.BLOCK_SQL || !connect()) {
 				return;
 			}
+
+			if(player.getRightGroup().isOrInherits(Right.ADMINISTRATOR))
+				return;
 		
 			String name = player.getName();
 			this.executeUpdate("DELETE FROM hs_users WHERE username='"+name+"'");

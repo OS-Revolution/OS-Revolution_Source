@@ -27,6 +27,7 @@ import org.rhd.api.math.impl.AdjustableLong;
 import org.rhd.api.model.*;
 
 import java.awt.*;
+import java.util.logging.Logger;
 
 public class NPC extends Entity implements NonPlayableCharacter {
     // private Hitmark hitmark = null;
@@ -764,7 +765,8 @@ public class NPC extends Entity implements NonPlayableCharacter {
     }
 
     public void dropLootFor(Player player) {
-        final Location3D dropLocation = new Location3D(this.getX(), this.getY(), this.getHeight());
+        final Location3D dropLocation = new Location3D(this.getX(), this.getY(), player.getHeight());
+        Logger.getGlobal().info("Dropping Loot @: X:" + this.getX() + " Y: " + this.getY() + " Height: " + player.getHeight());
         final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(this.getId(), LootContainerType.NPC);
         if (container != null && container.getLootTables().size() > 0) {
             final LootTable lootTable = container.roll(player.getContext().getMagicFind().value());

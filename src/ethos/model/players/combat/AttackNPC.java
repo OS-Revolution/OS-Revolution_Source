@@ -541,13 +541,13 @@ public class AttackNPC {
 			/**
 			 * Corporeal Beast
 			 */
-			case 320:
-				if (!Boundary.isIn(c, Boundary.CORPOREAL_BEAST_LAIR)) {
-					c.getCombat().resetPlayerAttack();
-					c.sendMessage("You cannot do this from here.");
-					return;
-				}
-				break;
+//			case 320:
+//				if (!Boundary.isIn(c, Boundary.CORPOREAL_BEAST_LAIR)) {
+//					c.getCombat().resetPlayerAttack();
+//					c.sendMessage("You cannot do this from here.");
+//					return;
+//				}
+//				break;
 
 			/**
 			 * No melee
@@ -650,14 +650,14 @@ public class AttackNPC {
 				break;
 			
 			
-			case 319:
-				if (!Boundary.isIn(c, Boundary.CORPOREAL_BEAST_LAIR)) {
-					c.getCombat().resetPlayerAttack();
-					c.sendMessage("You cannot do this from here.");
-					return;
-				}
-				c.corpDamage += damage.getAmount();
-				break;
+//			case 319:
+//				if (!Boundary.isIn(c, Boundary.CORPOREAL_BEAST_LAIR)) {
+//					c.getCombat().resetPlayerAttack();
+//					c.sendMessage("You cannot do this from here.");
+//					return;
+//				}
+//				c.corpDamage += damage.getAmount();
+//				break;
 			case 7585:
 				c.setIceDemonDamageCounter(c.getIceDemonDamageCounter() + damage.getAmount());
 			break;

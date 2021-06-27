@@ -55,6 +55,7 @@ import ethos.model.players.packets.action.ReceiveString;
 import ethos.model.players.packets.itemoptions.ItemOptionOne;
 import ethos.model.players.packets.itemoptions.ItemOptionThree;
 import ethos.model.players.packets.itemoptions.ItemOptionTwo;
+import ethos.runehub.packet.NpcClickPacket;
 
 public class PacketHandler {
 
@@ -103,6 +104,7 @@ public class PacketHandler {
 		packetId[70] = co;
 		packetId[228] = co;
 		packetId[57] = new ItemOnNpc();
+//		NpcClickPacket cn = new NpcClickPacket();//TODO Change to reset npc clicks
 		ClickNPC cn = new ClickNPC();
 		packetId[72] = cn;
 		packetId[131] = cn;

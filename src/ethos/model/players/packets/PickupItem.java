@@ -26,6 +26,7 @@ public class PickupItem implements PacketType {
 		c.itemY = c.getInStream().readSignedWordBigEndian();
 		c.itemId = c.getInStream().readUnsignedWord();
 		c.itemX = c.getInStream().readSignedWordBigEndian();
+		System.out.println("Picking up Item: " + c.itemId);
 		if (Math.abs(c.getX() - c.itemX) > 25 || Math.abs(c.getY() - c.itemY) > 25) {
 			c.resetWalkingQueue();
 			return;
@@ -63,6 +64,7 @@ public class PickupItem implements PacketType {
 			return;
 		}
 		GroundItem item = Server.itemHandler.getGroundItem(c.itemId, c.itemX, c.itemY, c.heightLevel);
+		System.out.println("ITEM : " + item);
 		if (item == null) {
 			return;
 		}
@@ -91,6 +93,7 @@ public class PickupItem implements PacketType {
 		}
 		if (c.getX() == c.itemX && c.getY() == c.itemY) {
 			c.sendAudio(1329);
+
 			Server.itemHandler.removeGroundItem(c, c.itemId, c.itemX, c.itemY, c.heightLevel, true);
 		} else {
 			c.walkingToItem = true;
@@ -100,6 +103,7 @@ public class PickupItem implements PacketType {
 					if (!c.walkingToItem)
 						container.stop();
 					if (c.getX() == c.itemX && c.getY() == c.itemY) {
+						System.out.println("PICKING UP ITEM");
 						Server.itemHandler.removeGroundItem(c, c.itemId, c.itemX, c.itemY, c.heightLevel, true);
 						container.stop();
 					}

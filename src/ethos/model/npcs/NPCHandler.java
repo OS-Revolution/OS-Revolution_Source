@@ -1797,7 +1797,6 @@ public class NPCHandler {
 
                 if (npcs[i].isDead) {
                     Player player = PlayerHandler.players[npcs[i].spawnedBy];
-
                     if (npcs[i].actionTimer == 0 && !npcs[i].applyDead && !npcs[i].needRespawn) {
                         if (npcs[i].npcType == 8028) {
                             CycleEventHandler.getSingleton().addEvent(player, new CycleEvent() {

@@ -2,7 +2,7 @@ package ethos;
 
 public enum ServerState {
 
-	PUBLIC_PRIMARY(43596), PUBLIC_SECONDARY(43596), PRIVATE(43596);
+	PUBLIC_PRIMARY(43596), PUBLIC_SECONDARY(43596), PRIVATE(43595);
 
 	private int port;
 

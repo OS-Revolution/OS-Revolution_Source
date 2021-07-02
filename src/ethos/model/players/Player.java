@@ -1469,14 +1469,14 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             return;
 
         }
-        if (!updatedHs) {
+      /*  if (!updatedHs) {
             if (this.getRightGroup().getPrimary().getValue() != 2
                     && this.getRightGroup().getPrimary().getValue() != 3) {
                 new Thread(new Highscores(this)).start();
 
             }
             updatedHs = !updatedHs;
-        }
+        } *///checkmate
         if (combatLevel >= 100) {
             if (Highpkarena.getState(this) != null) {
                 Highpkarena.removePlayer(this, true);
@@ -1531,7 +1531,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         getFriends().notifyFriendsOfUpdate();
         if (getMode().isIronman()) {
             com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        }
+        } 
         if (getMode().isUltimateIronman()) {
             com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
@@ -2060,13 +2060,13 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (getPA().viewingOtherBank) {
             getPA().resetOtherBank();
         }
-        if (!updatedHs) {
+   /*     if (!updatedHs) { //Checkmate
             if (this.getRightGroup().getPrimary().getValue() != 2
                     && this.getRightGroup().getPrimary().getValue() != 3) {
                 new Thread(new Highscores(this)).start();
             }
             updatedHs = !updatedHs;
-        }
+        } */
         DuelSession duelSession = (DuelSession) Server.getMultiplayerSessionListener().getMultiplayerSession(this,
                 MultiplayerSessionType.DUEL);
         if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST) {

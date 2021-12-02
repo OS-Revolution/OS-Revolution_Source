@@ -178,6 +178,9 @@ public class ObjectOptionOne {
 					});
 				}
 				break;
+				
+		
+				
 		case 31990:
 			if (c.absY == 4054) {
 				Vorkath.exit(c);
@@ -185,11 +188,7 @@ public class ObjectOptionOne {
 				Vorkath.enterInstance(c, 10);
 			}
 			break;
-			
-		case 16664:
-				c.getPA().movePlayer(3045, 10323, 0);
-			break;
-			
+
 		case 16665:
 			if (c.absX == 3045) {
 				c.getPA().movePlayer(3045, 3927, 0);
@@ -230,6 +229,9 @@ public class ObjectOptionOne {
 			
 		case 3309:
 				DemonGod.enterInstance(c, 10);
+			break;
+		case 16664:
+			c.getPA().movePlayer(3058, 9777, 0);
 			break;
 			case 31561:
 				// south jump north
@@ -1430,6 +1432,7 @@ public class ObjectOptionOne {
 			}
 			break;
 		case 25824:
+		case 4309:
 			c.turnPlayerTo(obX, obY);
 			c.getDH().sendDialogues(40, -1);
 			break;
@@ -2040,15 +2043,17 @@ public class ObjectOptionOne {
 		case 16469:
 		case 14838:
 		case 2030:
+		case 6189:
 			c.getSmithing().sendSmelting();
 			break;
+		
 		/*
 		 * case 2030: if (c.absX == 1718 && c.absY == 3468) {
 		 * c.getSmithing().sendSmelting(); } else { c.getSmithing().sendSmelting(); }
 		 * break;
 		 */
-
 		/* AL KHARID */
+			
 		case 2883:
 		case 2882:
 			c.getDH().sendDialogues(1023, 925);
@@ -2477,6 +2482,12 @@ public class ObjectOptionOne {
 		// }
 		// c.getPA().movePlayer(3577, 9927, 0);
 		// break;
+			
+		case 23969:
+		c.getPA().movePlayer(3061, 3376, 0);
+		break;
+		
+		
 
 		case 5126:
 		case 2100:

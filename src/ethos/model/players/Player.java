@@ -1469,14 +1469,14 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             return;
 
         }
-      /*  if (!updatedHs) {
+       if (!updatedHs) {
             if (this.getRightGroup().getPrimary().getValue() != 2
                     && this.getRightGroup().getPrimary().getValue() != 3) {
                 new Thread(new Highscores(this)).start();
 
             }
             updatedHs = !updatedHs;
-        } *///checkmate
+        } 
         if (combatLevel >= 100) {
             if (Highpkarena.getState(this) != null) {
                 Highpkarena.removePlayer(this, true);
@@ -1954,19 +1954,19 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         getPA().sendFrame126("" + this.nlevel, 8008);
         getPA().sendFrame126("" + this.nxp, 8015);
     }
-
+    // Player Info Tab
     public void updateQuestTab() {
 
         getPA().sendFrame126("@cr11@@or1@ Players online : @gre@" + PlayerHandler.getPlayers().size(), 10407);
         if (!Config.BONUS_WEEKEND) {
-            getPA().sendFrame126("@cr20@@or1@ Double Xp: @red@ False", 10408);
+            getPA().sendFrame126("@cr18@@or1@ Double Xp: @red@ False", 10408);
         } else if (Config.BONUS_WEEKEND) {
-            getPA().sendFrame126("@cr20@@or1@ Double Xp: @gre@ True", 10408);
+            getPA().sendFrame126("@cr18@@or1@ Double Xp: @gre@ True", 10408);
         }
         if (MonsterHunt.getCurrentLocation() != null) {
-            getPA().sendFrame126("@cr19@@or1@ Current event : @gre@" + MonsterHunt.getName(), 10409);
+            getPA().sendFrame126("@cr18@@or1@ Current event : @gre@" + MonsterHunt.getName(), 10409);
         } else {
-            getPA().sendFrame126("@cr19@@or1@ Current event : @red@None", 10409);
+            getPA().sendFrame126("@cr18@@or1@ Current event : @red@None", 10409);
         }
         if (Config.BONUS_XP_WOGW) {
             getPA().sendFrame126("@cr18@@or1@WOGW: @gre@Double XP", 10410);
@@ -1977,31 +1977,31 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         } else {
             getPA().sendFrame126("@cr18@@or1@WOGW: @red@Inactive", 10410);
         }
-        long milliseconds = (long) playTime * 600;
+        /* long milliseconds = (long) playTime * 600;
         long days = TimeUnit.MILLISECONDS.toDays(milliseconds);
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds - TimeUnit.DAYS.toMillis(days));
         String time = days + " days, " + hours + " hrs";
 
-        getPA().sendFrame126("@or1@@cr20@Time Played = @gre@" + time, 10225);
-        getPA().sendFrame126("@or1@@cr1@ Player Rank = @gre@" + getRightGroup().getPrimary().toString(), 10226);
-        if (membership) {
+        getPA().sendFrame126("@or1@@cr20@Time Played = @gre@" + time, 10225); */
+        getPA().sendFrame126("@or1@@cr16@ Player Rank = @gre@" + getRightGroup().getPrimary().toString(), 10225);
+        /* if (membership) {
             getPA().sendFrame126("@or1@@cr15@ Membership days = @gre@ " + Membership.getDaysLeft(this), 10227);
         } else {
             getPA().sendFrame126("@or1@@cr15@ You're not a member.", 10227);
-        }
-        getPA().sendFrame126("@or1@@cr21@ KDR = @gre@" + (double) (this.deathcount == 0 ? this.killcount + this.deathcount : this.killcount / this.deathcount), 10228);
-        getPA().sendFrame126("@or1@@cr8@ Amount donated = @gre@$" + this.amDonated, 10229);
-        getPA().sendFrame126("@or1@@cr16@  PK Points = @gre@" + this.pkp, 10230);
-        getPA().sendFrame126("@or1@@cr22@  Slayer Points = @gre@" + this.getSlayer().getPoints(), 10231);
-        getPA().sendFrame126("@or1@@cr17@ PC points = @gre@" + this.pcPoints, 10232);
-        getPA().sendFrame126("@or1@@cr4@ Shayzien points = @gre@" + this.shayPoints, 10233);
+        } */
+        getPA().sendFrame126("@or1@@cr21@ KDR = @gre@" + (double) (this.deathcount == 0 ? this.killcount + this.deathcount : this.killcount / this.deathcount), 10226);
+        //getPA().sendFrame126("@or1@@cr8@ Amount donated = @gre@$" + this.amDonated, 10229);
+        getPA().sendFrame126("@or1@@cr21@ PK Points = @gre@" + this.pkp, 10227);
+        getPA().sendFrame126("@or1@@cr21@ Slayer Points = @gre@" + this.getSlayer().getPoints(), 10228);
+        getPA().sendFrame126("@or1@@cr21@ PC points = @gre@" + this.pcPoints, 10229);
+        //getPA().sendFrame126("@or1@@cr25@ Shayzien points = @gre@" + this.shayPoints, 10230);
 
 
-        getPA().sendFrame126("@or1@View the forums", 47514);
-        getPA().sendFrame126("@or1@View vote page", 47515);
-        getPA().sendFrame126("@or1@View online store", 47516);
-        getPA().sendFrame126("@or1@View the rules", 47517);
-        getPA().sendFrame126("@or1@View community guides ", 47518);
+        getPA().sendFrame126(">@or1@View the forums", 47514);
+        getPA().sendFrame126(">@or1@View vote page", 47515);
+        getPA().sendFrame126(">@or1@View online store", 47516);
+        getPA().sendFrame126(">@or1@View the rules", 47517);
+        getPA().sendFrame126(">@or1@View community guides ", 47518);
 
     }
 
@@ -2060,13 +2060,13 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (getPA().viewingOtherBank) {
             getPA().resetOtherBank();
         }
-   /*     if (!updatedHs) { //Checkmate
+     if (!updatedHs) { 
             if (this.getRightGroup().getPrimary().getValue() != 2
                     && this.getRightGroup().getPrimary().getValue() != 3) {
                 new Thread(new Highscores(this)).start();
             }
             updatedHs = !updatedHs;
-        } */
+        }
         DuelSession duelSession = (DuelSession) Server.getMultiplayerSessionListener().getMultiplayerSession(this,
                 MultiplayerSessionType.DUEL);
         if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST) {

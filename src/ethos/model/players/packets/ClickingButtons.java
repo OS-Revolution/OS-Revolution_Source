@@ -250,14 +250,23 @@ public class ClickingButtons implements PacketType {
 				c.getPA().showInterface(51000);
 				c.getTeleport().selection(c, 0);
 				break;
-		case 4143:
+		case 4143: //lumbridge
 			if (c.teleTimer > 0) {
 				return;
 			} else if(c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
 					c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
 					return;
 				}
-				c.sendMessage("@red@Under Development");
+			c.getPA().spellTeleport(3222, 3218, 0, false);
+				break;
+		case 29031: // trollheim
+			if (c.teleTimer > 0) {
+				return;
+			} else if(c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+					c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+					return;
+				}
+			c.getPA().spellTeleport(2888, 3676, 0, false);
 				break;
 			case 183156:
 				switch(c.boxCurrentlyUsing) {
@@ -266,44 +275,44 @@ public class ClickingButtons implements PacketType {
 						break;
 				}
 				break;
-		case 4146:
+		case 4146: //falador
 			if (c.teleTimer > 0) {
 				return;
 			} else if(c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
 					c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
 					return;
 				}
-				c.sendMessage("@red@Under Development");
+			c.getPA().spellTeleport(2964, 3378, 0, false);
 				break;
 
-		case 4150:
+		case 4150: //camelot
 			if (c.teleTimer > 0) {
 				return;
 			} else if(c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
 					c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
 					return;
 				}
-				c.sendMessage("@red@Under Development");
+			c.getPA().spellTeleport(2757, 3447, 0, false);
 				break;
 
-		case 6004:
+		case 6004: //ardounge
 			if (c.teleTimer > 0) {
 				return;
 			} else if(c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
 					c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
 					return;
 				}
-				c.sendMessage("@red@Under Development");
+				c.getPA().spellTeleport(2662, 3305, 0, false);
 				break;
 
-		case 6005:
+		case 6005: //watchtower
 			if (c.teleTimer > 0) {
 				return;
 			} else if(c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
 					c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
 					return;
 				}
-				c.sendMessage("@red@Under Development");
+			c.getPA().spellTeleport(2549, 3112, 0, false);
 				break;
 
 		case 113238:

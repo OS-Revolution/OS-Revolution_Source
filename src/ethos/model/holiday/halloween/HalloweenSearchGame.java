@@ -99,7 +99,7 @@ public class HalloweenSearchGame {
 			NPCHandler.spawnNpc(6462, 2967, 2756, 0, 1, 90, 8, 150, 200);
 			NPCHandler.spawnNpc(6465, 2974, 2771, 0, 1, 100, 13, 150, 200);
 			NPCHandler.spawnNpc(6465, 2968, 2768, 0, 1, 100, 13, 150, 200);
-			PlayerHandler.executeGlobalMessage("[@red@HALLOWEEN@bla@] The zombies are invading south of home.");
+			PlayerHandler.executeGlobalMessage("[@red@HALLOWEEN@bla@] The zombies are invading south of Edgeville.");
 			break;
 		case 1:
 			NPCHandler.spawnNpc(6462, 2953, 2782, 0, 1, 90, 8, 150, 200);
@@ -107,14 +107,14 @@ public class HalloweenSearchGame {
 			NPCHandler.spawnNpc(6462, 3953, 2790, 0, 1, 90, 8, 150, 200);
 			NPCHandler.spawnNpc(6465, 2955, 2779, 0, 1, 100, 13, 150, 200);
 			NPCHandler.spawnNpc(6465, 2953, 2776, 0, 1, 100, 13, 150, 200);
-			PlayerHandler.executeGlobalMessage("[@red@HALLOWEEN@bla@] The zombies are invading the store west of home.");
+			PlayerHandler.executeGlobalMessage("[@red@HALLOWEEN@bla@] The zombies are invading the store west of Edgeville.");
 			break;
 		case 2:
 			NPCHandler.spawnNpc(6462, 2993, 2732, 0, 1, 90, 8, 150, 200);
 			NPCHandler.spawnNpc(6462, 2996, 2728, 0, 1, 90, 8, 150, 200);
 			NPCHandler.spawnNpc(6462, 2994, 2727, 0, 1, 90, 8, 150, 200);
 			NPCHandler.spawnNpc(6462, 2996, 2723, 0, 1, 90, 8, 150, 200);
-			PlayerHandler.executeGlobalMessage("[@red@HALLOWEEN@bla@] The zombies are invading the skilling area south-south east of home.");
+			PlayerHandler.executeGlobalMessage("[@red@HALLOWEEN@bla@] The zombies are invading the skilling area south-south east of Edgeville.");
 			break;
 		}
 	}

@@ -72,6 +72,7 @@ public class ObjectOptionTwo {
 			c.getPA().movePlayer(3433, 3537, 1);
 			break;
 		case 25824:
+		case 4309:
 			c.turnPlayerTo(obX, obY);
 			c.getDH().sendDialogues(40, -1);
 			break;
@@ -82,20 +83,22 @@ public class ObjectOptionTwo {
 			
 			FlaxPicking.getInstance().pick(c, new Location3D(obX, obY, c.heightLevel));
 			break; 
+		case 11730:
+			c.getThieving().steal(Stall.Baker, objectType, location);
+			break;
+		case 11733:
+			c.getThieving().steal(Stall.Spice, objectType, location);
+			break;
 		//bar stool test
 		case 2312:
 			c.turnPlayerTo(obX, obY);
 			c.getPA().movePlayer(3086, 3259, 0);
 			c.startAnimation(2939);
 			break;
-		
 		case 3840: // Compost Bin
 			c.getFarming().handleCompostRemoval();
 		break;
 		case 4874:
-		case 11730:
-			c.getThieving().steal(Stall.Crafting, objectType, location);
-			break;
 		case 4877:
 	/*	case 11731:
 			c.getThieving().steal(Stall.Magic, objectType, location);
@@ -120,6 +123,7 @@ public class ObjectOptionTwo {
 			c.getThieving().steal(Stall.Toys, objectType, location);
 			break;
 		case 629:
+		case 11729:
 			c.getThieving().steal(Stall.Silk, objectType, location);
 			break;
 		// END
@@ -271,6 +275,7 @@ public class ObjectOptionTwo {
 		case 3044:
 		case 16469:
 		case 2030:
+		case 6189:
 		case 24009:
 		case 26300:
 			c.getSmithing().sendSmelting();

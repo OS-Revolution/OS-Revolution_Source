@@ -63,7 +63,8 @@ public class ItemOnObject implements PacketType {
 		// UseItem.ItemonObject(c, objectId, objectX, objectY, itemId);
 
 		switch (c.objectId) {
-		
+			
+			case 6189:
 			case 2030: //Allows for items to be used from both sides of the furnace
 				c.objectDistance = 4;
 				c.objectXOffset = 3;

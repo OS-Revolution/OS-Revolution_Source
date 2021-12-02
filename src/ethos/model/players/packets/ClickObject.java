@@ -666,7 +666,7 @@ public class ClickObject implements PacketType {
 				c.getShops().openShop(14);
 			}
 			switch (c.objectId) {
-
+			case 6189:
 			case 2030: // Allows for the furnace to be used from the other side too
 				c.objectDistance = 4;
 				c.objectXOffset = 3;
@@ -683,6 +683,9 @@ public class ClickObject implements PacketType {
 			case 2484:
 			case 11734:
 			case 11731:
+			case 11729:
+			case 11730:
+			case 11733:
 			case 14011:
 			case 4277:
 			case 5595:

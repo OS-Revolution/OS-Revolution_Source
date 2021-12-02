@@ -1,5 +1,5 @@
 [ACCOUNT]
-character-username = Michael
+character-username = michael
 character-password = f9fbb9423108ccfc8432e10971ccae55
 
 [CHARACTER]
@@ -12,11 +12,11 @@ mode = REGULAR
 tutorial-stage = END
 character-height = 0
 character-hp = 99
-play-time = 81628
+play-time = 151176
 last-clan = michael
 character-specRestore = 0
-character-posx = 3091
-character-posy = 3243
+character-posx = 3093
+character-posy = 3246
 bank-pin = 
 bank-pin-cancellation = false
 bank-pin-unlock-delay = 0
@@ -31,13 +31,13 @@ playerChoice =
 dailyEnabled = true
 hourly-box-toggle = true
 fractured-crystal-toggle = true
-accept-aid = false
+accept-aid = true
 did-you-know = true
 lootvalue = 0
 raidPoints = 0
 maRound = 0
 raidCount = 0
-experience-counter = 639063
+experience-counter = 994032
 character-title-updated = 
 removed-slayer-tasks = 			
 last-incentive = 0
@@ -67,7 +67,7 @@ wave-id = 0
 wave-type = 0
 wave-info = 0	0	0
 master-clue-reqs = 0	0	0	0
-counters = 0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+counters = 1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
 max-cape = false	false	false	false	false
 zulrah-best-time = 0
 toxic-staff = 0
@@ -80,9 +80,9 @@ trident-of-the-swamp = 0
 arclight-charge = 0
 slayerPoints = 0
 LastLoginYear = 2021
-LastLoginMonth = 5
-LastLoginDate = 23
-LoginStreak = 1
+LastLoginMonth = 12
+LastLoginDate = 1
+LoginStreak = 2
 crystal-bow-shots = 0
 skull-timer = -1
 magic-book = 0
@@ -96,7 +96,7 @@ barrows-final-brother = Verac
 barrows-monsters-killcount = 0
 barrows-completed = false
 special-amount = 10.0
-prayer-amount = 1.0
+prayer-amount = 0.9988867797964807
 KC =0
 DC =0
 total-hunter-kills = 0
@@ -110,7 +110,7 @@ zerkAmount =
 pkp = 0
 donP =0
 donA =44
-bank-charges = 3320
+bank-charges = 6715
 augury = 0
 rigour = 0
 prestige-points = 65
@@ -131,8 +131,8 @@ LumbridgeClaimedDiaries =
 MorytaniaClaimedDiaries = 
 WesternClaimedDiaries = 
 WildernessClaimedDiaries = 
-diaries = PURCHASE_KITTEN,POTION_DECANT,TELEPORT_ARDOUGNE,PICKPOCKET_MAN_LUM,LUMBRIDGE_TELEPORT,HANS
-partialDiaries = PICKPOCKET_HERO:1
+diaries = POTION_DECANT,PURCHASE_KITTEN,TELEPORT_ARDOUGNE,TELEPORT_TO_FALADOR,LUMBRIDGE_TELEPORT,PICKPOCKET_MAN_LUM,HANS
+partialDiaries = STEAL_FUR:23,STEAL_CAKE:16,PICKPOCKET_HERO:1,PICKPOCKET_MAN:1,PICK_FLAX_SEERS:6
 necromancy-level = 1
 necromancy-xp = 0
 pc-points = 0
@@ -148,7 +148,7 @@ slayer-master = 0
 consecutive-tasks = 0
 mage-arena-points = 0
 shayzien-assault-points = 0
-autoRet = 0
+autoRet = 1
 flagged = false
 keepTitle = false
 killTitle = false
@@ -157,7 +157,7 @@ gwkc = 0
 fightMode = 0
 privatechat = 0
 void = 0	0	0	0	0
-quickprayer = false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	
+quickprayer = false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	
 pouch-rune = 0	0	0
 pouch-pure = 0	0	0
 crabsKilled = 0
@@ -185,7 +185,7 @@ lost-items-skotizo =
 character-equip = 0	10828	1	
 character-equip = 1	21295	1	
 character-equip = 2	-1	1	
-character-equip = 3	4566	1	
+character-equip = 3	767	1	
 character-equip = 4	11832	1	
 character-equip = 5	-1	1	
 character-equip = 6	-1	0	
@@ -213,24 +213,24 @@ character-look = 11	3
 character-look = 12	0
 
 [SKILLS]
-character-skill = 0	99	13262126	false	10
-character-skill = 1	99	13034432	false	0
+character-skill = 0	99	13608610	false	10
+character-skill = 1	99	13041636	false	0
 character-skill = 2	99	13034432	false	0
-character-skill = 3	99	13118624	false	0
+character-skill = 3	99	13234110	false	0
 character-skill = 4	99	13059390	false	0
 character-skill = 5	99	13034480	false	0
 character-skill = 6	99	13034432	false	0
 character-skill = 7	99	13034432	false	0
 character-skill = 8	99	13034432	false	0
 character-skill = 9	99	13034432	false	0
-character-skill = 10	99	13055086	false	0
+character-skill = 10	99	13059732	false	0
 character-skill = 11	99	13034432	false	0
-character-skill = 12	99	13041568	false	0
+character-skill = 12	99	13041952	false	0
 character-skill = 13	99	13034432	false	0
 character-skill = 14	99	13034432	false	0
 character-skill = 15	99	13034432	false	0
 character-skill = 16	99	13034432	false	0
-character-skill = 17	99	13943680	false	0
+character-skill = 17	99	14179414	false	0
 character-skill = 18	99	13034432	false	0
 character-skill = 19	99	13034432	false	0
 character-skill = 20	99	13034432	false	0
@@ -240,14 +240,7 @@ character-skill = 23	99	13034436	false	0
 character-skill = 24	99	13034436	false	0
 
 [ITEMS]
-character-item = 0	996	50714205
-character-item = 3	5292	8
-character-item = 4	5344	1
-character-item = 5	5344	1
-character-item = 7	4567	1
-character-item = 8	1465	4
-character-item = 9	314	5
-character-item = 11	3124	1
+character-item = 0	9	1
 
 [RECHARGEITEMS]
 item = 	0	3	2019-11-20 00:21:54
@@ -266,13 +259,12 @@ item = 	13118	1	2019-11-20 00:21:54
 item = 	13119	1	2019-11-20 00:21:54
 
 [BANK]
-bank-tab = 0	996	3073993
+bank-tab = 0	996	104996
 bank-tab = 0	3848	1
 bank-tab = 0	8014	49
 bank-tab = 0	380	100
 bank-tab = 0	1324	1
 bank-tab = 0	1334	1
-bank-tab = 0	842	1
 bank-tab = 0	1382	1
 bank-tab = 0	1154	1
 bank-tab = 0	1116	1
@@ -286,15 +278,13 @@ bank-tab = 0	1130	1
 bank-tab = 0	1096	1
 bank-tab = 0	1064	1
 bank-tab = 0	864	100
-bank-tab = 0	883	100
-bank-tab = 0	3452	2
-bank-tab = 0	11740	21
-bank-tab = 0	1465	8
+bank-tab = 0	11740	34
+bank-tab = 0	1465	19
 bank-tab = 0	13661	1
 bank-tab = 0	12238	1
 bank-tab = 0	12733	5
-bank-tab = 0	386	6
-bank-tab = 0	2529	2
+bank-tab = 0	386	156
+bank-tab = 0	2529	3
 bank-tab = 0	5294	3
 bank-tab = 0	5296	3
 bank-tab = 0	774	1
@@ -302,26 +292,25 @@ bank-tab = 0	7479	1956
 bank-tab = 0	13191	1
 bank-tab = 0	22328	1
 bank-tab = 0	1560	1
-bank-tab = 0	314	116
-bank-tab = 0	328	4
-bank-tab = 0	1628	6
-bank-tab = 0	1626	11
-bank-tab = 0	2350	1
-bank-tab = 0	336	6
-bank-tab = 0	342	2
+bank-tab = 0	314	146
+bank-tab = 0	328	7
+bank-tab = 0	1628	9
+bank-tab = 0	1626	15
+bank-tab = 0	2350	5
+bank-tab = 0	336	7
+bank-tab = 0	342	3
 bank-tab = 0	6572	1
-bank-tab = 0	2356	3
+bank-tab = 0	2356	6
 bank-tab = 0	11710	1
 bank-tab = 0	12728	1
 bank-tab = 0	2527	2
 bank-tab = 0	2525	1
-bank-tab = 0	11709	1
 bank-tab = 0	11708	1
 bank-tab = 0	1108	1
 bank-tab = 0	13189	1
 bank-tab = 0	1049	1
-bank-tab = 0	5292	12
-bank-tab = 0	5344	5
+bank-tab = 0	5292	25
+bank-tab = 0	5344	7
 bank-tab = 0	651	3
 bank-tab = 0	2933	3
 bank-tab = 0	2927	1
@@ -335,11 +324,36 @@ bank-tab = 0	322	1
 bank-tab = 0	360	6
 bank-tab = 0	372	3
 bank-tab = 0	637	2
-bank-tab = 0	647	1
+bank-tab = 0	647	2
 bank-tab = 0	643	2
 bank-tab = 0	639	1
 bank-tab = 0	2897	1
-bank-tab = 0	6860	1
+bank-tab = 0	6860	2
+bank-tab = 0	4567	2
+bank-tab = 0	612	1
+bank-tab = 0	3124	1
+bank-tab = 0	557	20
+bank-tab = 0	564	25
+bank-tab = 0	555	20
+bank-tab = 0	2352	2
+bank-tab = 0	1778	8
+bank-tab = 0	1780	7
+bank-tab = 0	7478	1
+bank-tab = 0	527	2
+bank-tab = 0	2139	1
+bank-tab = 0	315	191
+bank-tab = 0	13469	1
+bank-tab = 0	2435	15
+bank-tab = 0	2492	1
+bank-tab = 0	990	3
+bank-tab = 0	3452	2
+bank-tab = 0	541	1
+bank-tab = 0	1892	3
+bank-tab = 0	2008	3
+bank-tab = 0	7115	2
+bank-tab = 0	10838	1
+bank-tab = 0	2310	2
+bank-tab = 0	842	1
 
 
 [LOOTBAG]
@@ -356,29 +370,39 @@ bank-tab = 0	6860	1
 
 
 [HOLIDAY-EVENTS]
-stage = Halloween	1
+stage = Halloween	4
 
 [DEGRADEABLES]
 claim-state = false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false
 
 
 [ACHIEVEMENTS-TIER-1]
-pvm_i = 6	false
-fisher_i = 23	false
-thief_i = 327	false
+cow_tipper = 7	false
+kbd_i = 2	false
+pvm_i = 42	false
+fisher_i = 25	false
+thief_i = 403	false
+boss_hunter_i = 2	false
+clue_master_i = 1	false
 
 
 [ACHIEVEMENTS-TIER-2]
-pvm_ii = 6	false
-fisher_ii = 23	false
-thief_ii = 327	false
+kbd_ii = 2	false
+pvm_ii = 42	false
+fisher_ii = 25	false
+thief_ii = 403	false
+boss_hunter_ii = 2	false
+clue_master_ii = 1	false
 
 
 [ACHIEVEMENTS-TIER-3]
-pvm_iii = 6	false
-slaughter = 6	false
-fisher_iii = 23	false
-thief_iii = 327	false
+pvm_iii = 42	false
+kbd_iii = 2	false
+slaughter = 42	false
+boss_hunter_iii = 2	false
+fisher_iii = 25	false
+thief_iii = 403	false
+clue_master_iii = 1	false
 
 [IGNORES]
 
@@ -414,6 +438,7 @@ hasHouse = false
 [TITLES]
 
 [NPC-TRACKER]
+evil chicken = 2
 the shaikahan = 1
 smoke devil = 5
 

@@ -448,6 +448,8 @@ public class Thieving {
         //
         Wine(new GameItem(1), 30, 23, 0, 0),
         //
+        Spice(new GameItem(1), 30, 23, 0, 0),
+        //
         Toys(new GameItem(1), 99, 1000, 0, 0),
         //
         Silk(new GameItem(1), 45, 500, 0, 0),
@@ -459,6 +461,8 @@ public class Thieving {
         Fish(new GameItem(1), 1, 16, 0, 0),
         //
         Seeds(new GameItem(1), 30, 23, 0, 0),
+        //
+        Baker(new GameItem(1), 30, 23, 0, 0),
         //
         Fur(new GameItem(995, Misc.random(1000) + 1000), 50, 54, 10, 40000);
     	//

@@ -46,8 +46,8 @@ public class TeleportHandler {
 	String[] donatorNames = { "@yel@Select Your Dungeon Teleport", "@yel@Catacombs", "@yel@Fremennik Slayer Dungeon",
 			"@yel@Taverley Dungeon", "@yel@Skeletal Wyverns", "@yel@Asgarnian Ice Dungeon", "@yel@Brimhaven Dungeon", "", "", "", "", "",
 			"", "", "", "", "", "", "", "", "" };
-	String[] otherNames = { "@yel@Select Your Skilling Teleport", "@yel@Slayer Master's House", "@yel@Crafting/Gem Rocks", "@yel@Fishing/Cooking/Mining/Smithing",
-			"@yel@Woodcutting", "@yel@Farming", "@yel@Agility @or1@(Gnome)", "@yel@Hunter @or1@(Animals)", "@yel@Hunter @or1@(Implings)", "@yel@Mining Guild", "@yel@Thieving", "",
+	String[] otherNames = { "@yel@Select Your Skilling Teleport", "@yel@Slayer Master's House", "@yel@Skill House (Cooking / Crafting / Smithing / Combat)", "@yel@Mining (Falador Mining)",
+			"@yel@Woodcutting", "@yel@Farming", "@yel@Agility @or1@(Gnome)", "@yel@Hunter @or1@(Animals)", "@yel@Hunter @or1@(Implings)", "@yel@Fishing (Fishing Guild)", "@yel@Thieving Stalls (Ardougne)", "",
 			"", "", "", "", "", "", "", "", "" };
 
 	public void loadMonsterTab() {
@@ -296,7 +296,7 @@ public class TeleportHandler {
 			} else if (player.teleSelected == 5) { // Donator - Basic Slayer
 				player.getPA().startTeleport(2807, 10003, 0, "modern", false);
 			} else if (player.teleSelected == 6) { // Other - Lands end
-				player.getPA().startTeleport(1504, 3419, 0, "modern", false); // change
+				player.getPA().startTeleport(3033, 3284, 0, "modern", false); // change
 				// player.sendMessage("Teleporting to "+otherNames[2]+".");
 			}
 			break;
@@ -323,7 +323,7 @@ public class TeleportHandler {
 			} else if (player.teleSelected == 5) { // Super - Advanced Slayer
 				player.getPA().startTeleport(2883, 9800, 0, "modern", false);
 			} else if (player.teleSelected == 6) { // Other - Skillers Cove
-				player.getPA().startTeleport(1721, 3464, 0, "modern", false);
+				player.getPA().startTeleport(3058, 9776, 0, "modern", false);
 				// player.sendMessage("Teleporting to "+otherNames[3]+".");
 			}
 			break;
@@ -482,8 +482,8 @@ public class TeleportHandler {
 				// player.sendMessage("Teleporting to "+cityNames[9]+".");
 			} else if (player.teleSelected == 5) { // Extreme - Smoke Devil
 
-			} else if (player.teleSelected == 6) { // Other - Mining Guild
-				player.getPA().startTeleport(3046, 9756, 0, "modern", false);
+			} else if (player.teleSelected == 6) { // Other - Fishing Guild
+				player.getPA().startTeleport(2604, 3401, 0, "modern", false);
 				// player.sendMessage("Teleporting to "+otherNames[9]+".");
 			} 
 			break;
@@ -560,7 +560,7 @@ public class TeleportHandler {
 			} else if (player.teleSelected == 5) { // Legendary - Skeletal Wyverns
 				
 			}else if (player.teleSelected == 6) { // Other - Theiving
-				player.getPA().startTeleport(3079, 3477, 0, "modern", false);
+				player.getPA().startTeleport(2661, 3305, 0, "modern", false);
 				// player.sendMessage("Teleporting to "+otherNames[9]+".");
 			}
 			break;

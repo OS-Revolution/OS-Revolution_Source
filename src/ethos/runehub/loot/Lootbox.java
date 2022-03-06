@@ -3,8 +3,11 @@ package ethos.runehub.loot;
 import com.google.common.base.Preconditions;
 import ethos.model.items.ItemDefinition;
 import ethos.model.players.Player;
-import org.rhd.api.io.loader.LootContainerContextProducer;
-import org.rhd.api.model.*;
+import org.runehub.api.io.data.impl.LootTableContainerDAO;
+import org.runehub.api.io.load.impl.LootTableContainerDefinitionLoader;
+import org.runehub.api.io.load.impl.LootTableContainerLoader;
+import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.model.entity.item.loot.*;
 
 import java.util.*;
 
@@ -22,16 +25,20 @@ public class Lootbox extends LootTableContainer {
         return Arrays.stream(lootboxes).anyMatch(value -> value == id);
     }
 
-    public Lootbox(LootTableContainer container, Player player) {
-        super(container.getId(), container.getLootTables());
+    private static LootTableContainer getLootTableContainer(int containerId) {
+        return LootTableContainerDAO.getInstance().getAllEntries().stream().filter(lootTableContainer -> lootTableContainer.getContainerId() == containerId)
+                .findAny().orElseThrow();
+    }
+    public Lootbox(int containerId, Player player) {
+        super(getLootTableContainer(containerId).getId(), containerId, getLootTableContainer(containerId).getLootTables());
         this.player = player;
     }
 
     public void open() {
         try {
             Preconditions.checkArgument(!player.getAttributes().isUsingLootBox(),"Please finish your current spin.");
-            Preconditions.checkArgument(player.getItems().playerHasItem(11739),"You're out of lootboxes.");
-            player.getItems().deleteItem(this.getId(), 1);
+            Preconditions.checkArgument(player.getItems().playerHasItem(this.getContainerId()),"You're out of lootboxes.");
+            player.getItems().deleteItem(this.getContainerId(), 1);
             this.spin();
         } catch (IllegalArgumentException e) {
             player.sendMessage(e.getMessage());
@@ -40,41 +47,47 @@ public class Lootbox extends LootTableContainer {
 
     private List<Loot> spin() {
         this.openInterface();
-        player.boxCurrentlyUsing = this.getId();
+        player.boxCurrentlyUsing = this.getContainerId();
         player.sendMessage(":spin");
         player.getAttributes().setUsingLootBox(true);
         return this.selectPrize();
     }
 
     private List<Loot> selectPrize() {
-        final Loot loot = this.roll().roll().get(0);
+        final Loot lootTable = new ArrayList<>(this.roll()).get(0);
+        final Loot loot = new ArrayList<>(LootTableLoader.getInstance().read(lootTable.getId()).roll()).get(0);
         final List<Loot> items = new ArrayList<>();
-        final List<PotentialItem> potentialLoot = new ArrayList<>();
+        final List<LootTableEntry> potentialLoot = new ArrayList<>();
 
-        this.getLootTables().getMap().values().forEach(table -> {
-            potentialLoot.addAll(table.getPotentialItems());
+        this.getLootTables().forEach(table -> {
+            potentialLoot.addAll(LootTableLoader.getInstance().read(table.getId()).getLootTableEntries());
         });
 
         items.add(loot);
         for (int i=0; i<66; i++) {
-            final int previousId = potentialLoot.get(new Random().nextInt(potentialLoot.size())).getItemId();
-            sendItem(i, 55, loot.getItemId(), previousId,1);
+            final int previousId = potentialLoot.get(new Random().nextInt(potentialLoot.size())).getId();
+            sendItem(i, 55, (int) loot.getId(), previousId,1);
         }
-        final String name = ItemDefinition.forId(loot.getItemId()).getName();
-        final Tier tier = Tier.getRarityForValue(potentialLoot.stream().filter(potentialItem ->
-                potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll());
+
+
+        final String name = ItemDefinition.forId((int) loot.getId()).getName();
+        final Tier tier = Tier.getTier(potentialLoot.stream().filter(potentialItem ->
+                potentialItem.getId() == loot.getId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getChance());
+        final long amount = loot.getAmount();
         final Timer timer = new Timer();
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (name.endsWith("s")) {
-                    player.sendMessage("Congratulations, you have won " + "[" + tier + "] " + name + "@bla@!");
+                if (name.endsWith("s") || amount > 1) {
+                    player.sendMessage("Congratulations, you have won " + "[" + tier + "] " + name + " x" + amount + "@bla@!");
                 }
                 else {
-                    player.sendMessage("Congratulations, you have won a " + "[" + tier + "] "  + name + "@bla@!");
+                    player.sendMessage("Congratulations, you have won a " + "[" + tier + "] "  + name + " x" + amount + "@bla@!");
                 }
-                player.getItems().addItem(loot.getItemId(),loot.getAmount());
+                player.getItems().addItem((int) loot.getId(), (int) loot.getAmount());
+                player.getItems().updateItems();
                 player.getAttributes().setUsingLootBox(false);
+                player.getPA().closeAllWindows();
             }
         };
 
@@ -102,7 +115,7 @@ public class Lootbox extends LootTableContainer {
         // Reset interface
         this.clearWheel();
         // Open
-        player.getPA().sendString(LootContainerContextProducer.getInstance(LootContainerType.ITEM).get(this.getId()).getName(), 47002);
+        player.getPA().sendString(LootTableContainerDefinitionLoader.getInstance().read(this.getId()).getName(), 47002);
         player.getPA().showInterface(INTERFACE_ID);
     }
 
@@ -116,15 +129,5 @@ public class Lootbox extends LootTableContainer {
             player.getOutStream().writeDWord(amount);
             player.getOutStream().endFrameVarSizeWord();
         }
-    }
-
-    @Override
-    public LootTable roll() {
-        return this.roll(0.0D);
-    }
-
-    @Override
-    public LootTable roll(double modifier) {
-        return this.getLootTables().next(0.0D);
     }
 }

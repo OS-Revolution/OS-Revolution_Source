@@ -36,6 +36,7 @@ import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 import org.rhd.api.io.loader.LootContainerLoader;
 import org.rhd.api.model.LootContainerType;
+import org.runehub.api.io.load.impl.LootTableContainerLoader;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -185,7 +186,7 @@ public class ItemOptionOne implements PacketType {
             return;
         }
         if(Lootbox.isLootbox(itemId)) {
-                final Lootbox lootbox = new Lootbox(LootContainerLoader.getInstance().getLootContainer(itemId, LootContainerType.ITEM), c);
+                final Lootbox lootbox = new Lootbox(itemId, c);
                 lootbox.open();
         }
         switch (itemId) {

@@ -51,6 +51,12 @@ import ethos.world.ShopHandler;
 import ethos.world.objects.GlobalObjects;
 import org.rhd.api.io.db.LootMetricDAO;
 import org.rhd.api.model.LootMetric;
+import org.runehub.api.io.data.impl.*;
+import org.runehub.api.io.load.impl.*;
+import org.runehub.api.model.entity.item.loot.LootTable;
+import org.runehub.api.model.entity.item.loot.LootTableContainer;
+import org.runehub.api.model.entity.item.loot.LootTableContainerDefinition;
+import org.runehub.api.model.entity.item.loot.LootTableDefinition;
 
 /**
  * The main class needed to start the server.
@@ -174,6 +180,31 @@ public class Server {
 		sleepTime = 0;
 	}
 
+	private static void initializeLoaders() {
+		TierDAO.getInstance().getAllEntries().forEach(tier -> {
+			TierLoader.getInstance().create(tier.getId(),tier);
+		});
+		final List<LootTable> contexts = LootTableDAO.getInstance().getAllEntries();
+		final List<LootTableDefinition> definitions = LootTableDefinitionDAO.getInstance().getAllEntries();
+		final List<LootTableContainer> containers = LootTableContainerDAO.getInstance().getAllEntries();
+		final List<LootTableContainerDefinition> containerDefinitions = LootContainerDefinitionDAO.getInstance().getAllEntries();
+		final List<LootTable> tables = LootTableDAO.getInstance().getAllEntries();
+		final List<LootTableDefinition> tableDefinitions = LootTableDefinitionDAO.getInstance().getAllEntries();
+
+		containers.forEach(entry -> {
+			LootTableContainerLoader.getInstance().create(entry.getId(), entry);
+		});
+		containerDefinitions.forEach(entry -> {
+			LootTableContainerDefinitionLoader.getInstance().create(entry.getId(), entry);
+		});
+		contexts.forEach(itemContext -> {
+			LootTableLoader.getInstance().create(itemContext.getId(), itemContext);
+		});
+		definitions.forEach(itemContext -> {
+			LootTableDefinitionLoader.getInstance().create(itemContext.getId(), itemContext);
+		});
+	}
+
 	private static final Runnable SERVER_TASKS = () -> {
 		try {
 			itemHandler.process();
@@ -242,6 +273,9 @@ public class Server {
 			Commands.initializeCommands();
 			long endTime = System.currentTimeMillis();
 			long elapsed = endTime - startTime;
+
+			initializeLoaders();
+
 			System.out.println(Config.SERVER_NAME + " has successfully started up in " + elapsed + " milliseconds.");
 			GAME_THREAD.scheduleAtFixedRate(SERVER_TASKS, 0, 600, TimeUnit.MILLISECONDS);
 			IO_THREAD.scheduleAtFixedRate(IO_TASKS, 0, 60, TimeUnit.SECONDS);

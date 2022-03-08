@@ -45,6 +45,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                         new PlayerCharacterContext.PlayerCharacterContextBuilder(rs.getLong("id"))
                                 .withJobScore(rs.getInt("jobScore"))
                                 .withHotspots(rs.getString("hotspots"))
+                                .withSpawnPoints(rs.getLong("spawnPoints"))
                                 .withJob(new Job.JobBuilder()
                                         .forSkill(rs.getInt("jobSkillId"))
                                         .withDifficulty(Job.Difficulty.values()[rs.getInt("jobDifficultyId")])
@@ -75,6 +76,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                             + ",jobTargetId='" + context.getActiveJob().getTargetId() + "'"
                             + ",magicFind='" + context.getMagicFind().value() + "'"
                             + ",hotspots='" + context.getHotspotsAsJson() + "'"
+                            + ",spawnPoints='" + context.getSpawnPoints().value() + "'"
                     )
 
                     .addQuery("WHERE id='" + context.getId() + "'")
@@ -103,14 +105,15 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
     public void create(PlayerCharacterContext context) {
         final Query query = new Query.QueryBuilder().addQuery("INSERT INTO")
                 .addQuery(TABLE_NAME)
-                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind,hotspots)")
-                .addQuery("VALUES(?,?,?,?,?,?,?,?)")
+                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind,hotspots,spawnPoints)")
+                .addQuery("VALUES(?,?,?,?,?,?,?,?,?)")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
             pstmt.setLong(1, context.getId());
             pstmt.setInt(2, context.getJobScore().value());
             pstmt.setString(8, context.getHotspotsAsJson());
+            pstmt.setLong(9,context.getSpawnPoints().value());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -165,6 +168,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                             .build());
                     builder.setMagicFind(rs.getDouble("magicFind"));
                     builder.withHotspots(rs.getString("hotspots"));
+                    builder.withSpawnPoints(rs.getLong("spawnPoints"));
                 }
                 return builder.build();
             } catch (SQLException e) {
@@ -196,7 +200,8 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 new QueryParameter("jobTargetId", SqlDataType.INTEGER),
                 new QueryParameter("jobDifficultyId", SqlDataType.INTEGER),
                 new QueryParameter("magicFind", SqlDataType.DOUBLE),
-                new QueryParameter("hotspots", SqlDataType.TEXT)
+                new QueryParameter("hotspots", SqlDataType.TEXT),
+                new QueryParameter("spawnPoints", SqlDataType.BIGINT)
         );
 
         final Query query = new Query.QueryBuilder()
@@ -209,7 +214,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
 //                .addQuery(" jobDifficultyId INTEGER")
 //                .addQuery(" jobScore INTEGER")
 //                .addQuery(" magicFind DOUBLE")
-                .addQuery(" hotspots TEXT")
+                .addQuery(" spawnPoints BIGINT")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {

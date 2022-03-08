@@ -8,6 +8,7 @@ import org.rhd.api.entity.EntityContext;
 import org.rhd.api.math.AdjustableNumber;
 import org.rhd.api.math.impl.AdjustableDouble;
 import org.rhd.api.math.impl.AdjustableInteger;
+import org.rhd.api.math.impl.AdjustableLong;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class PlayerCharacterContext extends EntityContext {
     private Job activeJob;
     private final AdjustableNumber<Double> magicFind;
     private final Map<Integer, Hotspot> hotspotMap;
+    private final AdjustableNumber<Long> spawnPoints;
 
     private PlayerCharacterContext(PlayerCharacterContextBuilder builder) {
         super(builder.id);
@@ -26,6 +28,11 @@ public class PlayerCharacterContext extends EntityContext {
         this.activeJob = builder.job;
         this.magicFind = builder.magicFind;
         this.hotspotMap = builder.hotspotMap;
+        this.spawnPoints = builder.spawnPoints;
+    }
+
+    public AdjustableNumber<Long> getSpawnPoints() {
+        return spawnPoints;
     }
 
     public Map<Integer, Hotspot> getHotspotMap() {
@@ -62,6 +69,7 @@ public class PlayerCharacterContext extends EntityContext {
 
         private final Long id;
         private final AdjustableNumber<Integer> jobScore;
+        private final AdjustableNumber<Long> spawnPoints;
         private Job job;
         private final AdjustableNumber<Double> magicFind;
         private Map<Integer, Hotspot> hotspotMap;
@@ -70,6 +78,7 @@ public class PlayerCharacterContext extends EntityContext {
             this.id = id;
             this.jobScore = new AdjustableInteger(0);
             this.magicFind = new AdjustableDouble(0D);
+            this.spawnPoints = new AdjustableLong(0L);
         }
 
         public PlayerCharacterContextBuilder withHotspots(String json) {
@@ -87,6 +96,11 @@ public class PlayerCharacterContext extends EntityContext {
 
         public PlayerCharacterContextBuilder withJob(Job job) {
             this.job = job;
+            return this;
+        }
+
+        public PlayerCharacterContextBuilder withSpawnPoints(long value) {
+            this.spawnPoints.setValue(value);
             return this;
         }
 

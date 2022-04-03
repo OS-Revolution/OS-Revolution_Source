@@ -11,6 +11,12 @@ import com.google.gson.Gson;
 import ethos.event.impl.DidYouKnowEvent;
 import ethos.runehub.WorldSettingsController;
 import ethos.runehub.building.Hotspot;
+import ethos.runehub.entity.item.ItemInteractionDAO;
+import ethos.runehub.entity.item.ItemInteractionLoader;
+import ethos.runehub.skill.gathering.foraging.ForageNodeClusterController;
+import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
+import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
+import ethos.runehub.skill.node.io.*;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.util.HashedWheelTimer;
@@ -57,6 +63,7 @@ import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.entity.item.loot.LootTableContainer;
 import org.runehub.api.model.entity.item.loot.LootTableContainerDefinition;
 import org.runehub.api.model.entity.item.loot.LootTableDefinition;
+import org.runehub.api.util.APILogger;
 
 /**
  * The main class needed to start the server.
@@ -203,6 +210,42 @@ public class Server {
 		definitions.forEach(itemContext -> {
 			LootTableDefinitionLoader.getInstance().create(itemContext.getId(), itemContext);
 		});
+
+		GatheringToolDAO.getInstance().getAllEntries().forEach(gatheringTool -> {
+			GatheringToolLoader.getInstance().create(gatheringTool.getItemId(),gatheringTool);
+		});
+
+		RenewableNodeDAO.getInstance().getAllEntries().forEach(renewableNode -> {
+			RenewableNodeLoader.getInstance().create(renewableNode.getId(),renewableNode);
+		});
+
+		MiningNodeDAO.getInstance().getAllEntries().forEach(miningNode -> {
+			MiningNodeLoader.getInstance().create(miningNode.getId(),miningNode);
+		});
+
+		WoodcuttingNodeDAO.getInstance().getAllEntries().forEach(woodcuttingNode -> {
+			WoodcuttingNodeLoader.getInstance().create(woodcuttingNode.getId(), woodcuttingNode);
+		});
+
+		FishingNodeDAO.getInstance().getAllEntries().forEach(node -> {
+			FishingNodeLoader.getInstance().create(node.getId(), node);
+		});
+
+		FishLevelDAO.getInstance().getAllEntries().forEach(fishLevel -> {
+			FishLevelLoader.getInstance().create(fishLevel.getItemId(),fishLevel);
+		});
+
+		FishingSpotNodeDAO.getInstance().getAllEntries().forEach(node -> {
+			FishingSpotNodeLoader.getInstance().create(node.getId(),node);
+		});
+
+		ForagingNodeDAO.getInstance().getAllEntries().forEach(node -> {
+			ForagingNodeLoader.getInstance().create(node.getId(),node);
+		});
+
+		ItemInteractionDAO.getInstance().getAllEntries().forEach(node -> {
+			ItemInteractionLoader.getInstance().create(node.getUuid(),node);
+		});
 	}
 
 	private static final Runnable SERVER_TASKS = () -> {
@@ -216,6 +259,7 @@ public class Server {
 			globalObjects.pulse();
 			CycleEventHandler.getSingleton().process();
 			events.process();
+
 			serverData.processQueue();
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -229,14 +273,15 @@ public class Server {
 
 	private static final Runnable IO_TASKS = () -> {
 		try {
-			if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
-				WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().decrement();
-				WorldSettingsController.getInstance().saveSettings();
-			}
-			if(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0) {
-				WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().decrement();
-				WorldSettingsController.getInstance().saveSettings();
-			}
+			WorldSettingsController.getInstance().updateTimers();
+//			if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
+//				WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().decrement();
+//				WorldSettingsController.getInstance().saveSettings();
+//			}
+//			if(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0) {
+//				WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().decrement();
+//				WorldSettingsController.getInstance().saveSettings();
+//			}
 			lootMetrics.forEach(metric -> LootMetricDAO.getInstance().create(metric));
 			lootMetrics.clear();
 			// TODO tasks(players online, etc)
@@ -248,6 +293,8 @@ public class Server {
 	public static void main(java.lang.String[] args) {
 		try {
 			long startTime = System.currentTimeMillis();
+			APILogger.debug = true;
+			APILogger.initialize();
 			System.setOut(extracted());
 
 			PUNISHMENTS.initialize();
@@ -255,6 +302,7 @@ public class Server {
 			events.submit(new WheatPortalEvent());
 			events.submit(new BonusApplianceEvent());
 			events.submit(new PunishmentCycleEvent(PUNISHMENTS, 50));
+			ForageNodeClusterController.getInstance().spawnCluster();
 			Listing.loadNextSale();
 			Wogw.init();
 			ItemDefinition.load();

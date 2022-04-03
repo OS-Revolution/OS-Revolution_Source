@@ -641,9 +641,24 @@ case 4625:
 		case 4712:
 			Fishing.attemptdata(player, 15);
 			break;
-		case 1524:
-			Fishing.attemptdata(player, 11);
-			break;
+//		case 1524:
+////			Fishing.attemptdata(player, 11);
+//			NPC spot = NPCHandler.npcs[player.rememberNpcIndex];
+//			player.getSkillController().getFishing().train(
+//					new FishingSkillAction(
+//							player,
+//							10,
+//							new FishingNodeContext(
+//									1,
+//									spot.getX(),
+//									spot.getY(),
+//									spot.heightLevel
+//							),
+//							2,
+//							1524
+//					)
+//			);
+//			break;
 		case 3417: // TROUT
 			Fishing.attemptdata(player, 4);
 			break;

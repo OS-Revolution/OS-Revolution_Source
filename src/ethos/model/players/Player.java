@@ -4,19 +4,14 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
-import ethos.clip.Region;
-import ethos.clip.WorldObject;
-import ethos.model.players.packets.commands.owner.Npc;
 import ethos.model.players.skills.*;
 import ethos.phantasye.job.Employee;
 import ethos.phantasye.job.Job;
 import ethos.runehub.WorldSettingsController;
-import ethos.runehub.building.Hotspot;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
-import ethos.runehub.entity.player.PlayerCharacterAttribute;
-import ethos.runehub.entity.player.PlayerCharacterContext;
+import ethos.runehub.entity.player.*;
+import ethos.runehub.skill.SkillController;
 import ethos.util.*;
-import ethos.world.objects.GlobalObject;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 
@@ -153,16 +148,12 @@ import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
 import ethos.world.Clan;
-import org.necrotic.client.world.ObjectManager;
 import org.rhd.api.StringUtils;
 import org.rhd.api.action.Action;
 import org.rhd.api.action.ActionScheduler;
 import org.rhd.api.action.impl.interaction.Interactable;
 import org.rhd.api.action.impl.interaction.Interaction;
-import org.rhd.api.entity.EntityContext;
-import org.rhd.api.entity.user.character.CharacterEntityAttribute;
 import org.rhd.api.entity.user.character.player.PlayerCharacterEntity;
-import org.rhd.api.entity.user.character.player.impl.PlayerCharacter;
 import org.rhd.api.item.container.ItemContainer;
 
 public class Player extends Entity implements PlayerCharacterEntity, Employee {
@@ -373,7 +364,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     public Smelting.Bars bar = null;
     public byte[] buffer = null;
     public Stream inStream = null, outStream = null;
-    SimpleTimer potionTimer = new SimpleTimer();
+    public SimpleTimer potionTimer = new SimpleTimer();
     public int[] degradableItem = new int[Degrade.MAXIMUM_ITEMS];
     public boolean[] claimDegradableItem = new boolean[Degrade.MAXIMUM_ITEMS];
     private Entity targeted;
@@ -1463,14 +1454,14 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             return;
 
         }
-       if (!updatedHs) {
+        if (!updatedHs) {
             if (this.getRightGroup().getPrimary().getValue() != 2
                     && this.getRightGroup().getPrimary().getValue() != 3) {
                 new Thread(new Highscores(this)).start();
 
             }
             updatedHs = !updatedHs;
-        } 
+        }
         if (combatLevel >= 100) {
             if (Highpkarena.getState(this) != null) {
                 Highpkarena.removePlayer(this, true);
@@ -1525,7 +1516,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         getFriends().notifyFriendsOfUpdate();
         if (getMode().isIronman()) {
             com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        } 
+        }
         if (getMode().isUltimateIronman()) {
             com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
@@ -1669,12 +1660,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
              * Welcome messages
              */
             sendMessage("Welcome to " + Config.SERVER_NAME + ".");
-            if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
-                getPA().sendGameTimer(ClientGameTimer.EXPERIENCE, TimeUnit.MINUTES, Math.toIntExact(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value()));
-            }
-            if(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0) {
-                getPA().sendGameTimer(ClientGameTimer.DROPS, TimeUnit.MINUTES, Math.toIntExact(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value()));
-            }
+            WorldSettingsController.getInstance().initializeTimers(this);
             Membership.checkDate(this);
             if (getSlayer().superiorSpawned) {
                 getSlayer().superiorSpawned = false;
@@ -1790,7 +1776,6 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             setSidebarInterface(4, 1644);
             setSidebarInterface(5, 15608);
             setSidebarInterface(13, 47500);
-
 
 
             switch (playerMagicBook) {
@@ -1935,9 +1920,9 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
                     getPA().sendConfig(QuickPrayers.CONFIG + i, 0);
                 }
             }
-            playerAssistant.object(1,getX(),getY(),0,10);
+            playerAssistant.object(1, getX(), getY(), 0, 10);
 
-
+//            this.addIdleGatheringGains();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Player login - Check for error");
@@ -1948,6 +1933,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         getPA().sendFrame126("" + this.nlevel, 8008);
         getPA().sendFrame126("" + this.nxp, 8015);
     }
+
     // Player Info Tab
     public void updateQuestTab() {
 
@@ -2054,7 +2040,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (getPA().viewingOtherBank) {
             getPA().resetOtherBank();
         }
-     if (!updatedHs) { 
+        if (!updatedHs) {
             if (this.getRightGroup().getPrimary().getValue() != 2
                     && this.getRightGroup().getPrimary().getValue() != 3) {
                 new Thread(new Highscores(this)).start();
@@ -2087,8 +2073,90 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             disconnected = true;
             ConnectedFrom.addConnectedFrom(this, connectedFrom);
         }
+
+//        if (this.getSkilling().getSkill() != null)
+//            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
         PlayerCharacterContextDataAccessObject.getInstance().update(context);
     }
+
+//    private void addIdleGatheringGains() {
+//        PlayerIdleGatheringContext context = IdleGatheringContextLoader.getInstance().read(this.getContext().getId());
+//        if (context.getLogoutTimeMS() > 0L) {
+//            context.setLoginTimeMS(System.currentTimeMillis());
+//            if ((context.getLoginTimeMS() - context.getLogoutTimeMS()) > 60000 * 5) {
+//                final ActiveSkillNodeContext<GatheringNode> nodeContext = new ActiveSkillNodeContext<>
+//                        (GatheringNodeDAO.getInstance().read(context.getNodeId()), context.getNodeX(), context.getNodeY(), context.getNodeZ());
+//
+//                final double depletionChance = (100 - (nodeContext.getNode().getDepletionMinRoll() + context.getEfficiency())) / 100.0;
+//                final double harvestChance = (100 - (nodeContext.getNode().getGatherMinRoll() - context.getPower())) / 100.0;
+//                final long timeAwayMS = context.getLoginTimeMS() - context.getLogoutTimeMS(); //2hrs
+//                final long timeAwayMSEfficiencyAdjusted = (long) (timeAwayMS - (timeAwayMS * depletionChance));
+//
+//                switch (context.getSkillId()) {
+//                    case 8:
+//                        final long actionTickMS = 600 * 4;
+//                        final long actionsPerformed = timeAwayMSEfficiencyAdjusted / actionTickMS;
+//                        final long nodesDepleted = (long) (actionsPerformed * depletionChance);
+//                        final long ticksHarvesting = timeAwayMS / actionTickMS;
+//                        final long nodesHarvested = (long) (ticksHarvesting * harvestChance);
+//                        final double xpEarned = nodesHarvested * nodeContext.getNode().getInteractionExperience() ;//(nodeContext.getNode().getInteractionExperience() * context.getGainsRate());
+//
+//                        System.out.println("Time AFK MS: " + timeAwayMS);
+//                        System.out.println("Event Tick MS: " + actionTickMS);
+//                        System.out.println("Actions Performed: " + actionsPerformed);
+//                        System.out.println("Nodes Depleted: " + nodesDepleted);
+//                        System.out.println("Ticks Harvesting: " + ticksHarvesting);
+//                        System.out.println("Harvested: " + nodesHarvested);
+//                        System.out.println("XP: " + xpEarned);
+//                        break;
+//                }
+//                context.setLogoutTimeMS(0L);
+//            }
+//        }
+//    }
+//
+//    private void storeIdleGatheringData(int skillId) {
+//        PlayerIdleGatheringContext context = IdleGatheringContextLoader.getInstance().read(this.getContext().getId());
+//        context.setLogoutTimeMS(System.currentTimeMillis());
+//        context.setSkillId(skillId);
+//        switch (skillId) {
+//            case 8:
+//
+//                final SkillActionContext actionContext = new SkillActionContext(Skill.WOODCUTTING.getId(), playerLevel[Skill.WOODCUTTING.getId()]);
+//                final GatheringSkillAction action = new ActiveWoodcuttingSkillAction(
+//                        this,
+//                        Skill.WOODCUTTING.getId(),
+//                        this.getWoodcutting().getActiveNodeContext().getNode().getId(),
+//                        this.getWoodcutting().getActiveNodeContext().getX(),
+//                        this.getWoodcutting().getActiveNodeContext().getY(),
+//                        this.getWoodcutting().getActiveNodeContext().getZ());
+//
+//                actionContext.setToolId(action.getGetBestAvailableTool(actionContext).getItemId());
+//
+//                final int power = this.getWoodcutting().getPower(actionContext);
+//                final int efficiency = this.getWoodcutting().getEfficiency(actionContext);
+//                final double gainRate = this.getWoodcutting().getXpGainsRate(actionContext);
+//
+//                context.setToolId(action.getGetBestAvailableTool(actionContext).getItemId());
+//                context.setNodeId(this.getWoodcutting().getActiveNodeContext().getNode().getId());
+//                context.setNodeX(this.getWoodcutting().getActiveNodeContext().getX());
+//                context.setNodeY(this.getWoodcutting().getActiveNodeContext().getY());
+//                context.setNodeZ(this.getWoodcutting().getActiveNodeContext().getZ());
+//                context.setPower(power);
+//                context.setEfficiency(efficiency);
+//                context.setGainsRate(gainRate);
+//                break;
+//            default:
+//
+//                break;
+//        }
+//
+//        if (context.getLoginTimeMS() > 0L) {
+//            PlayerIdleGatheringDAO.getInstance().update(context);
+//        } else {
+//            PlayerIdleGatheringDAO.getInstance().create(context);
+//        }
+//    }
 
     int totalRaidsFinished;
 
@@ -3884,8 +3952,8 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     }
 
     public boolean inWild() {
-    	if (inFunPk())
-    		return true;
+        if (inFunPk())
+            return true;
         if (inClanWars())
             return true;
         if (Boundary.isIn(this, Boundary.EDGEVILLE_PERIMETER) && !Boundary.isIn(this, Boundary.EDGE_BANK) && getHeight() == 8) {
@@ -3954,11 +4022,12 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     private boolean inRevs() {
         return (absX > 3143 && absX < 3262 && absY > 10053 && absY < 10231);
     }
-    
+
     public boolean inFunPk() { // Michael - FunPK
-		return absX > 3072 && absX < 3080 && absY > 3255 && absY < 3262;
-	
-	}
+        return absX > 3072 && absX < 3080 && absY > 3255 && absY < 3262;
+
+    }
+
     public boolean inMulti() {
         if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
                 || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
@@ -6020,5 +6089,10 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         return quick;
     }
 
+    public SkillController getSkillController() {
+        return skillController;
+    }
+
+    private final SkillController skillController = new SkillController(this);
 
 }

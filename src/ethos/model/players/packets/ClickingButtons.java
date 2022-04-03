@@ -8,6 +8,8 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
+import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
 import org.apache.commons.lang3.text.WordUtils;
 
 import ethos.Config;
@@ -1445,16 +1447,16 @@ public class ClickingButtons implements PacketType {
 		 	*/
 
 		case 53152:
-			Cooking.getAmount(c, 1);
+			c.getAttributes().setIntegerInput(1);
 			break;
 		case 53151:
-			Cooking.getAmount(c, 5);
+			c.getAttributes().setIntegerInput(5);
 			break;
 		case 53150:
-			Cooking.getAmount(c, 10);
+			c.getAttributes().setIntegerInput(10);
 			break;
 		case 53149:
-			Cooking.getAmount(c, 28);
+			c.getAttributes().setIntegerInput(28);
 			break;
 		case 33206:
 			if (c.inClanWarsSafe()) {

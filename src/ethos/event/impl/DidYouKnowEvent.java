@@ -43,7 +43,7 @@ public class DidYouKnowEvent extends Event<Object> {
 			position = 0;
 		}
 		List<String> messages = Arrays.asList(WordUtils.wrap(MESSAGES.get(position), 65).split("\\n"));
-		messages.set(0, "[<col=255>News</col>] " + messages.get(0));
+		messages.set(0, "@cr10@ " + messages.get(0));
 		PlayerHandler.nonNullStream().forEach(player -> {
 			if (player.getBankPin().getPin().length() == 0) {
 				player.sendMessage("@red@You currently do not have a bank-pin set on your account! You are at risk.");

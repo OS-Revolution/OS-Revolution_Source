@@ -104,11 +104,16 @@ public class EventHandler {
 				event.stop();
 				continue;
 			}
+
 			if (event.isAlive()) {
 				event.increaseElapsed();
 				event.update();
 			}
+
 			if (event.isAlive()) {
+				if(!event.initialized) {
+					event.initialize();
+				}
 				if (event.getTicks() > 1) {
 					event.removeTick();
 					pendingAddition.add(event);

@@ -32,6 +32,7 @@ import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
 import ethos.net.discord.DiscordMessager;
 import ethos.runehub.loot.Lootbox;
+import ethos.runehub.skill.artisan.herblore.action.CleanHerbAction;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 import org.rhd.api.io.loader.LootContainerLoader;
@@ -164,7 +165,7 @@ public class ItemOptionOne implements PacketType {
             return;
         }
         c.lastClickedItem = itemId;
-        c.getHerblore().clean(itemId);
+//        c.getHerblore().clean(itemId);
         if (c.getFood().isFood(itemId)) {
             c.getFood().eat(itemId, itemSlot);
         } else if (c.getPotions().isPotion(itemId)) {
@@ -190,6 +191,25 @@ public class ItemOptionOne implements PacketType {
                 lootbox.open();
         }
         switch (itemId) {
+            case 199:
+            case 201:
+            case 203:
+            case 205:
+            case 207:
+            case 3049:
+            case 209:
+            case 211:
+            case 213:
+            case 3051:
+            case 215:
+            case 2485:
+            case 217:
+            case 219:
+                c.getSkillController().getHerblore().train(new CleanHerbAction(
+                        c,
+                        itemId
+                ));
+                break;
             case 716:
                 c.startAnimation(PlayerEmotes.PLAYER_ANIMATION_DATA.WAVE.getAnimation());
                 break;

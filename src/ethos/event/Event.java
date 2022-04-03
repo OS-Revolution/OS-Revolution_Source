@@ -9,6 +9,8 @@ import com.google.common.base.Preconditions;
  */
 public abstract class Event<T> {
 
+	protected boolean initialized;
+
 	/**
 	 * The name or signature of the event.
 	 */
@@ -75,6 +77,10 @@ public abstract class Event<T> {
 	 */
 	public void update() {
 
+	}
+
+	public void initialize() {
+		this.initialized = true;
 	}
 
 	/**

@@ -4734,6 +4734,23 @@ public void sendFrame107() {
 		stream.endFrameVarSize();
 	}
 
+	public void sendGameTimer(int timer, TimeUnit unitOfTime, int duration) {
+		if (c == null || c.disconnected) {
+			return;
+		}
+		Stream stream = c.getOutStream();
+		if (stream == null) {
+			return;
+		}
+		// System.out.println(duration);
+		int seconds = (int) Long.min(unitOfTime.toSeconds(duration), 65535);
+		// System.out.println(seconds);
+		stream.createFrame(223);
+		stream.writeByte(timer);
+		stream.writeWord(seconds);
+		c.flushOutStream();
+	}
+
 	public void sendGameTimer(ClientGameTimer timer, TimeUnit unitOfTime, int duration) {
 		if (c == null || c.disconnected) {
 			return;

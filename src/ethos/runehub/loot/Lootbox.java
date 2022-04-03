@@ -54,8 +54,8 @@ public class Lootbox extends LootTableContainer {
     }
 
     private List<Loot> selectPrize() {
-        final Loot lootTable = new ArrayList<>(this.roll()).get(0);
-        final Loot loot = new ArrayList<>(LootTableLoader.getInstance().read(lootTable.getId()).roll()).get(0);
+        final Loot lootTable = new ArrayList<>(this.roll(player.getAttributes().getMagicFind())).get(0);
+        final Loot loot = new ArrayList<>(LootTableLoader.getInstance().read(lootTable.getId()).roll(player.getAttributes().getMagicFind())).get(0);
         final List<Loot> items = new ArrayList<>();
         final List<LootTableEntry> potentialLoot = new ArrayList<>();
 

@@ -42,13 +42,20 @@ public class ClickObject implements PacketType {
 		if (c.isFrozen == true) {
 			return;
 		}
+
+
+
 		switch (packetType) {
 		case FIRST_CLICK:
 			c.objectX = c.getInStream().readSignedWordBigEndianA();
 			c.objectId = c.getInStream().readUnsignedWord();
 			c.objectY = c.getInStream().readUnsignedWordA();
 			c.objectDistance = 1;
-
+//			if(PatchPropertiesDatabase.getInstance().getAllEntries().stream().anyMatch(patchProperties -> patchProperties.getBoundary().contains(
+//					new Point(c.objectX, c.objectY)))) {
+//				Logger.getGlobal().info("Clicked Farming Patch: " + c.objectId
+//				);
+//			}
 			if (c.isForceMovementActive()) {
 				return;
 			}

@@ -53,6 +53,9 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                                         .withTargetId(rs.getInt("jobTargetId"))
                                         .build())
                                 .setMagicFind(rs.getDouble("magicFind"))
+                                .withLastHomeTeleportTimestamp(rs.getLong("lastHomeTeleportTimestamp"))
+                                .withInstantTeleportCharges(rs.getInt("instantTeleportCharges"))
+                                .withSkillAnimationOverrides(rs.getString("skillAnimationOverrides"))
                                 .build()
                 );
             }
@@ -77,6 +80,9 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                             + ",magicFind='" + context.getMagicFind().value() + "'"
                             + ",hotspots='" + context.getHotspotsAsJson() + "'"
                             + ",spawnPoints='" + context.getSpawnPoints().value() + "'"
+                            + ",lastHomeTeleportTimestamp='" + context.getLastHomeTeleportTimestamp() + "'"
+                            + ",instantTeleportCharges='" + context.getInstantTeleportCharges().value() + "'"
+                            + ",skillAnimationOverrides='" + context.getSkillAnimationOverridesAsJson() + "'"
                     )
 
                     .addQuery("WHERE id='" + context.getId() + "'")
@@ -105,8 +111,8 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
     public void create(PlayerCharacterContext context) {
         final Query query = new Query.QueryBuilder().addQuery("INSERT INTO")
                 .addQuery(TABLE_NAME)
-                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind,hotspots,spawnPoints)")
-                .addQuery("VALUES(?,?,?,?,?,?,?,?,?)")
+                .addQuery("(id,jobScore,jobSkillId,jobQuota,jobDifficultyId,jobTargetId,magicFind,hotspots,spawnPoints,lastHomeTeleportTimestamp,instantTeleportCharges,skillAnimationOverrides)")
+                .addQuery("VALUES(?,?,?,?,?,?,?,?,?,?,?,?)")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
@@ -114,6 +120,9 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
             pstmt.setInt(2, context.getJobScore().value());
             pstmt.setString(8, context.getHotspotsAsJson());
             pstmt.setLong(9,context.getSpawnPoints().value());
+            pstmt.setLong(10,context.getLastHomeTeleportTimestamp());
+            pstmt.setInt(11,context.getInstantTeleportCharges().value());
+            pstmt.setString(12,context.getSkillAnimationOverridesAsJson());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -169,6 +178,9 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                     builder.setMagicFind(rs.getDouble("magicFind"));
                     builder.withHotspots(rs.getString("hotspots"));
                     builder.withSpawnPoints(rs.getLong("spawnPoints"));
+                    builder.withLastHomeTeleportTimestamp(rs.getLong("lastHomeTeleportTimestamp"));
+                    builder.withInstantTeleportCharges(rs.getInt("instantTeleportCharges"));
+                    builder.withSkillAnimationOverrides(rs.getString("skillAnimationOverrides"));
                 }
                 return builder.build();
             } catch (SQLException e) {
@@ -201,7 +213,10 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                 new QueryParameter("jobDifficultyId", SqlDataType.INTEGER),
                 new QueryParameter("magicFind", SqlDataType.DOUBLE),
                 new QueryParameter("hotspots", SqlDataType.TEXT),
-                new QueryParameter("spawnPoints", SqlDataType.BIGINT)
+                new QueryParameter("spawnPoints", SqlDataType.BIGINT),
+                new QueryParameter("lastHomeTeleportTimestamp", SqlDataType.BIGINT),
+                new QueryParameter("instantTeleportCharges", SqlDataType.INTEGER),
+                new QueryParameter("skillAnimationOverrides", SqlDataType.INTEGER)
         );
 
         final Query query = new Query.QueryBuilder()
@@ -214,7 +229,7 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
 //                .addQuery(" jobDifficultyId INTEGER")
 //                .addQuery(" jobScore INTEGER")
 //                .addQuery(" magicFind DOUBLE")
-                .addQuery(" spawnPoints BIGINT")
+                .addQuery(" skillAnimationOverrides INTEGER")
                 .build();
         try (Connection conn = DatabaseAcessManager.getInstance().connect(this.getDatabaseServiceProvider().getUrl());
              PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {

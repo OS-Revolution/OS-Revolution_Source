@@ -19,6 +19,7 @@ import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.skills.TabletCreation;
+import ethos.runehub.entity.merchant.MerchantCache;
 
 /**
  * Bank X Items
@@ -46,11 +47,12 @@ public class BankX2 implements PacketType {
 			if(c.inWild() || c.inClanWars()) { //Fix wildy resource zone here inwild() && !inwildyzone
 				return;
 			}
-			if (amount > 10000) {
-				c.sendMessage("You can only buy 10,000 items at a time.");
-				amount = 10000;
-			}
-			c.getShops().buyItem(c.xRemoveId, c.xRemoveSlot, amount);// buy X
+//			if (amount > 10000) {
+//				c.sendMessage("You can only buy 10,000 items at a time.");
+//				amount = 10000;
+//			}
+//			c.getShops().buyItem(c.xRemoveId, c.xRemoveSlot, amount);// buy X
+			MerchantCache.getInstance().read(c.myShopId).sellItemToPlayer(c.xRemoveId,amount,c.xRemoveSlot,c);
             c.xRemoveSlot = 0;
             c.xInterfaceId = 0;
             c.xRemoveId = 0;
@@ -62,7 +64,8 @@ public class BankX2 implements PacketType {
 	    	if(c.inWild() || c.inClanWars()) {
 				return;
 			}
-	    	c.getShops().sellItem(c.xRemoveId, c.xRemoveSlot, amount);// sell X
+//	    	c.getShops().sellItem(c.xRemoveId, c.xRemoveSlot, amount);// sell X
+			MerchantCache.getInstance().read(c.myShopId).buyItemFromPlayer(c.xRemoveId,amount,c.xRemoveSlot,c);
 	        c.xRemoveSlot = 0;
 	        c.xInterfaceId = 0;
 	        c.xRemoveId = 0;

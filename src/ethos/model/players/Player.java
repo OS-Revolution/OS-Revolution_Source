@@ -1,23 +1,8 @@
 package ethos.model.players;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
-
-import ethos.model.players.skills.*;
-import ethos.phantasye.job.Employee;
-import ethos.phantasye.job.Job;
-import ethos.runehub.WorldSettingsController;
-import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
-import ethos.runehub.entity.player.*;
-import ethos.runehub.skill.SkillController;
-import ethos.util.*;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-
 import ethos.Config;
-import ethos.Server;
 import ethos.Highscores.Highscores;
+import ethos.Server;
 import ethos.event.CycleEventHandler;
 import ethos.event.Event;
 import ethos.event.impl.IronmanRevertEvent;
@@ -25,24 +10,9 @@ import ethos.event.impl.MinigamePlayersEvent;
 import ethos.event.impl.RunEnergyEvent;
 import ethos.event.impl.SkillRestorationEvent;
 import ethos.mining.SpawnEvent;
-import ethos.model.content.ChargeTrident;
-import ethos.model.content.DailyGearBox;
-import ethos.model.content.DailySkillBox;
-import ethos.model.content.GemBag;
-import ethos.model.content.HerbBox;
-import ethos.model.content.HerbSack;
-import ethos.model.content.HourlyRewardBox;
-import ethos.model.content.MysteryBox;
-import ethos.model.content.PvmCasket;
-import ethos.model.content.RandomEventInterface;
-import ethos.model.content.RunePouch;
-import ethos.model.content.SkillCasket;
-import ethos.model.content.SkillcapePerks;
-import ethos.model.content.Tutorial;
-import ethos.model.content.Tutorial.Stage;
-import ethos.model.content.UltraMysteryBox;
-import ethos.model.content.WildyCrate;
+import ethos.model.content.*;
 import ethos.model.content.LootingBag.LootingBag;
+import ethos.model.content.Tutorial.Stage;
 import ethos.model.content.achievement.AchievementHandler;
 import ethos.model.content.achievement.Achievements;
 import ethos.model.content.achievement_diary.AchievementDiary;
@@ -122,12 +92,9 @@ import ethos.model.players.combat.melee.QuickPrayers;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.mode.Mode;
 import ethos.model.players.mode.ModeType;
+import ethos.model.players.skills.*;
 import ethos.model.players.skills.agility.AgilityHandler;
-import ethos.model.players.skills.agility.impl.BarbarianAgility;
-import ethos.model.players.skills.agility.impl.GnomeAgility;
-import ethos.model.players.skills.agility.impl.Lighthouse;
-import ethos.model.players.skills.agility.impl.Shortcuts;
-import ethos.model.players.skills.agility.impl.WildernessAgility;
+import ethos.model.players.skills.agility.impl.*;
 import ethos.model.players.skills.agility.impl.rooftop.RooftopArdougne;
 import ethos.model.players.skills.agility.impl.rooftop.RooftopFalador;
 import ethos.model.players.skills.agility.impl.rooftop.RooftopSeers;
@@ -147,7 +114,21 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
+import ethos.phantasye.job.Employee;
+import ethos.phantasye.job.Job;
+import ethos.runehub.WorldSettingsController;
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.entity.player.PlayerCharacterAttribute;
+import ethos.runehub.entity.player.PlayerCharacterContext;
+import ethos.runehub.markup.MarkupParser;
+import ethos.runehub.skill.SkillController;
+import ethos.util.Misc;
+import ethos.util.SimpleTimer;
+import ethos.util.Stopwatch;
+import ethos.util.Stream;
 import ethos.world.Clan;
+import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.Channel;
 import org.rhd.api.StringUtils;
 import org.rhd.api.action.Action;
 import org.rhd.api.action.ActionScheduler;
@@ -155,6 +136,12 @@ import org.rhd.api.action.impl.interaction.Interactable;
 import org.rhd.api.action.impl.interaction.Interaction;
 import org.rhd.api.entity.user.character.player.PlayerCharacterEntity;
 import org.rhd.api.item.container.ItemContainer;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.math.AdjustableNumber;
+import org.runehub.api.model.math.impl.AdjustableDouble;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
@@ -749,7 +736,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     public int tablet = 0;
     public int wellItem = -1;
     public int wellItemPrice = -1;
-    private int chatTextColor = 0, chatTextEffects = 0, dragonfireShieldCharge, runEnergy = 100, lastEnergyRecovery,
+    private int chatTextColor = 0, chatTextEffects = 0, dragonfireShieldCharge, runEnergy = 10000, lastEnergyRecovery,
             x1 = -1, y1 = -1, x2 = -1, y2 = -1, privateChat, shayPoints, arenaPoints, toxicStaffOfTheDeadCharge,
             toxicBlowpipeCharge, toxicBlowpipeAmmo, toxicBlowpipeAmmoAmount, serpentineHelmCharge, tridentCharge,
             toxicTridentCharge, arcLightCharge, runningDistanceTravelled, interfaceOpen;
@@ -1433,6 +1420,14 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         }
     }
 
+    public float getTeleportRechargeReduction() {
+        float currentReduction = attributes.getTeleportRechargeReduction();
+//        if(this.getItems().isWearingItem(88)) {
+//            currentReduction += 0.5f;
+//        }
+        return currentReduction;
+    }
+
     public void highscores() {
         getPA().sendFrame126("Os-Revolution - Top PKers Online", 6399); // Title
         for (int i = 0; i < 10; i++) {
@@ -1552,7 +1547,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         // synchronized (this) {
         if (getOutStream() != null) {
             outStream.createFrameVarSize(253);
-            outStream.writeString(s);
+            outStream.writeString(MarkupParser.parseMarkup(s).getText());
             outStream.endFrameVarSize();
         }
     }
@@ -1650,7 +1645,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             setStopPlayer();
             getPlayerAction().setAction(false);
             getPlayerAction().canWalk(true);
-            getPA().sendFrame126(runEnergy + "%", 149);
+            getPA().sendFrame126(this.getRunEnergyPercentString(), 149);
             isFullHelm = Item.isFullHat(playerEquipment[playerHat]);
             isFullMask = Item.isFullMask(playerEquipment[playerHat]);
             isFullBody = Item.isFullBody(playerEquipment[playerChest]);
@@ -1831,6 +1826,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             getItems().setEquipment(playerEquipment[playerRing], 1, playerRing);
             getItems().setEquipment(playerEquipment[playerWeapon], playerEquipmentN[playerWeapon], playerWeapon);
             getCombat().getPlayerAnimIndex(ItemAssistant.getItemName(playerEquipment[playerWeapon]).toLowerCase());
+
             getPlayerAssistant().updateQuestTab();
             if (getPrivateChat() > 2) {
                 setPrivateChat(0);
@@ -1929,6 +1925,18 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         }
     }
 
+    private void getWalkingAnimationOverride() {
+        this.playerStandIndex = 1501;
+        this.playerTurnIndex = 1851;
+        this.playerWalkIndex = 1851;
+        this.playerTurn180Index = 1851;
+        this.playerTurn90CWIndex = 1501;
+        this.playerTurn90CCWIndex = 1501;
+        this.playerRunIndex = 1851;
+        this.updateRequired = true;
+        this.appearanceUpdateRequired = true;
+    }
+
     public void updateNecroLevel() {
         getPA().sendFrame126("" + this.nlevel, 8008);
         getPA().sendFrame126("" + this.nxp, 8015);
@@ -1974,6 +1982,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         getPA().sendFrame126("@or1@@cr21@ PK Points = @gre@" + this.pkp, 10227);
         getPA().sendFrame126("@or1@@cr21@ Slayer Points = @gre@" + this.getSlayer().getPoints(), 10228);
         getPA().sendFrame126("@or1@@cr21@ PC points = @gre@" + this.pcPoints, 10229);
+        getPA().sendFrame126("@or1@@cr21@ Inventory Weight = @gre@" + this.getInventoryWeight(), 10230);
         //getPA().sendFrame126("@or1@@cr25@ Shayzien points = @gre@" + this.shayPoints, 10230);
 
 
@@ -2077,6 +2086,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 //        if (this.getSkilling().getSkill() != null)
 //            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
         PlayerCharacterContextDataAccessObject.getInstance().update(context);
+
     }
 
 //    private void addIdleGatheringGains() {
@@ -2206,6 +2216,64 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
     public boolean hasSpawnedOlm;
 
+    private int getEnergyDepletedPerTick() {
+        return (int) (67 + ((67 * this.getWeight()) / 64));
+    }
+
+    public String getRunEnergyPercentString() {
+        return (Math.max((runEnergy * 100 / 10000), 0)) + "%";
+    }
+
+    private void depleteEnergy() {
+        runningDistanceTravelled = 0;
+        runEnergy -= this.getEnergyDepletedPerTick();
+        playerAssistant.sendFrame126(this.getRunEnergyPercentString(), 149);
+    }
+
+    public double getEquipmentWeight() {
+        final AdjustableNumber<Double> weight = new AdjustableDouble(0.0D);
+        for (int slot = 0; slot < playerEquipment.length; slot++) {
+            int itemId = playerEquipment[slot];
+            int itemAmount = playerEquipmentN[slot];
+            if (itemId != -1) {
+                final double itemWeight = ItemIdContextLoader.getInstance().read(itemId).getWeight();
+                final double slotWeight = itemWeight * itemAmount;
+                weight.add(slotWeight);
+            }
+        }
+        return weight.value();
+    }
+
+    public double getInventoryWeight() {
+        try {
+            final AdjustableNumber<Double> weight = new AdjustableDouble(0.0D);
+            for (int slot = 0; slot < this.playerItems.length; slot++) {
+                int itemId = playerItems[slot];
+                int itemAmount = playerItemsN[slot];
+                if (itemId > 0) {
+                    final double itemWeight = ItemIdContextLoader.getInstance().read(itemId).getWeight();
+                    final double slotWeight = itemWeight * itemAmount;
+                    weight.add(slotWeight);
+                }
+            }
+            return weight.value();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public double getWeight() {
+        final AdjustableNumber<Double> weight = new AdjustableDouble(getEquipmentWeight() + this.getInventoryWeight());
+
+        if (weight.value() > 64)
+            return 64;
+        else if (weight.value() < 0)
+            return 0;
+        else
+            return weight.value();
+    }
+
     public void process() {
         farming.farmingProcess();
         NecromancyLevel.main(this);
@@ -2215,11 +2283,10 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             SpawnEvent.handleSpawn(this);
             isMiningEventActive = false;
         }
-
         if (isRunning && runEnergy <= 0) {
             isRunning = false;
             isRunning2 = false;
-            playerAssistant.sendFrame126(runEnergy + "%", 149);
+            playerAssistant.sendFrame126(this.getRunEnergyPercentString(), 149);
             playerAssistant.setConfig(173, 0);
         }
 
@@ -2233,18 +2300,17 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (gwdAltar == 1) {
             sendMessage("You can now operate the godwars prayer altar again.");
         }
-
+//        System.out.println("Energy %: " + this.getRunEnergyPercentString());
+//        System.out.println("Energy: " + runEnergy);
         if (isRunning && runningDistanceTravelled > (wearingGrace() ? 1 + graceSum : staminaDelay != -1 ? 3 : 1)) {
-            runningDistanceTravelled = 0;
-            runEnergy -= 1;
-            playerAssistant.sendFrame126(runEnergy + "%", 149);
+            this.depleteEnergy();
         }
 
-        if (isRunning && runningDistanceTravelled > (wearingGrace() ? 1 + graceSum : staminaDelay != -1 ? 3 : 1)) {
-            runningDistanceTravelled = 0;
-            runEnergy -= 1;
-            playerAssistant.sendFrame126(runEnergy + "%", 149);
-        }
+//        if (isRunning && runningDistanceTravelled > (wearingGrace() ? 1 + graceSum : staminaDelay != -1 ? 3 : 1)) {
+//            runningDistanceTravelled = 0;
+//            runEnergy -= this.getEnergyDepletedPerTick();
+//            playerAssistant.sendFrame126(this.getRunEnergyPercentString(), 149);
+//        }
 
         if (updateItems) {
             itemAssistant.updateItems();

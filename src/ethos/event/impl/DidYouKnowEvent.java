@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import ethos.runehub.markup.MarkupParser;
 import org.apache.commons.lang3.text.WordUtils;
 
 import ethos.event.Event;
@@ -17,7 +18,7 @@ public class DidYouKnowEvent extends Event<Object> {
 	/**
 	 * The amount of time in game cycles (600ms) that the event pulses at
 	 */
-	private static final int INTERVAL = Misc.toCyclesOrDefault(5, 5, TimeUnit.MINUTES);
+	private static final int INTERVAL = Misc.toCyclesOrDefault(1, 1, TimeUnit.MINUTES);
 
 	/**
 	 * A {@link Collection} of messages that are to be displayed
@@ -42,14 +43,18 @@ public class DidYouKnowEvent extends Event<Object> {
 		if (position >= MESSAGES.size()) {
 			position = 0;
 		}
-		List<String> messages = Arrays.asList(WordUtils.wrap(MESSAGES.get(position), 65).split("\\n"));
-		messages.set(0, "@cr10@ " + messages.get(0));
+		List<String> messages = Arrays.asList(WordUtils.wrap(MESSAGES.get(position), 75).split("\\n"));
+//		messages.set(0, "@cr10@ " + messages.get(0));
 		PlayerHandler.nonNullStream().forEach(player -> {
-			if (player.getBankPin().getPin().length() == 0) {
-				player.sendMessage("@red@You currently do not have a bank-pin set on your account! You are at risk.");
-			}
+//			if (player.getBankPin().getPin().length() == 0) {
+//				player.sendMessage("@red@You currently do not have a bank-pin set on your account! You are at risk.");
+//			}
 			if (player.didYouKnow)
-				messages.forEach(player::sendMessage);
+				messages.forEach(message -> {
+					final String text = MarkupParser.parseMarkup("^Tips " + message).getText();
+
+					player.sendMessage(text);
+				});
 		});
 	}
 

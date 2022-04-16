@@ -15,13 +15,9 @@ import ethos.model.content.trails.RewardLevel;
 import ethos.model.multiplayer_session.MultiplayerSessionType;
 import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.multiplayer_session.duel.DuelSessionRules.Rule;
-import ethos.model.npcs.NPC;
-import ethos.model.npcs.NPCHandler;
 import ethos.model.players.*;
 import ethos.model.players.combat.Hitmark;
 import ethos.model.players.combat.magic.NonCombatSpells;
-import ethos.model.players.packets.commands.admin.Emote;
-import ethos.model.players.packets.commands.owner.Npc;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.hunter.trap.impl.BirdSnare;
@@ -31,15 +27,12 @@ import ethos.model.players.skills.prayer.Prayer;
 import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
 import ethos.net.discord.DiscordMessager;
+import ethos.runehub.action.click.item.ClickItemActionFactory;
 import ethos.runehub.loot.Lootbox;
 import ethos.runehub.skill.artisan.herblore.action.CleanHerbAction;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
-import org.rhd.api.io.loader.LootContainerLoader;
-import org.rhd.api.model.LootContainerType;
-import org.runehub.api.io.load.impl.LootTableContainerLoader;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -165,11 +158,14 @@ public class ItemOptionOne implements PacketType {
             return;
         }
         c.lastClickedItem = itemId;
+        ClickItemActionFactory.onClick(c,itemId,itemSlot);
 //        c.getHerblore().clean(itemId);
         if (c.getFood().isFood(itemId)) {
             c.getFood().eat(itemId, itemSlot);
         } else if (c.getPotions().isPotion(itemId)) {
-            c.getPotions().handlePotion(itemId, itemSlot);
+
+//            c.getPotions().handlePotion(itemId, itemSlot);
+
         }
         Optional<Bone> bone = Prayer.isOperableBone(itemId);
         if (bone.isPresent()) {

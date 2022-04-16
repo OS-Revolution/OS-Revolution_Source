@@ -18,6 +18,8 @@ import ethos.model.players.PlayerAssistant.PointExchange;
 import ethos.model.players.skills.Fishing;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.thieving.Thieving.Pickpocket;
+import ethos.runehub.entity.CommodityTrader;
+import ethos.runehub.entity.merchant.MerchantCache;
 
 /*
  * @author Matt
@@ -50,6 +52,10 @@ public class NpcOptionTwo {
 			return;
 		}
 		switch (npcType) {
+			case 1328:
+				MerchantCache.getInstance().read(npcType).openShop(player);
+//				CommodityTrader.getInstance().openShop(player);
+				break;
 		case 1306:
 			if (player.getItems().isWearingItems()) {
 				player.sendMessage("You must remove your equipment before changing your appearance.");

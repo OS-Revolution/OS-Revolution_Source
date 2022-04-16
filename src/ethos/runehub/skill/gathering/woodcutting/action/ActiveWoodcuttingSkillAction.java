@@ -28,11 +28,13 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
     @Override
     protected void updateAnimation() {
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
-            this.getActor().startAnimation(this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool().getAnimationId());
+            this.getActor().startAnimation(this.getActor().getContext().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
+                    this.getActor().getContext().getSkillAnimationOverrideMap().get(this.getSkillId()) :
+                    this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool().getAnimationId());
         }
     }
 
     public ActiveWoodcuttingSkillAction(Player player, int skillId, int nodeId, int nodeX, int nodeY, int nodeZ) {
-        super(player, skillId, new WoodcuttingNodeContext(nodeId,nodeX,nodeY,nodeZ), 4,player.getSkillController().getWoodcutting().getGetBestAvailableTool());
+        super(player, skillId, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4, player.getSkillController().getWoodcutting().getGetBestAvailableTool());
     }
 }

@@ -41,11 +41,7 @@ public abstract class GatheringSkill extends Skill {
 
     @Override
     public double getXpGainsRate() {
-        return Math.toIntExact(
-                Math.round((xpGainsRate * this.getGetBestAvailableTool().getXpGainMultiplier())
-                        * this.getGainsModifier()
-                )
-        );
+        return xpGainsRate * this.getGetBestAvailableTool().getXpGainMultiplier() * this.getGainsModifier();
     }
 
     @Override

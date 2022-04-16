@@ -27,6 +27,8 @@ public class WorldSettings {
     private final AdjustableLong skillPowerTimer;
     private final AdjustableLong skillGainsTimer;
 
+    private long commodityTraderVisitTimestamp;
+
     public WorldSettings() {
         this.bonusXpTimer = new AdjustableLong(0L);
         this.doubleDropRateTimer = new AdjustableLong(0L);
@@ -49,6 +51,14 @@ public class WorldSettings {
         this.powerModifer = 1.5D;
         this.efficiencyModifier = 1.5D;
         this.gainsModifier = 1.5D;
+    }
+
+    public long getCommodityTraderVisitTimestamp() {
+        return commodityTraderVisitTimestamp;
+    }
+
+    public void setCommodityTraderVisitTimestamp(long commodityTraderVisitTimestamp) {
+        this.commodityTraderVisitTimestamp = commodityTraderVisitTimestamp;
     }
 
     public double getEfficiencyModifier() {

@@ -9,7 +9,9 @@ public class Mining extends GatheringSkill {
 
     @Override
     public double getEfficiency() {
-        return this.getGetBestAvailableTool().getBasePower();
+        if (this.getGetBestAvailableTool() != null)
+            return this.getGetBestAvailableTool().getBasePower();
+        return 0;
     }
 
     @Override
@@ -31,6 +33,7 @@ public class Mining extends GatheringSkill {
     public int getId() {
         return SkillDictionary.Skill.MINING.getId();
     }
+
     public Mining(Player player) {
         super(player);
     }

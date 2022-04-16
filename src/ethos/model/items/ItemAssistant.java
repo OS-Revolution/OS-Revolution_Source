@@ -26,7 +26,10 @@ import ethos.model.players.mode.ModeType;
 import ethos.model.players.skills.Skill;
 import ethos.model.shops.ShopAssistant;
 import ethos.util.Misc;
+import org.runehub.api.io.load.impl.ItemEquipmentContextLoader;
+import org.runehub.api.model.entity.item.ItemEquipmentContext;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -301,6 +304,7 @@ public class ItemAssistant {
 	 * Gets the bonus' of an item.
 	 */
 	public void writeBonus() {
+		System.out.println("Weight: " + c.getEquipmentWeight());
 		int offset = 0;
 		String send = "";
 		for (int i = 0; i < c.playerBonus.length; i++) {
@@ -315,6 +319,12 @@ public class ItemAssistant {
 			}
 			c.getPA().sendFrame126(send, (1675 + i + offset));
 		}
+		DecimalFormat df = new DecimalFormat("###.##");
+		c.getPA().sendFrame126(df.format(c.getEquipmentWeight()) + "kg", 16117);
+
+//		for (int i = 1675; i < 3000; i++) {
+//			c.getPA().sendFrame126("Line: " + i, i);
+//		}
 
 	}
 
@@ -804,13 +814,30 @@ public class ItemAssistant {
 		for (int i = 0; i < c.playerEquipment.length; i++) {
 			if (c.playerEquipment[i] > -1) {
 				int equipmentItem = c.playerEquipment[i];
-				ItemList itemList = Server.itemHandler.ItemList[equipmentItem];
-				if (itemList == null) {
-					continue;
+				ItemEquipmentContext equipmentContext = ItemEquipmentContextLoader.getInstance().read(equipmentItem);
+				if(equipmentContext != null) {
+					c.playerBonus[0] += equipmentContext.getAttackStab();
+					c.playerBonus[1] += equipmentContext.getAttackSlash();
+					c.playerBonus[2] += equipmentContext.getAttackCrush();
+					c.playerBonus[3] += equipmentContext.getAttackMagic();
+					c.playerBonus[4] += equipmentContext.getAttackRanged();
+
+					c.playerBonus[5] += equipmentContext.getDefenceStab();
+					c.playerBonus[6] += equipmentContext.getDefenceSlash();
+					c.playerBonus[7] += equipmentContext.getDefenceCrush();
+					c.playerBonus[8] += equipmentContext.getDefenceMagic();
+					c.playerBonus[9] += equipmentContext.getDefenceRanged();
+
+					c.playerBonus[10] += equipmentContext.getMeleeStrength();
+					c.playerBonus[11] += equipmentContext.getPrayer();
 				}
-				for (int k = 0; k < c.playerBonus.length; k++) {
-					c.playerBonus[k] += itemList.Bonuses[k];
-				}
+//				ItemList itemList = Server.itemHandler.ItemList[equipmentItem];
+//				if (itemList == null) {
+//					continue;
+//				}
+//				for (int k = 0; k < c.playerBonus.length; k++) {
+//					c.playerBonus[k] += itemList.Bonuses[k];
+//				}
 			}
 		}
 		if (c.getItems().isWearingItem(12926) && c.getToxicBlowpipeAmmoAmount() > 0 && c.getToxicBlowpipeCharge() > 0) {

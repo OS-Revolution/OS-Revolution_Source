@@ -3,6 +3,7 @@ package ethos.runehub.skill;
 import ethos.model.players.Player;
 import ethos.runehub.skill.artisan.cooking.Cooking;
 import ethos.runehub.skill.artisan.herblore.Herblore;
+import ethos.runehub.skill.artisan.runecraft.Runecraft;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.fishing.Fishing;
 import ethos.runehub.skill.gathering.foraging.Foraging;
@@ -46,6 +47,8 @@ public class SkillController {
                 return herblore;
             case 19:
                 return foraging;
+            case 20:
+                return runecraft;
             default: throw new NullPointerException("No Skill with ID: " + skillId);
         }
     }
@@ -75,7 +78,7 @@ public class SkillController {
 //    }
 
     public int getLevel(int skillId) {
-        return player.playerLevel[skillId];
+        return player.getPA().getLevelForXP(player.playerXP[skillId]);
     }
 
     public Mining getMining() {
@@ -102,6 +105,10 @@ public class SkillController {
         return herblore;
     }
 
+    public Runecraft getRunecraft() {
+        return runecraft;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -114,6 +121,7 @@ public class SkillController {
         this.foraging = new Foraging(player);
         this.cooking = new Cooking(player);
         this.herblore = new Herblore(player);
+        this.runecraft = new Runecraft(player);
     }
 
     private final Player player;
@@ -123,4 +131,5 @@ public class SkillController {
     private final Foraging foraging;
     private final Cooking cooking;
     private final Herblore herblore;
+    private final Runecraft runecraft;
 }

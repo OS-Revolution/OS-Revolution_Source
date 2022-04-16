@@ -1,8 +1,19 @@
 [
-	"Foraging is a great way to collect herbs",
-	"Foraging Clusters spawn through out the world",
-	"Power boosts your chances of receiving items while gathering",
-	"Efficiency reduces your chances of depleting a resource while gathering",
-	"Gains boost your XP in a specific skill",
-	"You can purchase server wide boosts at our online store"
+	"$Foraging is a great way to collect herbs",
+	"$Foraging $Clusters spawn through out the world",
+	"$Power boosts your chances of receiving items while gathering",
+	"$Efficiency reduces your chances of depleting a resource while gathering",
+	"$Gains boost your XP in a specific skill",
+	"You can purchase $server $wide boosts at our online store",
+	"$Aubury can teleport you to the $Rune $Essence mine",
+	"@7936 is available at Mining level #30",
+	"Lower $weight equals more running",
+	"Check out the $Dimensional $Rift at the $Wizard's $Tower for $Runecrafting",
+	"Get more $instant $teleport $charges to skip the home teleport cooldown",
+	"Some items can reduce the home teleport cooldown",
+	"$Trader $Stan buys and sells $commodities",
+	"Keep and eye out for $Travelling $Merchants",
+	"$Commodities can be exchanged for @1459 through the $Commodity $Merchant",
+	"Some Merchants have $rotating $stock you never know what you'll find",
+	"Merchants can offer $discounts on various items, look out for great deals"
 ]

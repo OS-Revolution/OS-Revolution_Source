@@ -188,14 +188,14 @@ public class GlobalObjects {
 	private void loadCustomObjects(Player player) {
 		player.getFarming().updateObjects();
 		if(player.getContext().getHotspotMap() != null) {
-			player.getContext().getHotspotMap().keySet().forEach(key -> {
-				Hotspot hotspot = player.getContext().getHotspotMap().get(key);
-				System.out.println("SPAWNING: " + hotspot.getId() + " at X:" + hotspot.getX() + " Y:" + hotspot.getY());
-				player.getPA().checkObjectSpawn(player.getContext().getHotspotMap().get(key).getId(), //TODO replace with method that actually spawns object
-						player.getContext().getHotspotMap().get(key).getX(),
-						player.getContext().getHotspotMap().get(key).getY(),
-						0, 10);
-			});
+//			player.getContext().getHotspotMap().keySet().forEach(key -> {
+//				Hotspot hotspot = player.getContext().getHotspotMap().get(key);
+//				System.out.println("SPAWNING: " + hotspot.getId() + " at X:" + hotspot.getX() + " Y:" + hotspot.getY());
+//				player.getPA().checkObjectSpawn(player.getContext().getHotspotMap().get(key).getId(), //TODO replace with method that actually spawns object
+//						player.getContext().getHotspotMap().get(key).getX(),
+//						player.getContext().getHotspotMap().get(key).getY(),
+//						0, 10);
+//			});
 		}
 		for(int i = 0; i < ObjectDef.totalObjects; i++) {
 			ObjectDef def = ObjectDef.getObjectDef(i);

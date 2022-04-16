@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import ethos.runehub.action.click.DefaultHomeTeleportAction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
 import org.apache.commons.lang3.text.WordUtils;
@@ -2345,13 +2346,15 @@ public class ClickingButtons implements PacketType {
 				c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
 				return;
 			}
-			c.getPA().spellTeleport(3092, 3249, 0, false);
+//			c.getPA().spellTeleport(3092, 3249, 0, false);
+			Server.getEventHandler().submit(new DefaultHomeTeleportAction(c));
 			break;
 		case 50056:
-			if (c.homeTeleport >= 1 && c.homeTeleport <= 10) {
-				return;
-			}
-			c.getPA().spellTeleport(Config.START_LOCATION_X, Config.START_LOCATION_Y, 0, true);
+//			if (c.homeTeleport >= 1 && c.homeTeleport <= 10) {
+//				return;
+//			}
+//			c.getPA().spellTeleport(Config.START_LOCATION_X, Config.START_LOCATION_Y, 0, true);
+			Server.getEventHandler().submit(new DefaultHomeTeleportAction(c));
 			break;
 
 		// case 4171: case 50056: case 117048: if (c.homeTeleDelay <= 0) { c.homeTele =

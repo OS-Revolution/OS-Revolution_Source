@@ -24,7 +24,8 @@ public enum ForageNodeCluster {
     LANTADYME(8144, 5, 0.15, ForageNodeClusterLocation.DRAYNOR,ForageNodeClusterLocation.TAVERLY,ForageNodeClusterLocation.SEERS_VILLAGE,ForageNodeClusterLocation.WILDNERNESS_SCORPIA,ForageNodeClusterLocation.WILDNERNESS_WEST_DRAGONS,
             ForageNodeClusterLocation.LUMBRIDGE_SWAMP),
     DWARF_WEED(8145, 5, 0.1, ForageNodeClusterLocation.DRAYNOR,ForageNodeClusterLocation.TAVERLY,ForageNodeClusterLocation.FELDIP_HILLS,ForageNodeClusterLocation.WILDNERNESS_SCORPIA,ForageNodeClusterLocation.WILDNERNESS_WEST_DRAGONS),
-    TORSTOL(8146, 5, 0.05, ForageNodeClusterLocation.DRAYNOR,ForageNodeClusterLocation.TAVERLY,ForageNodeClusterLocation.WILDNERNESS_SCORPIA,ForageNodeClusterLocation.WILDNERNESS_WEST_DRAGONS,ForageNodeClusterLocation.LUMBRIDGE_SWAMP,ForageNodeClusterLocation.FELDIP_HILLS);
+    TORSTOL(8146, 5, 0.05, ForageNodeClusterLocation.DRAYNOR,ForageNodeClusterLocation.TAVERLY,ForageNodeClusterLocation.WILDNERNESS_SCORPIA,ForageNodeClusterLocation.WILDNERNESS_WEST_DRAGONS,ForageNodeClusterLocation.LUMBRIDGE_SWAMP,ForageNodeClusterLocation.FELDIP_HILLS),
+    BLOODWEED(8147, 1, 0.005, ForageNodeClusterLocation.DRAYNOR,ForageNodeClusterLocation.TAVERLY,ForageNodeClusterLocation.WILDNERNESS_SCORPIA,ForageNodeClusterLocation.WILDNERNESS_WEST_DRAGONS,ForageNodeClusterLocation.LUMBRIDGE_SWAMP,ForageNodeClusterLocation.FELDIP_HILLS);
 
     public int getId() {
         return id;

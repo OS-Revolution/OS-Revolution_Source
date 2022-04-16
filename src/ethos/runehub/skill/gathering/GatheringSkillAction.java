@@ -23,6 +23,14 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     protected abstract void onEvent();
 
+    protected boolean isException() {
+        return false;
+    }
+
+    protected void onException() {
+
+    }
+
     protected void onDeplete() {
         this.onRespawn();
     }
@@ -31,8 +39,6 @@ public abstract class GatheringSkillAction extends SkillAction {
     public void onTick() {
         Logger.getGlobal().fine("Starting Harvest Sequence");
         this.updateAnimation();
-        System.out.println((int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()));
-        System.out.println((int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()));
         if (this.isSuccessful(
                 (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower())
                 ,(int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()))) {
@@ -42,7 +48,8 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     @Override
     protected void onActionStart() {
-        this.getActor().startAnimation(tool.getAnimationId());
+        this.getActor().startAnimation(this.getActor().getContext().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
+                this.getActor().getContext().getSkillAnimationOverrideMap().get(this.getSkillId()) : tool.getAnimationId());
         this.getActor().turnPlayerTo(this.getTargetedNodeContext().getX(),this.getTargetedNodeContext().getY());
     }
 
@@ -64,9 +71,9 @@ public abstract class GatheringSkillAction extends SkillAction {
     @Override
     protected void validateLevelRequirements() {
         Preconditions.checkArgument(PreconditionUtils.isTrue(this.getActor().getSkillController().getLevel(this.getSkillId()) >= this.getTargetedNodeContext().getNode().getLevelRequirement()),
-                "You need a "
+                "You need a ?"
                         + SkillDictionary.getSkillNameFromId(this.getSkillId())
-                        + " level of at least "
+                        + " level of at least #"
                         + this.getTargetedNodeContext().getNode().getLevelRequirement()
                         + " to do this.");
 
@@ -80,11 +87,12 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     @Override
     protected void validateInventory() {
-        Preconditions.checkArgument(this.getActor().getItems().freeSlots() >= 1, "You must have at least " + 1 + " free inventory slot to do this.");
+        Preconditions.checkArgument(this.getActor().getItems().freeSlots() >= 1, "You must have at least #" + 1 + " free inventory slot to do this.");
     }
 
     @Override
     protected void addItems(int id, int amount) {
+        this.getActor().getItems().addItem(id,amount);
     }
 
     protected void addItems() {
@@ -128,7 +136,11 @@ public abstract class GatheringSkillAction extends SkillAction {
         if (this.isEventTick()) {
             this.onEvent();
         }
-        this.addItems();
+        if(this.isException()) {
+            this.onException();
+        } else {
+            this.addItems();
+        }
         this.addXp(this.getTargetedNodeContext().getNode().getInteractionExperience());
         if (this.depleteNode()) {
             this.onDeplete();

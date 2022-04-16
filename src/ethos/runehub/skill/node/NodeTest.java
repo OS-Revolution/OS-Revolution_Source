@@ -1,5 +1,6 @@
 package ethos.runehub.skill.node;
 
+import ethos.model.items.ItemAssistant;
 import ethos.runehub.skill.gathering.fishing.FishLevel;
 import ethos.runehub.skill.node.impl.RenewableNode;
 import ethos.runehub.skill.node.impl.gatherable.GatheringNode;
@@ -19,6 +20,7 @@ public class NodeTest {
         createMapleNodes(1759, 11762);
         createYewNodes(1753, 1754, 11758, 27255);
         createMagicNodes(1761, 11764);
+        createWoodcuttingNode(2887,99,150,6223316775799507538L,1342,800,1,0,6); //cinnamon tree
 
         createClayNodes(7487, 7454);
         createCopperNodes(7484, 11961, 11960, 11962, 13709);
@@ -29,6 +31,7 @@ public class NodeTest {
         createMithrilNodes(7492, 13718, 7459);
         createAdamantiteNodes(7493, 13720, 7460);
         createRuniteNodes(7494, 7461, 14175);
+        createMiningNode(7471,1,5,4220464022211939160L,-1,-1,1000,1000,8,1000);
 
 //        createShrimpFishingNode();
 //        createAnchovyFishingNode();
@@ -70,13 +73,14 @@ public class NodeTest {
         createForagingNode(8144,73,151,-6904893650944375485L,-1,80,16,50,96);
         createForagingNode(8145,79,192,-2571227490922839450L,-1,80,16,50,96);
         createForagingNode(8146,85,224,-2302024383490407217L,-1,80,16,50,96);
+        createForagingNode(8146,85,224,-2302024383490407217L,-1,800,1,40,6); //bloodweed
 
-        createForagingNode(7855,85,224,-2302024383490407217L,-1,80,16,50,96); //limpwurt
-        createForagingNode(7725,85,224,-2302024383490407217L,-1,80,16,50,96); //whiteberry bush
-        createForagingNode(8621,85,224,-2302024383490407217L,-1,80,16,50,96); //snapegrass needs pick option, name change, and recolor
-        createForagingNode(7134,85,224,-2302024383490407217L,-1,80,16,50,96); //mort myre fungus needs client side pick option and name change
-        createForagingNode(7757,85,224,-2302024383490407217L,-1,80,16,50,96); //cactus spine cactus
-        createForagingNode(1406,85,224,-2302024383490407217L,-1,80,16,50,96); //potato cactus needs name change and pick option
+        createForagingNode(7855,26,120,7473856952692066914L,-1,80,16,40,96); //limpwurt
+        createForagingNode(7725,59,29,6812173401978392303L,-1,80,16,50,96); //whiteberry bush
+        createForagingNode(8621,61,82,-3742746979874681384L,-1,80,16,50,96); //snapegrass needs pick option, name change, and recolor
+        createForagingNode(7134,35,70,884346873633983237L,-1,80,16,50,96); //mort myre fungus needs client side pick option and name change
+        createForagingNode(7757,55,25,45713744309145440L,-1,80,16,50,96); //cactus spine cactus
+        createForagingNode(1406,64,68,-2038964458387557841L,-1,80,16,50,96); //potato cactus needs name change and pick option
 
 
     }
@@ -213,15 +217,15 @@ public class NodeTest {
     }
 
     private static void createWillowGatheringNode(int nodeId) {
-        createWoodcuttingNode(nodeId, 30, 68, -3866761142122035288L, 1356, 35, 16, 87,50);
+        createWoodcuttingNode(nodeId, 30, 68, -3866761142122035288L, 9711, 35, 16, 87,50);
     }
 
     private static void createMapleGatheringNode(int nodeId) {
-        createWoodcuttingNode(nodeId, 45, 100, 7040907870021173253L, 1356, 45, 1, 87,25);
+        createWoodcuttingNode(nodeId, 45, 100, 7040907870021173253L, 9712, 45, 1, 87,25);
     }
 
     private static void createYewGatheringNode(int nodeId) {
-        createWoodcuttingNode(nodeId, 60, 175, -2896030443866405078L, 1356, 65, 4, 87,12);
+        createWoodcuttingNode(nodeId, 60, 175, -2896030443866405078L, 9714, 65, 4, 87,12);
 
     }
 

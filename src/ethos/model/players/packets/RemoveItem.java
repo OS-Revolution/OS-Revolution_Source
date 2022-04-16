@@ -15,6 +15,7 @@ import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.skills.Smithing;
 import ethos.model.players.skills.crafting.JewelryMaking;
+import ethos.runehub.entity.merchant.MerchantCache;
 
 /**
  * Remove Item
@@ -159,11 +160,13 @@ public class RemoveItem implements PacketType {
 		case 64016:
 
 			case 3900:
-				c.getShops().buyFromShopPrice(removeId, removeSlot);
+				c.sendMessage(MerchantCache.getInstance().read(c.myShopId).getPriceForItemBeingBoughtFromShop(removeId));
+//				c.getShops().buyFromShopPrice(removeId, removeSlot);
 			break;
 
 			case 3823:
-			c.getShops().sellToShopPrice(removeId, removeSlot);
+				c.sendMessage(MerchantCache.getInstance().read(c.myShopId).getPriceForItemBeingSoldToShop(removeId));
+//			c.getShops().sellToShopPrice(removeId, removeSlot);
 			break;
 
 		case 3322:

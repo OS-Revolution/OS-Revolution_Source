@@ -148,6 +148,8 @@ public class Walking implements PacketType {
 		if (c.getSkilling().isSkilling()) {
 			c.getSkilling().stop();
 		}
+		Server.getEventHandler().stop("teleport");
+		Server.getEventHandler().stop("teleport");
 		c.getPA().resetVariables();
 		SkillHandler.isSkilling[12] = false;
 		if (c.teleporting) {

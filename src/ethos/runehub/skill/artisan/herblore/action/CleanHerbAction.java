@@ -56,9 +56,9 @@ public class CleanHerbAction extends SkillAction {
     @Override
     protected void validateLevelRequirements() {
         Preconditions.checkArgument(PreconditionUtils.isTrue(this.getActor().getSkillController().getLevel(this.getSkillId()) >= herb.getLevel()),
-                "You need a "
+                "You need a ?"
                         + SkillDictionary.getSkillNameFromId(this.getSkillId())
-                        + " level of at least "
+                        + " level of at least #"
                         + herb.getLevel()
                         + " to do this.");
     }

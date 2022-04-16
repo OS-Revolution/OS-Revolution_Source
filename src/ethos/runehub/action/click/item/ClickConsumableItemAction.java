@@ -1,4 +1,4 @@
-package ethos.runehub.action.item;
+package ethos.runehub.action.click.item;
 
 import ethos.model.players.Player;
 

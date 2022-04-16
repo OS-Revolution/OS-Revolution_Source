@@ -41,6 +41,9 @@ public class NpcOptionThree {
 			return;
 		}
 		switch (npcType) {
+			case 637: //aubury rune essence mine teleport
+				player.getPA().startTeleport(2911, 4832, 0, "modern", false);
+				break;
 		case 1428:
 			player.getPrestige().openShop();
 			break;

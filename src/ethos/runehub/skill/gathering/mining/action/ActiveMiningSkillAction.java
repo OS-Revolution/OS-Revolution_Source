@@ -14,14 +14,38 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
     }
 
     @Override
+    protected boolean isException() {
+        if (this.getTargetedNodeContext().getNodeId() == 7471) {
+            return true;
+        }
+        return super.isException();
+    }
+
+    @Override
+    protected void onException() {
+        if (this.getTargetedNodeContext().getNodeId() == 7471) {
+            if (this.getActor().getSkillController().getLevel(this.getSkillId()) >= 30) {
+                this.addItems(7936, 1);
+            } else {
+                this.addItems(1436, 1);
+            }
+        }
+    }
+
+    @Override
     protected void onUpdate() {
         super.onUpdate();
         try {
             this.validateWorldRequirements();
         } catch (Exception e) {
             this.stop();
-            this.getActor().sendMessage(e.getMessage());
         }
+    }
+
+    @Override
+    protected void onActionStart() {
+        this.getActor().sendMessage("You swing your pick at the rock.");
+        super.onActionStart();
     }
 
     @Override
@@ -32,8 +56,14 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
         }
     }
 
+    @Override
+    protected void addItems(int id, int amount) {
+        this.getActor().sendMessage("You manage to mine some @" + id);
+        super.addItems(id, amount);
+    }
+
 
     public ActiveMiningSkillAction(Player player, int skillId, int nodeId, int nodeX, int nodeY, int nodeZ, int ticks) {
-        super(player, skillId, new MiningNodeContext(nodeId,nodeX,nodeY,nodeZ), ticks,player.getSkillController().getMining().getGetBestAvailableTool());
+        super(player, skillId, new MiningNodeContext(nodeId, nodeX, nodeY, nodeZ), ticks, player.getSkillController().getMining().getGetBestAvailableTool());
     }
 }

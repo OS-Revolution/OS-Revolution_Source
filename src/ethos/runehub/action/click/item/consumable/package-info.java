@@ -1,0 +1,1 @@
+package ethos.runehub.action.click.item.consumable;

@@ -1,13 +1,14 @@
-package ethos.runehub.action.item;
+package ethos.runehub.action.click.node;
 
 import com.google.common.base.Preconditions;
+import ethos.Server;
 import ethos.event.Event;
-import ethos.model.items.ItemAssistant;
 import ethos.model.players.Player;
+import ethos.util.PreconditionUtils;
 
 import java.util.logging.Logger;
 
-public abstract class ClickItemAction extends Event<Player> {
+public abstract class ClickNodeAction extends Event<Player> {
 
     protected abstract void onActionStart();
 
@@ -17,18 +18,25 @@ public abstract class ClickItemAction extends Event<Player> {
 
     protected abstract void onUpdate();
 
-    protected void playerHasItemPrerequisite() {
-
-        Preconditions.checkArgument(this.getActor().getItems().playerHasItem(itemId), "You have run out of " + ItemAssistant.getItemName(itemId));
+    protected void validate() {
 
     }
 
-    protected void checkPrerequisites() {
+    protected void validateNode() {
+        Preconditions.checkArgument(PreconditionUtils.isFalse(Server.getGlobalObjects().exists(nodeId, nodeX, nodeY)),
+                "This node does not exist.");
+    }
+
+    protected boolean checkPrerequisites() {
         try {
-            this.playerHasItemPrerequisite();
+            this.validate();
+            this.validateNode();
         } catch (Exception e) {
             this.getActor().sendMessage(e.getMessage());
+            this.stop();
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -52,32 +60,32 @@ public abstract class ClickItemAction extends Event<Player> {
     public void initialize() {
         Logger.getGlobal().fine("Starting Event");
         super.initialize();
-        this.checkPrerequisites();
-        this.onActionStart();
+        if (this.checkPrerequisites())
+            this.onActionStart();
     }
 
     protected Player getActor() {
         return this.getAttachment();
     }
 
-    protected int getItemId() {
-        return itemId;
+    public int getNodeId() {
+        return nodeId;
     }
 
-    protected int getItemAmount() {
-        return itemAmount;
+    public int getNodeX() {
+        return nodeX;
     }
 
-    protected int getItemSlot() {
-        return itemSlot;
+    public int getNodeY() {
+        return nodeY;
     }
 
-    public ClickItemAction(Player attachment, int ticks, int itemId, int itemAmount, int itemSlot) {
+    public ClickNodeAction(Player attachment, int ticks, int nodeId, int nodeX, int nodeY) {
         super(attachment, ticks);
-        this.itemId = itemId;
-        this.itemAmount = itemAmount;
-        this.itemSlot = itemSlot;
+        this.nodeId = nodeId;
+        this.nodeX = nodeX;
+        this.nodeY = nodeY;
     }
 
-    private final int itemId, itemAmount, itemSlot;
+    private final int nodeId, nodeX, nodeY;
 }

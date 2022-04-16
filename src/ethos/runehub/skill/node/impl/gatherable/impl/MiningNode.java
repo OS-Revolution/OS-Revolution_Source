@@ -12,7 +12,7 @@ public class MiningNode extends GatheringNode {
         return miningCycleTicks;
     }
 
-    public MiningNode(int id, int levelRequirement, int interactionExperience, int skillId, long tableId, int harvestChance, int maxRoll,int miningCycleTicks) {
+    public MiningNode(int id, int levelRequirement, int interactionExperience, int skillId, long tableId, int harvestChance,int maxRoll,int miningCycleTicks) {
         super(id, levelRequirement, interactionExperience, tableId, harvestChance, skillId,maxRoll);
         this.miningCycleTicks = miningCycleTicks;
     }

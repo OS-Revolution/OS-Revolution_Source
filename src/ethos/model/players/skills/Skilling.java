@@ -23,6 +23,7 @@ public class Skilling {
 
     public void stop2() {
         if (skill.isPresent()) {
+            Server.getEventHandler().stop(player, "skillAction");
             Server.getEventHandler().stop(player, "skillAction-" + skill.get().getId());
             skill = Optional.empty();
         }

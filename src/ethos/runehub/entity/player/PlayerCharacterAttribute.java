@@ -40,8 +40,16 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.integerInput = integerInput;
     }
 
+    public float getTeleportRechargeReduction() {
+        return teleportRechargeReduction;
+    }
+
+    public void setTeleportRechargeReduction(float teleportRechargeReduction) {
+        this.teleportRechargeReduction = teleportRechargeReduction;
+    }
+
     private boolean usingLootBox;
-    private float magicFind;
+    private float magicFind,teleportRechargeReduction;
     private int integerInput = -1;
     private final ItemReactionProcessor itemReactionProcessor;
 

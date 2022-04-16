@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import ethos.Server;
 import ethos.event.Event;
 import ethos.model.players.Player;
+import ethos.runehub.markup.MarkupParser;
 import ethos.runehub.skill.SkillActionContext;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
@@ -52,7 +53,7 @@ public abstract class SkillAction extends Event<Player> {
         } catch (Exception e) {
             this.stop();
             this.getActor().getPA().closeAllWindows();
-            this.getActor().sendMessage(e.getMessage());
+            this.getActor().sendMessage(MarkupParser.parseMarkup(e.getMessage()).getText());
         }
     }
 
@@ -84,6 +85,7 @@ public abstract class SkillAction extends Event<Player> {
     @Override
     public void initialize() {
         Logger.getGlobal().fine("Starting Event");
+        Server.getEventHandler().stop("teleport");
         super.initialize();
         this.checkPreconditions();
         this.onActionStart();
@@ -130,7 +132,7 @@ public abstract class SkillAction extends Event<Player> {
     }
 
     public SkillAction(Player actor, int skillId, int ticks) {
-        this("skillAction-" + skillId, actor, skillId, ticks);
+        this("skillAction", actor, skillId, ticks);
     }
 
     private final int skillId;

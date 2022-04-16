@@ -1,0 +1,113 @@
+package ethos.runehub.action.click;
+
+import com.google.common.base.Preconditions;
+import ethos.Config;
+import ethos.Server;
+import ethos.event.Event;
+import ethos.model.players.Player;
+import ethos.util.PreconditionUtils;
+
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
+public abstract class HomeTeleportAction extends Event<Player> {
+
+    public static final long TELEPORT_DELAY = 30 * 60000L;
+
+    protected abstract void onActionStart();
+
+    protected abstract void onActionStop();
+
+    protected abstract void onTick();
+
+    protected abstract void onUpdate();
+
+    protected void validate() {
+        Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().isInHouse),"Please use the house settings to leave your house");
+        Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().teleTimer > 0),"A magic force stops you from teleporting.");
+        Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().wildLevel > Config.NO_TELEPORT_WILD_LEVEL),"You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+        Preconditions.checkArgument(PreconditionUtils.notNull(this.getActor()), "Actor is Null");
+        Preconditions.checkArgument(PreconditionUtils.notNull(this.getActor().getSession()), "Session is Null");
+        Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().disconnected), "Actor is Disconnected");
+        Preconditions.checkArgument(this.hasBeen(this.getActor().getContext().getLastHomeTeleportTimestamp() + getTeleportDelay(), System.currentTimeMillis()),
+                "You must wait another "
+                        + this.getMSAsMinutes(
+                        this.timeBetweenMs(
+                                this.getActor().getContext().getLastHomeTeleportTimestamp() + getTeleportDelay(),
+                                System.currentTimeMillis()
+                                ))
+                        + " minutes before doing this.");
+    }
+
+
+    protected long getTeleportDelay() {
+        return (long) (TELEPORT_DELAY - (TELEPORT_DELAY * this.getActor().getTeleportRechargeReduction()));
+    }
+
+
+    protected boolean checkPrerequisites() {
+        try {
+            this.validate();
+        } catch (Exception e) {
+            this.getActor().sendMessage(e.getMessage());
+            this.stop();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void execute() {
+        Logger.getGlobal().fine("Executing Event Tick");
+        this.checkPrerequisites();
+        this.onTick();
+        this.stop();
+    }
+
+    @Override
+    public void stop() {
+        Logger.getGlobal().fine("Stopping Event");
+        super.stop();
+        this.onActionStop();
+        if (attachment != null) {
+            this.getActor().stopAnimation();
+        }
+    }
+
+    @Override
+    public void initialize() {
+        Logger.getGlobal().fine("Starting Event");
+        super.initialize();
+        Server.getEventHandler().stop("skillAction");
+        if (this.checkPrerequisites())
+            this.onActionStart();
+    }
+
+    @Override
+    public void update() {
+        Logger.getGlobal().fine("Updating Event Tick");
+        super.update();
+        this.checkPrerequisites();
+        this.onUpdate();
+    }
+
+    private long timeBetweenMs(long timestamp1, long timestamp2) {
+        return timestamp1 - timestamp2;
+    }
+
+    private int getMSAsMinutes(long ms) {
+        return (int) (ms / 60000);
+    }
+
+    private boolean hasBeen(long timeMS, long timestamp) {
+        return timestamp > timeMS;
+    }
+
+    protected Player getActor() {
+        return this.getAttachment();
+    }
+
+    public HomeTeleportAction(Player attachment) {
+        super("teleport",attachment, 12);
+    }
+}

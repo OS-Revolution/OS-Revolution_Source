@@ -16,6 +16,7 @@ import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.multiplayer_session.trade.TradeSession;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
+import ethos.runehub.entity.merchant.MerchantCache;
 
 /**
  * Bank All Items
@@ -63,15 +64,14 @@ public class BankAll implements PacketType {
 		break;
 		
 		case 3900:
-			c.getShops().buyItem(removeId, removeSlot, 10);
-			break;
-			
-		case 64016:
-			c.getShops().buyItem(removeId, removeSlot, 10);
+			case 64016:
+				MerchantCache.getInstance().read(c.myShopId).sellItemToPlayer(removeId,10,removeSlot,c);
+//			c.getShops().buyItem(removeId, removeSlot, 10);
 			break;
 
 		case 3823:
-			c.getShops().sellItem(removeId, removeSlot, 10);
+			MerchantCache.getInstance().read(c.myShopId).buyItemFromPlayer(removeId,10,removeSlot,c);
+//			c.getShops().sellItem(removeId, removeSlot, 10);
 			break;
 
 		case 5064:

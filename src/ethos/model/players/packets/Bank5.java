@@ -15,6 +15,7 @@ import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.skills.Smithing;
 import ethos.model.players.skills.crafting.JewelryMaking;
+import ethos.runehub.entity.merchant.MerchantCache;
 
 /**
  * Bank 5 Items
@@ -79,15 +80,14 @@ public class Bank5 implements PacketType {
 			break;
 
 		case 3900:
-			c.getShops().buyItem(removeId, removeSlot, 1);
-			break;
-
-		case -1520:
-			c.getShops().buyItem(removeId, removeSlot, 1);
+			case -1520:
+			MerchantCache.getInstance().read(c.myShopId).sellItemToPlayer(removeId,1,removeSlot,c);
+//			c.getShops().buyItem(removeId, removeSlot, 1);
 			break;
 
 		case 3823:
-			c.getShops().sellItem(removeId, removeSlot, 1);
+			MerchantCache.getInstance().read(c.myShopId).buyItemFromPlayer(removeId,1,removeSlot,c);
+//			c.getShops().sellItem(removeId, removeSlot, 1);
 			break;
 
 		case 5064:

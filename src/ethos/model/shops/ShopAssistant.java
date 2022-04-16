@@ -1,5 +1,6 @@
 package ethos.model.shops;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import ethos.Config;
@@ -13,6 +14,7 @@ import ethos.model.items.ItemList;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.PlayerSave;
+import ethos.runehub.entity.CommodityTrader;
 import ethos.util.Misc;
 import ethos.world.ShopHandler;
 
@@ -174,7 +176,11 @@ public class ShopAssistant {
 		ShopValue *= 1.00;
 		ShopValue = c.getMode().getModifiedShopPrice(c.myShopId, removeId, ShopValue);
 		String ShopAdd = "";
-		
+		if(c.myShopId == CommodityTrader.SHOP_ID) {
+			c.sendMessage("@" + removeId + " currently costs #" + CommodityTrader.getInstance().getSellStockPrice(removeId) + " @"
+			+ CommodityTrader.CURRENCY + " .");
+			return;
+		}
 		if (c.myShopId == 40) {
 			c.sendMessage(ItemAssistant.getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId) + " mage arena points.");
 			return;
@@ -1376,6 +1382,10 @@ public class ShopAssistant {
 	 * Sell item to shop (Shop Price)
 	 **/
 	public void sellToShopPrice(int removeId, int removeSlot) {
+		if(c.myShopId == CommodityTrader.SHOP_ID) {
+			c.sendMessage(CommodityTrader.getInstance().getAppraisalFor(removeId));
+			return;
+		}
 		boolean CANNOT_SELL = IntStream.of(Config.ITEM_SELLABLE).anyMatch(sellable -> sellable == removeId);
 		if (c.myShopId != 116 && c.myShopId != 115) {
 			if (CANNOT_SELL) {
@@ -1467,6 +1477,9 @@ public class ShopAssistant {
 		if (!c.getMode().isItemSellable(c.myShopId, itemID)) {
 			c.sendMessage("Your game mode does not permit you to sell this item to the shop.");
 			return false;
+		}
+		 if(c.myShopId == CommodityTrader.SHOP_ID) {
+			return CommodityTrader.getInstance().buyItem(itemID,amount,fromSlot,c);
 		}
 		if (c.myShopId != 115) {
 			if (itemID == 863 || itemID == 11230 || itemID == 869 || itemID == 868 || itemID == 867 || itemID == 866 || itemID == 4740 || itemID == 9244 || itemID == 11212
@@ -1687,6 +1700,10 @@ public class ShopAssistant {
 		if (c.myShopId == 83) {
 			c.sendMessage("You cannot buy items from this shop.");
 			return false;
+		}
+
+		if(c.myShopId == CommodityTrader.SHOP_ID) {
+			return CommodityTrader.getInstance().sellItem(itemID,amount,fromSlot,c);
 		}
 		
 		if (c.myShopId == 81) {

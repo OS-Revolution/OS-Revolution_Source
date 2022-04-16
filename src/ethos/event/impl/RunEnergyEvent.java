@@ -3,6 +3,7 @@ package ethos.event.impl;
 import ethos.event.Event;
 import ethos.model.players.Player;
 import ethos.model.players.skills.Skill;
+import org.runehub.api.util.SkillDictionary;
 
 public class RunEnergyEvent extends Event<Player> {
 
@@ -36,20 +37,27 @@ public class RunEnergyEvent extends Event<Player> {
 			super.stop();
 			return;
 		}
-		if (attachment.getRunEnergy() == 100) {
+		if (attachment.getRunEnergy() == 10000) {
 			return;
 		}
-		if (super.getElapsedTicks() >= ticksRequired) {
-			attachment.setRunEnergy(attachment.getRunEnergy() + 1);
-			attachment.getPA().sendFrame126(Integer.toString(attachment.getRunEnergy()) + "%", 149);
-			ticksRequired = super.getElapsedTicks() + updateTicksRequired();
+		if(attachment.isRunning()) {
+			return;
 		}
+		int energyGainPerTick = (int) Math.floor((attachment.playerLevel[SkillDictionary.Skill.AGILITY.getId()] / 6.0) + 8);
+		int replenishedEnergyTotal = attachment.getRunEnergy() + energyGainPerTick;
+		attachment.setRunEnergy(Math.min(replenishedEnergyTotal, 10000));
+		attachment.getPA().sendFrame126(attachment.getRunEnergyPercentString(), 149);
+//		if (super.getElapsedTicks() >= ticksRequired) {
+//			attachment.setRunEnergy(attachment.getRunEnergy() + 1);
+//			attachment.getPA().sendFrame126(Integer.toString(attachment.getRunEnergy()) + "%", 149);
+//			ticksRequired = super.getElapsedTicks() + updateTicksRequired();
+//		}
 	}
 
-	private final int updateTicksRequired() {
-		int level = Integer.min(99, attachment.playerLevel[Skill.AGILITY.getId()]);
-		int reduction = level < INTERVAL ? 0 : level / INTERVAL;
-		return Integer.max(MINIMUM_TICKS, MAXIMUM_TICKS - reduction);
-	}
+//	private final int updateTicksRequired() {
+//		int level = Integer.min(99, attachment.playerLevel[Skill.AGILITY.getId()]);
+//		int reduction = level < INTERVAL ? 0 : level / INTERVAL;
+//		return Integer.max(MINIMUM_TICKS, MAXIMUM_TICKS - reduction);
+//	}
 
 }

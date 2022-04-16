@@ -1,5 +1,6 @@
 package ethos.model.players.packets.commands.admin;
 
+import ethos.Server;
 import ethos.model.items.ItemAssistant;
 import ethos.model.players.ClientGameTimer;
 import ethos.model.players.Player;
@@ -8,39 +9,41 @@ import ethos.model.players.Right;
 import ethos.model.players.packets.commands.Command;
 import ethos.model.players.skills.Smelting;
 import ethos.runehub.WorldSettingsController;
+import ethos.runehub.entity.CommodityTrader;
+import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
 
 import java.util.concurrent.TimeUnit;
 
 public class Test extends Command {
-	
-	private static final int[] rewards = { 20773, 20775, 20777, 20779 };
-	
-	private enum RankUpgrade {
-		CONTRIBUTOR(Right.CONTRIBUTOR, 5), 
-		SPONSOR(Right.SPONSOR, 15), 
-		SUPPORTER(Right.SUPPORTER, 35), 
-		DONATOR(Right.DONATOR, 50), 
-		SUPER_DONATOR(Right.SUPER_DONATOR, 75), 
-		EXTREME_DONATOR(Right.EXTREME_DONATOR, 125), 
-		LEGENDARY(Right.LEGENDARY, 200),
-		UBER_DONATOR(Right.UBER_DONATOR, 300),
-		MAX_DONATOR(Right.MAX_DONATOR, 500);
 
-		/**
-		 * The rights that will be appended if upgraded
-		 */
-		private final Right rights;
+    private static final int[] rewards = {20773, 20775, 20777, 20779};
 
-		/**
-		 * The amount required for the upgrade
-		 */
-		private final int amount;
+    private enum RankUpgrade {
+        CONTRIBUTOR(Right.CONTRIBUTOR, 5),
+        SPONSOR(Right.SPONSOR, 15),
+        SUPPORTER(Right.SUPPORTER, 35),
+        DONATOR(Right.DONATOR, 50),
+        SUPER_DONATOR(Right.SUPER_DONATOR, 75),
+        EXTREME_DONATOR(Right.EXTREME_DONATOR, 125),
+        LEGENDARY(Right.LEGENDARY, 200),
+        UBER_DONATOR(Right.UBER_DONATOR, 300),
+        MAX_DONATOR(Right.MAX_DONATOR, 500);
 
-		private RankUpgrade(Right rights, int amount) {
-			this.rights = rights;
-			this.amount = amount;
-		}
-	}
+        /**
+         * The rights that will be appended if upgraded
+         */
+        private final Right rights;
+
+        /**
+         * The amount required for the upgrade
+         */
+        private final int amount;
+
+        private RankUpgrade(Right rights, int amount) {
+            this.rights = rights;
+            this.amount = amount;
+        }
+    }
 
 //	private boolean harvestNode(ActiveSkillNodeContext<GatheringNode> nodeContext, int power) {
 //		Logger.getGlobal().fine("harvest roll");
@@ -73,13 +76,17 @@ public class Test extends Command {
 //		return playerBaseRoll >= minRoll;
 //	}
 
-	@Override
-	public void execute(Player player, String input) {
+    @Override
+    public void execute(Player player, String input) {
+//        player.getContext().getSkillAnimationOverrideMap().put(8, 2876);
+//        CommodityTrader.getInstance().spawn();
+//        CommodityTrader.getInstance().openShop(player);
 
-		String[] args = input.split(" ");
-		int id = Integer.parseInt(args[0]);
-		int time = Integer.parseInt(args[1]);
-		WorldSettingsController.getInstance().addSkillPower(player,time,id);
+        Server.getEventHandler().submit(new TravellingCommodityMerchantEvent());
+//		String[] args = input.split(" ");
+//		int id = Integer.parseInt(args[0]);
+//		int time = Integer.parseInt(args[1]);
+//		WorldSettingsController.getInstance().addSkillPower(player,time,id);
 //		WorldSettingsController.getInstance().addSkillEfficiency(player,time,id);
 //		PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(id, TimeUnit.MINUTES,Math.toIntExact(5)));
 //		player.getPA().showInterface(2808);
@@ -338,5 +345,5 @@ public class Test extends Command {
 //			break;
 //
 //		}
-	}
+    }
 }

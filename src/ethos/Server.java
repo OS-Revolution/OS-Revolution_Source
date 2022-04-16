@@ -13,6 +13,7 @@ import ethos.runehub.WorldSettingsController;
 import ethos.runehub.building.Hotspot;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
+import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
 import ethos.runehub.skill.gathering.foraging.ForageNodeClusterController;
 import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
@@ -293,7 +294,7 @@ public class Server {
 	public static void main(java.lang.String[] args) {
 		try {
 			long startTime = System.currentTimeMillis();
-			APILogger.debug = true;
+			APILogger.debug = false;
 			APILogger.initialize();
 			System.setOut(extracted());
 
@@ -302,6 +303,7 @@ public class Server {
 			events.submit(new WheatPortalEvent());
 			events.submit(new BonusApplianceEvent());
 			events.submit(new PunishmentCycleEvent(PUNISHMENTS, 50));
+			events.submit(new TravellingCommodityMerchantEvent());
 			ForageNodeClusterController.getInstance().spawnCluster();
 			Listing.loadNextSale();
 			Wogw.init();

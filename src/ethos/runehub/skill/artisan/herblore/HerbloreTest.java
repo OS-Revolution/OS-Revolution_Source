@@ -2,10 +2,11 @@ package ethos.runehub.skill.artisan.herblore;
 
 import ethos.runehub.entity.item.ItemInteraction;
 import ethos.runehub.entity.item.ItemInteractionLoader;
+import ethos.runehub.skill.artisan.herblore.potion.effect.SkillAdjustmentEffect;
+import ethos.runehub.skill.artisan.herblore.potion.SkillAdjustmentEffectDAO;
 import org.runehub.api.util.IDManager;
 import org.runehub.api.util.SkillDictionary;
 
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class HerbloreTest {
@@ -94,13 +95,37 @@ public class HerbloreTest {
         createPotionAction(101,235,48,181,106); //super antipoison
         createPotionAction(103,2970,52,3018,117); //super energy
         createPotionAction(105,225,55,157,125); //super strength
-//        createPotionAction(267,227,72,109); //super restore
-//        createPotionAction(269,227,78,111); //super defence
-//        createPotionAction(269,227,78,111); //antifire
-//        createPotionAction(269,227,78,111); //ranging potion
-//        createPotionAction(269,227,78,111); //magic potion
-//        createPotionAction(269,227,78,111); //saradomin brew
+        createPotionAction(3004,223,63,3026,142); //super restore
+        createPotionAction(107,239,66,163,150); //super defence
+        createPotionAction(2483,241,69,2454,157); //antifire
+        createPotionAction(109,245,72,169,162); //ranging potion
+        createPotionAction(109,3138,76,3042,172); //magic potion
+        createPotionAction(3002,6693,81,6687,180); //saradomin brew
 
+//        createSkillAdjustmentEffect(0,0,3,1.1f); //attack potion effect
+//        createSkillAdjustmentEffect(1,1,3,1.1f); //defence potion effect
+//        createSkillAdjustmentEffect(2,2,3,1.1f); //strength potion effect
+//        createSkillAdjustmentEffect(3,0,5,1.15f); //super attack potion effect
+//        createSkillAdjustmentEffect(4,1,5,1.15f); //super defence potion effect
+//        createSkillAdjustmentEffect(5,2,5,1.15f); //super strength potion effect
+
+//        Attack Potion doses
+//        createPotion(2428,1,121);
+//        createPotion(121,1,123);
+//        createPotion(123,1,125);
+//        createPotion(125,1,229);
+
+    }
+
+//    private static void createPotion(int itemId, int effectId, int nextItemId) {
+//        Potion potion = new Potion(itemId,effectId,nextItemId);
+//
+//        PotionDAO.getInstance().create(potion);
+//    }
+
+    private static void createSkillAdjustmentEffect(int id, int skillId, int baseChange, float modifier) {
+        SkillAdjustmentEffect effect = new SkillAdjustmentEffect(id,skillId,baseChange,modifier);
+        SkillAdjustmentEffectDAO.getInstance().create(effect);
     }
 
     private static void createPotionAction(int usedId, int usedWithId, int levelRequired, int productItemId, int xp, int low, int high) {

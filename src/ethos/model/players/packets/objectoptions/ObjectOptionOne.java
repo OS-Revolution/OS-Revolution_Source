@@ -52,12 +52,15 @@ import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.mining.Mineral;
 import ethos.model.players.skills.runecrafting.Runecrafting;
 import ethos.model.players.skills.woodcutting.Tree;
+import ethos.runehub.action.click.node.FirstClickNodeActionListener;
 import ethos.runehub.building.Hotspot;
 import ethos.runehub.building.HotspotDefinition;
 import ethos.runehub.skill.gathering.fishing.action.FishingSkillAction;
 import ethos.runehub.skill.gathering.foraging.action.ActiveForagingSkillAction;
+import ethos.runehub.skill.gathering.foraging.action.ActiveRenewableForagingSkillAction;
 import ethos.runehub.skill.gathering.mining.action.ActiveMiningSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
+import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAction;
 import ethos.runehub.skill.node.context.impl.FishingNodeContext;
 import ethos.runehub.skill.node.impl.gatherable.impl.MiningNode;
 import ethos.runehub.skill.node.io.MiningNodeLoader;
@@ -85,13 +88,13 @@ public class ObjectOptionOne {
             return;
         }
         GlobalObject object = new GlobalObject(objectType, obX, obY, c.heightLevel);
+
         c.getPA().resetVariables();
         c.clickObjectType = 0;
         c.turnPlayerTo(obX, obY);
 //		c.getFarming().patchObjectInteraction(objectType, -1, obX, obY);
         c.boneOnAltar = false;
         Tree tree = Tree.forObject(objectType);
-
         RaidObjects.clickObject1(c, objectType, obX, obY);
         if (tree != null) {
             c.getSkillController().getWoodcutting().train(new ActiveWoodcuttingSkillAction(
@@ -172,7 +175,7 @@ public class ObjectOptionOne {
         }
 //        c.getMining().mine(objectType, new Location3D(obX, obY, c.heightLevel));
         Obelisks.get().activate(c, objectType);
-        Runecrafting.execute(c, objectType);
+//        Runecrafting.execute(c, objectType);
         if (objectType >= 26281 && objectType <= 26290) {
             HalloweenRandomOrder.chooseOrder(c, objectType);
         }
@@ -187,6 +190,15 @@ public class ObjectOptionOne {
         }
 
         switch (objectType) {
+            case 2887:
+                c.getSkillController().getWoodcutting().train(new ChopCinnamonTreeSkillAction(
+                        c,
+                        objectType,
+                        obX,
+                        obY,
+                        c.heightLevel)
+                );
+                break;
             case 8132:
             case 8133:
             case 8134:
@@ -208,6 +220,20 @@ public class ObjectOptionOne {
                         obY,
                         c.heightLevel
 
+                ));
+                break;
+            case 7855:
+            case 7725:
+            case 8621:
+            case 7134:
+            case 7757:
+            case 1406:
+                c.getSkillController().getForaging().train(new ActiveRenewableForagingSkillAction(
+                        c,
+                        objectType,
+                        obX,
+                        obY,
+                        c.heightLevel
                 ));
                 break;
 //            case 8152:
@@ -1495,17 +1521,17 @@ public class ObjectOptionOne {
                 }
                 break;
             case 21578: // Stairs up
-            case 10:
-                if (!c.getRightGroup().isOrInherits(Right.DONATOR)) {
-                    c.sendMessage("You must be <img=8><col=FFCC24>Donator</col> to enter the top floor.");
-                    return;
-                }
-                if (c.heightLevel == 0) {
-                    AgilityHandler.delayEmote(c, "CLIMB_UP", 3372, 9645, 1, 2);
-                } else {
-                    AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3372, 9645, 0, 2);
-                }
-                break;
+//            case 10:
+//                if (!c.getRightGroup().isOrInherits(Right.DONATOR)) {
+//                    c.sendMessage("You must be <img=8><col=FFCC24>Donator</col> to enter the top floor.");
+//                    return;
+//                }
+//                if (c.heightLevel == 0) {
+//                    AgilityHandler.delayEmote(c, "CLIMB_UP", 3372, 9645, 1, 2);
+//                } else {
+//                    AgilityHandler.delayEmote(c, "CLIMB_DOWN", 3372, 9645, 0, 2);
+//                }
+//                break;
             case 26502:
                 if (obX == 2839 && obY == 5295) {
                     c.getGodwars().enterBossRoom(God.ARMADYL);
@@ -1530,7 +1556,7 @@ public class ObjectOptionOne {
             case 2492:
             case 15638:
             case 7479:
-                c.getPA().startTeleport(3092, 3485, 0, "modern", false);
+                c.getPA().startTeleport(3092, 3249, 0, "modern", false);
                 break;
             case 11803:
                 if (c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)) {
@@ -2707,6 +2733,13 @@ public class ObjectOptionOne {
                 }
                 break;
 
+        }
+
+        try {
+            System.out.println((FirstClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel)));
+            Server.getEventHandler().submit(FirstClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel));
+        } catch (NullPointerException e) {
+            c.sendMessage(e.getMessage());
         }
     }
 

@@ -37,8 +37,8 @@ public class ToolTest {
         storeTool(createGatheringTool(21031,1,10,4.5,0,1.0f,618)); //harpoon
 
         storeTool(createGatheringTool(5329,1,19,1,0,1.0f,2286)); //secateurs
-        storeTool(createGatheringTool(7409,1,19,1.5,20,1.0f,2286)); //magic secateurs
-
+        storeTool(createGatheringTool(7409,1,19,1.5,10,1.0f,2286)); //magic secateurs
+        storeTool(createGatheringTool(7411,1,19,1.5,30,1.5f,2286)); //jewel secateurs
     }
 
     private static GatheringTool createGatheringTool(int itemId, int levelRequired, int skillId, double basePower, int baseEfficiency, float xpGainMultiplier, int animationId) {

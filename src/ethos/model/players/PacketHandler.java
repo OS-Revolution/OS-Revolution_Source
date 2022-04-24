@@ -55,7 +55,6 @@ import ethos.model.players.packets.action.ReceiveString;
 import ethos.model.players.packets.itemoptions.ItemOptionOne;
 import ethos.model.players.packets.itemoptions.ItemOptionThree;
 import ethos.model.players.packets.itemoptions.ItemOptionTwo;
-import ethos.runehub.packet.NpcClickPacket;
 
 public class PacketHandler {
 

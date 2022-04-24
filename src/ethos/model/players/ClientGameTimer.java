@@ -16,4 +16,40 @@ public enum ClientGameTimer {
 	public int getTimerId() {
 		return timerId;
 	}
+
+	public static ClientGameTimer getEfficiencyTimerForSkillId(int skillId) {
+		switch (skillId) {
+			case 8:
+				return WOODCUTTING_EFFICIENCY;
+			case 10:
+				return FISHING_EFFICIENCY;
+			case 14:
+				return MINING_EFFICIENCY;
+			default: return SKILL_EFFICIENCY;
+		}
+	}
+
+	public static ClientGameTimer getPowerTimerForSkillId(int skillId) {
+		switch (skillId) {
+			case 8:
+				return WOODCUTTING_POWER;
+			case 10:
+				return FISHING_POWER;
+			case 14:
+				return MINING_POWER;
+			default: return SKILL_POWER;
+		}
+	}
+
+	public static ClientGameTimer getGainsTimerForSkillId(int skillId) {
+		switch (skillId) {
+			case 8:
+				return WOODCUTTING_GAINS;
+			case 10:
+				return FISHING_GAINS;
+			case 14:
+				return MINING_GAINS;
+			default: return SKILL_EFFICIENCY;
+		}
+	}
 }

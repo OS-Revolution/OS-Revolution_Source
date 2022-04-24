@@ -11,6 +11,7 @@ import org.runehub.api.util.SkillDictionary;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -31,24 +32,28 @@ public class WorldSettingsController {
             worldSettings.getBonusXpTimer().decrement();
         if (isRunning(worldSettings.getDoubleDropRateTimer()))
             worldSettings.getDoubleDropRateTimer().decrement();
-        if (isRunning(worldSettings.getWoodcuttingEfficiencyTimer()))
-            worldSettings.getWoodcuttingEfficiencyTimer().decrement();
-        if (isRunning(worldSettings.getWoodcuttingPowerTimer()))
-            worldSettings.getWoodcuttingPowerTimer().decrement();
-        if (isRunning(worldSettings.getWoodcuttingGainsTimer()))
-            worldSettings.getWoodcuttingGainsTimer().decrement();
-        if (isRunning(worldSettings.getMiningEfficiencyTimer()))
-            worldSettings.getMiningEfficiencyTimer().decrement();
-        if (isRunning(worldSettings.getMiningPowerTimer()))
-            worldSettings.getMiningPowerTimer().decrement();
-        if (isRunning(worldSettings.getMiningGainsTimer()))
-            worldSettings.getMiningGainsTimer().decrement();
-        if (isRunning(worldSettings.getFishingEfficiencyTimer()))
-            worldSettings.getFishingEfficiencyTimer().decrement();
-        if (isRunning(worldSettings.getFishingPowerTimer()))
-            worldSettings.getFishingPowerTimer().decrement();
-        if (isRunning(worldSettings.getFishingGainsTimer()))
-            worldSettings.getFishingGainsTimer().decrement();
+
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> worldSettings.getSkillPowerTimer().containsKey(skill.getId())).forEach(skill -> worldSettings.getSkillPowerTimer().get(skill.getId()).decrement());
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> worldSettings.getSkillGainsTimer().containsKey(skill.getId())).forEach(skill -> worldSettings.getSkillGainsTimer().get(skill.getId()).decrement());
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> worldSettings.getSkillEfficiencyTimer().containsKey(skill.getId())).forEach(skill -> worldSettings.getSkillEfficiencyTimer().get(skill.getId()).decrement());
+//        if (isRunning(worldSettings.getWoodcuttingEfficiencyTimer()))
+//            worldSettings.getWoodcuttingEfficiencyTimer().decrement();
+//        if (isRunning(worldSettings.getWoodcuttingPowerTimer()))
+//            worldSettings.getWoodcuttingPowerTimer().decrement();
+//        if (isRunning(worldSettings.getWoodcuttingGainsTimer()))
+//            worldSettings.getWoodcuttingGainsTimer().decrement();
+//        if (isRunning(worldSettings.getMiningEfficiencyTimer()))
+//            worldSettings.getMiningEfficiencyTimer().decrement();
+//        if (isRunning(worldSettings.getMiningPowerTimer()))
+//            worldSettings.getMiningPowerTimer().decrement();
+//        if (isRunning(worldSettings.getMiningGainsTimer()))
+//            worldSettings.getMiningGainsTimer().decrement();
+//        if (isRunning(worldSettings.getFishingEfficiencyTimer()))
+//            worldSettings.getFishingEfficiencyTimer().decrement();
+//        if (isRunning(worldSettings.getFishingPowerTimer()))
+//            worldSettings.getFishingPowerTimer().decrement();
+//        if (isRunning(worldSettings.getFishingGainsTimer()))
+//            worldSettings.getFishingGainsTimer().decrement();
         WorldSettingsController.getInstance().saveSettings();
     }
 
@@ -88,43 +93,22 @@ public class WorldSettingsController {
     private void addSkillPower(int skillID, int time) {
         long hours = (long) time * 60;
         AdjustableNumber<Integer> timer = new AdjustableInteger(ClientGameTimer.SKILL_POWER.getTimerId());
-        switch (skillID) {
-            case 8:
-                worldSettings.getWoodcuttingPowerTimer().add(hours);
-                PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.WOODCUTTING_POWER, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getWoodcuttingPowerTimer().value())));
-                break;
-            case 10:
-                worldSettings.getFishingPowerTimer().add(hours);
-                PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.FISHING_POWER, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getFishingPowerTimer().value())));
-                break;
-            case 14:
-                worldSettings.getMiningPowerTimer().add(hours);
-                PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.MINING_POWER, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getMiningPowerTimer().value())));
-                break;
-            default:
-                break;
+        if(worldSettings.getSkillPowerTimer().containsKey(skillID)) {
+            worldSettings.getSkillPowerTimer().get(skillID).add(hours);
+        } else {
+            worldSettings.getSkillPowerTimer().put(skillID,new AdjustableLong(hours));
         }
-
+        PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.getPowerTimerForSkillId(skillID), TimeUnit.MINUTES, Math.toIntExact(worldSettings.getSkillPowerTimer().get(skillID).value())));
     }
 
     private void addSkillEfficiency(int skillID, int time) {
         long hours = (long) time * 60;
-        switch (skillID) {
-            case 8:
-                worldSettings.getWoodcuttingEfficiencyTimer().add(hours);
-                PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.WOODCUTTING_EFFICIENCY, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getWoodcuttingEfficiencyTimer().value())));
-                break;
-            case 10:
-                worldSettings.getFishingEfficiencyTimer().add(hours);
-                PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.FISHING_EFFICIENCY, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getFishingEfficiencyTimer().value())));
-                break;
-            case 14:
-                worldSettings.getMiningEfficiencyTimer().add(hours);
-                PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.MINING_EFFICIENCY, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getMiningEfficiencyTimer().value())));
-                break;
-            default:
-                break;
+        if(worldSettings.getSkillPowerTimer().containsKey(skillID)) {
+            worldSettings.getSkillPowerTimer().get(skillID).add(hours);
+        } else {
+            worldSettings.getSkillPowerTimer().put(skillID,new AdjustableLong(hours));
         }
+        PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.getEfficiencyTimerForSkillId(skillID), TimeUnit.MINUTES, Math.toIntExact(worldSettings.getSkillEfficiencyTimer().get(skillID).value())));
 
     }
 
@@ -137,51 +121,71 @@ public class WorldSettingsController {
         return timer.value() > 0;
     }
 
+    private boolean isEfficiencyRunning(int skillId) {
+        return worldSettings.getSkillEfficiencyTimer().containsKey(skillId) && worldSettings.getSkillEfficiencyTimer().get(skillId).value() > 0;
+    }
+
+    private boolean isPowerRunning(int skillId) {
+        return worldSettings.getSkillPowerTimer().containsKey(skillId) && worldSettings.getSkillPowerTimer().get(skillId).value() > 0;
+    }
+
+    private boolean isGainsRunning(int skillId) {
+        return worldSettings.getSkillGainsTimer().containsKey(skillId) && worldSettings.getSkillGainsTimer().get(skillId).value() > 0;
+    }
+
 
     private void sendInitializationMessage(Player player) {
         if (isRunning(worldSettings.getBonusXpTimer()))
             player.sendMessage("@blu@[News]@red@ Double Global XP @blu@is active");
          if (isRunning(worldSettings.getDoubleDropRateTimer()))
             player.sendMessage("@blu@[News]@red@Magic Find Boost @blu@is active @red@(50% Increased Drop Rate)");
-         if (isRunning(worldSettings.getWoodcuttingEfficiencyTimer()))
-            player.sendMessage("@blu@[News]@red@ Woodcutting Efficiency Boost @blu@is active" + " (@red@" + worldSettings.getEfficiencyModifier()  + "x @blu@Deplete Chance Reduction)");
-         if (isRunning(worldSettings.getWoodcuttingPowerTimer()))
-            player.sendMessage("@blu@[News]@red@ Woodcutting Power Boost @blu@is active" + " (@red@" + worldSettings.getPowerModifer()  + "x @blu@Chop Chance)");
-         if (isRunning(worldSettings.getWoodcuttingGainsTimer()))
-            player.sendMessage("@blu@[News]@red@ Woodcutting Gains Boost @blu@is active" + " (@red@" + worldSettings.getGainsModifier()  + "x @blu@Woodcutting XP)");
-         if (isRunning(worldSettings.getMiningEfficiencyTimer()))
-            player.sendMessage("@blu@[News]@red@ Mining Efficiency Boost @blu@is active" + " (@red@" + worldSettings.getEfficiencyModifier()  + "x @blu@Deplete Chance Reduction)");
-         if (isRunning(worldSettings.getMiningPowerTimer()))
-            player.sendMessage("@blu@[News]@red@ Mining Power Boost @blu@is active" + " (@red@" + worldSettings.getPowerModifer()  + "x @blu@Mine Chance)");
-         if (isRunning(worldSettings.getMiningGainsTimer()))
-            player.sendMessage("@blu@[News]@red@ Mining Gains Boost @blu@is active" + " (@red@" + worldSettings.getGainsModifier()  + "x @blu@Mining XP)");
-         if (isRunning(worldSettings.getFishingEfficiencyTimer()))
-            player.sendMessage("@blu@[News]@red@ Fishing Efficiency Boost @blu@is active" + " (@red@" + worldSettings.getEfficiencyModifier()  + "x @blu@Deplete Chance Reduction)");
-         if (isRunning(worldSettings.getFishingPowerTimer()))
-            player.sendMessage("@blu@[News]@red@ Fishing Power Boost @blu@is active" + " (@red@" + worldSettings.getPowerModifer()  + "x @blu@Catch Chance)");
-         if (isRunning(worldSettings.getFishingGainsTimer()))
-            player.sendMessage("@blu@[News]@red@ Fishing Gains Boost @blu@is active" + " (@red@" + worldSettings.getGainsModifier()  + "x @blu@Fishing XP)");
+
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isEfficiencyRunning(skill.getId())).forEach(skill -> player.sendMessage("^[News] $" + skill.name().toLowerCase() + " $Efficiency $Boost is active" + " (#" + worldSettings.getEfficiencyModifier()  + "x $Depletion $Chance $Reduction)"));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isPowerRunning(skill.getId())).forEach(skill -> player.sendMessage("^[News] $" + skill.name().toLowerCase() + " $Power $Boost is active" + " (#" + worldSettings.getPowerModifer()  + "x $Increased $Success $Chance)"));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isGainsRunning(skill.getId())).forEach(skill -> player.sendMessage("^[News] $" + skill.name().toLowerCase() + " $Gains $Boost is active" + " (#" + worldSettings.getGainsModifier()  + "x $Increased $XP)"));
+
+//        if (isEfficiencyRunning(SkillDictionary.Skill.WOODCUTTING.getId()))
+//            player.sendMessage("@blu@[News]@red@ Woodcutting Efficiency Boost @blu@is active" + " (@red@" + worldSettings.getEfficiencyModifier()  + "x @blu@Deplete Chance Reduction)");
+//         if (isRunning(worldSettings.getWoodcuttingPowerTimer()))
+//            player.sendMessage("@blu@[News]@red@ Woodcutting Power Boost @blu@is active" + " (@red@" + worldSettings.getPowerModifer()  + "x @blu@Chop Chance)");
+//         if (isRunning(worldSettings.getWoodcuttingGainsTimer()))
+//            player.sendMessage("@blu@[News]@red@ Woodcutting Gains Boost @blu@is active" + " (@red@" + worldSettings.getGainsModifier()  + "x @blu@Woodcutting XP)");
+//         if (isRunning(worldSettings.getMiningEfficiencyTimer()))
+//            player.sendMessage("@blu@[News]@red@ Mining Efficiency Boost @blu@is active" + " (@red@" + worldSettings.getEfficiencyModifier()  + "x @blu@Deplete Chance Reduction)");
+//         if (isRunning(worldSettings.getMiningPowerTimer()))
+//            player.sendMessage("@blu@[News]@red@ Mining Power Boost @blu@is active" + " (@red@" + worldSettings.getPowerModifer()  + "x @blu@Mine Chance)");
+//         if (isRunning(worldSettings.getMiningGainsTimer()))
+//            player.sendMessage("@blu@[News]@red@ Mining Gains Boost @blu@is active" + " (@red@" + worldSettings.getGainsModifier()  + "x @blu@Mining XP)");
+//         if (isRunning(worldSettings.getFishingEfficiencyTimer()))
+//            player.sendMessage("@blu@[News]@red@ Fishing Efficiency Boost @blu@is active" + " (@red@" + worldSettings.getEfficiencyModifier()  + "x @blu@Deplete Chance Reduction)");
+//         if (isRunning(worldSettings.getFishingPowerTimer()))
+//            player.sendMessage("@blu@[News]@red@ Fishing Power Boost @blu@is active" + " (@red@" + worldSettings.getPowerModifer()  + "x @blu@Catch Chance)");
+//         if (isRunning(worldSettings.getFishingGainsTimer()))
+//            player.sendMessage("@blu@[News]@red@ Fishing Gains Boost @blu@is active" + " (@red@" + worldSettings.getGainsModifier()  + "x @blu@Fishing XP)");
     }
 
     public void initializeTimers(Player player) {
         this.sendTimer(player, ClientGameTimer.EXPERIENCE, worldSettings.getBonusXpTimer());
         this.sendTimer(player, ClientGameTimer.DROPS, worldSettings.getDoubleDropRateTimer());
 
-        this.sendTimer(player, ClientGameTimer.WOODCUTTING_GAINS, worldSettings.getWoodcuttingGainsTimer());
-        this.sendTimer(player, ClientGameTimer.WOODCUTTING_EFFICIENCY, worldSettings.getWoodcuttingEfficiencyTimer());
-        this.sendTimer(player, ClientGameTimer.WOODCUTTING_POWER, worldSettings.getWoodcuttingPowerTimer());
-
-        this.sendTimer(player, ClientGameTimer.MINING_GAINS, worldSettings.getMiningGainsTimer());
-        this.sendTimer(player, ClientGameTimer.MINING_EFFICIENCY, worldSettings.getMiningEfficiencyTimer());
-        this.sendTimer(player, ClientGameTimer.MINING_POWER, worldSettings.getMiningPowerTimer());
-
-        this.sendTimer(player, ClientGameTimer.FISHING_GAINS, worldSettings.getFishingGainsTimer());
-        this.sendTimer(player, ClientGameTimer.FISHING_EFFICIENCY, worldSettings.getFishingEfficiencyTimer());
-        this.sendTimer(player, ClientGameTimer.FISHING_POWER, worldSettings.getFishingPowerTimer());
-
-        this.sendTimer(player, ClientGameTimer.SKILL_GAINS, worldSettings.getSkillGainsTimer());
-        this.sendTimer(player, ClientGameTimer.SKILL_EFFICIENCY, worldSettings.getSkillEfficiencyTimer());
-        this.sendTimer(player, ClientGameTimer.SKILL_POWER, worldSettings.getSkillPowerTimer());
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isEfficiencyRunning(skill.getId())).forEach(skill -> sendTimer(player,ClientGameTimer.getEfficiencyTimerForSkillId(skill.getId()),worldSettings.getSkillEfficiencyTimer().get(skill.getId())));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isEfficiencyRunning(skill.getId())).forEach(skill -> sendTimer(player,ClientGameTimer.getPowerTimerForSkillId(skill.getId()),worldSettings.getSkillPowerTimer().get(skill.getId())));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isEfficiencyRunning(skill.getId())).forEach(skill -> sendTimer(player,ClientGameTimer.getGainsTimerForSkillId(skill.getId()),worldSettings.getSkillGainsTimer().get(skill.getId())));
+//        this.sendTimer(player, ClientGameTimer.WOODCUTTING_GAINS, worldSettings.getWoodcuttingGainsTimer());
+//        this.sendTimer(player, ClientGameTimer.WOODCUTTING_EFFICIENCY, worldSettings.getWoodcuttingEfficiencyTimer());
+//        this.sendTimer(player, ClientGameTimer.WOODCUTTING_POWER, worldSettings.getWoodcuttingPowerTimer());
+//
+//        this.sendTimer(player, ClientGameTimer.MINING_GAINS, worldSettings.getMiningGainsTimer());
+//        this.sendTimer(player, ClientGameTimer.MINING_EFFICIENCY, worldSettings.getMiningEfficiencyTimer());
+//        this.sendTimer(player, ClientGameTimer.MINING_POWER, worldSettings.getMiningPowerTimer());
+//
+//        this.sendTimer(player, ClientGameTimer.FISHING_GAINS, worldSettings.getFishingGainsTimer());
+//        this.sendTimer(player, ClientGameTimer.FISHING_EFFICIENCY, worldSettings.getFishingEfficiencyTimer());
+//        this.sendTimer(player, ClientGameTimer.FISHING_POWER, worldSettings.getFishingPowerTimer());
+//
+//        this.sendTimer(player, ClientGameTimer.SKILL_GAINS, worldSettings.getSkillGainsTimer());
+//        this.sendTimer(player, ClientGameTimer.SKILL_EFFICIENCY, worldSettings.getSkillEfficiencyTimer());
+//        this.sendTimer(player, ClientGameTimer.SKILL_POWER, worldSettings.getSkillPowerTimer());
 
         this.sendInitializationMessage(player);
     }

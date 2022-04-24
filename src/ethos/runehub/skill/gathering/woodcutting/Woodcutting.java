@@ -3,6 +3,7 @@ package ethos.runehub.skill.gathering.woodcutting;
 import ethos.model.players.Player;
 import ethos.runehub.WorldSettingsController;
 import ethos.runehub.skill.gathering.GatheringSkill;
+import org.rhd.api.math.impl.AdjustableLong;
 import org.runehub.api.util.SkillDictionary;
 
 public class Woodcutting extends GatheringSkill {
@@ -14,17 +15,17 @@ public class Woodcutting extends GatheringSkill {
 
     @Override
     protected int getPowerModifier() {
-        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getWoodcuttingPowerTimer().greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getPowerModifer() : 1.0D));
+        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getSkillPowerTimer().getOrDefault(this.getId(),new AdjustableLong(0L)).greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getPowerModifer() : 1.0D));
     }
 
     @Override
     protected int getEfficiencyModifier() {
-        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getWoodcuttingEfficiencyTimer().greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getEfficiencyModifier() : 1.0D));
+        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getSkillEfficiencyTimer().getOrDefault(this.getId(),new AdjustableLong(0L)).greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getEfficiencyModifier() : 1.0D));
     }
 
     @Override
     protected int getGainsModifier() {
-        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getWoodcuttingGainsTimer().greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getGainsModifier() : 1.0D));
+        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getSkillGainsTimer().getOrDefault(this.getId(),new AdjustableLong(0L)).greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getGainsModifier() : 1.0D));
     }
 
     public Woodcutting(Player player) {

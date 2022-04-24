@@ -8,6 +8,7 @@ import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.impl.gatherable.impl.FishingNode;
+import org.rhd.api.math.impl.AdjustableLong;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,17 +65,17 @@ public class Fishing extends GatheringSkill {
 
     @Override
     protected int getPowerModifier() {
-        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getFishingPowerTimer().greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getPowerModifer() : 1.0D));
+        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getSkillPowerTimer().getOrDefault(this.getId(),new AdjustableLong(0L)).greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getPowerModifer() : 1.0D));
     }
 
     @Override
     protected int getEfficiencyModifier() {
-        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getFishingEfficiencyTimer().greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getEfficiencyModifier() : 1.0D));
+        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getSkillEfficiencyTimer().getOrDefault(this.getId(),new AdjustableLong(0L)).greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getEfficiencyModifier() : 1.0D));
     }
 
     @Override
     protected int getGainsModifier() {
-        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getFishingGainsTimer().greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getGainsModifier() : 1.0D));
+        return Math.toIntExact(Math.round(WorldSettingsController.getInstance().getWorldSettings().getSkillGainsTimer().getOrDefault(this.getId(),new AdjustableLong(0L)).greaterThan(0L) ? WorldSettingsController.getInstance().getWorldSettings().getGainsModifier() : 1.0D));
     }
 
     public Fishing(Player player) {

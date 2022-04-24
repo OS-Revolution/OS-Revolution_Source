@@ -55,7 +55,7 @@ public class WorldSettings {
 //        this.skillPowerTimer = new AdjustableLong(0L);
 //        this.skillGainsTimer = new AdjustableLong(0L);
 
-        this.powerModifer = 1.5D;
+        this.powerModifer = 1.6D;
         this.efficiencyModifier = 1.5D;
         this.gainsModifier = 1.5D;
 

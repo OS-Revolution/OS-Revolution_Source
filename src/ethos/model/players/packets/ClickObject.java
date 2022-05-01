@@ -43,6 +43,7 @@ public class ClickObject implements PacketType {
             return;
         }
 
+        System.out.println("Click: " + packetType);
 
         switch (packetType) {
             case FIRST_CLICK:
@@ -50,6 +51,11 @@ public class ClickObject implements PacketType {
                 c.objectId = c.getInStream().readUnsignedWord();
                 c.objectY = c.getInStream().readUnsignedWordA();
                 c.objectDistance = 1;
+                if(c.objectId >= 29180 && c.objectId <= 29225) {
+                    c.objectDistance = 2;
+                    c.objectYOffset = 2;
+                    c.objectXOffset = 2;
+                }
 //			if(PatchPropertiesDatabase.getInstance().getAllEntries().stream().anyMatch(patchProperties -> patchProperties.getBoundary().contains(
 //					new Point(c.objectX, c.objectY)))) {
 //				Logger.getGlobal().info("Clicked Farming Patch: " + c.objectId
@@ -276,6 +282,7 @@ public class ClickObject implements PacketType {
                         c.sendMessage("Welcome to Barrows, good luck with your rewards!");
                         break;
                     case 31561:
+                    case 29183:
                         c.objectDistance = 2;
                         break;
                     case 1733:
@@ -662,6 +669,12 @@ public class ClickObject implements PacketType {
                 c.objectY = c.getInStream().readSignedWordBigEndian();
                 c.objectX = c.getInStream().readUnsignedWordA();
                 c.objectDistance = 1;
+
+                if(c.objectId >= 29180 && c.objectId <= 29225) {
+                    c.objectDistance = 2;
+                    c.objectYOffset = 2;
+                    c.objectXOffset = 2;
+                }
                 // if (!Region.isWorldObject(c.objectId, c.objectX, c.objectY, c.heightLevel)) {
                 // c.sendMessage("Warning: The object could not be verified by the server. If
                 // you feel this is");
@@ -734,6 +747,7 @@ public class ClickObject implements PacketType {
                     case 6166:
                     case 6164:
                     case 6162:
+                    case 29183:
                         c.objectDistance = 2;
                         break;
                     case 3192:

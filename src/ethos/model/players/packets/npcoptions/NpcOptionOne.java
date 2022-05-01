@@ -21,6 +21,7 @@ import ethos.model.players.skills.crafting.Tanning;
 import ethos.model.players.skills.hunter.impling.Impling;
 import ethos.model.players.skills.mining.Mineral;
 import ethos.model.players.skills.thieving.Thieving.Pickpocket;
+import ethos.runehub.action.click.npc.FirstClickNpcListener;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 
@@ -794,6 +795,12 @@ case 4625:
 		 * Make over mage.
 		 */
 
+		}
+		try {
+			Server.getEventHandler().submit(FirstClickNpcListener.onClick(player,npcType,player.rememberNpcIndex));
+		} catch (NullPointerException e) {
+//			e.printStackTrace();
+			player.sendMessage("Nothing interesting happens.");
 		}
 	}
 

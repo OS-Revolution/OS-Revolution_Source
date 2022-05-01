@@ -21,7 +21,7 @@ public class FishingNode extends GatheringNode {
         return toolId;
     }
 
-    public FishingNode(int id, int levelRequirement, int interactionExperience, int skillId, long tableId, int harvestChance, int maxRoll,int baitId, int spotId, int toolId) {
+    public FishingNode(int id, int levelRequirement, int interactionExperience, int skillId, long tableId, int harvestChance,int maxRoll, int baitId, int spotId, int toolId) {
         super(id, levelRequirement, interactionExperience, tableId, harvestChance, skillId,maxRoll);
         this.baitId = baitId;
         this.spotId = spotId;

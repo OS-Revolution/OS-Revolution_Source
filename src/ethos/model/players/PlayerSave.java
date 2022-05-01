@@ -320,9 +320,9 @@ public class PlayerSave {
 					} else if (token.equals("character-specRestore")) {
 						p.specRestore = Integer.parseInt(token2);
 					} else if (token.equals("character-posx")) {
-						p.teleportToX = (Integer.parseInt(token2) <= 0 ? 3092 : Integer.parseInt(token2)); // When server crashes or reboots it brings the player here
+						p.teleportToX = (Integer.parseInt(token2) <= 0 ? Config.RESPAWN_X : Integer.parseInt(token2)); // When server crashes or reboots it brings the player here
 					} else if (token.equals("character-posy")) {
-						p.teleportToY = (Integer.parseInt(token2) <= 0 ? 3249 : Integer.parseInt(token2));
+						p.teleportToY = (Integer.parseInt(token2) <= 0 ? Config.RESPAWN_Y : Integer.parseInt(token2));
 					} else if (token.equals("character-rights")) {
 						p.getRightGroup().setPrimary(Right.get(Integer.parseInt(token2)));
 					} else if (token.equals("character-rights-secondary")) { // sound like an activist group

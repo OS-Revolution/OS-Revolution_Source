@@ -35,8 +35,8 @@ public abstract class GatheringSkill extends Skill {
                     .filter(tool -> this.getPlayer().getSkillController().getLevel(this.getId()) >= tool.getLevelRequired())
                     .collect(Collectors.toList());
             final int bestToolLevel = availableTools.stream().mapToInt(GatheringTool::getLevelRequired).max().orElse(1);
-
-            return availableTools.stream().filter(tool -> tool.getLevelRequired() == bestToolLevel).findFirst().orElse(null);
+            GatheringTool bestTool =availableTools.stream().filter(tool -> tool.getLevelRequired() == bestToolLevel).findFirst().orElse(null);
+            return bestTool;
     }
 
     @Override

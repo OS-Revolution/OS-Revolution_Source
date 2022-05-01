@@ -53,6 +53,7 @@ public class NpcOptionTwo {
 		}
 		switch (npcType) {
 			case 1328:
+			case 2148:
 				MerchantCache.getInstance().read(npcType).openShop(player);
 //				CommodityTrader.getInstance().openShop(player);
 				break;

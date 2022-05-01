@@ -37,7 +37,6 @@ public class CleanHerbAction extends SkillAction {
     @Override
     protected void onTick() {
 //        if(this.amountSelected > 0) {
-        System.out.println("Ticking");
         this.addItems(-1, 1);
         this.addXp(herb.getExperience());
 //        }
@@ -56,7 +55,7 @@ public class CleanHerbAction extends SkillAction {
     @Override
     protected void validateLevelRequirements() {
         Preconditions.checkArgument(PreconditionUtils.isTrue(this.getActor().getSkillController().getLevel(this.getSkillId()) >= herb.getLevel()),
-                "You need a ?"
+                "You need a "
                         + SkillDictionary.getSkillNameFromId(this.getSkillId())
                         + " level of at least #"
                         + herb.getLevel()

@@ -56,6 +56,7 @@ import ethos.model.players.skills.crafting.Tanning;
 import ethos.model.shops.ShopAssistant;
 import ethos.net.discord.DiscordMessager;
 import ethos.util.Misc;
+import org.runehub.api.util.APILogger;
 
 /**
  * Clicking most buttons
@@ -66,7 +67,7 @@ public class ClickingButtons implements PacketType {
 	@Override
 	public void processPacket(final Player c, int packetType, int packetSize) {
 		int actionButtonId = Misc.hexToInt(c.getInStream().buffer, 0, packetSize);
-		if (c.debugMessage) {
+		if (APILogger.debug && c.getRightGroup().isOrInherits(Right.OWNER)) {
 			c.sendMessage("actionbutton: " + actionButtonId + ", DialogueID: " + c.dialogueAction);
 		}
 		if (c.isFrozen == true) {
@@ -103,13 +104,13 @@ public class ClickingButtons implements PacketType {
 		if (c.getSlayer().onActionButton(actionButtonId)) {
 			return;
 		}
-		if (c.getTutorial().isActive()) {
-			if (actionButtonId == 165179) {
-				c.getTutorial().getIronmanInterface().confirm();
-			}
-			c.getTutorial().getIronmanInterface().click(actionButtonId);
-			return;
-		}
+//		if (c.getTutorial().isActive()) {
+//			if (actionButtonId == 165179) {
+//				c.getTutorial().getIronmanInterface().confirm();
+//			}
+//			c.getTutorial().getIronmanInterface().click(actionButtonId);
+//			return;
+//		}
 		
 		if (actionButtonId == 166012) {
 			if (c.isInHouse) {

@@ -53,7 +53,7 @@ public abstract class SkillAction extends Event<Player> {
         } catch (Exception e) {
             this.stop();
             this.getActor().getPA().closeAllWindows();
-            this.getActor().sendMessage(MarkupParser.parseMarkup(e.getMessage()).getText());
+            this.getActor().sendMessage(e.getMessage());
         }
     }
 

@@ -1481,6 +1481,10 @@ public class NPCHandler {
                     }
                 }
 
+//                if (npcs[i].npcType == 3953) {
+//                    npcs[i].startAnimation(346);
+//                }
+
                 /**
                  * Tekton walking
                  */

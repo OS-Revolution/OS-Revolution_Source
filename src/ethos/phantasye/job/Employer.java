@@ -159,7 +159,7 @@ public class Employer {
         //TODO roll job
         final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(job.getSkillId(), LootContainerType.MISC);
         if (container != null) {
-            employee.getContext().getJobScore().increment();
+//            employee.getContext().getJobScore().increment();
             container.roll(job.getDifficulty().getMagicFindBonus()).roll() //TODO add magic find
                     .forEach(loot -> {
                         employee.getItems().addItem(loot.getItemId(),loot.getAmount());
@@ -186,11 +186,11 @@ public class Employer {
     }
 
     private int employeeBaseWage() {
-        return dividesInto(employee.getContext().getJobScore().value(),Employee.POINT_VALUE) * Employee.BASE_PAY;
+        return 1;//dividesInto(employee.getContext().getJobScore().value(),Employee.POINT_VALUE) * Employee.BASE_PAY;
     }
 
     private int employeeBonusWage() {
-        return dividesInto(employee.getContext().getJobScore().value(),Employee.POINT_VALUE) * Employee.BONUS_PAY;
+        return 1;//dividesInto(employee.getContext().getJobScore().value(),Employee.POINT_VALUE) * Employee.BONUS_PAY;
     }
 
     /**

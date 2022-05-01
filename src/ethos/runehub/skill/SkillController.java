@@ -4,6 +4,7 @@ import ethos.model.players.Player;
 import ethos.runehub.skill.artisan.cooking.Cooking;
 import ethos.runehub.skill.artisan.herblore.Herblore;
 import ethos.runehub.skill.artisan.runecraft.Runecraft;
+import ethos.runehub.skill.artisan.smithing.Smithing;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.fishing.Fishing;
 import ethos.runehub.skill.gathering.foraging.Foraging;
@@ -41,6 +42,8 @@ public class SkillController {
                 return cooking;
             case 8:
                 return woodcutting;
+            case 13:
+                return smithing;
             case 14:
                 return mining;
             case 15:
@@ -58,24 +61,6 @@ public class SkillController {
     public RenewableNode getRenewableNode(int nodeId) {
         return RenewableNodeLoader.getInstance().read(nodeId);
     }
-
-    private LazyLoader<Integer,? extends GatheringNode> getDAO(int skillId) {
-
-        switch (skillId) {
-            case 8:
-                return WoodcuttingNodeLoader.getInstance();
-            case 14:
-                return MiningNodeLoader.getInstance();
-            case 10:
-                return FishingNodeLoader.getInstance();
-            default:
-                return null;
-        }
-    }
-
-//    public <T extends GatheringNode> T getGatheringNode(int nodeId) {
-//
-//    }
 
     public int getLevel(int skillId) {
         return player.getPA().getLevelForXP(player.playerXP[skillId]);
@@ -109,6 +94,10 @@ public class SkillController {
         return runecraft;
     }
 
+    public Smithing getSmithing() {
+        return smithing;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -122,6 +111,7 @@ public class SkillController {
         this.cooking = new Cooking(player);
         this.herblore = new Herblore(player);
         this.runecraft = new Runecraft(player);
+        this.smithing = new Smithing(player);
     }
 
     private final Player player;
@@ -132,4 +122,5 @@ public class SkillController {
     private final Cooking cooking;
     private final Herblore herblore;
     private final Runecraft runecraft;
+    private final Smithing smithing;
 }

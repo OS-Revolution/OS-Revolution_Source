@@ -18,7 +18,7 @@ public abstract class ArtisanSkillAction extends SkillAction {
 
     @Override
     protected void onActionStop() {
-        this.getActor().getAttributes().setIntegerInput(-1);
+        this.getActor().getAttributes().setIntegerInput(0);
     }
 
     @Override
@@ -28,22 +28,22 @@ public abstract class ArtisanSkillAction extends SkillAction {
     @Override
     protected void onTick() {
         Logger.getGlobal().fine("Starting Artisan Sequence");
-        System.out.println((int) (reaction.getLow()));
-        System.out.println((int) (reaction.getHigh()));
-        if(iterations < this.getIterations()) {
-            this.getActor().startAnimation(animationId);
-        }
-        if (iterations <= this.getIterations()) {
-            iterations++;
-            if (super.getElapsedTicks() >= refreshTick * 2 && super.getElapsedTicks() % (refreshTick) == 0) {
-                if (this.isSuccessful(reaction.getLow(),reaction.getHigh())) {
+        if (this.getIterations() != 0) {
+            if (iterations <= this.getIterations()) {
+                this.getActor().startAnimation(animationId);
+            }
+            if (iterations <= this.getIterations()) {
+                iterations++;
+//            if (super.getElapsedTicks() >= refreshTick * 2 && super.getElapsedTicks() % (refreshTick) == 0) {
+                if (this.isSuccessful(reaction.getLow(), reaction.getHigh())) {
                     this.onSuccess();
                 } else {
                     this.onFailure();
                 }
+//            }
+            } else if (iterations >= this.getIterations() && this.getIterations() > 0) {
+                this.stop();
             }
-        } else if (iterations >= this.getIterations() && this.getIterations() > 0) {
-            this.stop();
         }
     }
 
@@ -149,7 +149,7 @@ public abstract class ArtisanSkillAction extends SkillAction {
     }
 
     private boolean initialized;
-    private int iterations;
+    private int iterations = 0;
     private final ArtisanSkillItemReaction reaction;
     private int refreshTick;
     private final ItemInteractionContext context;

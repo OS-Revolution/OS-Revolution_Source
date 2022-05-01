@@ -7,7 +7,6 @@ import ethos.event.Event;
 import ethos.model.players.Player;
 import ethos.util.PreconditionUtils;
 
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public abstract class HomeTeleportAction extends Event<Player> {
@@ -23,17 +22,18 @@ public abstract class HomeTeleportAction extends Event<Player> {
     protected abstract void onUpdate();
 
     protected void validate() {
+        Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().getAttributes().isActionLocked()), "Please finish what you are doing.");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().isInHouse),"Please use the house settings to leave your house");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().teleTimer > 0),"A magic force stops you from teleporting.");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().wildLevel > Config.NO_TELEPORT_WILD_LEVEL),"You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
         Preconditions.checkArgument(PreconditionUtils.notNull(this.getActor()), "Actor is Null");
         Preconditions.checkArgument(PreconditionUtils.notNull(this.getActor().getSession()), "Session is Null");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().disconnected), "Actor is Disconnected");
-        Preconditions.checkArgument(this.hasBeen(this.getActor().getContext().getLastHomeTeleportTimestamp() + getTeleportDelay(), System.currentTimeMillis()),
+        Preconditions.checkArgument(this.hasBeen(this.getActor().getContext().getPlayerSaveData().getLastHomeTeleportTimestamp() + getTeleportDelay(), System.currentTimeMillis()),
                 "You must wait another "
                         + this.getMSAsMinutes(
                         this.timeBetweenMs(
-                                this.getActor().getContext().getLastHomeTeleportTimestamp() + getTeleportDelay(),
+                                this.getActor().getContext().getPlayerSaveData().getLastHomeTeleportTimestamp() + getTeleportDelay(),
                                 System.currentTimeMillis()
                                 ))
                         + " minutes before doing this.");

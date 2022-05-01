@@ -18,7 +18,7 @@ public class DidYouKnowEvent extends Event<Object> {
 	/**
 	 * The amount of time in game cycles (600ms) that the event pulses at
 	 */
-	private static final int INTERVAL = Misc.toCyclesOrDefault(1, 1, TimeUnit.MINUTES);
+	private static final int INTERVAL = Misc.toCyclesOrDefault(5, 5, TimeUnit.MINUTES);
 
 	/**
 	 * A {@link Collection} of messages that are to be displayed

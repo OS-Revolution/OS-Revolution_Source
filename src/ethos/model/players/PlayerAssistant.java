@@ -1281,25 +1281,23 @@ public void sendFrame107() {
 
 	}
 
+	public void sendPosition(int x, int y, boolean subtract) {
+		c.getOutStream().createFrame(85);
+		y = (y - (c.getMapRegionY() * 8)) - (subtract ? 2 : 0);
+		c.getOutStream().writeByteC(y);
+		x = (x - (c.getMapRegionX() * 8)) - (subtract ? 3 : 0);
+		c.getOutStream().writeByteC(x);
+		c.flushOutStream();
+	}
+
 	public void checkObjectSpawn(int objectId, int objectX, int objectY, int face, int objectType) {
-		Region.addWorldObject(objectId, objectX, objectY, c.heightLevel, face); // height
-																				// level
-																				// should
-																				// be
-																				// a
-																				// param
-																				// :s
-		if (c.distanceToPoint(objectX, objectY) > 60)
-			return;
-		// synchronized(c) {
+		Region.addWorldObject(objectId, objectX, objectY, c.heightLevel, face);
 		if (c.getOutStream() != null && c != null) {
-			c.getOutStream().createFrame(85);
-			c.getOutStream().writeByteC(objectY - (c.getMapRegionY() * 8));
-			c.getOutStream().writeByteC(objectX - (c.getMapRegionX() * 8));
+			sendPosition(objectX, objectY, false);
 			c.getOutStream().createFrame(101);
 			c.getOutStream().writeByteC((objectType << 2) + (face & 3));
 			c.getOutStream().writeByte(0);
-
+			c.flushOutStream();
 			if (objectId != -1) { // removing
 				c.getOutStream().createFrame(151);
 				c.getOutStream().writeByteS(0);
@@ -1308,6 +1306,24 @@ public void sendFrame107() {
 			}
 			c.flushOutStream();
 		}
+//		if (c.distanceToPoint(objectX, objectY) > 60)
+//			return;
+//		if (c.getOutStream() != null) {
+//			c.getOutStream().createFrame(85);
+//			c.getOutStream().writeByteC(objectY - (c.getMapRegionY() * 8));
+//			c.getOutStream().writeByteC(objectX - (c.getMapRegionX() * 8));
+//			c.getOutStream().createFrame(101);
+//			c.getOutStream().writeByteC((objectType << 2) + (face & 3));
+//			c.getOutStream().writeByte(0);
+//
+//			if (objectId != -1) { // removing
+//				c.getOutStream().createFrame(151);
+//				c.getOutStream().writeByteS(0);
+//				c.getOutStream().writeWordBigEndian(objectId);
+//				c.getOutStream().writeByteS((objectType << 2) + (face & 3));
+//			}
+//			c.flushOutStream();
+//		}
 
 	}
 
@@ -3610,41 +3626,6 @@ public void sendFrame107() {
 			amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED;
 		} else if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
 			amount *= 2.0;
-			// If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
-			// on
-		} else if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
-				&& Config.BONUS_WEEKEND == true) {
-			amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED + Config.SERVER_EXP_BONUS;
-
-			// If bonus weekend is enabled but no vote bonus xp is active, you get reg bonus
-		} else if (Config.BONUS_WEEKEND == true && c.bonusXpTime == 0) {
-			amount *= Config.SERVER_EXP_BONUS_WEEKEND;
-
-			// If bonus weekend is enabled and vote bonus xp is active, you get additional
-		} else if (Config.BONUS_WEEKEND == true && c.bonusXpTime > 0) {
-			amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED;
-
-			// If bonus weekend is disabled and vote bonus xp is active, you get reg vote
-		} else if (Config.BONUS_WEEKEND == false && c.bonusXpTime > 0) {
-			amount *= Config.SERVER_EXP_BONUS_BOOSTED;
-
-			// If wogw bonus xp is enabled and vote bonus is active, you get additional
-		} else if (Config.BONUS_XP_WOGW == true && c.bonusXpTime > 0) {
-			amount *= Config.SERVER_EXP_BONUS_BOOSTED * 2;
-			// If wogw bonus xp is enabled and bonus weekend is active, you get additional
-		} else if (Config.BONUS_XP_WOGW == true && Config.BONUS_WEEKEND == true) {
-			amount *= Config.SERVER_EXP_BONUS_BOOSTED * 2;
-			// Else (20%)
-		} else if (Config.BONUS_XP_WOGW == true && c.bonusXpTime == 0 && Config.BONUS_WEEKEND == false) {
-			amount *= Config.SERVER_EXP_BONUS_WEEKEND;
-		} else if (c.bonusXpTime > 0) {
-			amount *= Config.SERVER_EXP_BONUS_BOOSTED;
-			// Else (20%)
-			// OSRS Modes receive only 1x the experience
-		} else if (c.getMode().getType().equals(ModeType.OSRS)) {
-			amount *= Config.SERVER_EXP_BONUS;
-
-			// If none of the above are applied, regular experience is given
 		} else {
 			amount *= Config.SERVER_EXP_BONUS;
 		}

@@ -118,8 +118,10 @@ import ethos.phantasye.job.Employee;
 import ethos.phantasye.job.Job;
 import ethos.runehub.WorldSettingsController;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.player.PlayerCharacterAttribute;
 import ethos.runehub.entity.player.PlayerCharacterContext;
+import ethos.runehub.entity.player.PlayerSaveData;
 import ethos.runehub.markup.MarkupParser;
 import ethos.runehub.skill.SkillController;
 import ethos.util.Misc;
@@ -1509,12 +1511,12 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         Server.getEventHandler().stop(this);
         CycleEventHandler.getSingleton().stopEvents(this);
         getFriends().notifyFriendsOfUpdate();
-        if (getMode().isIronman()) {
-            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        }
-        if (getMode().isUltimateIronman()) {
-            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        }
+//        if (getMode().isIronman()) {
+//            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
+//        }
+//        if (getMode().isUltimateIronman()) {
+//            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
+//        }
         if (getMode().isRegular()) {
             com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Normal Mode", this.playerName, this.playerRank, this.playerXP, debugMessage);
         }
@@ -1636,8 +1638,22 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         }
     }
 
+    private void newAccountInitialization() {
+        dialogueHandler.sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(this)
+                .setMovementRestricted(true)
+                .addNpcChat("Draynor Representative", 3308, "Hello there! Welcome to Draynor.", "Have I seen you before?")
+                .addOptions(1, "Yes", "No")
+                .build()
+        );
+        this.getContext().getPlayerSaveData().setJoinTimestamp(System.currentTimeMillis());
+    }
+
     public void initialize() {
         try {
+            if(this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
+              this.newAccountInitialization();
+            }
+            this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
             loadDiaryTab();
             graceSum();
             Achievements.checkIfFinished(this);
@@ -1859,24 +1875,32 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             getPA().resetFollow();
             getPA().setClanData();
             updateRank();
-            if (!startPack) {
-                getRightGroup().remove(Right.IRONMAN);
-                getRightGroup().remove(Right.ULTIMATE_IRONMAN);
-                startPack = true;
-                Server.clanManager.getHelpClan().addMember(this);
-                tutorial.setStage(Stage.START);
-                mode = Mode.forType(ModeType.REGULAR);
-            } else {
-                if (mode == null && tutorial.getStage() == null) {
-                    mode = Mode.forType(ModeType.REGULAR);
-                    tutorial.autoComplete();
-                }
-                Server.clanManager.joinOnLogin(this);
-            }
+
+//            if (!startPack) {
+//
+////                getRightGroup().remove(Right.IRONMAN);
+////                getRightGroup().remove(Right.ULTIMATE_IRONMAN);
+//                startPack = true;
+//                Server.clanManager.getHelpClan().addMember(this);
+////                tutorial.setStage(Stage.START);
+//                mode = Mode.forType(ModeType.REGULAR);
+////                this.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(this)
+////                        .setMovementRestricted(true)
+////                        .addNpcChat(3308, "Hello there! Welcome to Draynor.", "Have I seen you before?")
+////                        .addOptions(1, "Yes", "No")
+////                        .build()
+////                );
+//            } else {
+//                if (mode == null && tutorial.getStage() == null) {
+//                    mode = Mode.forType(ModeType.REGULAR);
+////                    tutorial.autoComplete();
+//                }
+//                Server.clanManager.joinOnLogin(this);
+//            }
             getDL().LoggedIn();
-            if (tutorial.isActive()) {
-                tutorial.refresh();
-            }
+//            if (tutorial.isActive()) {
+//                tutorial.refresh();
+//            }
             if (autoRet == 1)
                 getPA().sendFrame36(172, 1);
             else
@@ -1916,7 +1940,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
                     getPA().sendConfig(QuickPrayers.CONFIG + i, 0);
                 }
             }
-            playerAssistant.object(1, getX(), getY(), 0, 10);
+
 
 //            this.addIdleGatheringGains();
         } catch (Exception e) {
@@ -2085,6 +2109,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
 //        if (this.getSkilling().getSkill() != null)
 //            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
+        this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
         PlayerCharacterContextDataAccessObject.getInstance().update(context);
 
     }
@@ -5819,22 +5844,22 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 
     @Override
     public void assignJob(Job job) {
-        if (this.getContext().getActiveJob() == null || this.getContext().getActiveJob().getQuota().value() <= 0) {
-            this.getContext().setActiveJob(job);
-            this.sendMessage("You've been assigned a " + Skill.forId(job.getSkillId()).name()
-                    + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
-        } else {
-            this.sendMessage("You already have an active job.");
-        }
+//        if (this.getContext().getActiveJob() == null || this.getContext().getActiveJob().getQuota().value() <= 0) {
+//            this.getContext().setActiveJob(job);
+//            this.sendMessage("You've been assigned a " + Skill.forId(job.getSkillId()).name()
+//                    + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
+//        } else {
+//            this.sendMessage("You already have an active job.");
+//        }
     }
 
     @Override
     public void updateJob(int itemId) {
-        if (this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
-            if (itemId == this.getContext().getActiveJob().getTargetId()) {
-                this.getContext().getActiveJob().getQuota().decrement();
-            }
-        }
+//        if (this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
+//            if (itemId == this.getContext().getActiveJob().getTargetId()) {
+//                this.getContext().getActiveJob().getQuota().decrement();
+//            }
+//        }
     }
 
     @Override
@@ -5885,6 +5910,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     private final ActionScheduler actionQueue;
     private final PlayerCharacterAttribute attributes;
     private final PlayerCharacterContext context;
+
 
     public int getArcLightCharge() {
         return arcLightCharge;

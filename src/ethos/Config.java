@@ -314,9 +314,9 @@ public class Config {
 	/**
 	 * Combat experience rates.
 	 */
-	public static final int MELEE_EXP_RATE = 50;
-	public static final int RANGE_EXP_RATE = 50;
-	public static final int MAGIC_EXP_RATE = 50;
+	public static final int MELEE_EXP_RATE = 1;
+	public static final int RANGE_EXP_RATE = 1;
+	public static final int MAGIC_EXP_RATE = 1;
 	/**
 	 * Special server experience bonus rates. (Double experience weekend etc)
 	 */
@@ -422,14 +422,14 @@ public class Config {
 	/**
 	 * The starting location of your server.
 	 */
-	public static final int START_LOCATION_X = 3100;
-	public static final int START_LOCATION_Y = 3254;
+	public static final int START_LOCATION_X = 3084;
+	public static final int START_LOCATION_Y = 3212;
 
 	/**
 	 * The re-spawn point of when someone dies.
 	 */
-	public static final int RESPAWN_X = 3093;
-	public static final int RESPAWN_Y = 3249;
+	public static final int RESPAWN_X = 3103;
+	public static final int RESPAWN_Y = 3250;
 
 	/**
 	 * The re-spawn point of when a duel ends.

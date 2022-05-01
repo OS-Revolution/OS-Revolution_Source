@@ -31,9 +31,9 @@ public class ItemSpawnController {
      * @param player
      * @return
      */
-    private boolean hasPoints(Player player, long points) {
-        return player.getContext().getSpawnPoints().value() >= points;
-    }
+//    private boolean hasPoints(Player player, long points) {
+//        return player.getContext().getSpawnPoints().value() >= points;
+//    }
 
     /**
      * Calculates the total cost of the spawn, checks if the player has that amount, removes the points, spawns the item, sends a message
@@ -44,16 +44,16 @@ public class ItemSpawnController {
     public void spawn(Player player, int itemId, int amount) {
         final long totalCost = this.getItemPointValue(itemId, amount);
 
-        if (this.hasPoints(player, totalCost)) {
-            player.getContext().getSpawnPoints().subtract(totalCost);
-            player.getItems().addItemUnderAnyCircumstance(itemId, amount);
-            player.sendMessage("Spawned "
-                    + amount + "x "
-                    + ItemDefinition.forId(itemId).getName()
-                    + " for " + NumberFormat.getInstance().format(totalCost) + " points.");
-        } else {
-            player.sendMessage("This item requires " + NumberFormat.getInstance().format(totalCost) + " points to spawn.");
-        }
+//        if (this.hasPoints(player, totalCost)) {
+//            player.getContext().getSpawnPoints().subtract(totalCost);
+//            player.getItems().addItemUnderAnyCircumstance(itemId, amount);
+//            player.sendMessage("Spawned "
+//                    + amount + "x "
+//                    + ItemDefinition.forId(itemId).getName()
+//                    + " for " + NumberFormat.getInstance().format(totalCost) + " points.");
+//        } else {
+//            player.sendMessage("This item requires " + NumberFormat.getInstance().format(totalCost) + " points to spawn.");
+//        }
     }
 
     private ItemSpawnController() {

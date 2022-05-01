@@ -69,6 +69,7 @@ import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 /*
@@ -107,25 +108,25 @@ public class ObjectOptionOne {
             );
             return;
         }
-        Mineral mineral = Mineral.forObjectId(objectType);
-        if (mineral != null) {
-            final MiningNode node = MiningNodeLoader.getInstance().read(objectType);
-            final int baseCycle = node.getMiningCycleTicks();
-            final int cycleModifier = (int) c.getSkillController().getMining().getEfficiency();
-            final int miningTicks = Math.max(baseCycle - cycleModifier, 4);
-            System.out.println(miningTicks + " Mining Ticks");
-            c.getSkillController().getMining().train(new ActiveMiningSkillAction(
-                            c,
-                            Skill.MINING.getId(),
-                            objectType,
-                            obX,
-                            obY,
-                            c.heightLevel,
-                            miningTicks
-                    )
-            );
-            return;
-        }
+//        Mineral mineral = Mineral.forObjectId(objectType);
+//        if (mineral != null) {
+//            final MiningNode node = MiningNodeLoader.getInstance().read(objectType);
+//            final int baseCycle = node.getMiningCycleTicks();
+//            final int cycleModifier = (int) c.getSkillController().getMining().getEfficiency();
+//            final int miningTicks = Math.max(baseCycle - cycleModifier, 4);
+//            System.out.println(miningTicks + " Mining Ticks");
+//            c.getSkillController().getMining().train(new ActiveMiningSkillAction(
+//                            c,
+//                            Skill.MINING.getId(),
+//                            objectType,
+//                            obX,
+//                            obY,
+//                            c.heightLevel,
+//                            miningTicks
+//                    )
+//            );
+//            return;
+//        }
         if (Server.getHolidayController().clickObject(c, 1, objectType, obX, obY)) {
             return;
         }
@@ -179,11 +180,11 @@ public class ObjectOptionOne {
         if (objectType >= 26281 && objectType <= 26290) {
             HalloweenRandomOrder.chooseOrder(c, objectType);
         }
-        DoorDefinition door = DoorDefinition.forCoordinate(c.objectX, c.objectY, c.getHeight());
-
-        if (door != null && DoorHandler.clickDoor(c, door)) {
-            return;
-        }
+//        DoorDefinition door = DoorDefinition.forCoordinate(c.objectX, c.objectY, c.getHeight());
+//
+//        if (door != null && DoorHandler.clickDoor(c, door)) {
+//            return;
+//        }
 
         if (c.getRaids().handleObjectClick(c, objectType)) {
             return;
@@ -236,13 +237,6 @@ public class ObjectOptionOne {
                         c.heightLevel
                 ));
                 break;
-//            case 8152:
-//                c.getSkillController().getFarming().train(new ActiveFarmingSkillAction(
-//                        c,
-//                        19,
-//                        new FarmingNodeContext(objectType,obX,obY,c.heightLevel)
-//                ));
-//                break;
             case 20927:
                 c.getSkillController().getFishing().train(
                         new FishingSkillAction(
@@ -299,27 +293,6 @@ public class ObjectOptionOne {
                         )
                 );
                 break;
-            case -1: //TODO Make Construction Hotspot ID
-                //TODO Send Dialogue prompting player if they want to upgrade and listing cost using below method
-                /*
-                 *Hotspots are indexed for example the Workbench is index 0 so assuming this is a workbench
-                 */
-                HotspotDefinition.WORKBENCH.getUpgrades()[0].getMaterials().forEach(material -> { //This loops through the materials of the selected upgrade
-                    c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
-                });
-                c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal())
-                        .setId(HotspotDefinition.WORKBENCH.getUpgrades()[0].getUpgradedObjectId());//Changes the specified index's object id to the specified upgrades object ID
-                c.getContext().getHotspotMap().get(HotspotDefinition.WORKBENCH.ordinal()).setId(100);//Changes the spawned object ID
-                c.getContext().getHotspotMap().put(HotspotDefinition.WORKBENCH.ordinal(), new Hotspot(69, 1000, 1000, 0)); //Adds a new Hotspot with index = to enum ordinal at the specified coords with the specified object ID
-                for (int i = 0; i < HotspotDefinition.WORKBENCH.getUpgrades().length; i++) { //This loops through all upgrades for bench
-                    c.sendMessage("The Workbench's " + i + " upgrade will require the following materials:");
-                    HotspotDefinition.WORKBENCH.getUpgrades()[i].getMaterials().forEach(material -> {
-                        c.sendMessage(ItemAssistant.getItemName(material.getItemId()) + " x" + material.getAmount());
-                    });
-                }
-                break;
-
-
             case 31990:
                 if (c.absY == 4054) {
                     Vorkath.exit(c);
@@ -2367,6 +2340,7 @@ public class ObjectOptionOne {
             case 409:
             case 6817:
             case 14860:
+            case 31624:
                 if (c.inWild()) {
                     return;
                 }
@@ -2736,10 +2710,9 @@ public class ObjectOptionOne {
         }
 
         try {
-            System.out.println((FirstClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel)));
             Server.getEventHandler().submit(FirstClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel));
         } catch (NullPointerException e) {
-            c.sendMessage(e.getMessage());
+            c.sendMessage("Nothing interesting happens.");
         }
     }
 

@@ -11,7 +11,7 @@ public class Mining extends GatheringSkill {
     @Override
     public double getEfficiency() {
         if (this.getGetBestAvailableTool() != null)
-            return this.getGetBestAvailableTool().getBasePower();
+            return this.getGetBestAvailableTool().getBaseEfficiency();
         return 0;
     }
 

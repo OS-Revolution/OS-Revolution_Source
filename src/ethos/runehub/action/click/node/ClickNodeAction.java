@@ -28,10 +28,14 @@ public abstract class ClickNodeAction extends Event<Player> {
     }
 
     protected boolean checkPrerequisites() {
+        Logger.getGlobal().fine("Checking Prerequisites");
         try {
             this.validate();
+            Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().getAttributes().isActionLocked()), "Please finish what you are doing.");
             this.validateNode();
+            canPerform = true;
         } catch (Exception e) {
+            canPerform = false;
             this.getActor().sendMessage(e.getMessage());
             this.stop();
             return false;
@@ -41,9 +45,11 @@ public abstract class ClickNodeAction extends Event<Player> {
 
     @Override
     public void execute() {
-        Logger.getGlobal().fine("Executing Event Tick");
-        this.checkPrerequisites();
-        this.onTick();
+        if(canPerform) {
+            Logger.getGlobal().fine("Executing Event Tick");
+            this.checkPrerequisites();
+            this.onTick();
+        }
     }
 
     @Override
@@ -53,6 +59,7 @@ public abstract class ClickNodeAction extends Event<Player> {
         this.onActionStop();
         if (attachment != null) {
             this.getActor().stopAnimation();
+//            this.getActor().getAttributes().setInteractingWithNodeId(0);
         }
     }
 
@@ -60,8 +67,10 @@ public abstract class ClickNodeAction extends Event<Player> {
     public void initialize() {
         Logger.getGlobal().fine("Starting Event");
         super.initialize();
-        if (this.checkPrerequisites())
+        if (this.checkPrerequisites()) {
+            this.getActor().getAttributes().setInteractingWithNodeId(this.getNodeId());
             this.onActionStart();
+        }
     }
 
     protected Player getActor() {
@@ -88,4 +97,5 @@ public abstract class ClickNodeAction extends Event<Player> {
     }
 
     private final int nodeId, nodeX, nodeY;
+    private boolean canPerform;
 }

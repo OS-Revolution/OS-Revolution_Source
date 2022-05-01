@@ -4,6 +4,7 @@ import ethos.Server;
 import ethos.model.content.tradingpost.Listing;
 import ethos.model.players.Player;
 import ethos.model.players.Right;
+import ethos.runehub.entity.merchant.MerchantCache;
 
 /*
  * @author Matt
@@ -26,6 +27,10 @@ public class ObjectOptionThree {
 			c.sendMessage("Clicked Object Option 3:  "+objectType+"");
 		
 		switch (objectType) {
+			case 6945:
+
+				MerchantCache.getInstance().read(2149).openShop(c);
+				break;
 		case 22819:
 		case 24101:
 			//if (c.debugMessage) {

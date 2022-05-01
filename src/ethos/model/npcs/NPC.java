@@ -769,7 +769,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
         Logger.getGlobal().info("Dropping Loot @: X:" + this.getX() + " Y: " + this.getY() + " Height: " + player.getHeight());
         final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(this.getId(), LootContainerType.NPC);
         if (container != null && container.getLootTables().size() > 0) {
-            final LootTable lootTable = container.roll(player.getContext().getMagicFind().value());
+            final LootTable lootTable = container.roll(player.getContext().getPlayerSaveData().getMagicFind().value());
             final long metricId = LootContainerContextProducer.getInstance(LootContainerType.NPC).get(container.getId()).getMetricId();
             final AdjustableNumber<Long> rolls = new AdjustableLong(
                     LootMetricProducer.getInstance().get(metricId) != null ?
@@ -778,7 +778,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
             );
             rolls.increment();
             final double mf = WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0 ?
-                    player.getContext().getMagicFind().value() * 2 : player.getContext().getMagicFind().value();
+                    player.getContext().getPlayerSaveData().getMagicFind().value() * 2 : player.getContext().getPlayerSaveData().getMagicFind().value();
             lootTable.roll(mf)
                     .forEach(loot -> {
                         final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
@@ -807,7 +807,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
                                         tier,
                                         rolls.value(),
                                         LootContainerType.NPC.ordinal(),
-                                        player.getContext().getMagicFind().value() //TODO replace with mf variable
+                                        player.getContext().getPlayerSaveData().getMagicFind().value() //TODO replace with mf variable
                                 )
                         );
                         Server.getDropManager().create(player, new Location3D(dropLocation.getX(), dropLocation.getY(), dropLocation.getZ()), loot);

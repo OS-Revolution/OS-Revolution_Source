@@ -29,7 +29,6 @@ public class Fishing extends GatheringSkill {
 
     @Override
     public GatheringTool getGetBestAvailableTool() throws NullPointerException {
-
         final List<GatheringTool> availableTools = GatheringToolLoader.getInstance().readAll().stream().filter(tool -> tool.getSkillId() == this.getId()).filter(tool -> isNodeTool(tool.getItemId())).filter(tool -> hasNodeTool(tool.getItemId())).filter(tool -> this.getPlayer().getSkillController().getLevel(this.getId()) >= tool.getLevelRequired()).collect(Collectors.toList());
         final int bestToolLevel = availableTools.stream().mapToInt(GatheringTool::getLevelRequired).max().orElse(1);
 

@@ -21,6 +21,9 @@ public class NodeTest {
         createYewNodes(1753, 1754, 11758, 27255);
         createMagicNodes(1761, 11764);
         createWoodcuttingNode(2887,99,150,6223316775799507538L,1342,800,1,0,6); //cinnamon tree
+//        createWoodcuttingNode(2887,1,150,-1,1342,800,1000,0,1000); //abyss tentacles
+
+
 
         createClayNodes(7487, 7454);
         createCopperNodes(7484, 11961, 11960, 11962, 13709);
@@ -159,13 +162,13 @@ public class NodeTest {
 
     private static void createMiningNode(int id, int levelRequirement, int interactionExperience, long tableId,
                                          int depletedId, int respawnTime, int harvestChance, int depletionMinRoll, int miningCycleTicks, int max) {
-        MiningNodeDAO.getInstance().create(new MiningNode(id, levelRequirement, interactionExperience,SkillDictionary.Skill.MINING.getId(), tableId, harvestChance,miningCycleTicks,max));
+        MiningNodeDAO.getInstance().create(new MiningNode(id, levelRequirement, interactionExperience,SkillDictionary.Skill.MINING.getId(), tableId, harvestChance,max,miningCycleTicks));
         RenewableNodeDAO.getInstance().create(new RenewableNode(id,depletedId,respawnTime,depletionMinRoll));
     }
 
     private static void createFishingNode(int id, int levelRequirement, long tableId, int harvestChance, int baitId, int spotId, int xp, int toolId,
                                           int respawnTime, int max) {
-        FishingNodeDAO.getInstance().create(new FishingNode(id, levelRequirement, xp, SkillDictionary.Skill.FISHING.getId(), tableId, harvestChance,baitId,spotId,toolId, max ));
+        FishingNodeDAO.getInstance().create(new FishingNode(id, levelRequirement, xp, SkillDictionary.Skill.FISHING.getId(), tableId, harvestChance,max,baitId,spotId,toolId ));
         RenewableNodeDAO.getInstance().create(new RenewableNode(spotId,-1,respawnTime,-1));
     }
 
@@ -238,15 +241,15 @@ public class NodeTest {
     }
 
     private static void createCopperGatheringNode(int nodeId) {
-        createMiningNode(nodeId, 1, 18, 7501536363911856927L, 2835, 5, 128, 0,15,400);
+        createMiningNode(nodeId, 1, 18, 7501536363911856927L, 2835, 4, 128, 0,15,400);
     }
 
     private static void createTinGatheringNode(int nodeId) {
-        createMiningNode(nodeId, 1, 18, -2630700682957665248L, 2835, 5, 128, 0,15,400);
+        createMiningNode(nodeId, 1, 18, -2630700682957665248L, 2835, 4, 128, 0,15,400);
     }
 
     private static void createIronGatheringNode(int nodeId) {
-        createMiningNode(nodeId, 15, 35, 8944265982660791207L, 2835, 8, 110, 0,17,350);
+        createMiningNode(nodeId, 15, 35, 8944265982660791207L, 2835, 9, 110, 0,18,350);
     }
 
     private static void createCoalGatheringNode(int nodeId) {

@@ -68,6 +68,7 @@ public class FishingSkillAction extends GatheringSkillAction {
 
     @Override
     protected void updateAnimation() {
+//        this.setTool(this.getActor().getSkillController().getFishing().getGetBestAvailableTool());
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
             this.getActor().startAnimation(this.getActor().getSkillController().getFishing().getGetBestAvailableTool().getAnimationId());
         }
@@ -76,12 +77,6 @@ public class FishingSkillAction extends GatheringSkillAction {
     @Override
     protected boolean isSuccessful(int min, int max) {
         Logger.getGlobal().fine("harvest roll");
-//        final int minRoll = this.getTargetedNodeContext().getNode().getGatherMinRoll();
-//        final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(
-//                Skill.SKILL_RANDOM.nextInt(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getGatherOdds())
-//                        + 1);
-//        final int playerRollModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower();
-//        final int playerRoll = playerBaseRoll + playerRollModifier;
         final AdjustableNumber<Integer> canCatch = new AdjustableInteger(0);
         LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()).roll(this.getFishingLevelBonus()).forEach(loot -> {
             final int itemId = Math.toIntExact(loot.getId());
@@ -147,14 +142,12 @@ public class FishingSkillAction extends GatheringSkillAction {
 
     public FishingSkillAction(Player player, FishingNodeContext targetedNodeContext, int spotId) {
         super(player, 10, targetedNodeContext, 4, null);
-        this.fishingSpot = NPCHandler.getNpc(spotId, targetedNodeContext.getX(), targetedNodeContext.getY());
         this.durationTicks = new IntegerRange(280, 530).getRandomValue();//280,530
         this.spotId = spotId;
     }
 
     private FishLevel caughtFish;
     private final int durationTicks;
-    private final NPC fishingSpot;
     private final int spotId;
     private final FishingNode node = (FishingNode) this.getTargetedNodeContext().getNode();
 }

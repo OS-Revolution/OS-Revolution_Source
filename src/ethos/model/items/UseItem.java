@@ -1274,9 +1274,9 @@ public class UseItem {
         if (PoisonedWeapon.poisonWeapon(c, itemUsed, useWith)) {
             return;
         }
-        if (Crushable.crushIngredient(c, itemUsed, useWith)) {
-            return;
-        }
+//        if (Crushable.crushIngredient(c, itemUsed, useWith)) {
+//            return;
+//        }
 //        if (itemUsed == 227 || useWith == 227) {
 //            GameItem item = new GameItem(itemUsed);
 //            if (c.getHerblore().makeUnfinishedPotion(c, item))

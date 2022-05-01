@@ -190,53 +190,53 @@ public class Thieving {
 
         player.startAnimation(ANIMATION);
 
-        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer
-                (objectId, LootContainerType.OBJECT);
-        if (container != null && container.getLootTables().size() > 0) {
-            final LootTable lootTable = container.roll(player.getContext().getMagicFind().value());
-            final long metricId = LootContainerContextProducer.getInstance(LootContainerType.OBJECT).get(container.getId()).getMetricId();
-            final AdjustableNumber<Long> rolls = new AdjustableLong(
-                    LootMetricProducer.getInstance().get(metricId) != null ?
-                            LootMetricProducer.getInstance().get(metricId).getRolls().value() :
-                            0L
-            );
-            rolls.increment();
-            lootTable.roll(player.getContext().getMagicFind().value())
-                    .forEach(loot -> {
-                        final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
-                                potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll();
-                        switch (Tier.getRarityForValue(tier)) {
-                            case VERY_RARE:
-                                break;
-                            case LEGENDARY:
-                                break;
-                            case MYTHIC:
-                                break;
-                        }
-                        Server.getLootMetrics().add(
-                                new LootMetric(
-                                        metricId,
-                                        System.currentTimeMillis(),
-                                        player.getName(),
-                                        container.getId(),
-                                        lootTable.getTableId(),
-                                        loot.getItemId(),
-                                        loot.getAmount(),
-                                        tier,
-                                        rolls.value(),
-                                        LootContainerType.NPC.ordinal(),
-                                        player.getContext().getMagicFind().value() //TODO replace with mf variable
-                                )
-                        );
-                        player.getItems().addItem(loot.getItemId(), loot.getAmount());
-                    });
-
-            player.getPA().addSkillXP((int) (player.getMode().getType().equals(ModeType.OSRS) ? osrsExperience : regExperience), Skill.THIEVING.getId(), true);
-            Achievements.increase(player, AchievementType.THIEV, 1);
-            lastInteraction = System.currentTimeMillis();
-        } else {
-            player.sendMessage("Missing Stall Data");
-        }
+//        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer
+//                (objectId, LootContainerType.OBJECT);
+//        if (container != null && container.getLootTables().size() > 0) {
+//            final LootTable lootTable = container.roll(player.getContext().getMagicFind().value());
+//            final long metricId = LootContainerContextProducer.getInstance(LootContainerType.OBJECT).get(container.getId()).getMetricId();
+//            final AdjustableNumber<Long> rolls = new AdjustableLong(
+//                    LootMetricProducer.getInstance().get(metricId) != null ?
+//                            LootMetricProducer.getInstance().get(metricId).getRolls().value() :
+//                            0L
+//            );
+//            rolls.increment();
+//            lootTable.roll(player.getContext().getMagicFind().value())
+//                    .forEach(loot -> {
+//                        final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
+//                                potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll();
+//                        switch (Tier.getRarityForValue(tier)) {
+//                            case VERY_RARE:
+//                                break;
+//                            case LEGENDARY:
+//                                break;
+//                            case MYTHIC:
+//                                break;
+//                        }
+//                        Server.getLootMetrics().add(
+//                                new LootMetric(
+//                                        metricId,
+//                                        System.currentTimeMillis(),
+//                                        player.getName(),
+//                                        container.getId(),
+//                                        lootTable.getTableId(),
+//                                        loot.getItemId(),
+//                                        loot.getAmount(),
+//                                        tier,
+//                                        rolls.value(),
+//                                        LootContainerType.NPC.ordinal(),
+//                                        player.getContext().getMagicFind().value() //TODO replace with mf variable
+//                                )
+//                        );
+//                        player.getItems().addItem(loot.getItemId(), loot.getAmount());
+//                    });
+//
+//            player.getPA().addSkillXP((int) (player.getMode().getType().equals(ModeType.OSRS) ? osrsExperience : regExperience), Skill.THIEVING.getId(), true);
+//            Achievements.increase(player, AchievementType.THIEV, 1);
+//            lastInteraction = System.currentTimeMillis();
+//        } else {
+//            player.sendMessage("Missing Stall Data");
+//        }
     }
 
     /**

@@ -1,0 +1,154 @@
+Prepare Home
+==================
+x Move Draynor Herb Cluster
+x Remove chest object 21299
+x Move Aubury 637
+x Make Doors work 11775
+x Remove Trapdoor 20279
+Spawn banker npcs
+x Spawn Exchange Clerk
+Spawn General store
+x Remove water icon near general store
+Make Bank deposit box work
+Spawn men to pickpocket
+
+=====================
+
+
+General
+
+Fix ghost object bug with herb cluster spawning/rework herb clusters
+fix graphical bug with robe tops
+
+
+
+
+
+
+
+
+
+Hey everyone and welcome to the first of many developer posts!
+
+I'd like to begin by introducing you to the **new** Os-Revolution.
+
+**Introduction** - ||Here at Os-Revolution we strive to provide our players with a balance of challenge and reward and that's not changed! However we have upped the ante and added many more challenges while also creating new more exciting rewards.||
+
+**Tl;DR** - ||We've made the gameplay more challenging and more rewarding to those who put in the grind.||
+
+
+__**Home**__
+
+Home has been redesigned:
+||
+```
+Many new features have been added which I'll leave for you to discover, but I will say a new "Hall of Heroes" has been added for players who have achieved at least one 99.
+```
+https://cdn.discordapp.com/attachments/447041598950473738/969002823910056026/unknown.png
+https://cdn.discordapp.com/attachments/453921735029293061/969319234423361586/unknown.png
+||
+
+__**The Exchange**__
+
+A new grand exchange like feature that can be accessed through the exchange clerk or a bank booth.
+
+**How it Works**
+||
+```
+Once in the exchange players may "sell" items to it like a shop. These items will be listed for everyone else to view and buy.
+Items are listed for their exchange price which will change with the market.
+All like items are listed as one and the amount sold goes by oldest offer first.
+When your offer sells you will receive a notification informing you how much of your listing sold, and for what price.
+Players can collect their money and remove their listings through the "Collect" option
+Market prices update once every 24 hours
+```
+https://cdn.discordapp.com/attachments/453921735029293061/969321599050321960/unknown.png
+https://cdn.discordapp.com/attachments/453921735029293061/969321906195034162/unknown.png
+https://cdn.discordapp.com/attachments/453921735029293061/969321988600496198/unknown.png
+||
+
+
+
+__**Foraging**__
+
+Foraging is the replacement for Farming. It involves foraging for different resourcesthrough out the world.
+
+**How it Works**
+||
+```
+Many farmable items are now naturally spawning foragable items. Things like herbs, flax, snape grass, coconuts, cacti to name a few.
+Where they spawn varies by climate. For example you will only find cacti in desert climates.
+These "nodes" do respawn and have a high chance of depleting so make sure you've got your best secateurs
+Foraging clusters will also spawn and move around the world. These clusters contain various herbs.
+The type of herbs and amount varies per cluster. Clusters in more high risk areas have a better chance of having better herbs
+```
+https://cdn.discordapp.com/attachments/453921735029293061/969323546025271406/unknown.png
+https://cdn.discordapp.com/attachments/453921735029293061/969323785977221120/unknown.png
+||
+
+
+
+
+
+__**Skills**__
+
+We have completely re-written most skills and have introduced some custom variations to the more tedious ones. With the goal of making them more rewarding to train. Don't worry if you don't see a skill on the list today it just means we've not gotten to it yet.
+
+**Gathering Skills (Woodcutting,Mining,Farming,Fishing,Hunter)**: ||All gathering skills now scale better with equipment and level. Meaning having a higher level and better equipment will have a greater impact on your success rate and progress more naturally. There are now also an **Efficiency** and **Power** modifier **per skill** that will impact your chance to deplete what you're gathering and your chance to harvest respectively.||
+
+**Farming**: ||Farming has been replaced with the **Foraging** skill. There are several methods of training including; Harvesting naturally spawning foraging node, and searching for and harvesting **foraging clusters**. **Secatuers** are the primary tool used to train foraging||
+
+**Runecrafting**: ||For those of you who played Runecessor relax. We took a different approach this time. Players now must navigate the *dimensional rift* to access any altar of their choice as long as they have the correct talisman, or tiara.  ||
+
+__**Misc.**__
+
+||
+* Home has been remodeled
+* Weight
+    - Items now have a weight which impacts run energy drain
+    - Some items can reduce weight
+* Run energy
+    - Drains faster based on weight
+    - Recovers faster based on Agility level
+* Home teleport
+    - No longer instant
+    - 30 minute cooldown
+* Teleporting
+    - Teleport interface has been removed
+    - Instant teleport charges can be gained for instant home teleports
+    - Cooldown reducing items can be worn to reduce the home teleport cooldown
+    - Custom Teleports can be set in the "Hall of Heroes" for easy access to up-to 3 locations
+* Potions
+    - Run energy potions have been added
+    - Super run energy potions have been added
+* Shops
+    - All shops have been removed except a general store which sells basic tools
+* Grand Exchange
+    - General stores will no longer buy items
+    - Player may sell and buy items from other players through the exchange clerk, or any bank booth
+* Commodities
+    - New rare skill related items that can be sold or for jewels or used in powerful new potions
+    - require 99 in their respective skill
+    - low spawn rate
+    - low success rate
+* Merchants
+    - Travelling merchants will visit town from time to time to sell exclusive items
+    - Can have rotating stock that changes with each visit
+    - Can offer discounts on items
+
+||
+
+
+
+
+
+
+
+home tele image
+https://cdn.discordapp.com/attachments/453921735029293061/969323878902009926/unknown.png
+
+
+
+
+
+

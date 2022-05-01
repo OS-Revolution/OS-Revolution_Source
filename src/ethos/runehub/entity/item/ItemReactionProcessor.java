@@ -6,6 +6,7 @@ import ethos.runehub.skill.artisan.ArtisanSkillItemReaction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReaction;
+import ethos.runehub.skill.artisan.herblore.action.CrushItemAction;
 import ethos.runehub.skill.artisan.herblore.action.MixUnfinishedPotionAction;
 
 public class ItemReactionProcessor {
@@ -26,6 +27,18 @@ public class ItemReactionProcessor {
                 ));
             } else if (artisanSkillItemReaction.getActionId() == 2) {
                 player.getSkillController().getHerblore().train(new MixUnfinishedPotionAction(
+                        player,
+                        (HerbloreItemReaction) reaction,
+                        context
+                ));
+            } else if (artisanSkillItemReaction.getActionId() == 3) {
+                player.getSkillController().getHerblore().train(new CrushItemAction(
+                        player,
+                        (HerbloreItemReaction) reaction,
+                        context
+                ));
+            } else if (artisanSkillItemReaction.getActionId() == 4) { //smelting
+                player.getSkillController().getHerblore().train(new CrushItemAction(
                         player,
                         (HerbloreItemReaction) reaction,
                         context

@@ -66,6 +66,10 @@ public class Walking implements PacketType {
 			c.getTutorial().refresh();
 			return;
 		}
+
+		if (c.getAttributes().isMovementResricted()) {
+			return;
+		}
 		if (c.isFrozen) {
 			return;
 		}

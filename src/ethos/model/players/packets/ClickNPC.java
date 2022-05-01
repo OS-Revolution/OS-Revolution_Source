@@ -3,6 +3,7 @@ package ethos.model.players.packets;
 import java.util.stream.IntStream;
 
 import ethos.Config;
+import ethos.Server;
 import ethos.event.CycleEvent;
 import ethos.event.CycleEventContainer;
 import ethos.event.CycleEventHandler;
@@ -14,6 +15,8 @@ import ethos.model.players.Boundary;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.combat.magic.MagicData;
+import ethos.runehub.action.click.node.FirstClickNodeActionListener;
+import ethos.runehub.action.click.npc.FirstClickNpcListener;
 
 /**
  * Click NPC
@@ -31,6 +34,8 @@ public class ClickNPC implements PacketType {
 		c.getPA().resetFollow();
 		c.followId2 = c.npcIndex;
 		c.getPA().followNpc();
+		if (c.getAttributes().isMovementResricted())
+			return;
 		if (c.isForceMovementActive()) {
 			return;
 		}
@@ -312,6 +317,8 @@ public class ClickNPC implements PacketType {
 					}
 				}, 1);
 			}
+
+
 			break;
 
 		case SECOND_CLICK:

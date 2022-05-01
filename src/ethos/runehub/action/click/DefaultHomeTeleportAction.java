@@ -2,6 +2,10 @@ package ethos.runehub.action.click;
 
 import ethos.Config;
 import ethos.model.players.Player;
+import ethos.runehub.skill.Skill;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Polygon;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 public class DefaultHomeTeleportAction extends HomeTeleportAction {
 
@@ -19,12 +23,13 @@ public class DefaultHomeTeleportAction extends HomeTeleportAction {
 
     @Override
     protected void onTick() {
-        this.getActor().getPA().movePlayer(3092, 3249);
-        if (this.getActor().getContext().getInstantTeleportCharges().value() <= 0) {
-            this.getActor().getContext().setLastHomeTeleportTimestamp(System.currentTimeMillis());
+        final Point selectedTeleportPoint = teleportArea.getAllPoints().get(Skill.SKILL_RANDOM.nextInt(teleportArea.getAllPoints().size()));
+        this.getActor().getPA().movePlayer(selectedTeleportPoint.getX(),selectedTeleportPoint.getY());
+        if (this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().value() <= 0) {
+            this.getActor().getContext().getPlayerSaveData().setLastHomeTeleportTimestamp(System.currentTimeMillis());
         } else {
-            this.getActor().getContext().getInstantTeleportCharges().decrement();
-            this.getActor().sendMessage("#" + this.getActor().getContext().getInstantTeleportCharges().value() + " instant teleport charges remaining.");
+            this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().decrement();
+            this.getActor().sendMessage("#" + this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().value() + " instant teleport charges remaining.");
         }
     }
 
@@ -44,5 +49,9 @@ public class DefaultHomeTeleportAction extends HomeTeleportAction {
 
     public DefaultHomeTeleportAction(Player attachment) {
         super(attachment);
+        this.teleportArea = new Rectangle(new Point(3102,3248),new Point(3106,3251));
     }
+
+
+    private final Rectangle teleportArea;
 }

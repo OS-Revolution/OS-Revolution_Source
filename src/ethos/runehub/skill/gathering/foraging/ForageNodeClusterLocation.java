@@ -6,12 +6,11 @@ import org.runehub.api.util.math.geometry.impl.IrregularPolygon;
 public enum ForageNodeClusterLocation {
 
     DRAYNOR(0,new IrregularPolygon(
-            new Point(3102, 3236),
-            new Point(3102, 3232),
-            new Point(3096, 3232),
-            new Point(3096, 3237),
-            new Point(3100, 3237),
-            new Point(3100, 3234)
+            new Point(3109, 3212),
+            new Point(3109, 3209),
+            new Point(3100, 3209),
+            new Point(3100, 3212),
+            new Point(3109, 3212)
     )),
     TAVERLY(5,new IrregularPolygon(
             new Point(2918, 3442),

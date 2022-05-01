@@ -508,35 +508,35 @@ public class Region {
 		return false;
 	}
 
-	private static boolean projectileBlockedNorth(int x, int y, int z) {
+	public static boolean projectileBlockedNorth(int x, int y, int z) {
 		return (getProjectileClipping(x, y + 1, z) & 0x1280120) != 0;
 	}
 
-	private static boolean projectileBlockedEast(int x, int y, int z) {
+	public static boolean projectileBlockedEast(int x, int y, int z) {
 		return (getProjectileClipping(x + 1, y, z) & 0x1280180) != 0;
 	}
 
-	private static boolean projectileBlockedSouth(int x, int y, int z) {
+	public static boolean projectileBlockedSouth(int x, int y, int z) {
 		return (getProjectileClipping(x, y - 1, z) & 0x1280102) != 0;
 	}
 
-	private static boolean projectileBlockedWest(int x, int y, int z) {
+	public static boolean projectileBlockedWest(int x, int y, int z) {
 		return (getProjectileClipping(x - 1, y, z) & 0x1280108) != 0;
 	}
 
-	private static boolean projectileBlockedNorthEast(int x, int y, int z) {
+	public static boolean projectileBlockedNorthEast(int x, int y, int z) {
 		return (getProjectileClipping(x + 1, y + 1, z) & 0x12801e0) != 0;
 	}
 
-	private static boolean projectileBlockedNorthWest(int x, int y, int z) {
+	public static boolean projectileBlockedNorthWest(int x, int y, int z) {
 		return (getProjectileClipping(x - 1, y + 1, z) & 0x1280138) != 0;
 	}
 
-	private static boolean projectileBlockedSouthEast(int x, int y, int z) {
+	public static boolean projectileBlockedSouthEast(int x, int y, int z) {
 		return (getProjectileClipping(x + 1, y - 1, z) & 0x1280183) != 0;
 	}
 
-	private static boolean projectileBlockedSouthWest(int x, int y, int z) {
+	public static boolean projectileBlockedSouthWest(int x, int y, int z) {
 		return (getProjectileClipping(x - 1, y - 1, z) & 0x128010e) != 0;
 	}
 
@@ -1334,5 +1334,5 @@ public class Region {
 		}
 		return (getClipping(x - 1, y - 1, z) != 0);
 	}
-	
+
 }

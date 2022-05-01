@@ -41,6 +41,10 @@ public class BankX2 implements PacketType {
 		if (Xamount > Integer.MAX_VALUE) {
 			Xamount = 1;
 		}
+
+		if(c.getAttributes().isEnteringValue()) {
+			int amount = Xamount;
+		}
 		
 		if (c.buyingX) {
 			int amount = Xamount;

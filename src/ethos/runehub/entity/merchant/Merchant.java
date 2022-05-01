@@ -3,12 +3,14 @@ package ethos.runehub.entity.merchant;
 import ethos.model.players.Player;
 import ethos.runehub.entity.CommodityTrader;
 import ethos.runehub.skill.Skill;
+import ethos.world.ShopHandler;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.math.impl.DoubleRange;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Merchant {
@@ -32,6 +34,7 @@ public class Merchant {
     }
 
     public void openShop(Player player) {
+        Logger.getGlobal().info("Opening Shop");
         player.getItems().resetItems(3823);
         player.isShopping = true;
         player.myShopId = merchantId;
@@ -42,7 +45,12 @@ public class Merchant {
         player.getOutStream().writeWord(64016);
         player.getOutStream().writeWord(merchandise.size());
         merchandise.forEach(merchandiseSlot -> {
-            player.getOutStream().writeByte(merchandiseSlot.getAmount());
+            if (merchandiseSlot.getAmount() > 254) {
+                player.getOutStream().writeByte(255);
+                player.getOutStream().writeDWord_v2(merchandiseSlot.getAmount());
+            } else {
+                player.getOutStream().writeByte(merchandiseSlot.getAmount());
+            }
             player.getOutStream().writeWordBigEndianA(merchandiseSlot.getItemId() + 1);
         });
         player.getOutStream().writeWordBigEndianA(0);
@@ -98,6 +106,10 @@ public class Merchant {
     public String getPriceForItemBeingBoughtFromShop(int itemId) {
         return "The shop will sell @" + itemId + " for #" + this.getPriceMerchantWillSellFor(itemId) + " @"
                 + currencyId + " each.";
+    }
+
+    public List<Integer> getBuyBackIds() {
+        return buyBackIds;
     }
 
     public List<MerchandiseSlot> getMerchandise() {

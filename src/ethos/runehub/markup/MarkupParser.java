@@ -15,7 +15,7 @@ public class MarkupParser {
                             .addText(" ");
                 } else if (word.startsWith("#")) {
                     builder
-                            .insertQuantity(Integer.parseInt(word.substring(1)))
+                            .insertFormattedQuantity(Integer.parseInt(word.substring(1)))
                             .addText(" ");
                 } else if (word.startsWith("$")) {
                     builder

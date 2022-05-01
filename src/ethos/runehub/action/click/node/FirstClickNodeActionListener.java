@@ -1,23 +1,84 @@
 package ethos.runehub.action.click.node;
 
-import com.google.common.base.Preconditions;
 import ethos.model.players.Player;
-import ethos.runehub.action.click.node.impl.*;
-import ethos.runehub.skill.gathering.foraging.action.ActiveForagingSkillAction;
+import ethos.runehub.action.click.node.impl.first.*;
 
 public class FirstClickNodeActionListener {
 
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
         switch (nodeId) {
+            case 14897:
+            case 14898:
+            case 14899:
+            case 14900:
+            case 14901:
+            case 14902:
+                return new FirstClickRunecraftingAltarAction(player,nodeId,nodeX,nodeY,nodeZ);
+            case 7484:
+            case 7453:
+            case 7454:
+            case 7487:
+            case 7485:
+            case 7486:
+            case 7455:
+            case 7488:
+            case 7491:
+            case 7458:
+            case 11961:
+            case 11960:
+            case 11962:
+            case 13709:
+            case 9714:
+            case 9716:
+            case 11957:
+            case 7494:
+            case 7461:
+            case 14175:
+            case 7493:
+            case 7492:
+            case 7489:
+                return new FirstClickRockAction(player,nodeId,nodeX,nodeY,nodeZ);
+            case 29183:
+            case 29191:
+            case 29207:
+            case 29211:
+            case 29213:
+            case 29221:
+            case 29203:
+            case 29193:
+            case 29199:
+            case 29197:
+            case 29195:
+            case 29189:
+            case 29219:
+            case 29209:
+            case 29201:
+            case 29181:
+            case 29223:
+            case 29217:
+            case 29215:
+            case 29185:
+            case 29187:
+            case 29225:
+                return new FirstClickSkillCapeStandAction(player, nodeId, nodeX, nodeY);
+            case 11775:
+            case 11773:
+            case 16902:
+            case 4964:
+                return new OpenDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
+            case 11774:
+            case 11772:
+            case 4963:
+                return new CloseDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 10:
             case 11:
-                return new LadderAction(player,nodeId,nodeX,nodeY,nodeZ);
-            case 16902:
-            case 16903:
-                return new FirstClickHallofHeroesDoorAction(player,nodeX,nodeY);
+                return new LadderAction(player, nodeId, nodeX, nodeY, nodeZ);
+//            case 16902:
+//            case 16903:
+//                return new FirstClickHallofHeroesDoorAction(player, nodeX, nodeY);
             case 11807:
             case 11799:
-                return new FirstClickHallofHeroesStairsAction(player,nodeId,nodeX,nodeY,nodeZ);
+                return new FirstClickHallofHeroesStairsAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 10157:
             case 26149:
                 return new FirstClickAbyssalSeerAction(player, nodeId, nodeX, nodeY);
@@ -58,6 +119,7 @@ public class FirstClickNodeActionListener {
             case 14893:
             case 14848:
             case 14894:
+            case 14847:
                 return new FirstClickAbyssalPortalAction(player, nodeId, nodeX, nodeY);
             default:
                 throw new NullPointerException("Nothing Interesting Happens.");

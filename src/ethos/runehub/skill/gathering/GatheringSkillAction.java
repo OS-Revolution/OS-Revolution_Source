@@ -48,8 +48,8 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     @Override
     protected void onActionStart() {
-        this.getActor().startAnimation(this.getActor().getContext().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
-                this.getActor().getContext().getSkillAnimationOverrideMap().get(this.getSkillId()) : tool.getAnimationId());
+        this.getActor().startAnimation(this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
+                this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().get(this.getSkillId()) : tool.getAnimationId());
         this.getActor().turnPlayerTo(this.getTargetedNodeContext().getX(),this.getTargetedNodeContext().getY());
     }
 
@@ -104,7 +104,6 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     protected boolean depleteNode() {
         Logger.getGlobal().fine("depleting node roll");
-        System.out.println(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEfficiency() + " efficiency");
         final RenewableNode node = RenewableNodeLoader.getInstance().read(this.getTargetedNodeContext().getNode().getId());
         final int baseMinRoll = node.getDepletionMinRoll();
         final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getDepletionOdds());
@@ -132,7 +131,6 @@ public abstract class GatheringSkillAction extends SkillAction {
     }
 
     protected void onGather() {
-        System.out.println(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower() + " power");
         if (this.isEventTick()) {
             this.onEvent();
         }

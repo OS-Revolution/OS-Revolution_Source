@@ -1,6 +1,11 @@
 package ethos.model.players.packets.commands.admin;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializer;
 import ethos.Server;
+import ethos.model.content.Tutorial;
 import ethos.model.items.ItemAssistant;
 import ethos.model.players.ClientGameTimer;
 import ethos.model.players.Player;
@@ -9,9 +14,19 @@ import ethos.model.players.Right;
 import ethos.model.players.packets.commands.Command;
 import ethos.model.players.skills.Smelting;
 import ethos.runehub.WorldSettingsController;
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.dialog.Dialog;
+import ethos.runehub.dialog.DialogOption;
+import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.CommodityTrader;
+import ethos.runehub.entity.player.PlayerCharacterContext;
+import ethos.runehub.entity.player.PlayerSaveData;
+import ethos.runehub.entity.player.PlayerSaveDataSerializer;
 import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
+import org.runehub.api.util.IDManager;
+import org.runehub.api.util.StringUtils;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class Test extends Command {
@@ -78,11 +93,12 @@ public class Test extends Command {
 
     @Override
     public void execute(Player player, String input) {
+
+
 //        player.getContext().getSkillAnimationOverrideMap().put(8, 2876);
 //        CommodityTrader.getInstance().spawn();
 //        CommodityTrader.getInstance().openShop(player);
-
-        Server.getEventHandler().submit(new TravellingCommodityMerchantEvent());
+//        Server.getEventHandler().submit(new TravellingCommodityMerchantEvent());
 //		String[] args = input.split(" ");
 //		int id = Integer.parseInt(args[0]);
 //		int time = Integer.parseInt(args[1]);

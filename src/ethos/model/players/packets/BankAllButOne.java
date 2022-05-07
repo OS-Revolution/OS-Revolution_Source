@@ -18,10 +18,6 @@ public class BankAllButOne implements PacketType {
 			player.sendMessage("Please finish what you're doing.");
 			return;
 		}
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return;
-		}
 		switch (interfaceId) {
 		case 5382:
 			int amount = player.getBank().getCurrentBankTab().getItemAmount(new BankItem(itemId + 1));

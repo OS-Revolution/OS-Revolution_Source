@@ -17,10 +17,7 @@ public class BankModifiableX implements PacketType {
 			player.sendMessage("Please finish what you're doing.");
 			return;
 		}
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return;
-		}
+
 		if (amount <= 0)
 			return;
 		switch (component) {

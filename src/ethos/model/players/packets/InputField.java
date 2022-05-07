@@ -44,10 +44,6 @@ public class InputField implements PacketType {
 			player.sendMessage("Please finish what you're doing.");
 			return;
 		}
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return;
-		}
 		//System.out.println("ID: " + id);
 		switch (id) {
 		

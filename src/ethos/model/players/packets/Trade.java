@@ -17,10 +17,7 @@ public class Trade implements PacketType {
 		int tradeId = c.getInStream().readSignedWordBigEndian();
 		Player requested = PlayerHandler.players[tradeId];
 		c.getPA().resetFollow();
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
+
 		if (c.getBankPin().requiresUnlock()) {
 			c.getBankPin().open(2);
 			return;

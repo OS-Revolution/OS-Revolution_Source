@@ -93,10 +93,6 @@ public class ClickNPC implements PacketType {
 				c.getBankPin().open(2);
 				return;
 			}
-			if (c.getTutorial().isActive()) {
-				c.getTutorial().refresh();
-				return;
-			}
 			if (c.autocastId > 0)
 				c.autocasting = true;
 			if (!c.autocasting && c.spellId > 0) {

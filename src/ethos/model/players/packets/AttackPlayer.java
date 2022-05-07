@@ -38,10 +38,6 @@ public class AttackPlayer implements PacketType {
 			if (player.respawnTimer > 0) {
 				break;
 			}
-			if (player.getTutorial().isActive()) {
-				player.getTutorial().refresh();
-				return;
-			}
 			if (player == (PlayerHandler.players[player.playerIndex])) {
 				player.sendMessage("You cannot attack yourself, " + player.playerName + ".");
 				return;

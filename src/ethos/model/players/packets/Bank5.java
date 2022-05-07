@@ -35,10 +35,6 @@ public class Bank5 implements PacketType {
 			c.sendMessage("Please finish what you're doing.");
 			return;
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
 		if (c.viewingLootBag || c.addingItemsToLootBag) {
 			if (c.getLootingBag().handleClickItem(removeId, 5)) {
 				return;

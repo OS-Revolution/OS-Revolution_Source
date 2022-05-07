@@ -1362,6 +1362,7 @@ public void sendFrame107() {
 	}
 
 	public void openUpBank() {
+		System.out.println("Opening bank");
 		c.getPA().sendChangeSprite(58014, c.placeHolders ? (byte) 1 : (byte) 0);
 		if (c.viewingLootBag || c.addingItemsToLootBag || c.viewingRunePouch) {
 			c.sendMessage("You should stop what you are doing before opening the bank.");

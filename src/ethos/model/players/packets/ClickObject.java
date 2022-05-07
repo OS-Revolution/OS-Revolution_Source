@@ -91,10 +91,6 @@ public class ClickObject implements PacketType {
                     c.getBankPin().open(2);
                     return;
                 }
-                if (c.getTutorial().isActive()) {
-                    c.getTutorial().refresh();
-                    return;
-                }
                 if (c.getInterfaceEvent().isActive()) {
                     c.sendMessage("Please finish what you're doing.");
                     return;

@@ -3,9 +3,12 @@ package ethos.runehub.action.click.node;
 import ethos.model.players.Player;
 import ethos.runehub.action.click.node.impl.first.*;
 
+import java.util.logging.Logger;
+
 public class FirstClickNodeActionListener {
 
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
+        Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY + " " + nodeZ);
         switch (nodeId) {
 
             case 14897:

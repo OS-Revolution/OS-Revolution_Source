@@ -146,12 +146,12 @@ public class ObjectOptionTwo {
 			
 			FlaxPicking.getInstance().pick(c, new Location3D(obX, obY, c.heightLevel));
 			break; 
-		case 11730:
-			c.getThieving().steal(Stall.Baker, objectType, location);
-			break;
-		case 11733:
-			c.getThieving().steal(Stall.Spice, objectType, location);
-			break;
+//		case 11730:
+//			c.getThieving().steal(Stall.Baker, objectType, location);
+//			break;
+//		case 11733:
+//			c.getThieving().steal(Stall.Spice, objectType, location);
+//			break;
 		//bar stool test
 		case 2312:
 			c.turnPlayerTo(obX, obY);
@@ -166,42 +166,42 @@ public class ObjectOptionTwo {
 	/*	case 11731:
 			c.getThieving().steal(Stall.Magic, objectType, location);
 			break; */
-		case 14011: 
-			c.getThieving().steal(Stall.Wine, objectType, location);
-			break;
-		// STALLS ADDED 3/4/21
-		case 4277:
-		case 3860:
-		case 4275:
-			c.getThieving().steal(Stall.Fish, objectType, location);
-			break;
-		case 11734:
-			c.getThieving().steal(Stall.Silver, objectType, location);
-			break;
-
-		case 7053:
-			c.getThieving().steal(Stall.Seeds, objectType, location);
-			break;
-		case 5595:
-			c.getThieving().steal(Stall.Toys, objectType, location);
-			break;
-		case 629:
-		case 11729:
-			c.getThieving().steal(Stall.Silk, objectType, location);
-			break;
-		// END
-		case 4876:
-			c.getThieving().steal(Stall.General, objectType, location);
-			break;
-		case 4878:
-			c.getThieving().steal(Stall.Scimitar, objectType, location);
-			break;
-		case 4875:
-			c.getThieving().steal(Stall.Food, objectType, location);
-			break;
-		case 11732:
-			c.getThieving().steal(Stall.Fur, objectType, location);
-			break;
+//		case 14011:
+//			c.getThieving().steal(Stall.Wine, objectType, location);
+//			break;
+//		// STALLS ADDED 3/4/21
+//		case 4277:
+//		case 3860:
+//		case 4275:
+//			c.getThieving().steal(Stall.Fish, objectType, location);
+//			break;
+//		case 11734:
+//			c.getThieving().steal(Stall.Silver, objectType, location);
+//			break;
+//
+//		case 7053:
+//			c.getThieving().steal(Stall.Seeds, objectType, location);
+//			break;
+//		case 5595:
+//			c.getThieving().steal(Stall.Toys, objectType, location);
+//			break;
+//		case 629:
+//		case 11729:
+//			c.getThieving().steal(Stall.Silk, objectType, location);
+//			break;
+//		// END
+//		case 4876:
+//			c.getThieving().steal(Stall.General, objectType, location);
+//			break;
+//		case 4878:
+//			c.getThieving().steal(Stall.Scimitar, objectType, location);
+//			break;
+//		case 4875:
+//			c.getThieving().steal(Stall.Food, objectType, location);
+//			break;
+//		case 11732:
+//			c.getThieving().steal(Stall.Fur, objectType, location);
+//			break;
 			
 		case 23609:
 			c.getPA().movePlayer(3507, 9494, 0);

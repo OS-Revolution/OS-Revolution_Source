@@ -2,6 +2,7 @@ package ethos.runehub;
 
 import ethos.runehub.editor.HerbloreItemActionEditor;
 import ethos.runehub.editor.RunecraftAltarNodeEditor;
+import ethos.runehub.editor.ThievingStallEditor;
 import ethos.runehub.entity.item.ItemInteraction;
 import ethos.runehub.entity.item.ItemInteractionLoader;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReaction;
@@ -130,6 +131,9 @@ public class ConsoleEditor {
                 break;
             case "runecraft-altar-node":
                 RunecraftAltarNodeEditor.getInstance().run(this);
+                break;
+            case "stall-editor":
+                new ThievingStallEditor().run(this);
                 break;
             default:
                 runEditor(this.getPrompt("No Such Editor. Enter an Editor Type"));

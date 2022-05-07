@@ -1517,15 +1517,15 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 //        if (getMode().isUltimateIronman()) {
 //            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
 //        }
-        if (getMode().isRegular()) {
+//        if (getMode().isRegular()) {
             com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Normal Mode", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        }
-        if (getMode().isOsrs()) {
-            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Osrs", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        }
-        if (getMode().isStaffs()) {
-            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Staff List", this.playerName, this.playerRank, this.playerXP, debugMessage);
-        }
+//        }
+//        if (getMode().isOsrs()) {
+//            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Osrs", this.playerName, this.playerRank, this.playerXP, debugMessage);
+//        }
+//        if (getMode().isStaffs()) {
+//            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Staff List", this.playerName, this.playerRank, this.playerXP, debugMessage);
+//        }
         Misc.println("[Logged out]: " + playerName);
         disconnected = true;
         // logoutDelay = Long.MAX_VALUE;
@@ -1653,6 +1653,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             if(this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
               this.newAccountInitialization();
             }
+            this.getAttributes().setMovementResricted(false);
             this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
             loadDiaryTab();
             graceSum();

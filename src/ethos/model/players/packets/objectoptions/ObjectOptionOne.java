@@ -448,7 +448,7 @@ public class ObjectOptionOne {
                 c.sendMessage("You feel rejuvinated.");
                 break;
             case 6150:
-
+            case 2031:
                 if (c.getItems().playerHasItem(barType[0])) {
                     c.getSmithingInt().showSmithInterface(barType[0]);
                 } else if (c.getItems().playerHasItem(barType[1])) {
@@ -2155,6 +2155,7 @@ public class ObjectOptionOne {
             case 14838:
             case 2030:
             case 6189:
+            case 2282:
                 c.getSmithing().sendSmelting();
                 break;
 

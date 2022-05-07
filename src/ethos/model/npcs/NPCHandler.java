@@ -62,9 +62,12 @@ import ethos.model.players.combat.effects.SerpentineHelmEffect;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.skills.hunter.impling.PuroPuro;
 import ethos.model.players.skills.necromancy.Necromancy;
+import ethos.runehub.skill.support.thieving.Thieving;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
+import org.runehub.api.model.world.Face;
+import org.runehub.api.model.world.region.location.Location;
 
 public class NPCHandler {
 
@@ -1468,23 +1471,35 @@ public class NPCHandler {
                         npcs[i].forceChat("Woof!");
                     }
                 }
-                if (npcs[i].npcType == 1143) {
-                    if (Misc.random(30) == 3) {
-                        npcs[i].updateRequired = true;
-                        npcs[i].forceChat("Sell your PvM items here for a limited time!");
-                    }
-                }
-
-                if (npcs[i].npcType == 306) {
-                    if (Misc.random(50) == 3) {
-                        npcs[i].forceChat("Speak to me if you wish to learn more about this land!");
-                    }
-                }
 
 //                if (npcs[i].npcType == 3953) {
 //                    npcs[i].startAnimation(346);
 //                }
-
+                if (Thieving.isMarketGuard(npcs[i].npcType) != -1) {
+                    if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
+                        int playerIndex = getCloseRandomPlayer(i);
+                        Player player = PlayerHandler.players[playerIndex];
+                        if (player != null) {
+                            if (npc.getFacingDirection() == new Location(npcs[i].getX(), npcs[i].getY()).directionFrom(new Location(player.getX(), player.getY())).ordinal()
+                                    && (System.currentTimeMillis() - player.getAttributes().getCaughtThievingTimestamp()) < Thieving.CAUGHT_DELAY_SECONDS * 1000 && !player.getAttributes().getGuardsAttacking().contains(i)) {
+                                npc.forceChat("Hey! What do you think you are doing?");
+                                player.getAttributes().getGuardsAttacking().add(i);
+                                npcs[i].killerId = playerIndex;
+                                player.underAttackBy = i;
+                                player.underAttackBy2 = i;
+                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+                            } else if (player.getAttributes().getGuardsAttacking().contains(i)) {
+                                npcs[i].killerId = playerIndex;
+                                player.underAttackBy = i;
+                                player.underAttackBy2 = i;
+                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+                            }
+//                        System.out.println("NPC FACE INDEX: " + npc.getFacingDirection());
+//                            System.out.println("NPC IS FACING: " + Face.values()[npc.getFacingDirection()]);
+////                            System.out.println("PLAYER IS TO THE: " + new Location(npcs[i].getX(),npcs[i].getY()).directionFrom(new Location(player.getX(),player.getY())));
+                        }
+                    }
+                }
                 /**
                  * Tekton walking
                  */
@@ -1666,16 +1681,17 @@ public class NPCHandler {
                         closestPlayer.underAttackBy = npc.getIndex();
                         closestPlayer.underAttackBy2 = npc.getIndex();
                     }
+
                 } else if (isAggressive(i, false) && !npcs[i].underAttack && !npcs[i].isDead
                         && (switchesAttackers(i) || Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS))) {
 
                     if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
-                        int player = getCloseRandomPlayer(i);
-
-                        if (player > 0) {
-                            npcs[i].killerId = player;
-                            PlayerHandler.players[player].underAttackBy = i;
-                            PlayerHandler.players[player].underAttackBy2 = i;
+                        int playerIndex = getCloseRandomPlayer(i);
+                        Player player = PlayerHandler.players[playerIndex];
+                        if (player != null) {
+                            npcs[i].killerId = playerIndex;
+                            player.underAttackBy = i;
+                            player.underAttackBy2 = i;
                             npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
                         }
                     }
@@ -1890,6 +1906,9 @@ public class NPCHandler {
                             if (npcs[i].npcType == 5935) {
                                 player.chosenSandCrab = true;
                                 Necromancy.main(player);
+                            }
+                            if(player.getAttributes().getGuardsAttacking().contains(i)) {
+                                player.getAttributes().getGuardsAttacking().remove(i);
                             }
                         }
                         /*

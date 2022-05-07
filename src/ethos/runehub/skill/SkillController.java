@@ -16,7 +16,10 @@ import ethos.runehub.skill.node.io.FishingNodeLoader;
 import ethos.runehub.skill.node.io.MiningNodeLoader;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.node.io.WoodcuttingNodeLoader;
+import ethos.runehub.skill.support.SupportSkill;
+import ethos.runehub.skill.support.thieving.Thieving;
 import org.runehub.api.io.load.LazyLoader;
+import org.runehub.api.util.SkillDictionary;
 
 public class SkillController {
 
@@ -30,6 +33,14 @@ public class SkillController {
                 return mining;
             case 19:
                 return foraging;
+            default: throw new NullPointerException("No Gathering Skill with ID: " + skillId);
+        }
+    }
+
+    public SupportSkill getSupportSkill(int skillId) {
+        switch (skillId) {
+            case 17:
+                return thieving;
             default: throw new NullPointerException("No Gathering Skill with ID: " + skillId);
         }
     }
@@ -48,6 +59,8 @@ public class SkillController {
                 return mining;
             case 15:
                 return herblore;
+            case 17:
+                return thieving;
             case 19:
                 return foraging;
             case 20:
@@ -98,6 +111,10 @@ public class SkillController {
         return smithing;
     }
 
+    public Thieving getThieving() {
+        return thieving;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -112,6 +129,7 @@ public class SkillController {
         this.herblore = new Herblore(player);
         this.runecraft = new Runecraft(player);
         this.smithing = new Smithing(player);
+        this.thieving = new Thieving(player);
     }
 
     private final Player player;
@@ -123,4 +141,5 @@ public class SkillController {
     private final Herblore herblore;
     private final Runecraft runecraft;
     private final Smithing smithing;
+    private final Thieving thieving;
 }

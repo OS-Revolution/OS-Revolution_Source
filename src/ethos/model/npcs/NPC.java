@@ -11,6 +11,7 @@ import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
 import ethos.runehub.WorldSettingsController;
+import ethos.runehub.skill.support.thieving.Thieving;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -45,6 +46,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public boolean summoner = false;
     public long singleCombatDelay = 0;
     public boolean teleporting = false;
+    private int facingDirection;
 
     public long lastRandomlySelectedPlayer = System.currentTimeMillis();
 
@@ -97,9 +99,13 @@ public class NPC extends Entity implements NonPlayableCharacter {
         applyDead = false;
         actionTimer = 0;
         randomWalk = true;
-        if(_npcType == 2888) {
+        if (_npcType == 2888) {
             System.out.println(definition);
         }
+    }
+
+    public int getFacingDirection() {
+        return facingDirection;
     }
 
     public Position getPosition() {
@@ -534,6 +540,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
         dir >>= 1;
         absX += moveX;
         absY += moveY;
+        facingDirection = dir;
         return dir;
     }
 

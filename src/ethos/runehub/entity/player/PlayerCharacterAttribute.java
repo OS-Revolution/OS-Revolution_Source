@@ -1,10 +1,12 @@
 package ethos.runehub.entity.player;
 
-import ethos.runehub.dialog.DialogOption;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.ItemReactionProcessor;
 import org.rhd.api.entity.user.character.CharacterEntity;
 import org.rhd.api.entity.user.character.CharacterEntityAttribute;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
@@ -12,6 +14,11 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     public PlayerCharacterAttribute(CharacterEntity owner) {
         super(owner);
         this.itemReactionProcessor = new ItemReactionProcessor();
+        this.guardsAttacking = new ArrayList<>();
+    }
+
+    public List<Integer> getGuardsAttacking() {
+        return guardsAttacking;
     }
 
     public boolean isUsingLootBox() {
@@ -98,15 +105,23 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.actionLocked = interruptableAction;
     }
 
-    private boolean usingLootBox;
+    public long getCaughtThievingTimestamp() {
+        return caughtThievingTimestamp;
+    }
+
+    public void setCaughtThievingTimestamp(long caughtThievingTimestamp) {
+        this.caughtThievingTimestamp = caughtThievingTimestamp;
+    }
+
+
+
+    private boolean movementResricted,actionLocked,usingLootBox,enteringValue;
     private float magicFind,teleportRechargeReduction;
     private int integerInput = 0;
     private final ItemReactionProcessor itemReactionProcessor;
-    private boolean enteringValue;
     private DialogSequence activeDialogSequence;
-    private int selectedOption;
-    private boolean movementResricted;
-    private boolean actionLocked;
-    private int interactingWithNodeId;
+    private int selectedOption,interactingWithNodeId;
+    private long caughtThievingTimestamp;
+    private final List<Integer> guardsAttacking;
 
 }

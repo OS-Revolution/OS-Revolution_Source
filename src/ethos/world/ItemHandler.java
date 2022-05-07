@@ -93,9 +93,6 @@ public class ItemHandler {
 	}
 
 	public void reloadItems(Player player) {
-		if (player.getMode() == null || player.getTutorial().isActive()) {
-			return;
-		}
 		Predicate<GroundItem> visible = item -> (((player.getItems().isTradable(item.getId()) || item.getController().equalsIgnoreCase(player.playerName))
 				&& player.distanceToPoint(item.getX(), item.getY()) <= 60)
 				&& (item.hideTicks > 0 && item.getController().equalsIgnoreCase(player.playerName) || item.hideTicks == 0) && player.heightLevel == item.getHeight());

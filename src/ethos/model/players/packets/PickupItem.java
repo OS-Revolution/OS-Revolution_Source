@@ -64,7 +64,7 @@ public class PickupItem implements PacketType {
 		if (item == null) {
 			return;
 		}
-		if (!c.inClanWars() && !c.inClanWarsSafe() && !c.getMode().isItemScavengingPermitted()) {
+		if (!c.inClanWars() && !c.inClanWarsSafe()) {
 			Player owner = PlayerHandler.getPlayer(item.getController());
 			if (owner == null || !c.playerName.equalsIgnoreCase(item.getController())) {
 				c.sendMessage("Your mode restricts you from picking up items that are not yours.");

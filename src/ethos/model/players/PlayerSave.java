@@ -1249,6 +1249,9 @@ public class PlayerSave {
 			if (p.getMode() != null) {
 				characterfile.write("mode = " + p.getMode().getType().name());
 				characterfile.newLine();
+			} else {
+				characterfile.write("mode = " + ModeType.OSRS.name());
+				characterfile.newLine();
 			}
 			if (p.getTutorial().getStage() != null) {
 				characterfile.write("tutorial-stage = " + p.getTutorial().getStage().name());

@@ -2053,18 +2053,18 @@ public void sendFrame107() {
 			c.getCombat().degradeVenemousItems(killer);
 
 			// If a player is not an ultimate ironman, update the items kept on death
-			if (c.getMode().isUltimateIronman() || c.getMode().isIronman() || c.getMode().isOsrs() || c.getMode().isRegular()) {
-				c.getItems().resetKeepItems();
-				c.updateItemsOnDeath();
-			}
+//			if (c.getMode().isUltimateIronman() || c.getMode().isIronman() || c.getMode().isOsrs() || c.getMode().isRegular()) {
+//				c.getItems().resetKeepItems();
+//				c.updateItemsOnDeath();
+//			}
 			// Handles the items kept on death
 			for (int item = 0; item < Config.ITEMS_KEPT_ON_DEATH.length; item++) {
 				int itemId = Config.ITEMS_KEPT_ON_DEATH[item];
 				int itemAmount = c.getItems().getItemAmount(itemId) + c.getItems().getWornItemAmount(itemId);
 				if (c.getItems().playerHasItem(itemId) || c.getItems().isWearingItem(itemId)) {
-					if (c.getMode().isUltimateIronman()) {
-						Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount, c.getIndex());
-					}
+//					if (c.getMode().isUltimateIronman()) {
+//						Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount, c.getIndex());
+//					}
 					if (c.inClanWars() || c.inClanWarsSafe()) {
 						Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount,
 								c.getIndex());
@@ -2075,10 +2075,10 @@ public void sendFrame107() {
 			}
 
 			// If ultimate ironman, delete all items and drop all of them
-			if (c.getMode().isUltimateIronman() || c.getMode().isIronman() || c.getMode().isOsrs() || c.getMode().isRegular()) {
-				c.getItems().dropAllItems();
-				c.getItems().deleteAllItems();
-			}
+//			if (c.getMode().isUltimateIronman() || c.getMode().isIronman() || c.getMode().isOsrs() || c.getMode().isRegular()) {
+//				c.getItems().dropAllItems();
+//				c.getItems().deleteAllItems();
+//			}
 				if (!c.isSkulled) {
 					for (int i1 = 0; i1 < 3; i1++) {
 						if (c.itemKeptId[i1] > 0) {

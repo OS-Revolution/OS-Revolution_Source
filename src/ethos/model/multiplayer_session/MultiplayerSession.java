@@ -308,13 +308,13 @@ public abstract class MultiplayerSession implements MultiplayerSessionItemDistri
 			return;
 		}
 		if (this instanceof TradeSession) {
-			if (!player.getMode().isTradingPermitted() || !other.getMode().isTradingPermitted()) {
+			if (!player.getMode().isTradingPermitted()) {
 				finish(MultiplayerSessionFinalizeType.DISPOSE_ITEMS);
 				return;
 			}
 		}
 		if (this instanceof DuelSession) {
-			if (!player.getMode().isStakingPermitted() || !other.getMode().isStakingPermitted()) {
+			if (!player.getMode().isStakingPermitted()) {
 				finish(MultiplayerSessionFinalizeType.DISPOSE_ITEMS);
 				return;
 			}

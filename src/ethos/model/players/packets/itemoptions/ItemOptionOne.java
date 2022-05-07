@@ -153,10 +153,6 @@ public class ItemOptionOne implements PacketType {
             c.getBankPin().open(2);
             return;
         }
-        if (c.getTutorial().isActive()) {
-            c.getTutorial().refresh();
-            return;
-        }
         c.lastClickedItem = itemId;
         ClickItemActionFactory.onClick(c,itemId,itemSlot);
 //        c.getHerblore().clean(itemId);

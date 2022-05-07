@@ -1826,10 +1826,6 @@ public class ItemAssistant {
 			c.getPA().resetOtherBank();
 			return false;
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return false;
-		}
 		if (!c.getMode().isBankingPermitted()) {
 			c.sendMessage("Your game mode prohibits use of the banking system.");
 			return false;
@@ -1967,10 +1963,6 @@ public class ItemAssistant {
 		// boolean notable = isNoted(itemId + 1);		//does this work to remove items?
 		if (!c.isBanking)
 			return;
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
 		if (freeSlots() == 0 && !playerHasItem(itemId)) {
 			c.sendMessage("Not enough space in your inventory.");
 			return;
@@ -2078,10 +2070,6 @@ public class ItemAssistant {
 		
 		if (!c.isBanking)
 			return;
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
 		if (freeSlots() == 0 && !playerHasItem(itemId)) {
 			c.sendMessage("Not enough space in your inventory.");
 			return;

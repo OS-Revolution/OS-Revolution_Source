@@ -49,10 +49,7 @@ public class ItemOnPlayer implements PacketType {
 		if (other.getBankPin().requiresUnlock()) {
 			return;
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
+
 		if (c.getInterfaceEvent().isActive()) {
 			c.sendMessage("Please finish what you're doing.");
 			return;

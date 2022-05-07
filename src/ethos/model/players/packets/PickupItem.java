@@ -47,10 +47,6 @@ public class PickupItem implements PacketType {
 			c.sendMessage("You cannot own multiples of this item.");
 			return;
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
 		if (c.getBankPin().requiresUnlock()) {
 			c.getBankPin().open(2);
 			return;

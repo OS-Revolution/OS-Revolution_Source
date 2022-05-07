@@ -28,19 +28,11 @@ public class Trade extends Multiplayer {
 			requested.viewingLootBag || requested.addingItemsToLootBag) {
 			return false;
 		}
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return false;
-		}
 		if (player.getBankPin().requiresUnlock()) {
 			player.getBankPin().open(2);
 			return false;
 		}
 		if (requested.getBankPin().requiresUnlock()) {
-			return false;
-		}
-		if (requested.getTutorial().isActive()) {
-			player.sendMessage("This player has not completed the tutorial yet.");
 			return false;
 		}
 		if (!player.getMode().isTradingPermitted()) {

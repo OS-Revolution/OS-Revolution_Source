@@ -104,10 +104,6 @@ public class Commands implements PacketType {
 			c.getBankPin().open(2);
 			return;
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
 		if (c.isStuck) {
 			c.isStuck = false;
 			c.sendMessage("@red@You've disrupted stuck command, you will no longer be moved home.");

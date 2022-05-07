@@ -1,12 +1,15 @@
 package ethos.runehub.action.click.node;
 
 import ethos.model.players.Player;
+import ethos.runehub.action.click.node.impl.first.ClickStallAction;
 import ethos.runehub.action.click.node.impl.second.SecondClickSkillCapeStandAction;
 
 public class SecondClickNodeActionListener {
 
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
         switch (nodeId) {
+            case 11730:
+                return new ClickStallAction(player,nodeId,nodeX,nodeY,nodeZ);
             case 29183:
             case 29191:
             case 29207:

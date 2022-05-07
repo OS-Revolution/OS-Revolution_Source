@@ -62,10 +62,10 @@ public class Walking implements PacketType {
 		if (c.getPA().viewingOtherBank) {
 			c.getPA().resetOtherBank();
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
+//		if (c.getTutorial().isActive()) {
+//			c.getTutorial().refresh();
+//			return;
+//		}
 
 		if (c.getAttributes().isMovementResricted()) {
 			return;

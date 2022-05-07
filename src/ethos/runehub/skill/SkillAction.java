@@ -11,6 +11,7 @@ import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.util.PreconditionUtils;
+import ethos.util.Stream;
 import org.runehub.api.io.load.impl.LootTableLoader;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public abstract class SkillAction extends Event<Player> {
             Preconditions.checkArgument(PreconditionUtils.notNull(this.getActor()), "Actor is Null");
             Preconditions.checkArgument(PreconditionUtils.notNull(this.getActor().getSession()), "Session is Null");
             Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().disconnected), "Actor is Disconnected");
+            Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().hitUpdateRequired), "You can't do this while in combat");
             this.validateLevelRequirements();
             this.validateInventory();
             this.validateItemRequirements();

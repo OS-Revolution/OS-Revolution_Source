@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import ethos.model.content.achievement.AchievementType;
 import ethos.model.content.achievement.Achievements;
+import ethos.runehub.entity.mob.HostileMobContextDAO;
+import ethos.runehub.entity.mob.HostileMobIdContextLoader;
 import org.apache.commons.lang3.RandomUtils;
 
 import ethos.Config;
@@ -1147,13 +1149,16 @@ public class AttackNPC {
 			return;
 		}
 		NPC npc = NPCHandler.npcs[i];
-		Optional<Task> task = SlayerMaster.get(npc.getName().replaceAll("_", " "));
-		if (task.isPresent()) {
-			int level = task.get().getLevel();
-			if (c.playerLevel[Skill.SLAYER.getId()] < task.get().getLevel()) {
-				c.sendMessage("You need a slayer level of " + level + " to attack this npc.");
-				c.getCombat().resetPlayerAttack();
-				return;
+		if(npc != null) {
+			String name = HostileMobContextDAO.getInstance().read(npc.npcType).getName();
+			Optional<Task> task = SlayerMaster.get(name == null ? npc.getName() : name.replaceAll("_", " "));
+			if (task.isPresent()) {
+				int level = task.get().getLevel();
+				if (c.playerLevel[Skill.SLAYER.getId()] < task.get().getLevel()) {
+					c.sendMessage("You need a slayer level of " + level + " to attack this npc.");
+					c.getCombat().resetPlayerAttack();
+					return;
+				}
 			}
 		}
 		if (NPCHandler.npcs[i].npcType == 7544) {

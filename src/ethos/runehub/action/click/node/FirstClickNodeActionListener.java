@@ -7,6 +7,7 @@ public class FirstClickNodeActionListener {
 
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
         switch (nodeId) {
+
             case 14897:
             case 14898:
             case 14899:

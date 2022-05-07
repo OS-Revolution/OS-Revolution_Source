@@ -2,8 +2,6 @@ package ethos.model.players.packets.objectoptions;
 
 import ethos.Server;
 import ethos.clip.ObjectDef;
-import ethos.clip.doors.DoorDefinition;
-import ethos.clip.doors.DoorHandler;
 import ethos.event.CycleEvent;
 import ethos.event.CycleEventContainer;
 import ethos.event.CycleEventHandler;
@@ -24,7 +22,6 @@ import ethos.model.content.godwars.God;
 import ethos.model.entity.HealthStatus;
 import ethos.model.holiday.halloween.HalloweenRandomOrder;
 import ethos.model.items.EquipmentSet;
-import ethos.model.items.ItemAssistant;
 import ethos.model.minigames.lighthouse.DagannothMother;
 import ethos.model.minigames.lighthouse.DisposeType;
 import ethos.model.minigames.pest_control.PestControl;
@@ -49,27 +46,19 @@ import ethos.model.players.skills.Skill;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.crafting.JewelryMaking;
 import ethos.model.players.skills.hunter.Hunter;
-import ethos.model.players.skills.mining.Mineral;
-import ethos.model.players.skills.runecrafting.Runecrafting;
 import ethos.model.players.skills.woodcutting.Tree;
 import ethos.runehub.action.click.node.FirstClickNodeActionListener;
-import ethos.runehub.building.Hotspot;
-import ethos.runehub.building.HotspotDefinition;
 import ethos.runehub.skill.gathering.fishing.action.FishingSkillAction;
 import ethos.runehub.skill.gathering.foraging.action.ActiveForagingSkillAction;
 import ethos.runehub.skill.gathering.foraging.action.ActiveRenewableForagingSkillAction;
-import ethos.runehub.skill.gathering.mining.action.ActiveMiningSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAction;
 import ethos.runehub.skill.node.context.impl.FishingNodeContext;
-import ethos.runehub.skill.node.impl.gatherable.impl.MiningNode;
-import ethos.runehub.skill.node.io.MiningNodeLoader;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 /*
@@ -2208,6 +2197,7 @@ public class ObjectOptionOne {
             case 6943:
             case 3194:
             case 10661:
+            case 6945:
                 c.sendAudio(1877);
                 c.getPA().openUpBank();
                 break;

@@ -530,9 +530,9 @@ public class DropManager {
 
     private double getModifier(Player player) {
         double modifier = 1.0;
-        if (player.getMode().isOsrs()) {
-            modifier -= .15;
-        }
+//        if (player.getMode().isOsrs()) {
+//            modifier -= .15;
+//        }
         if (player.prestigePoints >= 1 && player.prestigePoints < 10) {
             modifier -= .0075;
         } else if (player.prestigePoints >= 10 && player.prestigePoints < 25) {

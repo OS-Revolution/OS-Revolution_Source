@@ -96,7 +96,7 @@ public class ItemHandler {
 		Predicate<GroundItem> visible = item -> (((player.getItems().isTradable(item.getId()) || item.getController().equalsIgnoreCase(player.playerName))
 				&& player.distanceToPoint(item.getX(), item.getY()) <= 60)
 				&& (item.hideTicks > 0 && item.getController().equalsIgnoreCase(player.playerName) || item.hideTicks == 0) && player.heightLevel == item.getHeight());
-		if (!player.inClanWars() && !player.inClanWarsSafe() && !player.getMode().isItemScavengingPermitted()) {
+		if (!player.inClanWars() && !player.inClanWarsSafe()) {
 			visible = visible.and(item -> item.getController().equalsIgnoreCase(player.playerName));
 		}
 		items.stream().filter(visible).forEach(item -> player.getItems().removeGroundItem(item));

@@ -47,10 +47,6 @@ public class ItemOptionTwo implements PacketType {
 			player.getBankPin().open(2);
 			return;
 		}
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return;
-		}
 		if (LootingBag.isLootingBag(player, itemId)) {
 			player.getLootingBag().openDepositMode();
 			return;

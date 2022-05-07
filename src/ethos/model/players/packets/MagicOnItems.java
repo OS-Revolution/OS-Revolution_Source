@@ -34,10 +34,6 @@ public class MagicOnItems implements PacketType {
 			duelSession.finish(MultiplayerSessionFinalizeType.WITHDRAW_ITEMS);
 			return;
 		}
-		if (c.getTutorial().isActive()) {
-			c.getTutorial().refresh();
-			return;
-		}
 		if (c.getBankPin().requiresUnlock()) {
 			c.getBankPin().open(2);
 			return;

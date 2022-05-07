@@ -21,10 +21,6 @@ public class SelectItemOnInterface implements PacketType {
 		int slot = player.getInStream().readInteger();
 		int itemId = player.getInStream().readInteger();
 		int itemAmount = player.getInStream().readInteger();
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return;
-		}
 		if (player.isFrozen = true) {
 			return;
 		}

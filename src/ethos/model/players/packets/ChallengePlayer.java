@@ -35,14 +35,6 @@ public class ChallengePlayer implements PacketType {
 			if (requested.getBankPin().requiresUnlock()) {
 				return;
 			}
-			if (c.getTutorial().isActive()) {
-				c.getTutorial().refresh();
-				return;
-			}
-			if (requested.getTutorial().isActive()) {
-				c.sendMessage("This player needs to finish the tutorial first.");
-				return;
-			}
 			if (c.getInterfaceEvent().isActive()) {
 				c.sendMessage("Please finish what you're doing.");
 				return;

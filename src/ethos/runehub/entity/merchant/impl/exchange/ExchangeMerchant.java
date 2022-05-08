@@ -77,19 +77,23 @@ public class ExchangeMerchant extends Merchant {
     @Override
     public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
         final int unitPrice = this.getPriceMerchantWillBuyFor(itemId);
-        if (player.getItems().playerHasItem(itemId, amount)) {
-            player.getItems().deleteItem2(itemId, amount);
-            if (!ItemIdContextLoader.getInstance().read(itemId).isNoted())
-                this.listOffer(player, itemId, amount, unitPrice);
-            else
-                this.listOffer(player, itemId - 1, amount, unitPrice);
-            player.sendMessage("You list your #" + amount + " @" + itemId + " in exchange for #"
-                    + unitPrice + " @" + this.getCurrencyId() + " ea.");
+        if(player.getContext().getPlayerSaveData().getExchangeSlots() > ExchangeAccountDatabase.getInstance().read(player.getContext().getId()).getTotalActiveOffers()) {
+            if (player.getItems().playerHasItem(itemId, amount)) {
+                player.getItems().deleteItem2(itemId, amount);
+                if (!ItemIdContextLoader.getInstance().read(itemId).isNoted())
+                    this.listOffer(player, itemId, amount, unitPrice);
+                else
+                    this.listOffer(player, itemId - 1, amount, unitPrice);
+                player.sendMessage("You list your #" + amount + " @" + itemId + " in exchange for #"
+                        + unitPrice + " @" + this.getCurrencyId() + " ea.");
 
-            player.getItems().resetItems(3823);
-            return true;
+                player.getItems().resetItems(3823);
+                return true;
+            } else {
+                player.sendMessage("You can't sell what you don't have.");
+            }
         } else {
-            player.sendMessage("You can't sell what you don't have.");
+            player.sendMessage("You've reached your maximum offer limit of #" + player.getContext().getPlayerSaveData().getExchangeSlots());
         }
         return false;
     }

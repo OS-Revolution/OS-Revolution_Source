@@ -52,6 +52,10 @@ public class ExchangeAccount {
         this.totalRevenue = totalRevenue;
     }
 
+    public long getTotalActiveOffers() {
+        return ExchangeOfferDatabase.getInstance().getAllEntries().stream().filter(offer -> offer.getUserId() == userId).count();
+    }
+
     public ExchangeAccount(long userId, long availableRevenue, long totalSales, long totalPurchases, long totalExpenditure, long totalRevenue) {
         this.userId = userId;
         this.availableRevenue = availableRevenue;

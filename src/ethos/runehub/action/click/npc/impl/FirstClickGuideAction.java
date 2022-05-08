@@ -6,8 +6,6 @@ import ethos.runehub.dialog.DialogSequence;
 
 public class FirstClickGuideAction extends ClickNpcAction {
 
-    public static final int GUIDE_NPC = 3308;
-
     @Override
     protected void onActionStart() {
         this.getActor().getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(this.getActor())
@@ -31,7 +29,7 @@ public class FirstClickGuideAction extends ClickNpcAction {
 
     }
 
-    public FirstClickGuideAction(Player attachment, int ticks, int npcId, int npcIndex) {
-        super(attachment, ticks, npcId, npcIndex);
+    public FirstClickGuideAction(Player attachment, int npcId, int npcIndex) {
+        super(attachment, 1, npcId, npcIndex);
     }
 }

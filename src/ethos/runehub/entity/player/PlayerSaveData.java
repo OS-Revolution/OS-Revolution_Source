@@ -136,6 +136,22 @@ public class PlayerSaveData {
         this.telescopeSpace = telescopeSpace;
     }
 
+    public int getExchangeSlots() {
+        return exchangeSlots;
+    }
+
+    public void setExchangeSlots(int exchangeSlots) {
+        this.exchangeSlots = exchangeSlots;
+    }
+
+    public boolean isInitiativePackageClaimed() {
+        return initiativePackageClaimed;
+    }
+
+    public void setInitiativePackageClaimed(boolean initiativePackageClaimed) {
+        this.initiativePackageClaimed = initiativePackageClaimed;
+    }
+
     public PlayerSaveData(long playerId) {
         this.playerId = playerId;
         this.magicFind = new AdjustableDouble(0.0D);
@@ -150,6 +166,7 @@ public class PlayerSaveData {
         this.altarSpace = 15270;
         this.portalSpace = 15406;
         this.spellSpace = 29140;
+        this.exchangeSlots = 3;
     }
 
     private final long playerId;
@@ -160,7 +177,7 @@ public class PlayerSaveData {
     private long logoutTimestamp;
     private long loginTimestamp;
     private long lastHomeTeleportTimestamp;
-    private boolean homeUnlocked;
-    private int heraldrySpace,crystalBallSpace,jewelleryBoxSpace,poolSpace,telescopeSpace,lecternSpace,altarSpace,portalSpace,spellSpace;
+    private boolean homeUnlocked,initiativePackageClaimed;
+    private int heraldrySpace,crystalBallSpace,jewelleryBoxSpace,poolSpace,telescopeSpace,lecternSpace,altarSpace,portalSpace,spellSpace,exchangeSlots;
 
 }

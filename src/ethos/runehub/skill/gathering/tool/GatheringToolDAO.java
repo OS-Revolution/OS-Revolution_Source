@@ -14,12 +14,6 @@ public class GatheringToolDAO  extends BetaAbstractDataAcessObject<GatheringTool
     }
 
     private GatheringToolDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("tools")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), GatheringTool.class);
+        super("./Data/runehub/db/tools.db", GatheringTool.class);
     }
 }

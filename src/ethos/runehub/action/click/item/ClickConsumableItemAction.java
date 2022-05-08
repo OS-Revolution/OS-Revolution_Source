@@ -8,7 +8,7 @@ public abstract class ClickConsumableItemAction extends ClickItemAction {
 
     @Override
     protected void onActionStart() {
-
+        this.removeItem();
     }
 
     @Override
@@ -19,6 +19,7 @@ public abstract class ClickConsumableItemAction extends ClickItemAction {
     @Override
     protected void onTick() {
         this.consume();
+        this.stop();
     }
 
     @Override

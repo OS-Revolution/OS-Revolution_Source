@@ -1554,6 +1554,15 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         }
     }
 
+    public void sendPlainMessage(String s) {
+        // synchronized (this) {
+        if (getOutStream() != null) {
+            outStream.createFrameVarSize(253);
+            outStream.writeString(s);
+            outStream.endFrameVarSize();
+        }
+    }
+
     public void sendAudio(int soundId) {
         if (soundId < 1)
             return;
@@ -2274,7 +2283,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         try {
             final AdjustableNumber<Double> weight = new AdjustableDouble(0.0D);
             for (int slot = 0; slot < this.playerItems.length; slot++) {
-                int itemId = playerItems[slot];
+                int itemId = playerItems[slot] - 1;
                 int itemAmount = playerItemsN[slot];
                 if (itemId > 0) {
                     final double itemWeight = ItemIdContextLoader.getInstance().read(itemId).getWeight();

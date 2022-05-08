@@ -14,12 +14,6 @@ public class CookingItemReactionDAO extends BetaAbstractDataAcessObject<CookingI
     }
 
     private CookingItemReactionDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("item-interactions")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), CookingItemReaction.class);
+        super("./Data/runehub/db/item-interactions.db", CookingItemReaction.class);
     }
 }

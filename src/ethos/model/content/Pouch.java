@@ -103,10 +103,6 @@ public abstract class Pouch {
 			player.getBankPin().open(2);
 			return false;
 		}
-		if (player.getTutorial().isActive()) {
-			player.getTutorial().refresh();
-			return false;
-		}
 		DuelSession duelSession = (DuelSession) Server.getMultiplayerSessionListener().getMultiplayerSession(player, MultiplayerSessionType.DUEL);
 		if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST
 				&& duelSession.getStage().getStage() < MultiplayerSessionStage.FURTHER_INTERATION) {

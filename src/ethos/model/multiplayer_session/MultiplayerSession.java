@@ -302,11 +302,6 @@ public abstract class MultiplayerSession implements MultiplayerSessionItemDistri
 			player.getBankPin().open(2);
 			return;
 		}
-		if (other.getTutorial().isActive()) {
-			other.getTutorial().refresh();
-			finish(MultiplayerSessionFinalizeType.DISPOSE_ITEMS);
-			return;
-		}
 		if (this instanceof TradeSession) {
 			if (!player.getMode().isTradingPermitted()) {
 				finish(MultiplayerSessionFinalizeType.DISPOSE_ITEMS);

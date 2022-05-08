@@ -2,6 +2,7 @@ package ethos.runehub.entity.player;
 
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.ItemReactionProcessor;
+import ethos.runehub.loot.Lootbox;
 import org.rhd.api.entity.user.character.CharacterEntity;
 import org.rhd.api.entity.user.character.CharacterEntityAttribute;
 
@@ -21,12 +22,12 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         return guardsAttacking;
     }
 
-    public boolean isUsingLootBox() {
-        return usingLootBox;
+    public Lootbox getActiveLootBox() {
+        return activeLootBox;
     }
 
-    public void setUsingLootBox(boolean usingLootBox) {
-        this.usingLootBox = usingLootBox;
+    public void setActiveLootBox(Lootbox activeLootBox) {
+        this.activeLootBox = activeLootBox;
     }
 
     public float getMagicFind() {
@@ -115,7 +116,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
 
 
-    private boolean movementResricted,actionLocked,usingLootBox,enteringValue;
+    private boolean movementResricted,actionLocked,enteringValue;
     private float magicFind,teleportRechargeReduction;
     private int integerInput = 0;
     private final ItemReactionProcessor itemReactionProcessor;
@@ -123,5 +124,6 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     private int selectedOption,interactingWithNodeId;
     private long caughtThievingTimestamp;
     private final List<Integer> guardsAttacking;
+    private Lootbox activeLootBox;
 
 }

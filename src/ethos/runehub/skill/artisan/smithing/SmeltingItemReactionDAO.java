@@ -14,12 +14,6 @@ public class SmeltingItemReactionDAO extends BetaAbstractDataAcessObject<Smeltin
     }
 
     private SmeltingItemReactionDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("item-interactions")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), SmeltingItemReaction.class);
+        super("./Data/runehub/db/item-interactions.db", SmeltingItemReaction.class);
     }
 }

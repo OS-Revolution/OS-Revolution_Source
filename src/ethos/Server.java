@@ -1,35 +1,12 @@
 package ethos;
 
-import java.net.InetSocketAddress;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import com.google.gson.Gson;
-import ethos.event.impl.DidYouKnowEvent;
-import ethos.runehub.WorldSettingsController;
-import ethos.runehub.building.Hotspot;
-import ethos.runehub.entity.item.ItemInteractionDAO;
-import ethos.runehub.entity.item.ItemInteractionLoader;
-import ethos.runehub.entity.merchant.impl.exchange.ExchangeOfferDatabase;
-import ethos.runehub.event.shop.impl.ExchangePriceUpdateEvent;
-import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
-import ethos.runehub.skill.gathering.foraging.ForageNodeClusterController;
-import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
-import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
-import ethos.runehub.skill.node.io.*;
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.util.HashedWheelTimer;
-
 import ethos.clip.ObjectDef;
 import ethos.clip.Region;
 import ethos.clip.doors.DoorDefinition;
 import ethos.event.CycleEventHandler;
 import ethos.event.EventHandler;
 import ethos.event.impl.BonusApplianceEvent;
+import ethos.event.impl.DidYouKnowEvent;
 import ethos.event.impl.WheatPortalEvent;
 import ethos.model.content.godwars.GodwarsEquipment;
 import ethos.model.content.godwars.GodwarsNPCs;
@@ -51,6 +28,15 @@ import ethos.model.players.packets.Commands;
 import ethos.net.PipelineFactory;
 import ethos.punishments.PunishmentCycleEvent;
 import ethos.punishments.Punishments;
+import ethos.runehub.WorldSettingsController;
+import ethos.runehub.entity.item.ItemInteractionDAO;
+import ethos.runehub.entity.item.ItemInteractionLoader;
+import ethos.runehub.event.shop.impl.ExchangePriceUpdateEvent;
+import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
+import ethos.runehub.skill.gathering.foraging.ForageNodeClusterController;
+import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
+import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
+import ethos.runehub.skill.node.io.*;
 import ethos.server.data.ServerData;
 import ethos.util.date.GameCalendar;
 import ethos.util.log.Logger;
@@ -58,15 +44,27 @@ import ethos.world.ClanManager;
 import ethos.world.ItemHandler;
 import ethos.world.ShopHandler;
 import ethos.world.objects.GlobalObjects;
+import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.util.HashedWheelTimer;
 import org.rhd.api.io.db.LootMetricDAO;
 import org.rhd.api.model.LootMetric;
+import org.runehub.api.APISettingsController;
 import org.runehub.api.io.data.impl.*;
 import org.runehub.api.io.load.impl.*;
+import org.runehub.api.model.entity.item.ItemEquipmentContext;
 import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.entity.item.loot.LootTableContainer;
 import org.runehub.api.model.entity.item.loot.LootTableContainerDefinition;
 import org.runehub.api.model.entity.item.loot.LootTableDefinition;
 import org.runehub.api.util.APILogger;
+
+import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The main class needed to start the server.
@@ -191,9 +189,32 @@ public class Server {
 	}
 
 	private static void initializeLoaders() {
+		APISettingsController.getInstance().getApiSettings().setItemDatabaseLocation("./Data/runehub/db/os-definitions.db");
+		APISettingsController.getInstance().getApiSettings().setLootDatabase("./Data/runehub/db/loot.db");
 		TierDAO.getInstance().getAllEntries().forEach(tier -> {
 			TierLoader.getInstance().create(tier.getId(),tier);
 		});
+//		final Map<String,Integer> requirements = new HashMap<>();
+//		final int itemId = 9703;
+//		ItemEquipmentContextDAO.getInstance().create(new ItemEquipmentContext.ItemEquipmentContextBuilder(itemId)
+//						.withAttackStab(4)
+//						.withAttackSlash(3)
+//						.withAttackCrush(-2)
+//						.withAttackMagic(0)
+//						.withAttackRanged(0)
+//						.withDefenceStab(0)
+//						.withDefenceSlash(2)
+//						.withDefenceCrush(1)
+//						.withDefenceMagic(0)
+//						.withDefenceRanged(0)
+//						.withMeleeStrength(5)
+//						.withRangedStrength(0)
+//						.withSlot("weapon")
+//						.withPrayerBonus(0)
+//						.withMagicDamage(0)
+//						.withRequirements(itemId,requirements)
+//				.build()
+//		);
 		final List<LootTable> contexts = LootTableDAO.getInstance().getAllEntries();
 		final List<LootTableDefinition> definitions = LootTableDefinitionDAO.getInstance().getAllEntries();
 		final List<LootTableContainer> containers = LootTableContainerDAO.getInstance().getAllEntries();

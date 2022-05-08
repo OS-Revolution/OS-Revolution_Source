@@ -15,12 +15,6 @@ public class FishLevelDAO extends BetaAbstractDataAcessObject<FishLevel> {
     }
 
     private FishLevelDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), FishLevel.class);
+        super("./Data/runehub/db/nodes.db", FishLevel.class);
     }
 }

@@ -14,12 +14,6 @@ public class ItemInteractionDAO extends BetaAbstractDataAcessObject<ItemInteract
     }
 
     private ItemInteractionDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("item-interactions")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), ItemInteraction.class);
+        super("./Data/runehub/db/item-interactions.db", ItemInteraction.class);
     }
 }

@@ -120,10 +120,6 @@ public class IronManInterface {
 	 * Confirms the choice you have made
 	 */
 	public void confirm() {
-		if (!player.getTutorial().isActive()) {
-			player.getPA().closeAllWindows();
-			return;
-		}
 		List<Entry<Action, Byte>> selected = actions.entrySet().stream().filter(e -> e.getValue() == SELECTED).collect(Collectors.toList());
 		if (selected.stream().noneMatch(entry -> entry.getKey() == Action.NONE)) {
 			Optional<Entry<Action, Byte>> revert = selected.stream().filter(e -> e.getKey() == Action.NPC || e.getKey() == Action.PERMANENT).findFirst();
@@ -164,7 +160,6 @@ public class IronManInterface {
 			player.setMode(Mode.forType(ModeType.REGULAR));
 		}
 		player.getPA().requestUpdates();
-		player.getTutorial().proceed();
 	}
 
 	public enum Action {

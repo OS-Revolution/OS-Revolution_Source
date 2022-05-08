@@ -15,13 +15,7 @@ public class SkillNodeDAO extends AbstractDataAcessObject<SkillNode> {
     }
 
     private SkillNodeDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), SkillNode.class);
+        super("./Data/runehub/db/nodes.db", SkillNode.class);
         this.getDatabaseServiceProvider().createTable();
     }
 }

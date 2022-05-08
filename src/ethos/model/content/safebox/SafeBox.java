@@ -34,10 +34,6 @@ public class SafeBox {
 				player.getBankPin().open(2);
 				return false;
 			}
-			if (player.getTutorial().isActive()) {
-				player.getTutorial().refresh();
-				return false;
-			}
 			DuelSession duelSession = (DuelSession) Server.getMultiplayerSessionListener().getMultiplayerSession(player,
 					MultiplayerSessionType.DUEL);
 			if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST

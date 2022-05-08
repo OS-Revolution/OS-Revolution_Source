@@ -2,7 +2,13 @@ package ethos.runehub.action.click.item;
 
 import ethos.Server;
 import ethos.model.players.Player;
+import ethos.runehub.action.click.item.consumable.lootable.ClickLootAction;
 import ethos.runehub.action.click.item.consumable.potion.ClickPotionConsumableAction;
+import org.runehub.api.io.load.impl.LootTableContainerLoader;
+import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.model.entity.item.loot.Loot;
+
+import java.util.ArrayList;
 
 public class ClickItemActionFactory {
 
@@ -76,6 +82,16 @@ public class ClickItemActionFactory {
                         1,
                         slot
                 );
+                break;
+            case 6198:
+                player.getItems().deleteItem(itemId,slot,1);
+                double playerMF = player.getContext().getPlayerSaveData().getMagicFind().value();
+                float mf = (float) playerMF;
+                final Loot lootTable = new ArrayList<>(LootTableContainerLoader.getInstance().readAll().stream().filter(lootTableContainer -> lootTableContainer.getContainerId() == itemId).findAny().orElseThrow().roll(mf)).get(0);
+
+                LootTableLoader.getInstance().read(lootTable.getId()).roll(mf).forEach(loot -> {
+                    player.getItems().addItem((int) loot.getId(), (int) loot.getAmount());
+                });
                 break;
         }
         if (action != null)

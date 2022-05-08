@@ -15,12 +15,6 @@ public class ForagingNodeDAO extends BetaAbstractDataAcessObject<ForagingNode> {
     }
 
     private ForagingNodeDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), ForagingNode.class);
+        super("./Data/runehub/db/nodes.db", ForagingNode.class);
     }
 }

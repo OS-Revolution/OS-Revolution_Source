@@ -42,7 +42,7 @@ public class ClickPotionConsumableAction extends ClickConsumableItemAction {
     protected void consume() {
         this.consumeDose();
         this.applyEffect();
-        this.stop();
+//        this.stop();
     }
 
     protected void applyEffect() {

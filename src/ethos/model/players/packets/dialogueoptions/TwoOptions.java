@@ -1,40 +1,14 @@
 package ethos.model.players.packets.dialogueoptions;
 
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Logger;
 
-import ethos.model.content.*;
-import ethos.model.players.packets.commands.owner.Camera;
 import ethos.runehub.HallOfHeroesUtils;
 import ethos.runehub.action.click.npc.impl.FirstClickEstateAgentAction;
 import ethos.runehub.dialog.Dialog;
-import ethos.runehub.dialog.DialogOption;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.dialog.DialogueUtils;
-import org.apache.commons.lang3.text.WordUtils;
-import ethos.Server;
-import ethos.model.content.achievement_diary.varrock.VarrockDiaryEntry;
-import ethos.model.content.achievement_diary.western_provinces.WesternDiaryEntry;
-import ethos.model.content.achievement_diary.wilderness.WildernessDiaryEntry;
-import ethos.model.content.barrows.RoomLocation;
-import ethos.model.content.dailytasks.TaskTypes;
-import ethos.model.content.wogw.Wogw;
-import ethos.model.content.wogw.Wogwitems;
-import ethos.model.items.GameItem;
-import ethos.model.items.ItemAssistant;
-import ethos.model.items.ItemCombination;
-import ethos.model.minigames.bounty_hunter.BountyHunterEmblem;
-import ethos.model.npcs.bosses.skotizo.Skotizo;
+import ethos.runehub.entity.mob.passive.GuideNpcUtils;
 import ethos.model.players.Player;
-import ethos.model.players.PlayerAssistant.PointExchange;
-import ethos.model.players.combat.Degrade;
-import ethos.model.players.combat.pkdistrict.District;
-import ethos.model.players.skills.crafting.SpinMaterial;
-import ethos.model.players.skills.herblore.UnfCreator;
-import ethos.model.players.skills.slayer.SlayerMaster;
-import ethos.util.Misc;
 
 /*
  * @author Matt
@@ -50,11 +24,7 @@ public class TwoOptions {
 
         switch (c.dialogueAction) {
             case 1:
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC, "I thought you looked familiar.")
-                                .build()
-                );
+                c.getDH().sendDialogueSequence(GuideNpcUtils.getOptionOneSequence(c));
                 break;
             case 2:
                 c.getDH().sendDialogueSequence(
@@ -1077,86 +1047,7 @@ public class TwoOptions {
         Logger.getGlobal().fine("Dialogue Option 2 for ID: " + c.dialogueAction);
         switch (c.dialogueAction) {
             case 1:
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .setActionLocked(true)
-                                .setMovementRestricted(true)
-                                .addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "I'm sorry, ever since they built the port here",
-                                        " there have been so many new people",
-                                        " it's difficult to keep track of.")
-                                .addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "Let me show you around.",
-                                        "Afterwards I'll give you your initiative package.")
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getPA().movePlayer(3104, 3249);
-                                    }
-                                })
-                                .addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "This is the Draynor Marketplace!",
-                                        "It's a very popular hub for travelling merchants and",
-                                        "home of The Exchange!"
-                                )
-                                .addPlayerChat(c.getDH().CALM, "The Exchange?")
-                                .addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "Yes! It's a global market where we can trade with people",
-                                        "all over the world. However space is limited so only 3 slots",
-                                        "are included in the initiative package"
-                                ).addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getPA().movePlayer(3118, 3247);
-                                    }
-                                })
-                                .addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "Moving on we have the Apothecary, the finest in the land!",
-                                        "I'd recommend you stop by here if you ever want to learn",
-                                        "about making potions or foraging for ingredients."
-                                ).addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getPA().movePlayer(3117, 3230);
-                                    }
-                                }).addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "Here is the famed Hall of Heroes.",
-                                        "Home of the finest adventurers, or at least the ones",
-                                        "who have achieved max level in a skill."
-                                ).addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getPA().movePlayer(3084, 3212);
-                                    }
-                                }).addNpcChat("Draynor Representative", Tutorial.GUIDE_NPC,
-                                        "We have just about everything an adventurer",
-                                        "could ever need. Here's your initiative package",
-                                        "as promised to help get you started."
-                                ).addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getItems().addItem(9704, 1);
-                                        c.getItems().addItem(9703, 1);
-                                        c.getItems().addItem(9705, 1);
-                                        c.getItems().addItem(9706, 50);
-                                        c.getItems().addItem(556, 30);
-                                        c.getItems().addItem(558, 30);
-                                        c.getItems().addItem(303, 1);
-                                        c.getItems().addItem(1351, 1);
-                                        c.getItems().addItem(1265, 1);
-                                        c.getItems().addItem(590, 1);
-                                        c.getItems().addItem(316, 10);
-                                    }
-                                }).addItemStatement(9703, "You receive your Initiative Package")
-//                                .addDialogueAction(new Dialog() {
-//                                    @Override
-//                                    public void onSend() {
-//                                        c.getPA().showInterface(3559);
-//                                        c.canChangeAppearance = true;
-//                                    }
-//                                })
-                                .build()
-                );
+                c.getDH().sendDialogueSequence(GuideNpcUtils.getOptionTwoSequence(c));
                 break;
             case 2:
                 c.getDH().sendDialogueSequence(

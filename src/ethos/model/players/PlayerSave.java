@@ -343,14 +343,14 @@ public class PlayerSave {
 						}
 						Mode mode = Mode.forType(type);
 						p.setMode(mode);
-					} else if (token.equals("tutorial-stage")) {
-						Stage stage = null;
-						try {
-							stage = Enum.valueOf(Stage.class, token2);
-						} catch (IllegalArgumentException | NullPointerException e) {
-							break;
-						}
-						p.getTutorial().setStage(stage);
+//					} else if (token.equals("tutorial-stage")) {
+//						Stage stage = null;
+//						try {
+//							stage = Enum.valueOf(Stage.class, token2);
+//						} catch (IllegalArgumentException | NullPointerException e) {
+//							break;
+//						}
+//						p.getTutorial().setStage(stage);
 					} else if (token.equals("character-title-updated")) {
 						p.getTitles().setCurrentTitle(token2);
 					} else if (token.equals("experience-counter")) {
@@ -1253,10 +1253,10 @@ public class PlayerSave {
 				characterfile.write("mode = " + ModeType.OSRS.name());
 				characterfile.newLine();
 			}
-			if (p.getTutorial().getStage() != null) {
-				characterfile.write("tutorial-stage = " + p.getTutorial().getStage().name());
-				characterfile.newLine();
-			}
+//			if (p.getTutorial().getStage() != null) {
+//				characterfile.write("tutorial-stage = " + p.getTutorial().getStage().name());
+//				characterfile.newLine();
+//			}
 			characterfile.write("character-height = ", 0, 19);
 			characterfile.write(Integer.toString(p.heightLevel), 0, Integer.toString(p.heightLevel).length());
 			characterfile.newLine();

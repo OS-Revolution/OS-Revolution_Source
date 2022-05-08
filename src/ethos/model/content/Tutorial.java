@@ -16,7 +16,7 @@ import ethos.runehub.dialog.DialogSequence;
 import ethos.util.Misc;
 
 public class Tutorial {
-    public static final int GUIDE_NPC = 3308;
+
     private final DialogSequence dialogSequence;
     /**
      * The stage of the tutorial

@@ -15,12 +15,6 @@ public class MiningNodeDAO extends BetaAbstractDataAcessObject<MiningNode> {
     }
 
     private MiningNodeDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), MiningNode.class);
+        super("./Data/runehub/db/nodes.db", MiningNode.class);
     }
 }

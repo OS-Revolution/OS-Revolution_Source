@@ -31,9 +31,6 @@ public class BankPin {
 
 	public void open(int state) {
 		player.getPA().sendFrame126("", 59507);
-		if (player.getTutorial().isActive()) {
-			return;
-		}
 		switch (state) {
 		case 1:
 			pinState = PinState.CREATE_NEW;

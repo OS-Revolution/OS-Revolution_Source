@@ -14,12 +14,6 @@ public class HerbloreItemReactionDAO extends BetaAbstractDataAcessObject<Herblor
     }
 
     private HerbloreItemReactionDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("item-interactions")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), HerbloreItemReaction.class);
+        super("./Data/runehub/db/item-interactions.db", HerbloreItemReaction.class);
     }
 }

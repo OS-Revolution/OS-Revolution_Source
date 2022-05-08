@@ -17,12 +17,6 @@ public class RunecraftingAltarNodeDAO extends BetaAbstractDataAcessObject<Runecr
     }
 
     private RunecraftingAltarNodeDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), RunecraftingAltarNode.class);
+        super("./Data/runehub/db/nodes.db", RunecraftingAltarNode.class);
     }
 }

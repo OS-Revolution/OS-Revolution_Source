@@ -16,12 +16,6 @@ public class ThievingStallDAO extends BetaAbstractDataAcessObject<ThievingStallN
     }
 
     private ThievingStallDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), ThievingStallNode.class);
+        super("./Data/runehub/db/nodes.db", ThievingStallNode.class);
     }
 }

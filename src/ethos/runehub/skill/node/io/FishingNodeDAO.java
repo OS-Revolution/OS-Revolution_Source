@@ -15,12 +15,6 @@ public class FishingNodeDAO extends BetaAbstractDataAcessObject<FishingNode> {
     }
 
     private FishingNodeDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), FishingNode.class);
+        super("./Data/runehub/db/nodes.db", FishingNode.class);
     }
 }

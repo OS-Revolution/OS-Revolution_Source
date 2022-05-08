@@ -15,12 +15,6 @@ public class GatheringNodeDAO extends BetaAbstractDataAcessObject<GatheringNode>
     }
 
     private GatheringNodeDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("nodes")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), GatheringNode.class);
+        super("./Data/runehub/db/nodes.db", GatheringNode.class);
     }
 }

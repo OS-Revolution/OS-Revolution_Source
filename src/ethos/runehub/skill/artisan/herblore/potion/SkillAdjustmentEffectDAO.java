@@ -15,12 +15,6 @@ public class SkillAdjustmentEffectDAO extends BetaAbstractDataAcessObject<SkillA
     }
 
     private SkillAdjustmentEffectDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("effects")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), SkillAdjustmentEffect.class);
+        super("./Data/runehub/db/effects.db", SkillAdjustmentEffect.class);
     }
 }

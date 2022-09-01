@@ -2,6 +2,9 @@ package ethos.model.players.packets.commands.admin;
 
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
+import ethos.runehub.skill.support.sailing.ship.Ship;
+import ethos.runehub.skill.support.sailing.ship.ShipLoader;
+import ethos.runehub.skill.support.sailing.voyage.Voyage;
 
 /**
  * Force the player to perform a given emote.
@@ -16,28 +19,41 @@ public class E extends Command {
 	@Override
 	public void execute(Player c, String input) {
 		String[] args = input.split(" ");
-
-		if (args.length == 1) {
-			c.startAnimation(Integer.parseInt(args[0]));
-			c.sendMessage("Performing animation: " + Integer.parseInt(args[0]));
-			c.emote = Integer.parseInt(args[0]);
-			
-		} else {
-
-			switch (args[1]) {
-			case "plus":
-				c.startAnimation(c.emote);
-				c.sendMessage("Performing animation: " + c.emote);
-				c.emote += Integer.parseInt(args[2]);
-				break;
-
-			case "minus":
-				c.startAnimation(c.emote);
-				c.sendMessage("Performing animation: " + c.emote);
-				c.emote -= Integer.parseInt(args[2]);
-				break;
-			}
-		}
+//		Voyage voyage = new Voyage(
+//				1,
+//				"Test Voyage",
+//				100,
+//				100,
+//				10,
+//				1000
+//		);
+//		c.getSkillController().getSailing().getVoyageDuration(voyage);
+//
+//		System.out.println(c.getSkillController().getSailing().getVoyageSuccessRatePrint(
+//				c.getSkillController().getSailing().getVoyageSuccessRate(voyage)));
+		c.getSkillController().getSailing().sendVoyageSelectionUI();
+		System.out.println(c.getSkillController().getLevel(c.getSkillController().getSailing().getId()));
+//		if (args.length == 1) {
+//			c.startAnimation(Integer.parseInt(args[0]));
+//			c.sendMessage("Performing animation: " + Integer.parseInt(args[0]));
+//			c.emote = Integer.parseInt(args[0]);
+//
+//		} else {
+//
+//			switch (args[1]) {
+//			case "plus":
+//				c.startAnimation(c.emote);
+//				c.sendMessage("Performing animation: " + c.emote);
+//				c.emote += Integer.parseInt(args[2]);
+//				break;
+//
+//			case "minus":
+//				c.startAnimation(c.emote);
+//				c.sendMessage("Performing animation: " + c.emote);
+//				c.emote -= Integer.parseInt(args[2]);
+//				break;
+//			}
+//		}
 	}
 }
 	

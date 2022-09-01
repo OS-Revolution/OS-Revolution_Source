@@ -43,6 +43,18 @@ public class PlayerHandler {
 		return null;
 	}
 
+	public static Optional<Player> getPlayer(long id) {
+		for (int d = 0; d < Config.MAX_PLAYERS; d++) {
+			if (PlayerHandler.players[d] != null) {
+				Player o = PlayerHandler.players[d];
+				if (o.getContext().getId() == id) {
+					return Optional.of(o);
+				}
+			}
+		}
+		return Optional.empty();
+	}
+
 	public static Optional<Player> getOptionalPlayer(String name) {
 		return getPlayers().stream().filter(Objects::nonNull).filter(client -> client.playerName.equalsIgnoreCase(name)).findFirst();
 	}
@@ -105,6 +117,17 @@ public class PlayerHandler {
 		for (int i = 0; i < Config.MAX_PLAYERS; i++) {
 			if (players[i] != null) {
 				if (players[i].playerName.equalsIgnoreCase(playerName)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean isPlayerOn(long playerId) {
+		for (int i = 0; i < Config.MAX_PLAYERS; i++) {
+			if (players[i] != null) {
+				if (players[i].getContext().getId() == playerId) {
 					return true;
 				}
 			}

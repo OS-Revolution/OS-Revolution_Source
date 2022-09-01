@@ -1,5 +1,6 @@
 package ethos.runehub.entity.node.door;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.AbstractDataAcessObject;
 
 public class DoorDefinitionDAO extends AbstractDataAcessObject<DoorDefinition> {
@@ -13,6 +14,6 @@ public class DoorDefinitionDAO extends AbstractDataAcessObject<DoorDefinition> {
     }
 
     private DoorDefinitionDAO() {
-        super("./Data/runehub/db/nodes.db", DoorDefinition.class);
+        super(RunehubConstants.NODE_DB, DoorDefinition.class);
     }
 }

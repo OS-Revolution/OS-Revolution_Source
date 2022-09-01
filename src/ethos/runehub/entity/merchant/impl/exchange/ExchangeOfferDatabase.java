@@ -1,5 +1,6 @@
 package ethos.runehub.entity.merchant.impl.exchange;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 
 public class ExchangeOfferDatabase extends BetaAbstractDataAcessObject<ExchangeOffer> {
@@ -13,6 +14,6 @@ public class ExchangeOfferDatabase extends BetaAbstractDataAcessObject<ExchangeO
     }
 
     private ExchangeOfferDatabase() {
-        super("./Data/runehub/db/exchange.db", ExchangeOffer.class);
+        super(RunehubConstants.EXCHANGE_DB, ExchangeOffer.class);
     }
 }

@@ -4,9 +4,9 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.entity.merchant.MerchandiseSlot;
 import ethos.runehub.entity.merchant.Merchant;
-import org.rhd.api.math.AdjustableNumber;
-import org.rhd.api.math.impl.AdjustableInteger;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.math.AdjustableNumber;
+import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.util.IDManager;
 
 import java.util.*;

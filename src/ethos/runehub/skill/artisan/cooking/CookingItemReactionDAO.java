@@ -1,5 +1,6 @@
 package ethos.runehub.skill.artisan.cooking;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
 
@@ -14,6 +15,6 @@ public class CookingItemReactionDAO extends BetaAbstractDataAcessObject<CookingI
     }
 
     private CookingItemReactionDAO() {
-        super("./Data/runehub/db/item-interactions.db", CookingItemReaction.class);
+        super(RunehubConstants.ITEM_INTERACTION_DB, CookingItemReaction.class);
     }
 }

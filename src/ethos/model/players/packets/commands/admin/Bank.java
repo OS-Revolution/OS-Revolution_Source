@@ -4,10 +4,6 @@ import ethos.model.items.ItemAssistant;
 import ethos.model.players.ClientGameTimer;
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
-import ethos.model.players.skills.Skill;
-import ethos.runehub.WorldSettingsController;
-import ethos.runehub.building.Hotspot;
-import ethos.runehub.building.HotspotDefinition;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;

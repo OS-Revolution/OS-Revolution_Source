@@ -28,10 +28,11 @@ import ethos.model.players.packets.Commands;
 import ethos.net.PipelineFactory;
 import ethos.punishments.PunishmentCycleEvent;
 import ethos.punishments.Punishments;
-import ethos.runehub.WorldSettingsController;
+import ethos.runehub.RunehubConstants;
+import ethos.runehub.TimeUtils;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
-import ethos.runehub.event.shop.impl.ExchangePriceUpdateEvent;
 import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
 import ethos.runehub.skill.gathering.foraging.ForageNodeClusterController;
 import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
@@ -47,12 +48,9 @@ import ethos.world.objects.GlobalObjects;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.util.HashedWheelTimer;
-import org.rhd.api.io.db.LootMetricDAO;
-import org.rhd.api.model.LootMetric;
 import org.runehub.api.APISettingsController;
 import org.runehub.api.io.data.impl.*;
 import org.runehub.api.io.load.impl.*;
-import org.runehub.api.model.entity.item.ItemEquipmentContext;
 import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.entity.item.loot.LootTableContainer;
 import org.runehub.api.model.entity.item.loot.LootTableContainerDefinition;
@@ -96,8 +94,6 @@ public class Server {
 	private static MultiplayerSessionListener multiplayerSessionListener = new MultiplayerSessionListener();
 
 	private static GlobalObjects globalObjects = new GlobalObjects();
-
-	private static List<LootMetric> lootMetrics = new ArrayList<>();
 
 	/**
 	 * ClanChat Added by Valiant
@@ -189,8 +185,7 @@ public class Server {
 	}
 
 	private static void initializeLoaders() {
-		APISettingsController.getInstance().getApiSettings().setItemDatabaseLocation("./Data/runehub/db/os-definitions.db");
-		APISettingsController.getInstance().getApiSettings().setLootDatabase("./Data/runehub/db/loot.db");
+
 		TierDAO.getInstance().getAllEntries().forEach(tier -> {
 			TierLoader.getInstance().create(tier.getId(),tier);
 		});
@@ -298,16 +293,6 @@ public class Server {
 	private static final Runnable IO_TASKS = () -> {
 		try {
 			WorldSettingsController.getInstance().updateTimers();
-//			if(WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
-//				WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().decrement();
-//				WorldSettingsController.getInstance().saveSettings();
-//			}
-//			if(WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0) {
-//				WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().decrement();
-//				WorldSettingsController.getInstance().saveSettings();
-//			}
-			lootMetrics.forEach(metric -> LootMetricDAO.getInstance().create(metric));
-			lootMetrics.clear();
 			// TODO tasks(players online, etc)
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -315,10 +300,12 @@ public class Server {
 	};
 
 	public static void main(java.lang.String[] args) {
+		APILogger.debug = RunehubConstants.DEBUG;
+		APILogger.initialize();
+		APISettingsController.getInstance().getApiSettings().setItemDatabaseLocation(RunehubConstants.OS_DEFINTIONS_DB);
+		APISettingsController.getInstance().getApiSettings().setLootDatabase(RunehubConstants.LOOT_DB);
 		try {
 			long startTime = System.currentTimeMillis();
-			APILogger.debug = true;
-			APILogger.initialize();
 			System.setOut(extracted());
 
 			PUNISHMENTS.initialize();
@@ -327,8 +314,9 @@ public class Server {
 			events.submit(new BonusApplianceEvent());
 			events.submit(new PunishmentCycleEvent(PUNISHMENTS, 50));
 			events.submit(new TravellingCommodityMerchantEvent());
-			events.submit(new ExchangePriceUpdateEvent());
+//			events.submit(new ExchangePriceUpdateEvent());
 			ForageNodeClusterController.getInstance().spawnCluster();
+
 			Listing.loadNextSale();
 			Wogw.init();
 			ItemDefinition.load();
@@ -349,6 +337,10 @@ public class Server {
 			long elapsed = endTime - startTime;
 
 			initializeLoaders();
+
+			if(System.currentTimeMillis() >= TimeUtils.getDaysAsMS(1) + WorldSettingsController.getInstance().getWorldSettings().getLastDailyResetTimestamp()) {
+				WorldSettingsController.getInstance().resetDailies();
+			}
 
 			System.out.println(Config.SERVER_NAME + " has successfully started up in " + elapsed + " milliseconds.");
 			GAME_THREAD.scheduleAtFixedRate(SERVER_TASKS, 0, 600, TimeUnit.MILLISECONDS);
@@ -414,9 +406,5 @@ public class Server {
 	public static String getStatus() {
 		return "IO_THREAD\n" + "\tShutdown? " + IO_THREAD.isShutdown() + "\n" + "\tTerminated? "
 				+ IO_THREAD.isTerminated();
-	}
-
-	public static List<LootMetric> getLootMetrics() {
-		return lootMetrics;
 	}
 }

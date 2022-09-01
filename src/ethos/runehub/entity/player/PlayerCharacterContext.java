@@ -1,6 +1,6 @@
 package ethos.runehub.entity.player;
 
-import org.rhd.api.entity.EntityContext;
+import org.runehub.api.model.entity.EntityContext;
 
 public class PlayerCharacterContext extends EntityContext {
 

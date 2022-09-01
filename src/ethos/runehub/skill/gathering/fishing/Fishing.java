@@ -1,14 +1,14 @@
 package ethos.runehub.skill.gathering.fishing;
 
 import ethos.model.players.Player;
-import ethos.runehub.WorldSettingsController;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.gathering.fishing.action.FishingSkillAction;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.impl.gatherable.impl.FishingNode;
-import org.rhd.api.math.impl.AdjustableLong;
+import org.runehub.api.model.math.impl.AdjustableLong;
 
 import java.util.List;
 import java.util.stream.Collectors;

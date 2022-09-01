@@ -2,8 +2,11 @@ package ethos.runehub.action.click.item;
 
 import ethos.Server;
 import ethos.model.players.Player;
-import ethos.runehub.action.click.item.consumable.lootable.ClickLootAction;
+import ethos.runehub.RunehubConstants;
+import ethos.runehub.action.click.item.consumable.star.ClickPrismaticStarAction;
+import ethos.runehub.action.click.item.consumable.TeleportChargeScroll;
 import ethos.runehub.action.click.item.consumable.potion.ClickPotionConsumableAction;
+import ethos.runehub.action.click.item.consumable.star.ClickSkillStarAction;
 import org.runehub.api.io.load.impl.LootTableContainerLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.Loot;
@@ -15,6 +18,9 @@ public class ClickItemActionFactory {
 
     public static void onClick(Player player, int itemId, int slot) {
         ClickItemAction action = null;
+        if (RunehubConstants.STAR_IDS.contains(itemId)) {
+            action = new ClickSkillStarAction(player,itemId,slot);
+        }
         switch (itemId) {
             case 2428:
             case 121:
@@ -84,7 +90,7 @@ public class ClickItemActionFactory {
                 );
                 break;
             case 6198:
-                player.getItems().deleteItem(itemId,slot,1);
+                player.getItems().deleteItem(itemId, slot, 1);
                 double playerMF = player.getContext().getPlayerSaveData().getMagicFind().value();
                 float mf = (float) playerMF;
                 final Loot lootTable = new ArrayList<>(LootTableContainerLoader.getInstance().readAll().stream().filter(lootTableContainer -> lootTableContainer.getContainerId() == itemId).findAny().orElseThrow().roll(mf)).get(0);
@@ -92,6 +98,15 @@ public class ClickItemActionFactory {
                 LootTableLoader.getInstance().read(lootTable.getId()).roll(mf).forEach(loot -> {
                     player.getItems().addItem((int) loot.getId(), (int) loot.getAmount());
                 });
+                break;
+            case 2396:
+                action = new TeleportChargeScroll(player, 1, slot);
+                break;
+            case 6822:
+            case 6823:
+            case 6824:
+            case 6825:
+                action = new ClickPrismaticStarAction(player,itemId,slot);
                 break;
         }
         if (action != null)

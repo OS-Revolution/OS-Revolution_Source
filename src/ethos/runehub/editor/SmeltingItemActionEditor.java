@@ -90,5 +90,6 @@ public class SmeltingItemActionEditor extends Editor {
     }
 
     private SmeltingItemActionEditor() {
+        createDefaults();
     }
 }

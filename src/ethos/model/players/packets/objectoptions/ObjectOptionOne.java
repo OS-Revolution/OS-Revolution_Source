@@ -2137,16 +2137,16 @@ public class ObjectOptionOne {
                     c.getPA().movePlayer(3252, 3266, 0);
                 }
                 break;
-            case 3044:
-            case 24009:
-            case 26300:
-            case 16469:
-            case 14838:
-            case 2030:
-            case 6189:
-            case 2282:
-                c.getSmithing().sendSmelting();
-                break;
+//            case 3044:
+//            case 24009:
+//            case 26300:
+//            case 16469:
+//            case 14838:
+//            case 2030:
+//            case 6189:
+//            case 2282:
+////                c.getSmithing().sendSmelting();
+//                break;
 
             /*
              * case 2030: if (c.absX == 1718 && c.absY == 3468) {
@@ -2701,6 +2701,7 @@ public class ObjectOptionOne {
         }
 
         try {
+            Server.getEventHandler().stop("click-object");
             Server.getEventHandler().submit(FirstClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel));
         } catch (NullPointerException e) {
             c.sendMessage("Nothing interesting happens.");

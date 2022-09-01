@@ -25,11 +25,11 @@ public class DefaultHomeTeleportAction extends HomeTeleportAction {
     protected void onTick() {
         final Point selectedTeleportPoint = teleportArea.getAllPoints().get(Skill.SKILL_RANDOM.nextInt(teleportArea.getAllPoints().size()));
         this.getActor().getPA().movePlayer(selectedTeleportPoint.getX(),selectedTeleportPoint.getY());
-        if (this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().value() <= 0) {
+        if (this.getActor().getContext().getPlayerSaveData().getTeleportCharges().value() <= 0) {
             this.getActor().getContext().getPlayerSaveData().setLastHomeTeleportTimestamp(System.currentTimeMillis());
         } else {
-            this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().decrement();
-            this.getActor().sendMessage("#" + this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().value() + " instant teleport charges remaining.");
+            this.getActor().getContext().getPlayerSaveData().getTeleportCharges().decrement();
+            this.getActor().sendMessage("#" + this.getActor().getContext().getPlayerSaveData().getTeleportCharges().value() + " teleport charges remaining.");
         }
     }
 
@@ -48,7 +48,7 @@ public class DefaultHomeTeleportAction extends HomeTeleportAction {
     }
 
     public DefaultHomeTeleportAction(Player attachment) {
-        super(attachment);
+        super(attachment,12);
         this.teleportArea = new Rectangle(new Point(3102,3248),new Point(3106,3251));
     }
 

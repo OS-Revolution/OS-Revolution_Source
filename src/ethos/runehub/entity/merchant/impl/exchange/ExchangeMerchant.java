@@ -4,10 +4,9 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.entity.merchant.MerchandiseSlot;
 import ethos.runehub.entity.merchant.Merchant;
-import ethos.runehub.entity.player.PlayerCharacter;
-import org.rhd.api.math.AdjustableNumber;
-import org.rhd.api.math.impl.AdjustableInteger;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.math.AdjustableNumber;
+import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.util.IDManager;
 
 import java.util.*;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 
 
 public class ExchangeMerchant extends Merchant {
-
 
 
     @Override
@@ -68,7 +66,8 @@ public class ExchangeMerchant extends Merchant {
     @Override
     public String getPriceForItemBeingSoldToShop(int itemId) {
         if (!this.getBuyBackIds().contains(itemId) && ItemIdContextLoader.getInstance().read(itemId).isTradable()
-                && (ItemIdContextLoader.getInstance().read(itemId).isNoteable() || ItemIdContextLoader.getInstance().read(itemId).isNoted()))
+                && ((ItemIdContextLoader.getInstance().read(itemId).isNoteable() || ItemIdContextLoader.getInstance().read(itemId).isNoted()))
+                || ItemIdContextLoader.getInstance().read(itemId).isStackable())
             return "These will list for #" + this.getPriceMerchantWillBuyFor(itemId) + " @"
                     + this.getCurrencyId() + " per @" + itemId;
         return "The shop will not buy this";
@@ -77,7 +76,7 @@ public class ExchangeMerchant extends Merchant {
     @Override
     public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
         final int unitPrice = this.getPriceMerchantWillBuyFor(itemId);
-        if(player.getContext().getPlayerSaveData().getExchangeSlots() > ExchangeAccountDatabase.getInstance().read(player.getContext().getId()).getTotalActiveOffers()) {
+        if (player.getContext().getPlayerSaveData().getExchangeSlots() > ExchangeAccountDatabase.getInstance().read(player.getContext().getId()).getTotalActiveOffers()) {
             if (player.getItems().playerHasItem(itemId, amount)) {
                 player.getItems().deleteItem2(itemId, amount);
                 if (!ItemIdContextLoader.getInstance().read(itemId).isNoted())
@@ -108,7 +107,7 @@ public class ExchangeMerchant extends Merchant {
             if (player.getItems().freeSlots() > 1) {
                 final int amountSold = this.makeExchange(player, itemId, amount, unitPrice);
                 player.getItems().deleteItem(this.getCurrencyId(), unitPrice * amountSold);
-                player.getItems().addItem(itemId + 1, amountSold);
+                player.getItems().addItem(ItemIdContextLoader.getInstance().read(itemId).isStackable() ? itemId : itemId + 1, amountSold);
                 player.getItems().resetItems(3823);
                 player.sendMessage("You bought #" + amountSold + " @" + itemId + " for #" + (unitPrice * amountSold) + " @" + this.getCurrencyId());
                 return true;
@@ -224,6 +223,6 @@ public class ExchangeMerchant extends Merchant {
     }
 
     public ExchangeMerchant() {
-        super(new ArrayList<>(), 995, 2148, "The Exchange", -1, List.of(995,13204));
+        super(new ArrayList<>(), 995, 2148, "The Exchange", -1, List.of(995, 13204));
     }
 }

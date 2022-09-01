@@ -1,5 +1,6 @@
 package ethos.runehub.skill.node.io;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.node.impl.gatherable.impl.WoodcuttingNode;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
@@ -15,6 +16,6 @@ public class WoodcuttingNodeDAO extends BetaAbstractDataAcessObject<WoodcuttingN
     }
 
     private WoodcuttingNodeDAO() {
-        super("./Data/runehub/db/nodes.db", WoodcuttingNode.class);
+        super(RunehubConstants.NODE_DB, WoodcuttingNode.class);
     }
 }

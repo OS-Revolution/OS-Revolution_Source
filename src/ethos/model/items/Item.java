@@ -9,6 +9,7 @@ import java.util.List;
 
 import ethos.Config;
 import ethos.model.players.Player;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
 
 /**
  * Handles The Item Wielding Of The Server Used When Hardcoding Additional Items
@@ -138,7 +139,7 @@ public class Item {
 			4967, 4988, 4989, 4990, 0x2f9a0eb, 6186, 6184, 6180, 3058, 4509, 4504, 4069, 4728, 4736, 4712, 6107, 2661,
 			3140, 1115, 1117, 1119, 1121, 1123, 1125, 1127, 2583, 2591, 2599, 2607, 2615, 6322, 2623, 2653, 2669, 3481,
 			4720, 4728, 4749, 2661, 6129, 6916, 4091, 6654, 6133, 75, 7399, 7390, 5575, 6341, 6351, 3387, 5030, 5032,
-			5034, 7392, 1035,577, 22327, 22507 };
+			5034, 7392, 1035,577, 22327, 22507,9054 };
 
 	/**
 	 * Body armour that covers your body and arms.
@@ -201,7 +202,11 @@ public class Item {
 		switch (itemId) {
 			case 11899:
 			case 11896:
+			case 3767:
+//			case 20:
 				return true;
+//			case 9054:
+//				return false;
 		}
 		for (int i = 0; i < fullbody.length; i++) {
 			if (armour.contains(fullbody[i])) {
@@ -284,10 +289,17 @@ public class Item {
 		return ItemAssistant.getItemName(id);
 	}
 
+	public static boolean isStackable(int itemId) {
+		if (ItemIdContextLoader.getInstance().read(itemId) != null) {
+			return ItemIdContextLoader.getInstance().read(itemId).isStackable() || ItemIdContextLoader.getInstance().read(itemId).isNoted();
+		}
+		return false;
+	}
+
 	/**
 	 * Checks if the item is stackable.
 	 */
-	public static boolean[] itemStackable = new boolean[Config.ITEM_LIMIT];
+//	public static boolean[] itemStackable = new boolean[Config.ITEM_LIMIT];
 
 	/**
 	 * Checks if the item can be made into a note.
@@ -300,20 +312,20 @@ public class Item {
 	public static int[] targetSlots = new int[Config.ITEM_LIMIT];
 
 	static {
-		try {
-			List<String> stackableData = Files.readAllLines(Paths.get("./Data/", "data", "stackables.dat"));
-			for (String data : stackableData) {
-				int id = Integer.parseInt(data.split("\t")[0]);
-				boolean stackable = Boolean.parseBoolean(data.split("\t")[1]);
-				itemStackable[id] = stackable;
-				itemStackable[21880] = true;
-				itemStackable[6646] = true;
-				itemStackable[6651] = true;
-				itemStackable[21930] = true;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			List<String> stackableData = Files.readAllLines(Paths.get("./Data/", "data", "stackables.dat"));
+//			for (String data : stackableData) {
+//				int id = Integer.parseInt(data.split("\t")[0]);
+//				boolean stackable = Boolean.parseBoolean(data.split("\t")[1]);
+//				itemStackable[id] = stackable;
+//				itemStackable[21880] = true;
+//				itemStackable[6646] = true;
+//				itemStackable[6651] = true;
+//				itemStackable[21930] = true;
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 		int counter = 0;
 		int c = 0;

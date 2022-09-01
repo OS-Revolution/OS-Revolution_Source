@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import ethos.runehub.loot.RewardCodeController;
 import org.apache.commons.lang3.text.WordUtils;
 
 import ethos.Server;
@@ -134,8 +135,9 @@ public class InputField implements PacketType {
 			/**
 			 * Player shop name
 			 */
-		case 28054:
-			player.sendMessage("Setting player shop name to: " + text);
+		case 18135:
+			player.getAttributes().setEnteredString(text);
+//			player.sendMessage("Setting player shop name to: " + text);
 			break;
 			
 			/**

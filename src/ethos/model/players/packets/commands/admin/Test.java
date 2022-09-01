@@ -1,33 +1,9 @@
 package ethos.model.players.packets.commands.admin;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializer;
-import ethos.Server;
-import ethos.model.content.Tutorial;
-import ethos.model.items.ItemAssistant;
-import ethos.model.players.ClientGameTimer;
 import ethos.model.players.Player;
-import ethos.model.players.PlayerHandler;
 import ethos.model.players.Right;
 import ethos.model.players.packets.commands.Command;
-import ethos.model.players.skills.Smelting;
-import ethos.runehub.WorldSettingsController;
-import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
-import ethos.runehub.dialog.Dialog;
-import ethos.runehub.dialog.DialogOption;
-import ethos.runehub.dialog.DialogSequence;
-import ethos.runehub.entity.CommodityTrader;
-import ethos.runehub.entity.player.PlayerCharacterContext;
-import ethos.runehub.entity.player.PlayerSaveData;
-import ethos.runehub.entity.player.PlayerSaveDataSerializer;
-import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
-import org.runehub.api.util.IDManager;
-import org.runehub.api.util.StringUtils;
-
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import ethos.runehub.ui.impl.MoaiRechargeUI;
 
 public class Test extends Command {
 
@@ -93,14 +69,24 @@ public class Test extends Command {
 
     @Override
     public void execute(Player player, String input) {
-
-
+//        TeleportationInterface.open(player);
+        player.sendUI(new MoaiRechargeUI(player));
+//        player.getPA().sendBonusXp(8,1169);
+//        RewardCodeController.getInstance().requestCodeEntryFromPlayer(player);
 //        player.getContext().getSkillAnimationOverrideMap().put(8, 2876);
 //        CommodityTrader.getInstance().spawn();
 //        CommodityTrader.getInstance().openShop(player);
 //        Server.getEventHandler().submit(new TravellingCommodityMerchantEvent());
 //		String[] args = input.split(" ");
-//		int id = Integer.parseInt(args[0]);
+////		int id = Integer.parseInt(args[0]);
+//        for (int i = 300; i < 5000; i++) {
+//            player.setSidebarInterface(0, i);
+//            player.sendMessage("Showing interface: $" + i);
+//            System.out.println("Showing interface: " + i);
+//        }
+//        player.setSidebarInterface(0, id);
+//        CombatUtils.sendWeaponInterface(player,WeaponType.values()[id]);
+//        CombatUtils.sendWeaponInterface(player,WeaponType.SCYTHE);
 //		int time = Integer.parseInt(args[1]);
 //		WorldSettingsController.getInstance().addSkillPower(player,time,id);
 //		WorldSettingsController.getInstance().addSkillEfficiency(player,time,id);

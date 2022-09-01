@@ -82,7 +82,7 @@ public class PacketHandler {
 		packetId[238] = u;
 		packetId[150] = u;
 		packetId[74] = u;
-		packetId[234] = u;
+		packetId[234] = new ClickObject();
 		packetId[34] = u;
 		packetId[68] = u;
 		packetId[79] = u;

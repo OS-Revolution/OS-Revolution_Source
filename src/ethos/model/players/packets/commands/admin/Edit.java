@@ -41,7 +41,7 @@ public class Edit extends Command {
         System.out.println("Save Data: " + saveData);
         System.out.println("Save Data JSON: " + saveDataJson);
         System.out.println("Target Object: " + targetObject);
-        System.out.println(element.getAsJsonObject().keySet());
+        System.out.println(element.getAsJsonObject().entrySet());
 
         if (targetValue instanceof Number) {
             targetObject.addProperty(nestedKey.orElse(targetKey), (Number) targetValue);

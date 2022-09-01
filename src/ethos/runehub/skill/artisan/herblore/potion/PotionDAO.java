@@ -1,5 +1,6 @@
 package ethos.runehub.skill.artisan.herblore.potion;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
 
@@ -14,12 +15,6 @@ public class PotionDAO extends BetaAbstractDataAcessObject<Potion> {
     }
 
     private PotionDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("item-actions")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), Potion.class);
+        super(RunehubConstants.ITEM_ACTION_DB, Potion.class);
     }
 }

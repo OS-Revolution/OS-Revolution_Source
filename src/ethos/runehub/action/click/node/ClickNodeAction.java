@@ -90,7 +90,7 @@ public abstract class ClickNodeAction extends Event<Player> {
     }
 
     public ClickNodeAction(Player attachment, int ticks, int nodeId, int nodeX, int nodeY) {
-        super(attachment, ticks);
+        super("click-object",attachment, ticks);
         this.nodeId = nodeId;
         this.nodeX = nodeX;
         this.nodeY = nodeY;

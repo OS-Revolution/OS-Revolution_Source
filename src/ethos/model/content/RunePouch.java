@@ -10,7 +10,7 @@ import ethos.model.players.PlayerSave;
 public class RunePouch extends Pouch {
 	public List<LootingBagItem> items;
 
-	public static final int RUNE_POUCH_ID = 13000;
+	public static final int RUNE_POUCH_ID = 12791;
 	private static final boolean CHECK_FOR_POUCH = true;
 
 	private final int START_ITEM_INTERFACE = 29908;

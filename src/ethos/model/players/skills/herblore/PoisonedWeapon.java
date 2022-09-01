@@ -559,7 +559,7 @@ public enum PoisonedWeapon {
 		Optional<Integer> poisonedWeapon = PoisonedWeapon.getResult(poison.get(), weapon);
 		if (poisonedWeapon.isPresent()) {
 			int amount = 1;
-			if (Item.itemStackable[weapon]) {
+			if (Item.isStackable(weapon)) {
 				if (player.getItems().freeSlots() <= 0 && !player.getItems().playerHasItem(poisonedWeapon.get())) {
 					player.sendMessage("You need at least one free inventory space to do this.");
 					return false;

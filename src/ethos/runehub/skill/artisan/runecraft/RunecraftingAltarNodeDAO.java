@@ -1,5 +1,6 @@
 package ethos.runehub.skill.artisan.runecraft;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReaction;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReactionDAO;
 import ethos.runehub.skill.node.impl.artisan.RunecraftingAltarNode;
@@ -17,6 +18,6 @@ public class RunecraftingAltarNodeDAO extends BetaAbstractDataAcessObject<Runecr
     }
 
     private RunecraftingAltarNodeDAO() {
-        super("./Data/runehub/db/nodes.db", RunecraftingAltarNode.class);
+        super(RunehubConstants.NODE_DB, RunecraftingAltarNode.class);
     }
 }

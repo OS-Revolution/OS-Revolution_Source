@@ -10,8 +10,6 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
-import ethos.runehub.WorldSettingsController;
-import ethos.runehub.skill.support.thieving.Thieving;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -20,12 +18,6 @@ import org.menaphos.entity.impl.impl.NonPlayableCharacter;
 import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
-import org.rhd.api.io.loader.LootContainerContextProducer;
-import org.rhd.api.io.loader.LootContainerLoader;
-import org.rhd.api.io.loader.LootMetricProducer;
-import org.rhd.api.math.AdjustableNumber;
-import org.rhd.api.math.impl.AdjustableLong;
-import org.rhd.api.model.*;
 
 import java.awt.*;
 import java.util.logging.Logger;
@@ -774,54 +766,6 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public void dropLootFor(Player player) {
         final Location3D dropLocation = new Location3D(this.getX(), this.getY(), player.getHeight());
         Logger.getGlobal().info("Dropping Loot @: X:" + this.getX() + " Y: " + this.getY() + " Height: " + player.getHeight());
-        final LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(this.getId(), LootContainerType.NPC);
-        if (container != null && container.getLootTables().size() > 0) {
-            final LootTable lootTable = container.roll(player.getContext().getPlayerSaveData().getMagicFind().value());
-            final long metricId = LootContainerContextProducer.getInstance(LootContainerType.NPC).get(container.getId()).getMetricId();
-            final AdjustableNumber<Long> rolls = new AdjustableLong(
-                    LootMetricProducer.getInstance().get(metricId) != null ?
-                            LootMetricProducer.getInstance().get(metricId).getRolls().value() :
-                            0L
-            );
-            rolls.increment();
-            final double mf = WorldSettingsController.getInstance().getWorldSettings().getDoubleDropRateTimer().value() > 0 ?
-                    player.getContext().getPlayerSaveData().getMagicFind().value() * 2 : player.getContext().getPlayerSaveData().getMagicFind().value();
-            lootTable.roll(mf)
-                    .forEach(loot -> {
-                        final double tier = lootTable.getPotentialItems().stream().filter(potentialItem ->
-                                potentialItem.getItemId() == loot.getItemId()).findAny().orElseThrow(() -> new NullPointerException("Error")).getRoll();
-                        if (lootTable.getTableId() == 1 || lootTable.getTableId() == 2 || lootTable.getTableId() == 3 || lootTable.getTableId() == 4
-                                || lootTable.getTableId() == 5) {
-                            player.sendMessage("You received a drop from the rare drop table!");
-                        }
-                        switch (Tier.getRarityForValue(tier)) {
-                            case VERY_RARE:
-                                break;
-                            case LEGENDARY:
-                                break;
-                            case MYTHIC:
-                                break;
-                        }
-                        Server.getLootMetrics().add(
-                                new LootMetric(
-                                        metricId,
-                                        System.currentTimeMillis(),
-                                        player.getName(),
-                                        container.getId(),
-                                        lootTable.getTableId(),
-                                        loot.getItemId(),
-                                        loot.getAmount(),
-                                        tier,
-                                        rolls.value(),
-                                        LootContainerType.NPC.ordinal(),
-                                        player.getContext().getPlayerSaveData().getMagicFind().value() //TODO replace with mf variable
-                                )
-                        );
-                        Server.getDropManager().create(player, new Location3D(dropLocation.getX(), dropLocation.getY(), dropLocation.getZ()), loot);
-                    });
-        } else {
-            throw new NullPointerException("Missing Drop");
-        }
     }
 
 

@@ -1,5 +1,6 @@
 package ethos.runehub.skill.artisan.herblore.potion;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.artisan.herblore.potion.effect.SkillAdjustmentEffect;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
@@ -15,6 +16,6 @@ public class SkillAdjustmentEffectDAO extends BetaAbstractDataAcessObject<SkillA
     }
 
     private SkillAdjustmentEffectDAO() {
-        super("./Data/runehub/db/effects.db", SkillAdjustmentEffect.class);
+        super(RunehubConstants.EFFECT_DB, SkillAdjustmentEffect.class);
     }
 }

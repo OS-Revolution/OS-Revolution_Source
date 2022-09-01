@@ -47,6 +47,8 @@ import ethos.model.players.skills.prayer.Bone;
 import ethos.model.players.skills.prayer.Prayer;
 import ethos.runehub.entity.item.*;
 import ethos.util.Misc;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.entity.item.ItemContext;
 
 /**
  * @author Sanity
@@ -127,7 +129,7 @@ public class UseItem {
 
             if (def.name != null && def.name.toLowerCase().contains("bank")) {
                 //ItemDefinition definition = ItemDefinition.forId(itemId);
-                boolean stackable = Item.itemStackable[itemId];
+                boolean stackable = Item.isStackable(itemId);
                 if (stackable) {
                     c.getOutStream().createFrame(27);
                     c.unNoteItemId = itemId;
@@ -256,12 +258,6 @@ public class UseItem {
                 }
                 break;
 
-            case 11744:
-                if (c.getMode().isUltimateIronman()) {
-
-                }
-                break;
-
             case 14888:
                 if (itemId == 19529) {
                     if (c.getItems().playerHasItem(6571)) {
@@ -309,7 +305,7 @@ public class UseItem {
                             c.getItems().deleteItem(11286, c.getItems().getItemSlot(11286), 1);
                             c.getItems().addItem(11284, 1);
                             c.getDH().sendItemStatement("You combine the two materials to create a dragonfire shield.", 11284);
-                            c.getPA().addSkillXP((int) (500 * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.SMITHING_EXPERIENCE * c.prestige())), Player.playerSmithing, true);
+                            c.getPA().addSkillXP((int) (500 * (Config.SMITHING_EXPERIENCE * c.prestige())), Player.playerSmithing, true);
                         } else {
                             c.sendMessage("You need a smithing level of 90 to create a dragonfire shield.");
                         }
@@ -324,7 +320,7 @@ public class UseItem {
                             c.getItems().deleteItem(22006, c.getItems().getItemSlot(22006), 1);
                             c.getItems().addItem(22002, 1);
                             c.getDH().sendItemStatement("You combine the two materials to create a dragonfire ward.", 11284);
-                            c.getPA().addSkillXP((int) (2500 * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.SMITHING_EXPERIENCE * c.prestige())), Player.playerSmithing, true);
+                            c.getPA().addSkillXP((int) (2500 * (Config.SMITHING_EXPERIENCE * c.prestige())), Player.playerSmithing, true);
                         } else {
                             c.sendMessage("You need a smithing level of 90 to create a dragonfire ward.");
                         }
@@ -384,26 +380,52 @@ public class UseItem {
         GameItem gameItemUsedWith = new GameItem(useWith, c.playerItemsN[itemUsedSlot], usedWithSlot);
         c.getPA().resetVariables();
         List<ItemCombinations> itemCombinations = ItemCombinations.getCombinations(new GameItem(itemUsed), new GameItem(useWith));
-        ItemInteractionLoader.getInstance().readAll()
-                .stream()
-                .filter(itemInteraction -> itemInteraction.getUsedId() == itemUsed)
-                .filter(itemInteraction -> itemInteraction.getUsedOnId() == useWith)
-                .filter(itemInteraction -> itemInteraction.getInteractionTypeId() == ItemInteraction.ITEM_INTERACTION)
-                .findAny().ifPresent(itemInteraction -> {
-                    try {
-                        Logger.getGlobal().fine("Processing Item on Item Interaction: " + itemInteraction.getUuid()
-                                + "\nReaction ID: " + itemInteraction.getReactionUuid());
-                        c.getAttributes().getItemReactionProcessor().process(
-                                new ItemInteractionContext(c.absX, c.absY, c.heightLevel, itemUsed, useWith,gameItemUsed.getAmount(),gameItemUsedWith.getAmount()),
-                                itemInteraction,
-                                ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
-                                        itemInteraction.getReactionUuid()),
-                                c
-                        );
-                    } catch (NullPointerException e) {
-                        c.sendMessage("Nothing interesting happens.");
-                    }
-                });
+        if(useWith == 3103 || itemUsed == 3103) {
+            int targetId = -1;
+            int targetSlot = -1;
+            if(useWith == 3103) {
+                targetId = itemUsed;
+                targetSlot = itemUsedSlot;
+            } else if(itemUsed == 3103) {
+                targetId = useWith;
+                targetSlot = usedWithSlot;
+            }
+
+            ItemContext context = ItemIdContextLoader.getInstance().read(targetId);
+            if(((context != null && context.isNoteable()) || ItemDefinition.forId(targetId).isNoteable())
+            &&  (context != null && !context.isNoted())) {
+                if(c.getItems().playerHasItem(targetId + 1) || c.getItems().freeSlots() > 0) {
+                    c.getItems().deleteItem2(3103, 1);
+                    c.getItems().deleteItem(targetId, targetSlot, 1);
+                    c.getItems().addItem(targetId + 1, 1);
+                } else {
+                    c.sendMessage("You do not have enough inventory space.");
+                }
+            } else {
+                c.sendMessage("This item can not be noted.");
+            }
+        } else {
+            ItemInteractionLoader.getInstance().readAll()
+                    .stream()
+                    .filter(itemInteraction -> itemInteraction.getUsedId() == itemUsed)
+                    .filter(itemInteraction -> itemInteraction.getUsedOnId() == useWith)
+                    .filter(itemInteraction -> itemInteraction.getInteractionTypeId() == ItemInteraction.ITEM_INTERACTION)
+                    .findAny().ifPresent(itemInteraction -> {
+                        try {
+                            Logger.getGlobal().fine("Processing Item on Item Interaction: " + itemInteraction.getUuid()
+                                    + "\nReaction ID: " + itemInteraction.getReactionUuid());
+                            c.getAttributes().getItemReactionProcessor().process(
+                                    new ItemInteractionContext(c.absX, c.absY, c.heightLevel, itemUsed, useWith, gameItemUsed.getAmount(), gameItemUsedWith.getAmount()),
+                                    itemInteraction,
+                                    ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
+                                            itemInteraction.getReactionUuid()),
+                                    c
+                            );
+                        } catch (NullPointerException e) {
+                            c.sendMessage("Nothing interesting happens.");
+                        }
+                    });
+        }
         if (itemCombinations.size() > 0) {
             for (ItemCombinations combinations : itemCombinations) {
                 ItemCombination combination = combinations.getItemCombination();
@@ -456,7 +478,7 @@ public class UseItem {
                 c.getItems().deleteItem(1734, c.getItems().getItemSlot(1734), 1);
                 c.getItems().deleteItem2(1743, 1);
                 c.getItems().addItem(1131, 1);
-                c.getPA().addSkillXP((int) (35 * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.CRAFTING_EXPERIENCE * c.prestige())), 12, true);
+                c.getPA().addSkillXP((int) (35 * (Config.CRAFTING_EXPERIENCE * c.prestige())), 12, true);
                 //c.sendMessage("Crafting hardleather body.");
             } else {
                 c.sendMessage("You need 28 crafting to do this.");
@@ -510,7 +532,7 @@ public class UseItem {
                     c.getItems().deleteItem(3016, 1);
                     c.getItems().deleteItem(12640, 3);
                     c.getItems().addItem(12625, 1);
-                    c.getPA().addSkillXP((int) (152 * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.HERBLORE_EXPERIENCE * c.prestige())), Skill.HERBLORE.getId(), true);
+                    c.getPA().addSkillXP((int) (152 * ( Config.HERBLORE_EXPERIENCE * c.prestige())), Skill.HERBLORE.getId(), true);
                     c.sendMessage("You combine all of the ingredients and make a Stamina potion.");
                     Achievements.increase(c, AchievementType.HERB, 1);
                 }
@@ -1293,7 +1315,7 @@ public class UseItem {
                 c.getItems().deleteItem(269, c.getItems().getItemSlot(269), 1);
                 c.getItems().deleteItem2(12907, 1);
                 c.getItems().addItem(12915, 1);
-                c.getPA().addSkillXP((int) (125 * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.HERBLORE_EXPERIENCE * c.prestige())), Skill.HERBLORE.getId(), true);
+                c.getPA().addSkillXP((int) (125 * (Config.HERBLORE_EXPERIENCE * c.prestige())), Skill.HERBLORE.getId(), true);
                 c.sendMessage("You put the " + Item.getItemName(269) + " into the Anti-venom and create a " + Item.getItemName(12915) + ".");
             } else {
                 c.sendMessage("You have run out of supplies to do this.");

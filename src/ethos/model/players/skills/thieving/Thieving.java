@@ -35,12 +35,6 @@ import ethos.model.players.skills.Skill;
 import ethos.net.discord.DiscordMessager;
 import ethos.util.Location3D;
 import ethos.util.Misc;
-import org.rhd.api.io.loader.LootContainerContextProducer;
-import org.rhd.api.io.loader.LootContainerLoader;
-import org.rhd.api.io.loader.LootMetricProducer;
-import org.rhd.api.math.AdjustableNumber;
-import org.rhd.api.math.impl.AdjustableLong;
-import org.rhd.api.model.*;
 
 /**
  * A representation of the thieving skill. Support for both object and npc actions will be supported.

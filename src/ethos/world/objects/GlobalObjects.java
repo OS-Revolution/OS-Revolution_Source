@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import ethos.clip.ObjectDef;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
-import ethos.runehub.building.Hotspot;
 
 /**
  * 

@@ -7,7 +7,8 @@ public class Test extends Command{
 
 	@Override
 	public void execute(Player player, String input) {
-		player.getPA().sendNPCOnInterface(50049, 131);
+
+//		player.getPA().sendNPCOnInterface(50049, 131);
 		
 	}
 

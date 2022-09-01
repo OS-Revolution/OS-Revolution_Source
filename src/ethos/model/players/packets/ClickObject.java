@@ -32,7 +32,6 @@ public class ClickObject implements PacketType {
         c.objectYOffset = c.objectXOffset = 0;
         c.getPA().resetFollow();
         c.getCombat().resetPlayerAttack();
-
         if (c.isForceMovementActive()) {
             return;
         }
@@ -847,9 +846,12 @@ public class ClickObject implements PacketType {
                 }
                 break;
             case FOURTH_CLICK:
+            case 234:
                 c.objectX = c.getInStream().readSignedWordBigEndian();
                 c.objectY = c.getInStream().readUnsignedWord();
                 c.objectId = c.getInStream().readUnsignedWordBigEndianA();
+
+
                 // if (!Region.isWorldObject(c.objectId, c.objectX, c.objectY, c.heightLevel)) {
                 // c.sendMessage("Warning: The object could not be verified by the server. If
                 // you feel this is");
@@ -879,17 +881,19 @@ public class ClickObject implements PacketType {
                         c.objectDistance = 1;
                         c.objectXOffset = 0;
                         c.objectYOffset = 0;
+                        c.getActions().fourthClickObject(c.objectId, c.objectX, c.objectY);
                         break;
                 }
+
                 if (c.goodDistance(c.objectX + c.objectXOffset, c.objectY + c.objectYOffset, c.getX(), c.getY(),
                         c.objectDistance)) {
-                    c.getActions().thirdClickObject(c.objectId, c.objectX, c.objectY);
+
+                    c.getActions().fourthClickObject(c.objectId, c.objectX, c.objectY);
                 } else {
                     c.clickObjectType = 4;
                     CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
                         @Override
                         public void execute(CycleEventContainer container) {
-
                             if (c.clickObjectType == 4 && c.goodDistance(c.objectX + c.objectXOffset,
                                     c.objectY + c.objectYOffset, c.getX(), c.getY(), c.objectDistance)) {
                                 c.getActions().fourthClickObject(c.objectId, c.objectX, c.objectY);

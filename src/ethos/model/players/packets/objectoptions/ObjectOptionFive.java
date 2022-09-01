@@ -7,6 +7,7 @@ import ethos.model.players.Right;
 public class ObjectOptionFive {
 	
 	public static void handleOption(final Player c, int objectType, int obX, int obY) {
+		System.out.println("ObjectOptionFour: " + objectType);
 		if (Server.getMultiplayerSessionListener().inAnySession(c)) {
 			return;
 		}

@@ -2,6 +2,7 @@ package ethos.runehub.action.click.node;
 
 import ethos.model.players.Player;
 import ethos.runehub.action.click.node.impl.first.ClickStallAction;
+import ethos.runehub.action.click.node.impl.second.SecondClickShinyChest;
 import ethos.runehub.action.click.node.impl.second.SecondClickSkillCapeStandAction;
 
 public class SecondClickNodeActionListener {
@@ -33,6 +34,8 @@ public class SecondClickNodeActionListener {
             case 29187:
             case 29225:
                 return new SecondClickSkillCapeStandAction(player, nodeId, nodeX, nodeY);
+            case 4126:
+                return new SecondClickShinyChest(player,nodeId,nodeX,nodeY);
             default:
                 throw new NullPointerException("Nothing Interesting Happens.");
         }

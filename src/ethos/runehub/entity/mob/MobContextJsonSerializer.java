@@ -36,7 +36,7 @@ public class MobContextJsonSerializer extends JsonSerializer<MobContextJsonSeria
         final JsonElement element = new JsonParser().parse(json);
         final JsonObject jsonObject = element.getAsJsonObject();
         final List<HostileMobContext> npcContexts = new ArrayList<>();
-        if (jsonObject.keySet().contains("_items")) {
+        if (jsonObject.entrySet().stream().anyMatch(stringJsonElementEntry -> stringJsonElementEntry.getKey().contains("_items"))) {
             element.getAsJsonObject().get("_items").getAsJsonArray().forEach(jsonElement -> {
                 Logger.getGlobal().info("Parsed NPC from Array: " + this.parse(jsonElement));
                 npcContexts.add(this.parse(jsonElement));

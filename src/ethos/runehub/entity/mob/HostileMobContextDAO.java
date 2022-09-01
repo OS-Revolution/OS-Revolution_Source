@@ -1,6 +1,7 @@
 package ethos.runehub.entity.mob;
 
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.DatabaseAcessManager;
 import org.runehub.api.io.data.Query;
 import org.runehub.api.io.data.impl.AbstractDataAcessObject;
@@ -29,14 +30,7 @@ public class HostileMobContextDAO extends AbstractDataAcessObject<HostileMobCont
     }
 
     private HostileMobContextDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.COMMON_RESOURCE_DIRECTORY)
-                .inDirectory(APIFileSystem.COMMON_DB_RESOURCE)
-                .withFileName("os-definitions")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), HostileMobContext.class);
+        super(RunehubConstants.OS_DEFINTIONS_DB, HostileMobContext.class);
         this.getDatabaseServiceProvider().createTable();
     }
 

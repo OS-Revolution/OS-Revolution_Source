@@ -1,12 +1,11 @@
 package ethos.runehub.db;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.entity.player.PlayerCharacterContext;
 import ethos.runehub.entity.player.PlayerSaveDataSerializer;
-import org.rhd.api.io.db.DatabaseAcessManager;
-import org.rhd.api.io.db.Query;
-import org.rhd.api.io.db.QueryParameter;
-import org.rhd.api.io.db.SqlDataType;
-import org.rhd.api.io.db.impl.AbstractDataAcessObject;
+import org.runehub.api.io.data.DatabaseAcessManager;
+import org.runehub.api.io.data.Query;
+import org.runehub.api.io.data.impl.AbstractDataAcessObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -67,16 +66,10 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
                  PreparedStatement pstmt = Objects.requireNonNull(conn).prepareStatement(query.getSql())) {
                 pstmt.executeUpdate();
             } catch (SQLException e) {
-                System.out.println("PROBLEM");
-                if (this.getCachedEntries().containsKey(context.getId())) {
+                if (this.getCache().containsKey(context.getId())) {
                     this.delete(context);
                 }
                 this.create(context);
-            }
-            if (!this.getCachedEntries().containsKey(context.getId())) {
-                this.getCachedEntries().putIfAbsent(context.getId(), context);
-            } else {
-                this.getCachedEntries().replace(context.getId(), context);
             }
         } catch (NullPointerException e) {
 
@@ -98,11 +91,6 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if (!this.getCachedEntries().containsKey(context.getId())) {
-            this.getCachedEntries().putIfAbsent(context.getId(), context);
-        } else {
-            this.getCachedEntries().replace(context.getId(), context);
-        }
     }
 
     @Override
@@ -118,7 +106,6 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        this.getCachedEntries().remove(context.getId());
     }
 
     @Override
@@ -128,7 +115,6 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
 
     @Override
     public PlayerCharacterContext read(long l) {
-        System.out.println("READING: " + l);
             final Query query = new Query.QueryBuilder()
                     .addQuery("SELECT * FROM")
                     .addQuery(TABLE_NAME)
@@ -154,10 +140,10 @@ public class PlayerCharacterContextDataAccessObject extends AbstractDataAcessObj
     }
 
     private PlayerCharacterContextDataAccessObject() {
-        super("./Data/runehub/db/players.db");
-        this.getDatabaseServiceProvider().createTable(TABLE_NAME,
-                new QueryParameter("id", SqlDataType.BIGINT, QueryParameter.PRIMARY_KEY),
-                new QueryParameter("playerSaveData", SqlDataType.LONGTEXT)
-        );
+        super(RunehubConstants.PLAYER_DB,PlayerCharacterContext.class);
+//        this.getDatabaseServiceProvider().createTable(TABLE_NAME,
+//                new QueryParameter("id", SqlDataType.BIGINT, QueryParameter.PRIMARY_KEY),
+//                new QueryParameter("playerSaveData", SqlDataType.LONGTEXT)
+//        );
     }
 }

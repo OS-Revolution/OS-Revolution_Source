@@ -1528,10 +1528,10 @@ public class ShopAssistant {
 				}
 			}
 
-			if (amount > c.playerItemsN[fromSlot] && (Item.itemIsNote[(c.playerItems[fromSlot] - 1)] == true || Item.itemStackable[(c.playerItems[fromSlot] - 1)] == true)) {
+			if (amount > c.playerItemsN[fromSlot] && (Item.itemIsNote[(c.playerItems[fromSlot] - 1)] || Item.isStackable((c.playerItems[fromSlot] - 1)))) {
 				amount = c.playerItemsN[fromSlot];
-			} else if (amount > c.getItems().getItemAmount(itemID) && Item.itemIsNote[(c.playerItems[fromSlot] - 1)] == false
-					&& Item.itemStackable[(c.playerItems[fromSlot] - 1)] == false) {
+			} else if (amount > c.getItems().getItemAmount(itemID) && !Item.itemIsNote[(c.playerItems[fromSlot] - 1)]
+					&& !Item.isStackable((c.playerItems[fromSlot] - 1))) {
 				amount = c.getItems().getItemAmount(itemID);
 			}
 			// double ShopValue;
@@ -1562,7 +1562,7 @@ public class ShopAssistant {
 				TotPrice2 = TotPrice2 * amount;
 				TotPrice4 = TotPrice4 * amount;
 				if (c.getItems().freeSlots() > 0 || c.getItems().playerHasItem(995)) {
-						if ((Item.itemStackable[itemID] || Item.itemIsNote[itemID]) && c.getItems().playerHasItem(itemID, amount)) {
+						if ((Item.isStackable(itemID) || Item.itemIsNote[itemID]) && c.getItems().playerHasItem(itemID, amount)) {
 							c.getItems().deleteItemNoSave(itemID,c.getItems().getItemSlot(itemID),amount);
 							if (c.myShopId == 12) {
 								c.getItems().addItem(2996, (int) Math.ceil(TotPrice3 *= 0.75));
@@ -1727,7 +1727,7 @@ public class ShopAssistant {
 				System.out.println("[District] " + c.playerName + " Attempting to purchase from free shop outside disitrict.");
 				return false;
 			}
-			if (Item.itemStackable[itemID]) {
+			if (Item.isStackable(itemID)) {
 				amount = 1000;
 			}
 			if (itemID == 12934) {
@@ -1867,7 +1867,7 @@ public class ShopAssistant {
 			if(c.myShopId==124 && c.amDonated>=150 && itemID == 299){
 				TotPrice2=0;
 			}
-			if (Item.itemStackable[itemID]) {
+			if (Item.isStackable(itemID)) {
 				if (c.myShopId != 29) {
 					if (c.getItems().playerHasItem(995, TotPrice2 * amount)) {
 						if (c.getItems().freeSlots() > 0) {

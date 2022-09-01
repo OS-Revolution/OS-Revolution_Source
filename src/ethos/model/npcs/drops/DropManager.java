@@ -24,8 +24,6 @@ import ethos.model.players.skills.slayer.Task;
 import ethos.net.discord.DiscordMessager;
 import ethos.util.Location3D;
 import ethos.util.Misc;
-import org.rhd.api.io.loader.LootContainerLoader;
-import org.rhd.api.model.*;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -135,10 +133,10 @@ public class DropManager {
         player.getPA().showInterface(33000);
     }
 
-    public void create(Player player, Location3D location, Loot loot) {
-        Server.itemHandler.createGroundItem(player, loot.getItemId(), location.getX(), location.getY(),
-                location.getZ(), loot.getAmount(), player.getIndex());
-    }
+//    public void create(Player player, Location3D location, Loot loot) {
+//        Server.itemHandler.createGroundItem(player, loot.getItemId(), location.getX(), location.getY(),
+//                location.getZ(), loot.getAmount(), player.getIndex());
+//    }
 
     public void create(Player player, NPC npc, Location3D location, int repeats) {
         Optional<TableGroup> group = groups.values().stream().filter(g -> g.getNpcIds().contains(npc.npcType)).findFirst();
@@ -839,11 +837,11 @@ public class DropManager {
         player.lastDropTableSelected = System.currentTimeMillis();
 
         double modifier = getModifier(player);
-
-        LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(npcId, LootContainerType.NPC);
-        List<PotentialItem> potentialItems = new ArrayList<>();
-        container.getLootTables().getMap().values().forEach(lootTable -> potentialItems.addAll(lootTable.getPotentialItems()));
-        this.updateAmounts(player, potentialItems);
+//
+//        LootTableContainer container = LootContainerLoader.getInstance().getLootContainer(npcId, LootContainerType.NPC);
+//        List<PotentialItem> potentialItems = new ArrayList<>();
+//        container.getLootTables().getMap().values().forEach(lootTable -> potentialItems.addAll(lootTable.getPotentialItems()));
+//        this.updateAmounts(player, potentialItems);
         //Iterates through all 5 drop table's (Found in TablePolicy -> Enum)
 //			for (TablePolicy policy : TablePolicy.POLICIES) {
 //				Optional<Table> table = g.stream().filter(t -> t.getPolicy() == policy).findFirst();
@@ -879,35 +877,35 @@ public class DropManager {
     }
 
 
-    private void updateAmounts(Player player, List<PotentialItem> drops) {
-        DecimalFormat df = new DecimalFormat("#.#####");
-        df.setRoundingMode(RoundingMode.CEILING);
-        //Iterates through all drops in that catagory
-        for (int index = 0; index < drops.size(); index++) {
-            PotentialItem potentialItem = drops.get(index);
-            try {
-                int minimum = (int) potentialItem.getPotentialAmount().getMin();
-                int maximum = (int) potentialItem.getPotentialAmount().getMax();
-                String tierName = Tier.getRarityForValue(potentialItem.getRoll()).toString();
-                int frame = (34200 + player.dropSize + index);//collumnOffset + (index * 2);
-
-                //if max = min, just send the max
-                if (minimum == maximum) {
-                    player.getPA().sendString(Misc.getValueWithoutRepresentation(maximum), frame);
-                } else {
-                    player.getPA().sendString(Misc.getValueWithoutRepresentation(minimum) + " - " + Misc.getValueWithoutRepresentation(maximum), frame);
-                }
-                player.getPA().itemOnInterface(potentialItem.getItemId(), 1, 34010 + player.dropSize + index, 0);
-                player.getPA().sendString(Misc.optimizeText(tierName.toLowerCase()), 34300 + player.dropSize + index);
-                player.getPA().sendString(Server.itemHandler.getItemList(potentialItem.getItemId()).itemName, 34100 + player.dropSize + index);
-                player.getPA().sendString(df.format(potentialItem.getRoll()) + "%", 34400 + player.dropSize + index);
-            } catch (NullPointerException e) {
-                System.out.println("Missing Drop Data for: " + potentialItem.getItemId());
-            }
-        }
-
-        player.dropSize += drops.size();
-    }
+//    private void updateAmounts(Player player, List<PotentialItem> drops) {
+//        DecimalFormat df = new DecimalFormat("#.#####");
+//        df.setRoundingMode(RoundingMode.CEILING);
+//        //Iterates through all drops in that catagory
+//        for (int index = 0; index < drops.size(); index++) {
+//            PotentialItem potentialItem = drops.get(index);
+//            try {
+//                int minimum = (int) potentialItem.getPotentialAmount().getMin();
+//                int maximum = (int) potentialItem.getPotentialAmount().getMax();
+//                String tierName = Tier.getRarityForValue(potentialItem.getRoll()).toString();
+//                int frame = (34200 + player.dropSize + index);//collumnOffset + (index * 2);
+//
+//                //if max = min, just send the max
+//                if (minimum == maximum) {
+//                    player.getPA().sendString(Misc.getValueWithoutRepresentation(maximum), frame);
+//                } else {
+//                    player.getPA().sendString(Misc.getValueWithoutRepresentation(minimum) + " - " + Misc.getValueWithoutRepresentation(maximum), frame);
+//                }
+//                player.getPA().itemOnInterface(potentialItem.getItemId(), 1, 34010 + player.dropSize + index, 0);
+//                player.getPA().sendString(Misc.optimizeText(tierName.toLowerCase()), 34300 + player.dropSize + index);
+//                player.getPA().sendString(Server.itemHandler.getItemList(potentialItem.getItemId()).itemName, 34100 + player.dropSize + index);
+//                player.getPA().sendString(df.format(potentialItem.getRoll()) + "%", 34400 + player.dropSize + index);
+//            } catch (NullPointerException e) {
+//                System.out.println("Missing Drop Data for: " + potentialItem.getItemId());
+//            }
+//        }
+//
+//        player.dropSize += drops.size();
+//    }
 
     /**
      * Updates the interface for the selected NPC

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import ethos.runehub.action.click.DefaultHomeTeleportAction;
+import ethos.runehub.action.click.InstantHomeTeleportAction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
 import org.apache.commons.lang3.text.WordUtils;
@@ -57,6 +58,7 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.discord.DiscordMessager;
 import ethos.util.Misc;
 import org.runehub.api.util.APILogger;
+import org.runehub.api.util.SkillDictionary;
 
 /**
  * Clicking most buttons
@@ -66,6 +68,7 @@ public class ClickingButtons implements PacketType {
     @Override
     public void processPacket(final Player c, int packetType, int packetSize) {
         int actionButtonId = Misc.hexToInt(c.getInStream().buffer, 0, packetSize);
+        System.out.println("actionbutton: " + actionButtonId + ", DialogueID: " + c.dialogueAction);
         if (APILogger.debug && c.getRightGroup().isOrInherits(Right.OWNER)) {
             c.sendMessage("actionbutton: " + actionButtonId + ", DialogueID: " + c.dialogueAction);
         }
@@ -102,6 +105,10 @@ public class ClickingButtons implements PacketType {
         }
         if (c.getSlayer().onActionButton(actionButtonId)) {
             return;
+        }
+
+        if (c.getAttributes().getActiveUI() != null) {
+            c.getAttributes().getActiveUI().action(actionButtonId);
         }
 //		if (c.getTutorial().isActive()) {
 //			if (actionButtonId == 165179) {
@@ -244,36 +251,36 @@ public class ClickingButtons implements PacketType {
                 break;
 
             case 4140:
-                if (c.isInHouse) {
-                    c.sendMessage("Please use the house settings to leave your house");
-                    return;
-                }
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().showInterface(51000);
-                c.getTeleport().selection(c, 0);
+//                if (c.isInHouse) {
+//                    c.sendMessage("Please use the house settings to leave your house");
+//                    return;
+//                }
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().showInterface(51000);
+//                c.getTeleport().selection(c, 0);
                 break;
             case 4143: //lumbridge
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().spellTeleport(3222, 3218, 0, false);
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().spellTeleport(3222, 3218, 0, false);
                 break;
             case 29031: // trollheim
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().spellTeleport(2888, 3676, 0, false);
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().spellTeleport(2888, 3676, 0, false);
                 break;
             case 183156:
                 if (c.getAttributes().getActiveLootBox() != null)
@@ -285,43 +292,43 @@ public class ClickingButtons implements PacketType {
 //				}
                 break;
             case 4146: //falador
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().spellTeleport(2964, 3378, 0, false);
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().spellTeleport(2964, 3378, 0, false);
                 break;
 
             case 4150: //camelot
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().spellTeleport(2757, 3447, 0, false);
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().spellTeleport(2757, 3447, 0, false);
                 break;
 
             case 6004: //ardounge
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().spellTeleport(2662, 3305, 0, false);
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().spellTeleport(2662, 3305, 0, false);
                 break;
 
             case 6005: //watchtower
-                if (c.teleTimer > 0) {
-                    return;
-                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-                    return;
-                }
-                c.getPA().spellTeleport(2549, 3112, 0, false);
+//                if (c.teleTimer > 0) {
+//                    return;
+//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//                    return;
+//                }
+//                c.getPA().spellTeleport(2549, 3112, 0, false);
                 break;
 
             case 113238:
@@ -424,10 +431,10 @@ public class ClickingButtons implements PacketType {
                 c.wogwOption = "pc";
                 break;
 
-            case 242150:
-            case 154078:
-                c.getPA().closeAllWindows();
-                break;
+//            case 242150:
+//            case 154078:
+//                c.getPA().closeAllWindows();
+//                break;
             case 183155:
                 c.getAttributes().getActiveLootBox().close();
                 break;
@@ -689,15 +696,15 @@ public class ClickingButtons implements PacketType {
              * c.getAchievements().drawInterface(2); break;
              */
 
-            case 250002:
-            case 140244:
-            case 141088:
-            case 148122:
-                c.getPA().closeAllWindows();
-                break;
-            case 24150:
-                c.getPA().closeAllWindows();
-                break;
+//            case 250002:
+//            case 140244:
+//            case 141088:
+//            case 148122:
+//                c.getPA().closeAllWindows();
+//                break;
+//            case 24150:
+//                c.getPA().closeAllWindows();
+//                break;
 
             case 20174:
                 c.getPA().closeAllWindows();
@@ -929,10 +936,6 @@ public class ClickingButtons implements PacketType {
                 c.takeAsNote = !c.takeAsNote;
                 break;
 
-            case 10252:
-                c.antiqueSelect = 0;
-                c.sendMessage("You select Attack");
-                break;
 
             /** Start Achievement Interface - Grant **/
             // Opening Interface
@@ -960,23 +963,6 @@ public class ClickingButtons implements PacketType {
                 c.getAchievements().currentInterface = 2;
                 c.getAchievements().drawInterface(2);
                 break;
-
-            // Closing
-            case 140162:
-                c.getPA().removeAllWindows();
-                break;
-            /** End Achievement Interface - Grant **/
-            // case 113248: //Spawntab
-            // c.getPA().sendFrame171(0, 36200);
-            // c.setSidebarInterface(2, 36200); //638
-            // break;
-            // case 141112:
-            // c.setSidebarInterface(2, 638); //638
-            // c.getPA().sendFrame171(1, 36200);
-            // c.getPA().sendFrame126("Name", 36202);
-            // c.getPA().sendFrame126("Amount", 36205);
-            // break;
-
             case 164034:
             case 164035:
             case 164036:
@@ -1197,120 +1183,42 @@ public class ClickingButtons implements PacketType {
                 new DecimalFormat("#.##");
                 c.sendMessage("@blu@You have " + c.killcount + " kills and " + c.deathcount + " deaths.");
                 break;
-            case 10253:
-                c.antiqueSelect = 2;
-                c.sendMessage("You select Strength");
-                break;
-            case 10254:
-                c.antiqueSelect = 4;
-                c.sendMessage("You select Ranged");
-                break;
-            case 10255:
-                c.antiqueSelect = 6;
-                c.sendMessage("You select Magic");
-                break;
-            case 11000:
-                c.antiqueSelect = 1;
-                c.sendMessage("You select Defence");
-                break;
-            case 11001:
-                c.antiqueSelect = 3;
-                c.sendMessage("You select Hitpoints");
-                break;
-            case 11002:
-                c.antiqueSelect = 5;
-                c.sendMessage("You select Prayer");
-                break;
-            case 11003:
-                c.antiqueSelect = 16;
-                c.sendMessage("You select Agility");
-                break;
-            case 11004:
-                c.antiqueSelect = 15;
-                c.sendMessage("You select Herblore");
-                break;
-            case 11005:
-                c.antiqueSelect = 17;
-                c.sendMessage("You select Thieving");
-                break;
-            case 11006:
-                c.antiqueSelect = 12;
-                c.sendMessage("You select Crafting");
-                break;
-            case 11007:
-                c.antiqueSelect = 20;
-                c.sendMessage("You select Runecrafting");
-                break;
-            case 47002:
-                c.sendMessage("Sorry, but you can not select Slayer.");
-                c.sendMessage("Maybe if you weren't such a noob you could.");
-                break;
-            case 54090:
-                c.antiqueSelect = 19;
-                c.sendMessage("You select Farming");
-                break;
-            case 11008:
-                c.antiqueSelect = 14;
-                c.sendMessage("You select Mining");
-                break;
-            case 11009:
-                c.antiqueSelect = 13;
-                c.sendMessage("You select Smithing");
-                break;
-            case 11010:
-                c.antiqueSelect = 10;
-                c.sendMessage("You select Fishing");
-                break;
-            case 11011:
-                c.antiqueSelect = 7;
-                c.sendMessage("You select Cooking");
-                break;
-            case 11012:
-                c.antiqueSelect = 11;
-                c.sendMessage("You select Firemaking");
-                break;
-            case 11013:
-                c.antiqueSelect = 8;
-                c.sendMessage("You select Woodcutting");
-                break;
-            case 11014:
-                c.antiqueSelect = 9;
-                c.sendMessage("You select Fletching");
-                break;
-            case 11015:
-                if (c.usingLamp) {
-                    if (c.antiqueLamp && !c.normalLamp) {
-                        c.usingLamp = false;
-                        c.getPA().addSkillXP(3500, c.antiqueSelect, true);
-                        c.getItems().deleteItem2(4447, 1);
-                        c.sendMessage("The lamp mysteriously vanishes...");
-                        c.getPA().closeAllWindows();
-                    }
-                    if (c.normalLamp && !c.antiqueLamp) {
-                        int EXP_AWARDED = (int) (3500 + Misc.random(100) * c.prestige());
-
-                        if (Config.BETA_MODE) {
-                            EXP_AWARDED += EXP_AWARDED / 2;
-                            int currentExp = c.playerXP[c.antiqueSelect];
-                            if (currentExp > EXP_AWARDED) {
-                                EXP_AWARDED += currentExp / 2;
-                                c.sendMessage("During beta, lamps give increased exp!");
-                            }
-
-                        }
-
-                        c.usingLamp = false;
-                        c.getPA().addSkillXP(EXP_AWARDED, c.antiqueSelect, true);
-                        c.getItems().deleteItem2(2528, 1);
-                        c.sendMessage("The lamp mysteriously vanishes...");
-                        c.sendMessage("...and you gain some experience!");
-                        c.getPA().closeAllWindows();
-                    }
-                } else {
-                    c.sendMessage("You must rub a lamp to gain the experience.");
-                    return;
-                }
-                break;
+//            case 11015:
+//                if (c.usingLamp) {
+//                    if (c.antiqueLamp && !c.normalLamp) {
+//                        c.usingLamp = false;
+//                        c.getPA().addSkillXP(3500, c.antiqueSelect, true);
+//                        c.getItems().deleteItem2(4447, 1);
+//                        c.sendMessage("The lamp mysteriously vanishes...");
+//                        c.getPA().closeAllWindows();
+//                    }
+//                    if (c.normalLamp && !c.antiqueLamp) {
+//                        int EXP_AWARDED = (int) (3500 + Misc.random(100) * c.prestige());
+//
+//                        if (Config.BETA_MODE) {
+//                            EXP_AWARDED += EXP_AWARDED / 2;
+//                            int currentExp = c.playerXP[c.antiqueSelect];
+//                            if (currentExp > EXP_AWARDED) {
+//                                EXP_AWARDED += currentExp / 2;
+//                                c.sendMessage("During beta, lamps give increased exp!");
+//                            }
+//
+//                        }
+//
+//                        c.usingLamp = false;
+//                        c.getPA().addSkillXP(EXP_AWARDED, c.antiqueSelect, true);
+//                        c.getItems().deleteItem2(2528, 1);
+//                        c.sendMessage("The lamp mysteriously vanishes...");
+//                        c.sendMessage("...and you gain some experience!");
+//                        c.getPA().closeAllWindows();
+//                    }
+//                } else if(c.getAttributes().isUsingStar()) {
+//                    c.getAttributes().setUsingStar(false);
+//                } else {
+//                    c.sendMessage("You must rub a lamp to gain the experience.");
+//                    return;
+//                }
+//                break;
 
             /*
              * case 28172: if (c.expLock == false) { c.expLock = true; c.sendMessage(
@@ -1341,102 +1249,102 @@ public class ClickingButtons implements PacketType {
                 break;
 
             /* End Quest */
-            case 15147:// Bronze, 1
-                Smelting.startSmelting(c, "bronze", "ONE", "FURNACE");
-                break;
-            case 15146:// Bronze, 5
-                Smelting.startSmelting(c, "bronze", "FIVE", "FURNACE");
-                break;
-            case 10247:// Bronze, 10
-                Smelting.startSmelting(c, "bronze", "TEN", "FURNACE");
-                break;
-            case 9110:// Bronze, 28
-                Smelting.startSmelting(c, "bronze", "ALL", "FURNACE");
-                break;
-            case 15151:// Iron, 1
-                Smelting.startSmelting(c, "iron", "ONE", "FURNACE");
-                break;
-            case 15150:// Iron, 5
-                Smelting.startSmelting(c, "iron", "FIVE", "FURNACE");
-                break;
-            case 15149:// Iron, 10
-                Smelting.startSmelting(c, "iron", "TEN", "FURNACE");
-                break;
-            case 15148:// Iron, 28
-                Smelting.startSmelting(c, "iron", "ALL", "FURNACE");
-                break;
-            case 15155:// silver, 1
-                Smelting.startSmelting(c, "silver", "ONE", "FURNACE");
-                break;
-            case 15154:// silver, 5
-                Smelting.startSmelting(c, "silver", "FIVE", "FURNACE");
-                break;
-            case 15153:// silver, 10
-                Smelting.startSmelting(c, "silver", "TEN", "FURNACE");
-                break;
-            case 15152:// silver, 28
-                Smelting.startSmelting(c, "silver", "ALL", "FURNACE");
-                break;
-            case 15159:// steel, 1
-                Smelting.startSmelting(c, "steel", "ONE", "FURNACE");
-                break;
-            case 15158:// steel, 5
-                Smelting.startSmelting(c, "steel", "FIVE", "FURNACE");
-                break;
-            case 15157:// steel, 10
-                Smelting.startSmelting(c, "steel", "TEN", "FURNACE");
-                break;
-            case 15156:// steel, 28
-                Smelting.startSmelting(c, "steel", "ALL", "FURNACE");
-                break;
-            case 15163:// gold, 1
-                Smelting.startSmelting(c, "gold", "ONE", "FURNACE");
-                break;
-            case 15162:// gold, 5
-                Smelting.startSmelting(c, "gold", "FIVE", "FURNACE");
-                break;
-            case 15161:// gold, 10
-                Smelting.startSmelting(c, "gold", "TEN", "FURNACE");
-                break;
-            case 15160:// gold, 28
-                Smelting.startSmelting(c, "gold", "ALL", "FURNACE");
-                break;
-            case 29017:// mithril, 1
-                Smelting.startSmelting(c, "mithril", "ONE", "FURNACE");
-                break;
-            case 29016:// mithril, 5
-                Smelting.startSmelting(c, "mithril", "FIVE", "FURNACE");
-                break;
-            case 24253:// mithril, 10
-                Smelting.startSmelting(c, "mithril", "TEN", "FURNACE");
-                break;
-            case 16062:// mithril, 28
-                Smelting.startSmelting(c, "mithril", "ALL", "FURNACE");
-                break;
-            case 29022:// addy, 1
-                Smelting.startSmelting(c, "adamant", "ONE", "FURNACE");
-                break;
-            case 29021:// addy, 5
-                Smelting.startSmelting(c, "adamant", "FIVE", "FURNACE");
-                break;
-            case 29019:// addy, 10
-                Smelting.startSmelting(c, "adamant", "TEN", "FURNACE");
-                break;
-            case 29018:// addy, 28
-                Smelting.startSmelting(c, "adamant", "ALL", "FURNACE");
-                break;
-            case 29026:// rune, 1
-                Smelting.startSmelting(c, "rune", "ONE", "FURNACE");
-                break;
-            case 29025:// rune, 5
-                Smelting.startSmelting(c, "rune", "FIVE", "FURNACE");
-                break;
-            case 29024:// rune, 10
-                Smelting.startSmelting(c, "rune", "TEN", "FURNACE");
-                break;
-            case 29023:// rune, 28
-                Smelting.startSmelting(c, "rune", "ALL", "FURNACE");
-                break;
+//            case 15147:// Bronze, 1
+//                Smelting.startSmelting(c, "bronze", "ONE", "FURNACE");
+//                break;
+//            case 15146:// Bronze, 5
+//                Smelting.startSmelting(c, "bronze", "FIVE", "FURNACE");
+//                break;
+//            case 10247:// Bronze, 10
+//                Smelting.startSmelting(c, "bronze", "TEN", "FURNACE");
+//                break;
+//            case 9110:// Bronze, 28
+//                Smelting.startSmelting(c, "bronze", "ALL", "FURNACE");
+//                break;
+//            case 15151:// Iron, 1
+//                Smelting.startSmelting(c, "iron", "ONE", "FURNACE");
+//                break;
+//            case 15150:// Iron, 5
+//                Smelting.startSmelting(c, "iron", "FIVE", "FURNACE");
+//                break;
+//            case 15149:// Iron, 10
+//                Smelting.startSmelting(c, "iron", "TEN", "FURNACE");
+//                break;
+//            case 15148:// Iron, 28
+//                Smelting.startSmelting(c, "iron", "ALL", "FURNACE");
+//                break;
+//            case 15155:// silver, 1
+//                Smelting.startSmelting(c, "silver", "ONE", "FURNACE");
+//                break;
+//            case 15154:// silver, 5
+//                Smelting.startSmelting(c, "silver", "FIVE", "FURNACE");
+//                break;
+//            case 15153:// silver, 10
+//                Smelting.startSmelting(c, "silver", "TEN", "FURNACE");
+//                break;
+//            case 15152:// silver, 28
+//                Smelting.startSmelting(c, "silver", "ALL", "FURNACE");
+//                break;
+//            case 15159:// steel, 1
+//                Smelting.startSmelting(c, "steel", "ONE", "FURNACE");
+//                break;
+//            case 15158:// steel, 5
+//                Smelting.startSmelting(c, "steel", "FIVE", "FURNACE");
+//                break;
+//            case 15157:// steel, 10
+//                Smelting.startSmelting(c, "steel", "TEN", "FURNACE");
+//                break;
+//            case 15156:// steel, 28
+//                Smelting.startSmelting(c, "steel", "ALL", "FURNACE");
+//                break;
+//            case 15163:// gold, 1
+//                Smelting.startSmelting(c, "gold", "ONE", "FURNACE");
+//                break;
+//            case 15162:// gold, 5
+//                Smelting.startSmelting(c, "gold", "FIVE", "FURNACE");
+//                break;
+//            case 15161:// gold, 10
+//                Smelting.startSmelting(c, "gold", "TEN", "FURNACE");
+//                break;
+//            case 15160:// gold, 28
+//                Smelting.startSmelting(c, "gold", "ALL", "FURNACE");
+//                break;
+//            case 29017:// mithril, 1
+//                Smelting.startSmelting(c, "mithril", "ONE", "FURNACE");
+//                break;
+//            case 29016:// mithril, 5
+//                Smelting.startSmelting(c, "mithril", "FIVE", "FURNACE");
+//                break;
+//            case 24253:// mithril, 10
+//                Smelting.startSmelting(c, "mithril", "TEN", "FURNACE");
+//                break;
+//            case 16062:// mithril, 28
+//                Smelting.startSmelting(c, "mithril", "ALL", "FURNACE");
+//                break;
+//            case 29022:// addy, 1
+//                Smelting.startSmelting(c, "adamant", "ONE", "FURNACE");
+//                break;
+//            case 29021:// addy, 5
+//                Smelting.startSmelting(c, "adamant", "FIVE", "FURNACE");
+//                break;
+//            case 29019:// addy, 10
+//                Smelting.startSmelting(c, "adamant", "TEN", "FURNACE");
+//                break;
+//            case 29018:// addy, 28
+//                Smelting.startSmelting(c, "adamant", "ALL", "FURNACE");
+//                break;
+//            case 29026:// rune, 1
+//                Smelting.startSmelting(c, "rune", "ONE", "FURNACE");
+//                break;
+//            case 29025:// rune, 5
+//                Smelting.startSmelting(c, "rune", "FIVE", "FURNACE");
+//                break;
+//            case 29024:// rune, 10
+//                Smelting.startSmelting(c, "rune", "TEN", "FURNACE");
+//                break;
+//            case 29023:// rune, 28
+//                Smelting.startSmelting(c, "rune", "ALL", "FURNACE");
+//                break;
 
 		/*
 		case 58025: 
@@ -2353,7 +2261,10 @@ public class ClickingButtons implements PacketType {
                     return;
                 }
 //			c.getPA().spellTeleport(3092, 3249, 0, false);
-                Server.getEventHandler().submit(new DefaultHomeTeleportAction(c));
+                if (c.getContext().getPlayerSaveData().getInstantTeleportCharges().value() == 0)
+                    Server.getEventHandler().submit(new DefaultHomeTeleportAction(c));
+                else
+                    Server.getEventHandler().submit(new InstantHomeTeleportAction(c));
                 break;
             case 50056:
 //			if (c.homeTeleport >= 1 && c.homeTeleport <= 10) {

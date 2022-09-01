@@ -1,5 +1,6 @@
 package ethos.runehub.skill.artisan.herblore;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
 
@@ -14,6 +15,6 @@ public class HerbloreItemReactionDAO extends BetaAbstractDataAcessObject<Herblor
     }
 
     private HerbloreItemReactionDAO() {
-        super("./Data/runehub/db/item-interactions.db", HerbloreItemReaction.class);
+        super(RunehubConstants.ITEM_INTERACTION_DB, HerbloreItemReaction.class);
     }
 }

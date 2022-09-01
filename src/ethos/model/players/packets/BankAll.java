@@ -140,7 +140,7 @@ public class BankAll implements PacketType {
 			break;
 
 		case 7295:
-			if (Item.itemStackable[removeId]) {
+			if (Item.isStackable(removeId)) {
 				c.getItems().addToBank(c.playerItems[removeSlot], c.playerItemsN[removeSlot], false);
 				c.getItems().resetItems(7423);
 			} else {

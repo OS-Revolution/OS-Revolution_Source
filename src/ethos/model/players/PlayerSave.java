@@ -332,7 +332,7 @@ public class PlayerSave {
 					} else if (token.equals("revert-delay")) {
 						p.setRevertModeDelay(Long.parseLong(token2));
 					} else if (token.equals("mode")) {
-						ModeType type = null;
+						ModeType type = ModeType.OSRS;
 						try {
 							if (token2.equals("NONE")) {
 								token2 = "REGULAR";
@@ -1246,13 +1246,8 @@ public class PlayerSave {
 				characterfile.write("revert-delay = " + p.getRevertModeDelay());
 				characterfile.newLine();
 			}
-			if (p.getMode() != null) {
-				characterfile.write("mode = " + p.getMode().getType().name());
-				characterfile.newLine();
-			} else {
 				characterfile.write("mode = " + ModeType.OSRS.name());
 				characterfile.newLine();
-			}
 //			if (p.getTutorial().getStage() != null) {
 //				characterfile.write("tutorial-stage = " + p.getTutorial().getStage().name());
 //				characterfile.newLine();

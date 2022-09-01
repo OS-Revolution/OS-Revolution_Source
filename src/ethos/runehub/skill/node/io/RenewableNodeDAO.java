@@ -1,5 +1,6 @@
 package ethos.runehub.skill.node.io;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.node.impl.RenewableNode;
 import ethos.runehub.skill.node.impl.gatherable.impl.FishingNode;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
@@ -16,6 +17,6 @@ public class RenewableNodeDAO extends BetaAbstractDataAcessObject<RenewableNode>
     }
 
     private RenewableNodeDAO() {
-        super("./Data/runehub/db/nodes.db", RenewableNode.class);
+        super(RunehubConstants.NODE_DB, RenewableNode.class);
     }
 }

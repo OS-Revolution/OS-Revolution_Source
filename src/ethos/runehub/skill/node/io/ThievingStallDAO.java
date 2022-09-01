@@ -1,5 +1,6 @@
 package ethos.runehub.skill.node.io;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.node.impl.gatherable.impl.ThievingStallNode;
 import ethos.runehub.skill.node.impl.gatherable.impl.WoodcuttingNode;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
@@ -16,6 +17,6 @@ public class ThievingStallDAO extends BetaAbstractDataAcessObject<ThievingStallN
     }
 
     private ThievingStallDAO() {
-        super("./Data/runehub/db/nodes.db", ThievingStallNode.class);
+        super(RunehubConstants.NODE_DB, ThievingStallNode.class);
     }
 }

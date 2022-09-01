@@ -17,6 +17,7 @@ import ethos.runehub.skill.node.io.MiningNodeLoader;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.node.io.WoodcuttingNodeLoader;
 import ethos.runehub.skill.support.SupportSkill;
+import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.skill.support.thieving.Thieving;
 import org.runehub.api.io.load.LazyLoader;
 import org.runehub.api.util.SkillDictionary;
@@ -41,6 +42,8 @@ public class SkillController {
         switch (skillId) {
             case 17:
                 return thieving;
+            case 23:
+                return sailing;
             default: throw new NullPointerException("No Gathering Skill with ID: " + skillId);
         }
     }
@@ -65,6 +68,8 @@ public class SkillController {
                 return foraging;
             case 20:
                 return runecraft;
+            case 23:
+                return sailing;
             default: throw new NullPointerException("No Skill with ID: " + skillId);
         }
     }
@@ -119,6 +124,10 @@ public class SkillController {
         return player;
     }
 
+    public Sailing getSailing() {
+        return sailing;
+    }
+
     public SkillController(Player player) {
         this.player = player;
         this.woodcutting = new Woodcutting(player);
@@ -130,6 +139,7 @@ public class SkillController {
         this.runecraft = new Runecraft(player);
         this.smithing = new Smithing(player);
         this.thieving = new Thieving(player);
+        this.sailing = new Sailing(player);
     }
 
     private final Player player;
@@ -142,4 +152,5 @@ public class SkillController {
     private final Runecraft runecraft;
     private final Smithing smithing;
     private final Thieving thieving;
+    private final Sailing sailing;
 }

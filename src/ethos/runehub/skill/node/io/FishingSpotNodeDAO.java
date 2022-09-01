@@ -1,5 +1,6 @@
 package ethos.runehub.skill.node.io;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.node.impl.gatherable.impl.FishingNode;
 import ethos.runehub.skill.node.impl.gatherable.impl.FishingSpotNode;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
@@ -16,6 +17,6 @@ public class FishingSpotNodeDAO extends BetaAbstractDataAcessObject<FishingSpotN
     }
 
     private FishingSpotNodeDAO() {
-        super("./Data/runehub/db/nodes.db", FishingSpotNode.class);
+        super(RunehubConstants.NODE_DB, FishingSpotNode.class);
     }
 }

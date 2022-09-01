@@ -1,5 +1,6 @@
 package ethos.runehub.skill.gathering.tool;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
 
@@ -14,6 +15,6 @@ public class GatheringToolDAO  extends BetaAbstractDataAcessObject<GatheringTool
     }
 
     private GatheringToolDAO() {
-        super("./Data/runehub/db/tools.db", GatheringTool.class);
+        super(RunehubConstants.TOOL_DB, GatheringTool.class);
     }
 }

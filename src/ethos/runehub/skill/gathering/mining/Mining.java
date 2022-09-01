@@ -1,9 +1,9 @@
 package ethos.runehub.skill.gathering.mining;
 
 import ethos.model.players.Player;
-import ethos.runehub.WorldSettingsController;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.skill.gathering.GatheringSkill;
-import org.rhd.api.math.impl.AdjustableLong;
+import org.runehub.api.model.math.impl.AdjustableLong;
 import org.runehub.api.util.SkillDictionary;
 
 public class Mining extends GatheringSkill {

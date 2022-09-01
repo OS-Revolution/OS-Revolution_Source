@@ -134,7 +134,7 @@ public class ItemHandler {
 			if (id >= 2412 && id <= 2414) {
 				return;
 			}
-			if (!Item.itemStackable[id] && amount > 0) {
+			if (!Item.isStackable(id) && amount > 0) {
 				if (amount > 28) {
 					amount = 28;
 				}
@@ -188,7 +188,7 @@ public class ItemHandler {
 				return;
 			}
 			
-			if (!Item.itemStackable[itemId] && itemAmount > 0) {
+			if (!Item.isStackable(itemId) && itemAmount > 0) {
 				if (itemAmount > 28) {
 					itemAmount = 28;
 				}
@@ -212,7 +212,7 @@ public class ItemHandler {
 				player.sendMessage("The cape vanishes as it touches the ground.");
 				return;
 			}
-			if (!Item.itemStackable[itemId] && itemAmount > 0) {
+			if (!Item.isStackable(itemId) && itemAmount > 0) {
 				if (itemAmount > 28) {
 					itemAmount = 28;
 				}

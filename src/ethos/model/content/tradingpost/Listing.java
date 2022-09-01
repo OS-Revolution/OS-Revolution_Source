@@ -20,6 +20,7 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.PlayerSave;
 import ethos.util.Misc;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
 
 /**
 *
@@ -170,10 +171,6 @@ public class Listing {
 	 */
 
 	public static void openPost(Player c, boolean soldItem, boolean openFirst) {
-		if (!c.getMode().isTradingPermitted()) {
-			c.sendMessage("You are not permitted to make use of this.");
-			return;
-		}
 		resetEverything(c);
 		emptyInterface(c, openFirst);
 		c.getPA().showInterface(48600);
@@ -364,7 +361,7 @@ public class Listing {
 			return;
 		Sale sales = getSales(c.playerName).get(id);
 		int leftOver = sales.getQuantity() - sales.getTotalSold(), saleItem = sales.getId();
-		boolean stackable = Item.itemStackable[saleItem];
+		boolean stackable = ItemIdContextLoader.getInstance().read(itemId).isStackable();
 		boolean isNoted = Item.itemIsNote[saleItem];
 		if(!stackable && !isNoted && leftOver > 1) {
 			saleItem++;
@@ -374,7 +371,7 @@ public class Listing {
 			save(sales);
 			updateHistory(c, sales.getId(), sales.getTotalSold(), sales.getPrice());
 			if(leftOver > 0) {
-				if ((((c.getItems().freeSlots() >= 1) || c.getItems().playerHasItem(saleItem, 1)) && Item.itemIsNote[saleItem]) || ((c.getItems().freeSlots() > 0) && !Item.itemStackable[saleItem])) {
+				if ((((c.getItems().freeSlots() >= 1) || c.getItems().playerHasItem(saleItem, 1)) && Item.itemIsNote[saleItem]) || ((c.getItems().freeSlots() > 0) && !Item.isStackable(saleItem))) {
 					c.getItems().addItem(saleItem, leftOver);
 					c.sendMessage("[@red@Trading Post@bla@] You succesfully cancel the offer for "+leftOver+"x "+ItemAssistant.getItemName(sales.getId())+".");
 			} else {// If inventory is full!
@@ -532,11 +529,6 @@ public class Listing {
 	
 	public static void buyListing(Player c, int slot, int amount) {
 
-		if (!c.getMode().isTradingPermitted()) {
-			c.sendMessage("You are not permitted to make use of this.");
-			return;
-		}
-		
 		Sale sales = getSale(c.saleResults.get(slot));
 		
 		if(sales.getQuantity() == sales.getTotalSold())
@@ -562,7 +554,7 @@ public class Listing {
 			saleItem++;
 		}
 		
-		if(c.getItems().freeSlots() < slotsNeeded && (!Item.itemIsNote[sales.getId()+1] && !Item.itemStackable[sales.getId()])) {
+		if(c.getItems().freeSlots() < slotsNeeded && (!Item.itemIsNote[sales.getId()+1] && !Item.isStackable(sales.getId()))) {
 			c.sendMessage("[@red@Trading Post@bla@] You need atleast "+ slotsNeeded +" free slots to buy this.");
 			return;
 		}
@@ -689,10 +681,6 @@ public class Listing {
 	public static void postButtons(Player c, int button) {
 		switch(button) {
 			case 189237:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				int total = 0;
 				LinkedList<Sale> sales = (LinkedList<Sale>) getSales(c.playerName);
 				
@@ -725,10 +713,6 @@ public class Listing {
 			break;
 			
 			case 191072:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				synchronized (c) {
 					c.outStream.createFrame(191);
 				}
@@ -736,10 +720,6 @@ public class Listing {
 			break;
 			
 			case 191075: // Removed quantity button
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				synchronized (c) {
 					c.outStream.createFrame(192);
 				}
@@ -747,10 +727,6 @@ public class Listing {
 			break;
 			
 			case 191078:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				if (c.quantity * c.price <= -1) {
 					c.sendMessage("@red@Please do not exceed the max cash value!");
 					return;
@@ -760,10 +736,6 @@ public class Listing {
 				}
 			
 			case 189223:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				collectMoney(c);
 			break;
 			
@@ -776,18 +748,11 @@ public class Listing {
 			break;
 			
 			case 187133:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				openPost(c, false, false);
 			break;
 			
 			case 187136:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
+
 				if(c.pageId > 1)
 					c.pageId--;
 				//System.out.println("id: "+c.searchId+" lookup: " + c.lookup);
@@ -805,10 +770,6 @@ public class Listing {
 			break;
 			
 			case 187139:
-				if (!c.getMode().isTradingPermitted()) {
-					c.sendMessage("You are not permitted to make use of this.");
-					return;
-				}
 				c.pageId++;
 				//System.out.println("id: "+c.searchId+" lookup: " + c.lookup);
 				switch(c.searchId) {

@@ -1,5 +1,6 @@
 package ethos.runehub.entity.player;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
@@ -16,12 +17,6 @@ public class PlayerIdleGatheringDAO extends BetaAbstractDataAcessObject<PlayerId
     }
 
     private PlayerIdleGatheringDAO() {
-        super(APIFileSystem.getInstance().buildFileRequest()
-                .inDirectory(APIFileSystem.APP_DIRECTORY)
-                .inDirectory(APIFileSystem.SERVER_DIRECTORY)
-                .withFileName("players")
-                .withExtension(".db")
-                .build()
-                .getAbsolutePath(), PlayerIdleGatheringContext.class);
+        super(RunehubConstants.PLAYER_DB, PlayerIdleGatheringContext.class);
     }
 }

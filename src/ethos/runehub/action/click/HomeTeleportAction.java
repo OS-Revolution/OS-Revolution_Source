@@ -107,7 +107,7 @@ public abstract class HomeTeleportAction extends Event<Player> {
         return this.getAttachment();
     }
 
-    public HomeTeleportAction(Player attachment) {
-        super("teleport",attachment, 12);
+    public HomeTeleportAction(Player attachment, int ticks) {
+        super("teleport",attachment, ticks);
     }
 }

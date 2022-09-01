@@ -1,5 +1,6 @@
 package ethos.runehub.entity.item;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
 
@@ -14,6 +15,6 @@ public class ItemInteractionDAO extends BetaAbstractDataAcessObject<ItemInteract
     }
 
     private ItemInteractionDAO() {
-        super("./Data/runehub/db/item-interactions.db", ItemInteraction.class);
+        super(RunehubConstants.ITEM_INTERACTION_DB, ItemInteraction.class);
     }
 }

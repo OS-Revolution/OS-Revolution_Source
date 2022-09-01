@@ -3,11 +3,13 @@ package ethos.runehub.entity.player;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.ItemReactionProcessor;
 import ethos.runehub.loot.Lootbox;
-import org.rhd.api.entity.user.character.CharacterEntity;
-import org.rhd.api.entity.user.character.CharacterEntityAttribute;
+import ethos.runehub.ui.GameUI;
+import org.runehub.api.model.entity.user.character.CharacterEntity;
+import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
@@ -114,16 +116,48 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.caughtThievingTimestamp = caughtThievingTimestamp;
     }
 
+    public String getEnteredString() {
+        return enteredString;
+    }
 
+    public void setEnteredString(String enteredString) {
+        this.enteredString = enteredString;
+    }
 
-    private boolean movementResricted,actionLocked,enteringValue;
+    public boolean isUsingStar() {
+        return usingStar;
+    }
+
+    public void setUsingStar(boolean usingStar) {
+        this.usingStar = usingStar;
+    }
+
+    public int getSkillSelected() {
+        return skillSelected;
+    }
+
+    public void setSkillSelected(int skillSelected) {
+        this.skillSelected = skillSelected;
+    }
+
+    public GameUI getActiveUI() {
+        return activeUI;
+    }
+
+    public void setActiveUI(GameUI activeUI) {
+        this.activeUI = activeUI;
+    }
+
+    private boolean movementResricted,actionLocked,enteringValue,usingStar;
     private float magicFind,teleportRechargeReduction;
     private int integerInput = 0;
     private final ItemReactionProcessor itemReactionProcessor;
     private DialogSequence activeDialogSequence;
-    private int selectedOption,interactingWithNodeId;
+    private int selectedOption,interactingWithNodeId,skillSelected = -1;
     private long caughtThievingTimestamp;
     private final List<Integer> guardsAttacking;
     private Lootbox activeLootBox;
+    private String enteredString;
+    private GameUI activeUI;
 
 }

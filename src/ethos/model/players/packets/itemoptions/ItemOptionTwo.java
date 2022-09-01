@@ -74,13 +74,13 @@ public class ItemOptionTwo implements PacketType {
 			player.sendMessage("@red@You currently have @dre@"+player.bankCharges+" @red@charges.");
 			break;
 
-			case 13660:
-				if(player.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-					player.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-					return;
-				}
-				player.getPA().showInterface(51000);
-				return;
+//			case 13660:
+//				if(player.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+//					player.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+//					return;
+//				}
+//				player.getPA().showInterface(51000);
+//				return;
 		case 11238:
 		case 11240:
 		case 11242:

@@ -12,7 +12,6 @@ import ethos.event.impl.SkillRestorationEvent;
 import ethos.mining.SpawnEvent;
 import ethos.model.content.*;
 import ethos.model.content.LootingBag.LootingBag;
-import ethos.model.content.Tutorial.Stage;
 import ethos.model.content.achievement.AchievementHandler;
 import ethos.model.content.achievement.Achievements;
 import ethos.model.content.achievement_diary.AchievementDiary;
@@ -91,7 +90,6 @@ import ethos.model.players.combat.magic.MagicData;
 import ethos.model.players.combat.melee.QuickPrayers;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.mode.Mode;
-import ethos.model.players.mode.ModeType;
 import ethos.model.players.skills.*;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.agility.impl.*;
@@ -114,16 +112,15 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
-import ethos.phantasye.job.Employee;
-import ethos.phantasye.job.Job;
-import ethos.runehub.WorldSettingsController;
+import ethos.runehub.skill.support.sailing.Sailing;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.player.PlayerCharacterAttribute;
 import ethos.runehub.entity.player.PlayerCharacterContext;
-import ethos.runehub.entity.player.PlayerSaveData;
 import ethos.runehub.markup.MarkupParser;
 import ethos.runehub.skill.SkillController;
+import ethos.runehub.ui.GameUI;
 import ethos.util.Misc;
 import ethos.util.SimpleTimer;
 import ethos.util.Stopwatch;
@@ -131,21 +128,25 @@ import ethos.util.Stream;
 import ethos.world.Clan;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
-import org.rhd.api.StringUtils;
-import org.rhd.api.action.Action;
-import org.rhd.api.action.ActionScheduler;
-import org.rhd.api.action.impl.interaction.Interactable;
-import org.rhd.api.action.impl.interaction.Interaction;
-import org.rhd.api.entity.user.character.player.PlayerCharacterEntity;
-import org.rhd.api.item.container.ItemContainer;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.entity.user.character.player.PlayerCharacterEntity;
 import org.runehub.api.model.math.AdjustableNumber;
 import org.runehub.api.model.math.impl.AdjustableDouble;
+import org.runehub.api.model.math.impl.AdjustableInteger;
+import org.runehub.api.model.world.Face;
+import org.runehub.api.model.world.region.location.Location;
+import org.runehub.api.util.SkillDictionary;
+import org.runehub.api.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Logger;
 
-public class Player extends Entity implements PlayerCharacterEntity, Employee {
+public class Player extends Entity implements PlayerCharacterEntity {
+
+    public void sendUI(GameUI ui) {
+        ui.open();
+    }
 
     public static int maRound = 0;
     public boolean maOption = false, maIndeedyOption = false;
@@ -1296,7 +1297,6 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         buffer = new byte[Config.BUFFER_SIZE];
         // }
         this.attributes = new PlayerCharacterAttribute(this);
-        this.actionQueue = new ActionScheduler(1, 10);
         this.context = PlayerCharacterContextDataAccessObject.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
     }
 
@@ -1662,6 +1662,15 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             if(this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
               this.newAccountInitialization();
             }
+            if (this.getContext().getPlayerSaveData().getAvailableVoyages() == null) {
+                this.getContext().getPlayerSaveData().setAvailableVoyages(new ArrayList<>());
+            }
+            if (this.getContext().getPlayerSaveData().isDailyAvailable()) {
+                this.getSkillController().getSailing().generateDailyVoyages();
+                this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
+                this.sendMessage("Your daily tasks have reset.");
+                this.getContext().getPlayerSaveData().setDailiesAvailable(false);
+            }
             this.getAttributes().setMovementResricted(false);
             this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
             loadDiaryTab();
@@ -1951,7 +1960,12 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
                 }
             }
 
-
+            if(this.getContext().getPlayerSaveData().getBonusXp() == null) {
+                this.getContext().getPlayerSaveData().setBonusXp(new HashMap<>());
+                Arrays.stream(SkillDictionary.Skill.values()).forEach(skill -> this.getContext().getPlayerSaveData().getBonusXp().put(skill.getId(), new AdjustableInteger(0)));
+            }
+            this.getContext().getPlayerSaveData().getBonusXp().keySet().forEach(skill -> this.getPA().sendBonusXp(skill,
+                    this.getContext().getPlayerSaveData().getBonusXp().get(skill).value()));
 //            this.addIdleGatheringGains();
         } catch (Exception e) {
             e.printStackTrace();
@@ -2120,8 +2134,12 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
 //        if (this.getSkilling().getSkill() != null)
 //            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
         this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
-        PlayerCharacterContextDataAccessObject.getInstance().update(context);
+        this.save();
 
+    }
+
+    public void save() {
+        PlayerCharacterContextDataAccessObject.getInstance().update(context);
     }
 
 //    private void addIdleGatheringGains() {
@@ -2293,7 +2311,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
             }
             return weight.value();
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            Logger.getGlobal().warning("Missing Context for: " + itemId);
         }
         return 0;
     }
@@ -2310,14 +2328,14 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     }
 
     public void process() {
-        farming.farmingProcess();
-        NecromancyLevel.main(this);
+//        farming.farmingProcess();
+//        NecromancyLevel.main(this);
         onlinePlayers.add(this.playerName);
 
-        if (isMiningEventActive) {
-            SpawnEvent.handleSpawn(this);
-            isMiningEventActive = false;
-        }
+//        if (isMiningEventActive) {
+//            SpawnEvent.handleSpawn(this);
+//            isMiningEventActive = false;
+//        }
         if (isRunning && runEnergy <= 0) {
             isRunning = false;
             isRunning2 = false;
@@ -2335,8 +2353,7 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (gwdAltar == 1) {
             sendMessage("You can now operate the godwars prayer altar again.");
         }
-//        System.out.println("Energy %: " + this.getRunEnergyPercentString());
-//        System.out.println("Energy: " + runEnergy);
+
         if (isRunning && runningDistanceTravelled > (wearingGrace() ? 1 + graceSum : staminaDelay != -1 ? 3 : 1)) {
             this.depleteEnergy();
         }
@@ -2359,15 +2376,6 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
         if (bonusXpTime == 1) {
             sendMessage("@blu@Your time is up. Your XP is no longer boosted by the voting reward.");
         }
-		/*if (Config.BONUS_WEEKEND == true || Config.BONUS_XP_WOGW == true) {
-			this.getPA().sendGameTimer(ClientGameTimer.EXPERIENCE, TimeUnit.SECONDS, 1);
-		} else {
-			this.getPA().sendGameTimer(ClientGameTimer.EXPERIENCE, TimeUnit.SECONDS, 0);
-		} if (Config.DOUBLE_DROPS == true) {
-			this.getPA().sendGameTimer(ClientGameTimer.DROPS, TimeUnit.MINUTES, 1);
-		} else {
-			this.getPA().sendGameTimer(ClientGameTimer.DROPS, TimeUnit.SECONDS, 0);
-		}*/
         if (respawnTimer == 7) {
             respawnTimer = -6;
             getPA().giveLife();
@@ -5853,46 +5861,6 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     }
 
     @Override
-    public void assignJob(Job job) {
-//        if (this.getContext().getActiveJob() == null || this.getContext().getActiveJob().getQuota().value() <= 0) {
-//            this.getContext().setActiveJob(job);
-//            this.sendMessage("You've been assigned a " + Skill.forId(job.getSkillId()).name()
-//                    + " job of: x" + job.getQuota().value() + " " + ItemAssistant.getItemName(job.getTargetId()));
-//        } else {
-//            this.sendMessage("You already have an active job.");
-//        }
-    }
-
-    @Override
-    public void updateJob(int itemId) {
-//        if (this.getContext().getActiveJob() != null && this.getContext().getActiveJob().getQuota().value() > 0) {
-//            if (itemId == this.getContext().getActiveJob().getTargetId()) {
-//                this.getContext().getActiveJob().getQuota().decrement();
-//            }
-//        }
-    }
-
-    @Override
-    public void completeJob() {
-
-    }
-
-    @Override
-    public void quit() {
-
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
-
-    @Override
-    public ItemContainer inventory() {
-        return null;
-    }
-
-    @Override
     public PlayerCharacterContext getContext() {
         return context;
     }
@@ -5903,21 +5871,20 @@ public class Player extends Entity implements PlayerCharacterEntity, Employee {
     }
 
     @Override
-    public void perform(Action<?> action) {
-        actionQueue.queue(action);
+    public boolean walkTo(Location location) {
+        return false;
     }
 
     @Override
-    public void interact(Interactable interactable) {
-        actionQueue.queue(interactable.onInteraction());
+    public boolean setLocation(Location location) {
+        return false;
     }
 
     @Override
-    public Interaction onInteraction() {
-        return null;
+    public boolean face(Face face) {
+        return false;
     }
 
-    private final ActionScheduler actionQueue;
     private final PlayerCharacterAttribute attributes;
     private final PlayerCharacterContext context;
 

@@ -48,10 +48,10 @@ MAP
     spawn flax near home
 
 ITEMS
-    Make training equipment functional and equippable
+    x Make training equipment functional and equippable
 
 Misc.
-    Limit players to 3 exchange offers
+    x Limit players to 3 exchange offers
     Remove teleport interface
     Add rs standard teleporting mechanic/design custom teleporting mechanic
     Add low level combat training area near home (cows/chickens to provide access to leather and feathers)

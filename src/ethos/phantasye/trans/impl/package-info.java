@@ -1,1 +1,0 @@
-package ethos.phantasye.trans.impl;

@@ -58,10 +58,6 @@ public class PestControlRewards {
 		}
 		for (RewardButton button : RewardButton.values()) {
 			if (button.buttonId == buttonId) {
-				if (!player.getMode().isRewardSelectable(button)) {
-					player.sendMessage("Your mode is not able to select this reward.");
-					return false;
-				}
 				reward = button.reward;
 				player.getPA().sendFrame70(button.xOffset, button.yOffset, 37100);
 				player.getPA().sendString(reward.getCost() + " " + (reward.getCost() == 1 ? "point" : "points"), 37003);
@@ -222,7 +218,7 @@ public class PestControlRewards {
 			player.buyPestControlTimer = System.currentTimeMillis();
 			player.pcPoints -= cost;
 			player.refreshQuestTab(3);
-			player.getPA().addSkillXP((player.getMode().isOsrs() ? experience / 26 : experience) * cost, skillId, true);
+			player.getPA().addSkillXP((experience) * cost, skillId, true);
 			player.sendMessage("You have received " + ((player.getMode().isOsrs() ? experience / 26 : experience) * cost) + " experience in exchange for " + cost + " points.");
 		}
 	}

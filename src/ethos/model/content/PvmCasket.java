@@ -12,9 +12,6 @@ import ethos.model.items.ItemDefinition;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.util.Misc;
-import org.rhd.api.Range;
-import org.rhd.api.model.PotentialItem;
-import org.rhd.api.model.Tier;
 
 /**
  * Revamped a simple means of receiving a random item based on chance.

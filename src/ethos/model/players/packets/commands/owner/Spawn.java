@@ -21,10 +21,10 @@ public class Spawn extends Command {
 		int itemId = Integer.parseInt(args[0]);
 		int amount;
 		int id_one, id_two;
-		if (itemId >= Item.itemStackable.length) {
-			player.sendMessage("Index out of stackable bounds, can't spawn this item.");
-			return;
-		}
+//		if (itemId >= Item.itemStackable.length) {
+//			player.sendMessage("Index out of stackable bounds, can't spawn this item.");
+//			return;
+//		}
 		switch (args.length) {
 		case 1:
 			player.getItems().addItem(itemId, 1);

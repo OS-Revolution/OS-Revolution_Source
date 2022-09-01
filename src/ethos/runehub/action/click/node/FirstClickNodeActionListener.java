@@ -10,7 +10,8 @@ public class FirstClickNodeActionListener {
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
         Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY + " " + nodeZ);
         switch (nodeId) {
-
+            case 2282:
+                return new FirstClickFurnace(player,nodeId,nodeX,nodeY);
             case 14897:
             case 14898:
             case 14899:
@@ -125,6 +126,8 @@ public class FirstClickNodeActionListener {
             case 14894:
             case 14847:
                 return new FirstClickAbyssalPortalAction(player, nodeId, nodeX, nodeY);
+            case 4126:
+                return new ClickShinyChestAction(player,nodeId,nodeX,nodeY,nodeZ);
             default:
                 throw new NullPointerException("Nothing Interesting Happens.");
         }

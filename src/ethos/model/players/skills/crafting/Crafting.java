@@ -53,7 +53,6 @@ public class Crafting {
 					c.getItems().deleteItem(id, c.getItems().getItemSlot(id), 1);
 					c.getItems().addItem(gems[j][1], 1);
 					c.getPA().addSkillXP((int) (gems[j][3] * (c.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.CRAFTING_EXPERIENCE * c.prestige())), Player.playerCrafting, true);
-					c.updateJob(id);
 					if (gems[j][0] == 1631)
 						DailyTasks.increase(c, PossibleTasks.DRAGONSTONES);
 					break;

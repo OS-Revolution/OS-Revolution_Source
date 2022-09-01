@@ -1,5 +1,6 @@
 package ethos.runehub.skill.artisan.smithing;
 
+import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
 import org.runehub.api.io.file.impl.APIFileSystem;
 
@@ -14,6 +15,6 @@ public class SmeltingItemReactionDAO extends BetaAbstractDataAcessObject<Smeltin
     }
 
     private SmeltingItemReactionDAO() {
-        super("./Data/runehub/db/item-interactions.db", SmeltingItemReaction.class);
+        super(RunehubConstants.ITEM_INTERACTION_DB, SmeltingItemReaction.class);
     }
 }

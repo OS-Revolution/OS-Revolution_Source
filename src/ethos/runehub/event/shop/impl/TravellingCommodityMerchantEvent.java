@@ -86,7 +86,7 @@ public class TravellingCommodityMerchantEvent extends TravellingMerchantEvent {
     }
 
     public TravellingCommodityMerchantEvent() {
-        super(MerchantCache.getInstance().read(1328), 18000, new LinkedList<>(List.of(new Location(3075, 3248), new Location(3075, 1,3248))));
+        super(MerchantCache.getInstance().read(1328), 18000, new LinkedList<>(List.of(new Location(3099, 3251), new Location(3099, 1,3251))));
     }
 
     private final DecimalFormat decimalFormat = new DecimalFormat("##");

@@ -1,5 +1,6 @@
 package ethos.runehub.markup;
 
+import ethos.runehub.RunehubUtils;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 
 import java.text.NumberFormat;
@@ -24,6 +25,11 @@ public class RSString {
 
         public RSStringBuilder addText(String text) {
             sb.append(text);
+            return this;
+        }
+
+        public RSStringBuilder insertIndefiniteArticle(String nextWord) {
+            sb.append(RunehubUtils.getIndefiniteArticle(nextWord));
             return this;
         }
 

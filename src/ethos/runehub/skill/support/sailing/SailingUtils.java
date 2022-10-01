@@ -6,6 +6,36 @@ import java.text.DecimalFormat;
 
 public class SailingUtils {
 
+    public static int getLootTableContainerIdForRegion(int region) {
+        switch (region) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return 50000 + region;
+        }
+        return -1;
+    }
+
+    public static int getLootTableContainerIdForIsland(int island) {
+        switch (island) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return 50000 + island;
+        }
+        return -1;
+    }
+
     public static String getVoyageSuccessRatePrint(float successRate) {
         final DecimalFormat decimalFormat = new DecimalFormat("###.##");
         return decimalFormat.format(successRate * 100) + '%';
@@ -38,8 +68,8 @@ public class SailingUtils {
     public static int getIslandFromRegion(int region) {
         switch (region) {
             case 0:
-                int island = new IntegerRange(0, 6).getRandomValue();
-                return island == 2 ? getIslandFromRegion(region) : island;
+                int island = new IntegerRange(0, 7).getRandomValue();
+                return island == 0 ? getIslandFromRegion(region) : island;
             case 1:
                 return new IntegerRange(7, 12).getRandomValue();
             case 2:

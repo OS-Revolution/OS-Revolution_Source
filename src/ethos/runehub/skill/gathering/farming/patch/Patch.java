@@ -4,47 +4,37 @@ import org.runehub.api.io.data.QueryParameter;
 import org.runehub.api.io.data.SqlDataType;
 import org.runehub.api.io.data.StoredObject;
 import org.runehub.api.io.data.StoredValue;
-import org.runehub.api.io.load.Serializer;
+import org.runehub.api.util.math.geometry.impl.IrregularPolygon;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+@StoredObject(tableName = "patch")
+public class Patch {
 
-@StoredObject(tableName = "patches")
-public class Patch implements Serializable {
+    public int getId() {
+        return id;
+    }
 
+    public IrregularPolygon getBoundary() {
+        return boundary;
+    }
+
+    public int getPatchTypeId() {
+        return patchTypeId;
+    }
+
+    public PatchType getPatchType() {
+        return PatchType.values()[patchTypeId];
+    }
+
+    public Patch(int id, IrregularPolygon boundary, int patchTypeId) {
+        this.id = id;
+        this.boundary = boundary;
+        this.patchTypeId = patchTypeId;
+    }
 
     @StoredValue(type = SqlDataType.INTEGER, parameter = QueryParameter.PRIMARY_KEY, id = true)
-    private final int patchId;
-    @StoredValue(type = SqlDataType.LONGTEXT, serializer = Serializer.JSON)
-    private final ArrayList<PlayerPatchData> patchData;
-
-//    private final PropertyChangeSupport propertyChangeSupport;
-
-    public Patch(Integer patchId, ArrayList<PlayerPatchData> patchData) {
-        this.patchId = patchId;
-        this.patchData = patchData;
-    }
-
-    public void update() {
-        patchData.forEach(playerPatchData -> {
-            System.out.println("Updating Patch Data for: " + playerPatchData.getOwnerId());
-            playerPatchData.update();
-        });
-//        PatchDatabase.getInstance().update(this);
-    }
-
-    public int getPatchId() {
-        return patchId;
-    }
-
-    public PlayerPatchData getPlayerPatchData(long playerId) {
-        return patchData.stream()
-                .filter(playerPatchData -> playerPatchData.getOwnerId() == playerId)
-                .findAny()
-                .orElse(null);
-    }
-
-    public ArrayList<PlayerPatchData> getPatchData() {
-        return patchData;
-    }
+    private final int id;
+    @StoredValue(type = SqlDataType.JSON)
+    private final IrregularPolygon boundary;
+    @StoredValue(type = SqlDataType.INTEGER)
+    private final int patchTypeId;
 }

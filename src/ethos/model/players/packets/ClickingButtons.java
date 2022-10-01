@@ -590,46 +590,68 @@ public class ClickingButtons implements PacketType {
 
             case 9157:
                 TwoOptions.handleOption1(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionOne();
                 break;
 
             case 9158:
                 TwoOptions.handleOption2(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionTwo();
                 break;
 
             case 9178:
                 FourOptions.handleOption1(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionOne();
                 break;
 
             case 9179:
                 FourOptions.handleOption2(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionTwo();
                 break;
 
             case 9180:
                 FourOptions.handleOption3(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionThree();
                 break;
 
             case 9181:
                 FourOptions.handleOption4(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionFour();
                 break;
 
             case 9190:
                 FiveOptions.handleOption1(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionOne();
                 break;
 
             case 9191:
                 FiveOptions.handleOption2(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionTwo();
                 break;
 
             case 9192:
                 FiveOptions.handleOption3(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionThree();
                 break;
 
             case 9193:
                 FiveOptions.handleOption4(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionFour();
                 break;
 
             case 9194:
                 FiveOptions.handleOption5(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionFive();
                 break;
 
             case 255255:

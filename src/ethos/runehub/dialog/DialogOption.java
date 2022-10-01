@@ -1,26 +1,21 @@
 package ethos.runehub.dialog;
 
-public class DialogOption {
+import java.util.logging.Logger;
 
-//    public DialogSequence getSequence() {
-//        return sequence;
-//    }
+public abstract class DialogOption  {
+
+    public abstract void onAction();
 
     public String getOptionText() {
         return optionText;
     }
 
-//    public int getId() {
-//        return id;
-//    }
-
     public DialogOption(String optionText) {
 //        this.id = id;
         this.optionText = optionText;
-//        this.sequence = sequence;
     }
 
-//    private final int id;
-//    private final DialogSequence sequence;
     private final String optionText;
+
+
 }

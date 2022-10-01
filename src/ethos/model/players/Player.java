@@ -9,7 +9,6 @@ import ethos.event.impl.IronmanRevertEvent;
 import ethos.event.impl.MinigamePlayersEvent;
 import ethos.event.impl.RunEnergyEvent;
 import ethos.event.impl.SkillRestorationEvent;
-import ethos.mining.SpawnEvent;
 import ethos.model.content.*;
 import ethos.model.content.LootingBag.LootingBag;
 import ethos.model.content.achievement.AchievementHandler;
@@ -103,7 +102,6 @@ import ethos.model.players.skills.fletching.Fletching;
 import ethos.model.players.skills.herblore.Herblore;
 import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.mining.Mining;
-import ethos.model.players.skills.necromancy.NecromancyLevel;
 import ethos.model.players.skills.prayer.Prayer;
 import ethos.model.players.skills.runecrafting.Runecrafting;
 import ethos.model.players.skills.slayer.Slayer;
@@ -112,6 +110,7 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
+import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
@@ -138,8 +137,10 @@ import org.runehub.api.model.world.region.location.Location;
 import org.runehub.api.util.SkillDictionary;
 import org.runehub.api.util.StringUtils;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Player extends Entity implements PlayerCharacterEntity {
@@ -1518,7 +1519,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
 //            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Ultimate Iron Man", this.playerName, this.playerRank, this.playerXP, debugMessage);
 //        }
 //        if (getMode().isRegular()) {
-            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Normal Mode", this.playerName, this.playerRank, this.playerXP, debugMessage);
+        com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Normal Mode", this.playerName, this.playerRank, this.playerXP, debugMessage);
 //        }
 //        if (getMode().isOsrs()) {
 //            com.everythingrs.hiscores.Hiscores.update("zv0KjfltVLgXGhSvTkHUbxmAttWqVDTV3DzCvXZBGsr6dHzhI0xJuKeQR30Q1xHHbhP4bsbw", "Osrs", this.playerName, this.playerRank, this.playerXP, debugMessage);
@@ -1657,20 +1658,69 @@ public class Player extends Entity implements PlayerCharacterEntity {
         this.getContext().getPlayerSaveData().setJoinTimestamp(System.currentTimeMillis());
     }
 
+    private void initializeDailyContent() {
+        if (this.getContext().getPlayerSaveData().isDailyAvailable()) {
+            this.getSkillController().getSailing().generateDailyVoyages();
+            if (this.getContext().getPlayerSaveData().getVoyageRerolls() < Sailing.BASE_MAX_DAILY_VOYAGES) {
+                this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
+            }
+            this.sendMessage("Your daily tasks have reset.");
+            this.getContext().getPlayerSaveData().setDailiesAvailable(false);
+        }
+    }
+
+//    private void initializeFarmObjects() {
+//        final AdjustableInteger patchId = new AdjustableInteger(0);
+//        for (int j = 0; j < context.getPlayerSaveData().getPatch().length; j++) {
+//            patchId.setValue(j);
+//            final Crop crop = CropDAO.getInstance().read(context.getPlayerSaveData().getCropId(j));
+//            if (PatchDAO.getInstance().getAllEntries().stream().anyMatch(patch -> patch.getId() == patchId.value())) {
+//                System.out.println("Initializing Patch: " + j);
+//                final Patch patch = PatchDAO.getInstance().read(j);
+//                final int nodeId = crop.nodeIdForState(this.getContext().getPlayerSaveData().getPatchGrowthStage(patch.getId()), this.getContext().getPlayerSaveData().getPatchState(patch.getId()));
+//                System.out.println("Node ID: " + nodeId);
+//                patch.getBoundary().getAllPoints().forEach(point -> {
+////                Optional<WorldObject> worldObject = Region.getWorldObject(
+////                        nodeId,
+////                        point.getX(),
+////                        point.getY(),
+////                        0
+////                );
+////                if (worldObject.isEmpty()) {
+//                    playerAssistant.checkObjectSpawn(
+//                            nodeId,
+//                            point.getX(),
+//                            point.getY(),
+//                            0,
+//                            10
+//                    );
+////                }
+//
+//                });
+//            }
+//        }
+//
+//    }
+
     public void initialize() {
         try {
-            if(this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
-              this.newAccountInitialization();
+            if (this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
+                this.newAccountInitialization();
             }
-            if (this.getContext().getPlayerSaveData().getAvailableVoyages() == null) {
-                this.getContext().getPlayerSaveData().setAvailableVoyages(new ArrayList<>());
-            }
-            if (this.getContext().getPlayerSaveData().isDailyAvailable()) {
-                this.getSkillController().getSailing().generateDailyVoyages();
-                this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
-                this.sendMessage("Your daily tasks have reset.");
-                this.getContext().getPlayerSaveData().setDailiesAvailable(false);
-            }
+            this.initializeDailyContent();
+            this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() -> {
+                System.out.println("Doing Farm Tick");
+                int regionX = this.absX >> 3;
+                int regionY = this.absY >> 3;
+                int regionId = ((regionX / 8) << 8) + (regionY / 8);
+                if (context.getPlayerSaveData().getFarmingConfig().containsKey(regionId)) {
+                    final int varbit = context.getPlayerSaveData().getFarmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+                    this.getPA().sendConfig(529,varbit);
+                }
+            }, WorldSettingsController.getInstance().getFarmController().getNextFlowerGrowthCycle().toMillis(), Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
+//            this.getAttributes().getFarmTickExecutorService().schedule(() -> {
+//                playerAssistant.sendConfig(529, 0);
+//            }, 600, TimeUnit.MILLISECONDS);
             this.getAttributes().setMovementResricted(false);
             this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
             loadDiaryTab();
@@ -1960,12 +2010,13 @@ public class Player extends Entity implements PlayerCharacterEntity {
                 }
             }
 
-            if(this.getContext().getPlayerSaveData().getBonusXp() == null) {
+            if (this.getContext().getPlayerSaveData().getBonusXp() == null) {
                 this.getContext().getPlayerSaveData().setBonusXp(new HashMap<>());
                 Arrays.stream(SkillDictionary.Skill.values()).forEach(skill -> this.getContext().getPlayerSaveData().getBonusXp().put(skill.getId(), new AdjustableInteger(0)));
             }
             this.getContext().getPlayerSaveData().getBonusXp().keySet().forEach(skill -> this.getPA().sendBonusXp(skill,
                     this.getContext().getPlayerSaveData().getBonusXp().get(skill).value()));
+
 //            this.addIdleGatheringGains();
         } catch (Exception e) {
             e.printStackTrace();
@@ -2133,6 +2184,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
 //        if (this.getSkilling().getSkill() != null)
 //            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
+        attributes.getFarmTickExecutorService().shutdownNow();
         this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
         this.save();
 

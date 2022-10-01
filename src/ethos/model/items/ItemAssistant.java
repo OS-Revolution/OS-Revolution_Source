@@ -105,6 +105,17 @@ public class ItemAssistant {
 		}
 	}
 
+	public void addOrDropItem(int itemId, int amount) {
+		if (!addItem(itemId, amount)) {
+//			if (c.getMode().isUltimateIronman()) {
+//				Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, amount);
+//				c.sendMessage("@red@Your box has been dropped to the ground!");
+//				return;
+//			}
+			Server.itemHandler.createGroundItem(c, itemId - 1, c.getX(), c.getY(), c.heightLevel, amount);
+		}
+	}
+
 	/**
 	 * The x and y represents the possible x and y location of the dropped item if in fact it cannot be added to the bank.
 	 */
@@ -1531,6 +1542,12 @@ public class ItemAssistant {
 		} else {
 			return false;
 		}
+	}
+
+	public void sendWeight(int weight) {
+		c.getOutStream().createFrame(240);
+		c.getOutStream().writeWord(weight);
+		c.flushOutStream();
 	}
 
 	/**

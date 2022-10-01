@@ -1,11 +1,26 @@
 package ethos.runehub.world;
 
+import ethos.clip.Region;
+import ethos.clip.WorldObject;
 import ethos.model.players.ClientGameTimer;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.RunehubConstants;
+import ethos.runehub.TimeUtils;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangePriceController;
+import ethos.runehub.entity.player.PlayerCharacterContext;
+import ethos.runehub.entity.player.PlayerSaveData;
+import ethos.runehub.skill.gathering.farming.FarmController;
+import ethos.runehub.skill.gathering.farming.GrowthCycleController;
+import ethos.runehub.skill.gathering.farming.crop.Crop;
+import ethos.runehub.skill.gathering.farming.crop.CropDAO;
+import ethos.runehub.skill.gathering.farming.crop.CropPayment;
+import ethos.runehub.skill.gathering.farming.crop.GrowthStage;
+import ethos.runehub.skill.gathering.farming.patch.Patch;
+import ethos.runehub.skill.gathering.farming.patch.PatchDAO;
+import ethos.runehub.skill.gathering.farming.patch.PatchState;
+import ethos.runehub.skill.gathering.farming.patch.PatchType;
 import ethos.runehub.skill.support.sailing.voyage.Voyage;
 import ethos.runehub.skill.support.sailing.voyage.VoyageDAO;
 import ethos.runehub.world.wushanko.island.Island;
@@ -15,14 +30,18 @@ import ethos.runehub.world.wushanko.region.IslandRegionDAO;
 import org.runehub.api.model.math.AdjustableNumber;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.model.math.impl.AdjustableLong;
+import org.runehub.api.model.skill.farming.patch.PatchDatabase;
 import org.runehub.api.util.SkillDictionary;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.IrregularPolygon;
+import org.runehub.api.util.math.geometry.impl.Polygon;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -186,7 +205,7 @@ public class WorldSettingsController {
         // Get duration between now and midnight
         final Duration initialDelay = Duration.between(now, nextRun);
 
-        System.out.println("Duration Until Next Run: " + initialDelay);
+        System.out.println("Duration Until Next Run: " + TimeUtils.getDurationString(initialDelay));
 
         // Schedule a task to run at midnight and then every day
         dailyScheduledExecutorService.scheduleAtFixedRate(this::resetDailies,
@@ -195,8 +214,10 @@ public class WorldSettingsController {
                 TimeUnit.MILLISECONDS);
 
         // Print time to midnight (UTC!), for debugging
-        System.out.println("Time until first run: " + initialDelay);
+        System.out.println("Time until first run: " + TimeUtils.getDurationString(initialDelay));
     }
+
+
 
     private void startGameTick() {
         gameTickExecutorService.scheduleAtFixedRate(() -> {
@@ -207,95 +228,28 @@ public class WorldSettingsController {
                 TimeUnit.MILLISECONDS);
     }
 
-    private void test() {
-        IslandRegionDAO.getInstance().create(new IslandRegion(0,"The Arc"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(1,"The Skull"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(2,"The Hook"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(3,"The Scythe"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(4,"The Bowl"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(5,"The Pincers"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(6,"The Loop"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(7,"The Shield"));
-        IslandRegionDAO.getInstance().create(new IslandRegion(8,"Uncharted Waters"));
+//    public GrowthCycleController getGrowthCycleController() {
+//        return growthCycleController;
+//    }
 
-        IslandDAO.getInstance().create(new Island(0,"Tuai Leit"));
-        IslandDAO.getInstance().create(new Island(1,"Whale's Maw"));
-        IslandDAO.getInstance().create(new Island(2,"Waiko"));
-        IslandDAO.getInstance().create(new Island(3,"Goshima"));
-        IslandDAO.getInstance().create(new Island(4,"The Islands that once were Turtles"));
-        IslandDAO.getInstance().create(new Island(5,"Aminishi"));
-        IslandDAO.getInstance().create(new Island(6,"Cyclosis"));
 
-        IslandDAO.getInstance().create(new Island(7,"Ai Jei"));
-        IslandDAO.getInstance().create(new Island(8,"Hanto"));
-        IslandDAO.getInstance().create(new Island(9,"The Sunlit Veil"));
-        IslandDAO.getInstance().create(new Island(10,"Thalassia"));
-        IslandDAO.getInstance().create(new Island(11,"Echo Bay"));
-        IslandDAO.getInstance().create(new Island(12,"The Siren's Shell"));
-
-        IslandDAO.getInstance().create(new Island(13,"Rei Ti"));
-        IslandDAO.getInstance().create(new Island(14,"The Earthquake Straits"));
-        IslandDAO.getInstance().create(new Island(15,"Teardrop Islands"));
-        IslandDAO.getInstance().create(new Island(16,"Rapa Causeway"));
-        IslandDAO.getInstance().create(new Island(17,"Bay of Playful Sirens"));
-        IslandDAO.getInstance().create(new Island(18,"The Fistmarks of Genma"));
-        IslandDAO.getInstance().create(new Island(19,"The Forgotten Chimera Straits"));
-        IslandDAO.getInstance().create(new Island(20,"Hubbub's Lovetubs"));
-        IslandDAO.getInstance().create(new Island(21,"Carlos's Fusion Kitchen"));
-
-        IslandDAO.getInstance().create(new Island(22,"Ren Bo"));
-        IslandDAO.getInstance().create(new Island(23,"Haranu"));
-        IslandDAO.getInstance().create(new Island(24,"The Islands that Reflect the Moon"));
-        IslandDAO.getInstance().create(new Island(25,"Aloft Dagger"));
-        IslandDAO.getInstance().create(new Island(26,"Jade Straits"));
-        IslandDAO.getInstance().create(new Island(27,"Wind's Home"));
-
-        IslandDAO.getInstance().create(new Island(28,"Falling Blossom"));
-        IslandDAO.getInstance().create(new Island(29,"Isle of Juniper"));
-        IslandDAO.getInstance().create(new Island(30,"Tokoko"));
-        IslandDAO.getInstance().create(new Island(31,"Kei Pi"));
-        IslandDAO.getInstance().create(new Island(32,"Tattanogi"));
-        IslandDAO.getInstance().create(new Island(33,"Crescent Island"));
-        IslandDAO.getInstance().create(new Island(34,"Glittercaves"));
-
-        IslandDAO.getInstance().create(new Island(35,"New Heritage"));
-        IslandDAO.getInstance().create(new Island(36,"Khanoka"));
-        IslandDAO.getInstance().create(new Island(37,"The Hole in the World"));
-        IslandDAO.getInstance().create(new Island(38,"Flou Tar-Shei"));
-        IslandDAO.getInstance().create(new Island(39,"Ashihama"));
-        IslandDAO.getInstance().create(new Island(40,"Yamada Island"));
-        IslandDAO.getInstance().create(new Island(41,"Shambling Lair"));
-
-        IslandDAO.getInstance().create(new Island(42,"Dhar Pei's Vantage"));
-        IslandDAO.getInstance().create(new Island(43,"The Reef that Lies to Mapmakers"));
-        IslandDAO.getInstance().create(new Island(44,"Straits of the Oyster Pearl"));
-        IslandDAO.getInstance().create(new Island(45,"Light Under the Sea"));
-
-        IslandDAO.getInstance().create(new Island(46,"Tengu Archipelago"));
-        IslandDAO.getInstance().create(new Island(47,"Bladewing Crag"));
-        IslandDAO.getInstance().create(new Island(48,"The Lair of Tavi and Vynal"));
-        IslandDAO.getInstance().create(new Island(49,"Exile's Point"));
-        IslandDAO.getInstance().create(new Island(50,"The Island that is Blamed for Nothing"));
-        IslandDAO.getInstance().create(new Island(51,"Adamant Isles"));
-
-//        VoyageDAO.getInstance().create(new Voyage(1,new Voyage(
-//                1,
-//                "Bamboo Runner",
-//                10,10,10,
-//        )));
+    public FarmController getFarmController() {
+        return farmController;
     }
 
     private WorldSettingsController() {
         try {
             this.worldSettings = new WorldSettingsSerializer().read(new File(SAVE_LOCATION));
             this.initializeDailies();
-//            this.startGameTick();
-//            this.test();
         } catch (IOException e) {
             this.worldSettings = new WorldSettings();
             this.saveSettings();
             Logger.getLogger("World Logger").severe("Failed to load world settings.");
         }
+        this.farmController = new FarmController();
+        farmController.initializeGrowthCycles();
+//        this.growthCycleController = new GrowthCycleController();
+//        growthCycleController.initializeGrowthCycles();
     }
 
 
@@ -306,4 +260,6 @@ public class WorldSettingsController {
     private WorldSettings worldSettings;
     private final ScheduledExecutorService dailyScheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final ScheduledExecutorService gameTickExecutorService = Executors.newScheduledThreadPool(1);
+//    private final GrowthCycleController growthCycleController;
+    private final FarmController farmController;
 }

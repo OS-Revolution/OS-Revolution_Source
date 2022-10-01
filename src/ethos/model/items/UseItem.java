@@ -46,6 +46,9 @@ import ethos.model.players.skills.herblore.UnfCreator;
 import ethos.model.players.skills.prayer.Bone;
 import ethos.model.players.skills.prayer.Prayer;
 import ethos.runehub.entity.item.*;
+import ethos.runehub.skill.gathering.farming.Farming;
+import ethos.runehub.skill.gathering.farming.action.ApplyCompostAction;
+import ethos.runehub.skill.gathering.farming.action.PlantSeedAction;
 import ethos.util.Misc;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.model.entity.item.ItemContext;
@@ -150,7 +153,7 @@ public class UseItem {
                         Logger.getGlobal().fine("Processing Object Item Interaction: " + itemInteraction.getUuid()
                                 + "\nReaction ID: " + itemInteraction.getReactionUuid());
                         c.getAttributes().getItemReactionProcessor().process(
-                                new ItemInteractionContext(objectX, objectY, c.heightLevel, itemId, objectID,c.getItems().getItemAmount(itemId),1),
+                                new ItemInteractionContext(objectX, objectY, c.heightLevel, itemId, objectID, c.getItems().getItemAmount(itemId), 1),
                                 itemInteraction,
                                 ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
                                         itemInteraction.getReactionUuid()),
@@ -162,7 +165,16 @@ public class UseItem {
                 });
 
         switch (objectID) {
+            case 8554:
+            case 8555:
+            case 7849:
+            case 8142:
+                if (itemId == Farming.COMPOST || itemId == Farming.SUPERCOMPOST || itemId == Farming.ULTRACOMPOST || itemId == Farming.BOTTOMLESS_COMPOST)
+                    c.getSkillController().getFarming().train(new ApplyCompostAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
+                else
+                    c.getSkillController().getFarming().train(new PlantSeedAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
 
+                break;
             case 16469:
             case 2030: //Allows for ores to be used on the furnace instead of going though the interface.
                 //if (itemId == )
@@ -380,21 +392,21 @@ public class UseItem {
         GameItem gameItemUsedWith = new GameItem(useWith, c.playerItemsN[itemUsedSlot], usedWithSlot);
         c.getPA().resetVariables();
         List<ItemCombinations> itemCombinations = ItemCombinations.getCombinations(new GameItem(itemUsed), new GameItem(useWith));
-        if(useWith == 3103 || itemUsed == 3103) {
+        if (useWith == 3103 || itemUsed == 3103) {
             int targetId = -1;
             int targetSlot = -1;
-            if(useWith == 3103) {
+            if (useWith == 3103) {
                 targetId = itemUsed;
                 targetSlot = itemUsedSlot;
-            } else if(itemUsed == 3103) {
+            } else if (itemUsed == 3103) {
                 targetId = useWith;
                 targetSlot = usedWithSlot;
             }
 
             ItemContext context = ItemIdContextLoader.getInstance().read(targetId);
-            if(((context != null && context.isNoteable()) || ItemDefinition.forId(targetId).isNoteable())
-            &&  (context != null && !context.isNoted())) {
-                if(c.getItems().playerHasItem(targetId + 1) || c.getItems().freeSlots() > 0) {
+            if (((context != null && context.isNoteable()) || ItemDefinition.forId(targetId).isNoteable())
+                    && (context != null && !context.isNoted())) {
+                if (c.getItems().playerHasItem(targetId + 1) || c.getItems().freeSlots() > 0) {
                     c.getItems().deleteItem2(3103, 1);
                     c.getItems().deleteItem(targetId, targetSlot, 1);
                     c.getItems().addItem(targetId + 1, 1);
@@ -532,7 +544,7 @@ public class UseItem {
                     c.getItems().deleteItem(3016, 1);
                     c.getItems().deleteItem(12640, 3);
                     c.getItems().addItem(12625, 1);
-                    c.getPA().addSkillXP((int) (152 * ( Config.HERBLORE_EXPERIENCE * c.prestige())), Skill.HERBLORE.getId(), true);
+                    c.getPA().addSkillXP((int) (152 * (Config.HERBLORE_EXPERIENCE * c.prestige())), Skill.HERBLORE.getId(), true);
                     c.sendMessage("You combine all of the ingredients and make a Stamina potion.");
                     Achievements.increase(c, AchievementType.HERB, 1);
                 }

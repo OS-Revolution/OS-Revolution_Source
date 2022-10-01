@@ -4,6 +4,7 @@ import ethos.runehub.skill.artisan.cooking.CookingItemReactionLoader;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReactionLoader;
 import ethos.runehub.skill.artisan.smithing.SmeltingItemReactionDAO;
 import ethos.runehub.skill.artisan.smithing.SmeltingItemReactionLoader;
+import org.runehub.api.util.SkillDictionary;
 
 public class ItemReactionFactory {
 

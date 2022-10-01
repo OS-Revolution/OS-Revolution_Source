@@ -6,21 +6,16 @@ import ethos.runehub.skill.artisan.herblore.Herblore;
 import ethos.runehub.skill.artisan.runecraft.Runecraft;
 import ethos.runehub.skill.artisan.smithing.Smithing;
 import ethos.runehub.skill.gathering.GatheringSkill;
+import ethos.runehub.skill.gathering.farming.Farming;
 import ethos.runehub.skill.gathering.fishing.Fishing;
-import ethos.runehub.skill.gathering.foraging.Foraging;
+import ethos.runehub.skill.gathering.farming.foraging.Foraging;
 import ethos.runehub.skill.gathering.mining.Mining;
 import ethos.runehub.skill.gathering.woodcutting.Woodcutting;
 import ethos.runehub.skill.node.impl.RenewableNode;
-import ethos.runehub.skill.node.impl.gatherable.GatheringNode;
-import ethos.runehub.skill.node.io.FishingNodeLoader;
-import ethos.runehub.skill.node.io.MiningNodeLoader;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
-import ethos.runehub.skill.node.io.WoodcuttingNodeLoader;
 import ethos.runehub.skill.support.SupportSkill;
 import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.skill.support.thieving.Thieving;
-import org.runehub.api.io.load.LazyLoader;
-import org.runehub.api.util.SkillDictionary;
 
 public class SkillController {
 
@@ -128,6 +123,10 @@ public class SkillController {
         return sailing;
     }
 
+    public Farming getFarming() {
+        return farming;
+    }
+
     public SkillController(Player player) {
         this.player = player;
         this.woodcutting = new Woodcutting(player);
@@ -140,6 +139,7 @@ public class SkillController {
         this.smithing = new Smithing(player);
         this.thieving = new Thieving(player);
         this.sailing = new Sailing(player);
+        this.farming = new Farming(player);
     }
 
     private final Player player;
@@ -153,4 +153,5 @@ public class SkillController {
     private final Smithing smithing;
     private final Thieving thieving;
     private final Sailing sailing;
+    private final Farming farming;
 }

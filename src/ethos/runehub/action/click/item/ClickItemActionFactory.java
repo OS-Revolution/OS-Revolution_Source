@@ -3,10 +3,12 @@ package ethos.runehub.action.click.item;
 import ethos.Server;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubConstants;
+import ethos.runehub.action.click.item.consumable.PortableBankChargeScroll;
 import ethos.runehub.action.click.item.consumable.star.ClickPrismaticStarAction;
 import ethos.runehub.action.click.item.consumable.TeleportChargeScroll;
 import ethos.runehub.action.click.item.consumable.potion.ClickPotionConsumableAction;
 import ethos.runehub.action.click.item.consumable.star.ClickSkillStarAction;
+import ethos.runehub.entity.item.impl.PortableBankChest;
 import org.runehub.api.io.load.impl.LootTableContainerLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.Loot;
@@ -107,6 +109,12 @@ public class ClickItemActionFactory {
             case 6824:
             case 6825:
                 action = new ClickPrismaticStarAction(player,itemId,slot);
+                break;
+            case 8152:
+                action = new PortableBankChest.OnFirstClick(player,slot);
+                break;
+            case 3495:
+                action = new PortableBankChargeScroll(player,1,slot);
                 break;
         }
         if (action != null)

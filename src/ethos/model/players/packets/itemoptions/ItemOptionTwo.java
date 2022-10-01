@@ -21,6 +21,7 @@ import ethos.model.players.combat.Degrade;
 import ethos.model.players.skills.hunter.impling.Impling;
 import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
+import ethos.runehub.entity.item.impl.PortableBankChest;
 import ethos.util.Misc;
 
 /**
@@ -71,7 +72,7 @@ public class ItemOptionTwo implements PacketType {
 			break;
 			
 		case 8152:
-			player.sendMessage("@red@You currently have @dre@"+player.bankCharges+" @red@charges.");
+			Server.getEventHandler().submit(new PortableBankChest.OnSecondClick(player,player.getItems().getItemSlot(itemId)));
 			break;
 
 //			case 13660:

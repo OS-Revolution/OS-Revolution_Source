@@ -1470,7 +1470,7 @@ public class AttackNPC {
 				}
 				if (c.usingBow || c.usingOtherRangeWeapons || c.usingCross || c.usingBallista) {
 					combatType = CombatType.RANGE;
-				} else if (c.usingMagic) {
+				} else if (c.usingMagic || c.playerEquipment[c.playerWeapon] == 21354) {
 					combatType = CombatType.MAGE;
 				} else {
 					combatType = CombatType.MELEE;

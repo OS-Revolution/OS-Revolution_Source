@@ -6,7 +6,7 @@ import ethos.runehub.entity.mob.Mob;
 
 public abstract class PassiveMob extends Mob {
 
-    public abstract ClickNpcAction talkTo(Player player);
+    public abstract ClickNpcAction talkTo(Player player, int index);
 
     public int getId() {
         return id;

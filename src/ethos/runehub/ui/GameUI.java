@@ -1,6 +1,9 @@
 package ethos.runehub.ui;
 
 import ethos.model.players.Player;
+import ethos.runehub.ui.component.impl.TextComponent;
+import ethos.runehub.ui.event.action.ActionEvent;
+import ethos.runehub.ui.event.action.ActionListener;
 
 import java.util.logging.Logger;
 
@@ -34,6 +37,15 @@ public abstract class GameUI {
         Logger.getGlobal().fine("Button Press on UI: " + id + " - ActionID: " + buttonId);
         this.onAction(buttonId);
     }
+
+    protected void writeLine(String text,int line) {
+        player.getPA().sendFrame126(text,line);
+    }
+
+    protected void writeLine(TextComponent component) {
+        player.getPA().sendFrame126(component.getText(),component.getLineId());
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -86,6 +98,14 @@ public abstract class GameUI {
 
     public enum State {
         ACTIVE,COMPLETED,CANCELLED;
+    }
+
+    public class UICloseActionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            close();
+        }
     }
 
 }

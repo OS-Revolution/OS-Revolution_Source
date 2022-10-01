@@ -17,6 +17,7 @@ import ethos.model.multiplayer_session.MultiplayerSessionType;
 import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
+import ethos.model.players.skills.farming.FarmingConstants;
 import ethos.runehub.entity.item.ItemInteraction;
 import ethos.runehub.entity.item.ItemInteractionLoader;
 import ethos.runehub.entity.item.ItemReactionFactory;
@@ -113,7 +114,14 @@ public class ItemOnObject implements PacketType {
                 case 28900:
                     c.objectDistance = 3;
                     break;
-
+                case FarmingConstants.GRASS_OBJECT:
+                case FarmingConstants.HERB_OBJECT:
+                case FarmingConstants.HERB_PATCH_DEPLETED:
+                case 7849:
+                    c.objectDistance = 6;
+                    c.objectXOffset = 3;
+                    c.objectYOffset = 3;
+                    break;
 
                 default:
                     c.objectDistance = 1;

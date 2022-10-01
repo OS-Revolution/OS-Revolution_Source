@@ -1,7 +1,6 @@
 package ethos.runehub.skill.node.io;
 
-import ethos.runehub.skill.gathering.foraging.ForagingSeed;
-import ethos.runehub.skill.node.impl.gatherable.impl.FishingNode;
+import ethos.runehub.skill.gathering.farming.foraging.ForagingSeed;
 import org.runehub.api.io.load.LazyLoader;
 
 public class ForagingSeedLoader extends LazyLoader<Integer, ForagingSeed> {

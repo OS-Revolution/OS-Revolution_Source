@@ -34,7 +34,7 @@ import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
 import ethos.runehub.event.shop.impl.TravellingCommodityMerchantEvent;
-import ethos.runehub.skill.gathering.foraging.ForageNodeClusterController;
+import ethos.runehub.skill.gathering.farming.foraging.ForageNodeClusterController;
 import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.io.*;
@@ -300,10 +300,37 @@ public class Server {
 	};
 
 	public static void main(java.lang.String[] args) {
+
+//		System.out.println(GamblingManMob.getInstance().getBlackjack().getEmptyPlayingPosition());
 		APILogger.debug = RunehubConstants.DEBUG;
 		APILogger.initialize();
 		APISettingsController.getInstance().getApiSettings().setItemDatabaseLocation(RunehubConstants.OS_DEFINTIONS_DB);
 		APISettingsController.getInstance().getApiSettings().setLootDatabase(RunehubConstants.LOOT_DB);
+
+//		ShipDAO.getInstance().create(new Ship(2,"Blazing Lantern",15,15,15,15));
+//		ShipDAO.getInstance().create(new Ship(3,"Pin's Ship",7,7,7,7));
+//		ShipDAO.getInstance().create(new Ship(4,"Dinghy",1,0,0,0));
+//		ShipDAO.getInstance().create(new Ship(5,"Trawler",2,2,1,2));
+//		ShipDAO.getInstance().create(new Ship(6,"Frigate",3,1,3,2));
+//		ShipDAO.getInstance().create(new Ship(7,"Catamaran",2,3,0,3));
+//		ShipDAO.getInstance().create(new Ship(8,"Coracle",0,0,0,0));
+//		ShipDAO.getInstance().create(new Ship(9,"Masula",2,1,1,2));
+
+//		VoyageDAO.getInstance().create(new Voyage(
+//				500002,
+//				"Warring Khans",
+//				25,25,25,150,0,1,
+//				true,false,
+//				new VoyageContext(new int[] {
+//						0,0,0,0,0,
+//						0,0,0,0,0,
+//						0,0,0,0,0,
+//						0,0,0,0,0,
+//						0,0,0,0
+//				}
+//		, new int[]{70000})));
+
+//		System.out.println(Arrays.toString(VoyageDAO.getInstance().read(500002).getContext().getLevels()));
 		try {
 			long startTime = System.currentTimeMillis();
 			System.setOut(extracted());
@@ -315,7 +342,7 @@ public class Server {
 			events.submit(new PunishmentCycleEvent(PUNISHMENTS, 50));
 			events.submit(new TravellingCommodityMerchantEvent());
 //			events.submit(new ExchangePriceUpdateEvent());
-			ForageNodeClusterController.getInstance().spawnCluster();
+//			ForageNodeClusterController.getInstance().spawnCluster();
 
 			Listing.loadNextSale();
 			Wogw.init();

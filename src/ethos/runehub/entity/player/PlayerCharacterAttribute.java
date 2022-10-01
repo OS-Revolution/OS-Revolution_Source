@@ -1,5 +1,6 @@
 package ethos.runehub.entity.player;
 
+import ethos.runehub.content.gambling.cards.Card;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.ItemReactionProcessor;
 import ethos.runehub.loot.Lootbox;
@@ -10,6 +11,8 @@ import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
@@ -148,6 +151,10 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.activeUI = activeUI;
     }
 
+    public ScheduledExecutorService getFarmTickExecutorService() {
+        return farmTickExecutorService;
+    }
+
     private boolean movementResricted,actionLocked,enteringValue,usingStar;
     private float magicFind,teleportRechargeReduction;
     private int integerInput = 0;
@@ -159,5 +166,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     private Lootbox activeLootBox;
     private String enteredString;
     private GameUI activeUI;
+
+    private final ScheduledExecutorService farmTickExecutorService = Executors.newScheduledThreadPool(1);
 
 }

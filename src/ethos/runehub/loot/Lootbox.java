@@ -6,7 +6,6 @@ import ethos.model.players.Player;
 import ethos.util.PreconditionUtils;
 import org.runehub.api.io.data.impl.LootTableContainerDAO;
 import org.runehub.api.io.load.impl.LootTableContainerDefinitionLoader;
-import org.runehub.api.io.load.impl.LootTableContainerLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.*;
 

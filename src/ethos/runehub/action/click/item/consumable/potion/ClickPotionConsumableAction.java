@@ -24,7 +24,7 @@ public class ClickPotionConsumableAction extends ClickConsumableItemAction {
     }
 
     @Override
-    protected void checkPrerequisites() {
+    protected boolean checkPrerequisites() {
         try {
             if (Objects.nonNull(session))
                 Preconditions.checkArgument(PreconditionUtils.isFalse(session.getRules().contains(DuelSessionRules.Rule.NO_DRINKS)), "Drinks have been disabled for this duel.");
@@ -32,10 +32,12 @@ public class ClickPotionConsumableAction extends ClickConsumableItemAction {
             Preconditions.checkArgument(PreconditionUtils.isFalse(System.currentTimeMillis() - this.getActor().lastSpear < 3000), "You are stunned and can not drink!");
             Preconditions.checkArgument(this.getActor().potionTimer.elapsed() > 1200);
             this.playerHasItemPrerequisite();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             this.getActor().sendMessage(e.getMessage());
         }
+        return false;
     }
 
     @Override

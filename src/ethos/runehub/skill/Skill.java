@@ -2,6 +2,8 @@ package ethos.runehub.skill;
 
 import ethos.Server;
 import ethos.model.players.Player;
+import ethos.util.Misc;
+import org.runehub.api.util.SkillDictionary;
 
 import java.util.Random;
 
@@ -49,6 +51,15 @@ public abstract class Skill {
         double top = 1 + brOne + brTwo;
         double value = top / 256;
         return value;
+    }
+
+    @Override
+    public String toString() {
+        if (this.getId() == SkillDictionary.Skill.FARMING.getId())
+            return "Foraging";
+        else if(this.getId() == 23)
+            return "Sailing";
+        return Misc.capitalize(SkillDictionary.getSkillNameFromId(this.getId()).toLowerCase());
     }
 
     public Player getPlayer() {

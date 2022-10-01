@@ -1,6 +1,7 @@
 package ethos.model.players.packets;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import ethos.Server;
 import ethos.event.CycleEvent;
@@ -42,7 +43,7 @@ public class ClickObject implements PacketType {
             return;
         }
 
-        System.out.println("Click: " + packetType);
+        Logger.getGlobal().fine("Click Type: " + packetType);
 
         switch (packetType) {
             case FIRST_CLICK:
@@ -363,6 +364,7 @@ public class ClickObject implements PacketType {
                     case FarmingConstants.GRASS_OBJECT:
                     case FarmingConstants.HERB_OBJECT:
                     case FarmingConstants.HERB_PATCH_DEPLETED:
+                    case 7849:
                     case 16671:
                     case 17068:
                     case 27057:

@@ -27,7 +27,8 @@ public enum Skill {
 		FARMING(19), 
 		RUNECRAFTING(20),
 		CONSTRUCTION(22),
-		HUNTER(21);
+		HUNTER(21),
+	SAILING(23);
 
 	private int id;
 

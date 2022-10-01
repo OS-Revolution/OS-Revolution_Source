@@ -110,7 +110,7 @@ public class MeleeData {
 			c.playerRunIndex = 1831;
 			return;
 		}
-		if (weaponName.contains("wand") || weaponName.contains("staff") || weaponName.contains("trident")) {
+		if (weaponName.contains("wand") || weaponName.contains("staff") || weaponName.contains("trident") || weaponName.contains("fan")) {
 			c.playerStandIndex = 809;
 			c.playerRunIndex = 1210;
 			c.playerWalkIndex = 1146;
@@ -222,6 +222,17 @@ public class MeleeData {
 				return 423;
 			case 1:
 				return 422;
+			}
+		} else if(c.playerEquipment[c.playerWeapon] == 21354) {
+			switch (c.fightMode) {
+				case 0:
+					return 8134;
+				case 1:
+					return 4352;
+				case 2:
+					return 8134;
+				case 3:
+					return 7710;
 			}
 		}
 		if (weaponName.contains("bulwark")) {
@@ -456,6 +467,8 @@ public class MeleeData {
 		if (c.playerEquipment[c.playerWeapon] == -1)
 			return 4;// unarmed
 		switch (c.playerEquipment[c.playerWeapon]) {
+			case 21354:
+				return 5;
 		case 12926:
 			return c.playerIndex > 0 ? 4 : 3;
 		case 12765:
@@ -588,7 +601,7 @@ public class MeleeData {
 		if (weaponName.contains("knife") || weaponName.contains("javelin") || weaponName.contains("thrownaxe")) {
 			return 3;
 		}
-		if (weaponName.contains("cross") || weaponName.contains("c'bow")) {
+		if (weaponName.contains("cross") || weaponName.contains("c'bow") || weaponName.contains("fan")) {
 			return 4;
 		}
 		if (weaponName.contains("ballista")) {

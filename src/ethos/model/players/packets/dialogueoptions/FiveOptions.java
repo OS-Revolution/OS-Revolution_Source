@@ -21,6 +21,10 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerAssistant;
 import ethos.model.players.combat.Degrade;
 import ethos.model.players.combat.Degrade.DegradableItem;
+import ethos.runehub.dialog.Dialog;
+import ethos.runehub.dialog.DialogSequence;
+import ethos.runehub.world.wushanko.region.IslandRegion;
+import ethos.runehub.world.wushanko.region.IslandRegionLoader;
 import ethos.world.objects.GlobalObject;
 
 /*
@@ -35,9 +39,38 @@ public class FiveOptions {
 
 	static NPC OLMLET = NPCHandler.getNpc(7520);
 	public static void handleOption1(Player c) {
-
+		IslandRegion region;
 			switch (c.dialogueAction) {
-			
+				case 55555:
+					 region = IslandRegionLoader.getInstance().read(0);
+					c.getDH().sendDialogueSequence(
+							new DialogSequence.DialogSequenceBuilder(c)
+									.addStatement("Preferred Region set to " + region.getName())
+									.addDialogueAction(new Dialog() {
+										@Override
+										public void onSend() {
+											c.getContext().getPlayerSaveData().setPreferredRegion(
+													region.getId()
+											);
+										}
+									})
+									.build());
+					break;
+				case 55556:
+					 region = IslandRegionLoader.getInstance().read(4);
+					c.getDH().sendDialogueSequence(
+							new DialogSequence.DialogSequenceBuilder(c)
+									.addStatement("Preferred Region set to " + region.getName())
+									.addDialogueAction(new Dialog() {
+										@Override
+										public void onSend() {
+											c.getContext().getPlayerSaveData().setPreferredRegion(
+													region.getId()
+											);
+										}
+									})
+									.build());
+					break;
 			case 16054:
 				c.getPA().movePlayer(c.absX, c.absY + 1);
 				break;
@@ -372,9 +405,38 @@ public class FiveOptions {
 	 * Handles all 2nd options on 'Five option' dialogues.
 	 */
 	public static void handleOption2(Player c) {
-
+		IslandRegion region;
 		switch (c.dialogueAction) {
-		
+			case 55555:
+				 region = IslandRegionLoader.getInstance().read(1);
+				c.getDH().sendDialogueSequence(
+						new DialogSequence.DialogSequenceBuilder(c)
+								.addStatement("Preferred Region set to " + region.getName())
+								.addDialogueAction(new Dialog() {
+									@Override
+									public void onSend() {
+										c.getContext().getPlayerSaveData().setPreferredRegion(
+												region.getId()
+										);
+									}
+								})
+								.build());
+				break;
+			case 55556:
+				region = IslandRegionLoader.getInstance().read(5);
+				c.getDH().sendDialogueSequence(
+						new DialogSequence.DialogSequenceBuilder(c)
+								.addStatement("Preferred Region set to " + region.getName())
+								.addDialogueAction(new Dialog() {
+									@Override
+									public void onSend() {
+										c.getContext().getPlayerSaveData().setPreferredRegion(
+												region.getId()
+										);
+									}
+								})
+								.build());
+				break;
 		case 16054:
 			c.getPA().movePlayer(c.absX + 1, c.absY);
 			break;
@@ -697,9 +759,38 @@ public class FiveOptions {
 	 * Handles all 3rd options on 'Five option' dialogues.
 	 */
 	public static void handleOption3(Player c) {
-
+		IslandRegion region;
 		switch (c.dialogueAction) {
-		
+			case 55555:
+				 region = IslandRegionLoader.getInstance().read(2);
+				c.getDH().sendDialogueSequence(
+						new DialogSequence.DialogSequenceBuilder(c)
+								.addStatement("Preferred Region set to " + region.getName())
+								.addDialogueAction(new Dialog() {
+									@Override
+									public void onSend() {
+										c.getContext().getPlayerSaveData().setPreferredRegion(
+												region.getId()
+										);
+									}
+								})
+								.build());
+				break;
+			case 55556:
+				region = IslandRegionLoader.getInstance().read(6);
+				c.getDH().sendDialogueSequence(
+						new DialogSequence.DialogSequenceBuilder(c)
+								.addStatement("Preferred Region set to " + region.getName())
+								.addDialogueAction(new Dialog() {
+									@Override
+									public void onSend() {
+										c.getContext().getPlayerSaveData().setPreferredRegion(
+												region.getId()
+										);
+									}
+								})
+								.build());
+				break;
 		case 16054:
 			c.getPA().movePlayer(c.absX, c.absY - 1);
 			break;
@@ -1012,9 +1103,38 @@ public class FiveOptions {
 	 * Handles all 4th options on 'Five option' dialogues.
 	 */
 	public static void handleOption4(Player c) {
-
+		IslandRegion region;
 		switch (c.dialogueAction) {
-		
+			case 55555:
+				 region = IslandRegionLoader.getInstance().read(3);
+				c.getDH().sendDialogueSequence(
+						new DialogSequence.DialogSequenceBuilder(c)
+								.addStatement("Preferred Region set to " + region.getName())
+								.addDialogueAction(new Dialog() {
+									@Override
+									public void onSend() {
+										c.getContext().getPlayerSaveData().setPreferredRegion(
+												region.getId()
+										);
+									}
+								})
+								.build());
+				break;
+			case 55556:
+				region = IslandRegionLoader.getInstance().read(7);
+				c.getDH().sendDialogueSequence(
+						new DialogSequence.DialogSequenceBuilder(c)
+								.addStatement("Preferred Region set to " + region.getName())
+								.addDialogueAction(new Dialog() {
+									@Override
+									public void onSend() {
+										c.getContext().getPlayerSaveData().setPreferredRegion(
+												region.getId()
+										);
+									}
+								})
+								.build());
+				break;
 		case 16054:
 			c.getPA().movePlayer(c.absX - 1, c.absY);
 			break;
@@ -1292,7 +1412,25 @@ public class FiveOptions {
 	public static void handleOption5(Player c) {
 
 		switch (c.dialogueAction) {
-		
+			case 55555:
+				c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
+						.addOptions(55556,
+								"The Bowl",
+								"Previous"
+						)
+						.build());
+				break;
+			case 55556:
+				c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
+						.addOptions(55555,
+								"The Arc",
+								"The Skull",
+								"The Hook",
+								"The Scythe",
+								"Next"
+						)
+						.build());
+				break;
 		case 16054:
 			ConstSave.addSpawn(c, "crate");
 			c.getPA().closeAllWindows();

@@ -128,8 +128,38 @@ public class FirstClickNodeActionListener {
                 return new FirstClickAbyssalPortalAction(player, nodeId, nodeX, nodeY);
             case 4126:
                 return new ClickShinyChestAction(player,nodeId,nodeX,nodeY,nodeZ);
+            case 2213:
+            case 24101:
+            case 3045:
+            case 14367:
+            case 3193:
+            case 10517:
+            case 11402:
+            case 26972:
+            case 4483:
+            case 25808:
+            case 11744:
+            case 10060:
+            case 12309:
+            case 10058:
+            case 2693:
+            case 21301:
+            case 6943:
+            case 3194:
+            case 10661:
+            case 6945:
+                return new OpenBankAction(player,nodeId,nodeX,nodeY);
+            case 8554:
+            case 8555:
+            case 7849:
+            case 8152:
+                return new FirstClickFarmingPatchAction(player,nodeId,nodeX,nodeY);
+            case 19206:
+            case 19207:
+                return new FirstClickRiftDoorAction(player,nodeId,nodeX,nodeY,nodeZ);
             default:
-                throw new NullPointerException("Nothing Interesting Happens.");
+                Logger.getGlobal().fine("First Click Action[Id:" + nodeId + ", X:" +nodeX +", Y:" + nodeY + ", Z:" + nodeZ + "]");
+                throw new NullPointerException("Nothing interesting happens.");
         }
     }
 }

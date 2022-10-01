@@ -3642,15 +3642,17 @@ public class PlayerAssistant {
 
         // If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
         // off
-        if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > amount) {
-            c.getContext().getPlayerSaveData().getBonusXp().get(skill).subtract(amount);
-            sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
-            amount *= 2;
-        } else if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > 0) {
-            amount += c.getContext().getPlayerSaveData().getBonusXp().get(skill).value();
-            c.getContext().getPlayerSaveData().getBonusXp().get(skill).setValue(0);
-            c.sendMessage("You've used up all your bonus XP in $" + SkillDictionary.getSkillNameFromId(skill));
-            sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+        if(c.getContext().getPlayerSaveData().getBonusXp().containsKey(skill)) {
+            if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > amount) {
+                c.getContext().getPlayerSaveData().getBonusXp().get(skill).subtract(amount);
+                sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+                amount *= 2;
+            } else if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > 0) {
+                amount += c.getContext().getPlayerSaveData().getBonusXp().get(skill).value();
+                c.getContext().getPlayerSaveData().getBonusXp().get(skill).setValue(0);
+                c.sendMessage("You've used up all your bonus XP in $" + SkillDictionary.getSkillNameFromId(skill));
+                sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+            }
         }
         if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
                 && Config.BONUS_WEEKEND == false) {

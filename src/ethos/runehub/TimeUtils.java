@@ -18,4 +18,8 @@ public class TimeUtils {
         return DurationFormatUtils.formatDuration(ms, "'Days: ' dd 'Hours: 'HH 'Minutes: ' mm 'Seconds: ' ss", true);
     }
 
+    public static int getMsAsTicks(long ms) {
+        return Math.toIntExact(ms / 600);
+    }
+
 }

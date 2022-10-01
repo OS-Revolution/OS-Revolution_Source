@@ -40,7 +40,19 @@ public class Voyage {
         return region;
     }
 
-    public Voyage(int id, String name, int seafaring, int morale, int combat, int distance, int region, int island) {
+    public boolean isAdventure() {
+        return adventure;
+    }
+
+    public boolean isStory() {
+        return story;
+    }
+
+    public VoyageContext getContext() {
+        return context;
+    }
+
+    public Voyage(int id, String name, int seafaring, int morale, int combat, int distance, int region, int island, boolean story, boolean adventure, VoyageContext context) {
         this.id = id;
         this.name = name;
         this.seafaring = seafaring;
@@ -49,6 +61,9 @@ public class Voyage {
         this.distance = distance;
         this.island = island;
         this.region = region;
+        this.story = story;
+        this.adventure = adventure;
+        this.context = context;
     }
 
     @StoredValue(type = SqlDataType.INTEGER, parameter = QueryParameter.PRIMARY_KEY, id = true)
@@ -67,4 +82,10 @@ public class Voyage {
     private final int region;
     @StoredValue(type = SqlDataType.INTEGER)
     private final int island;
+    @StoredValue(type = SqlDataType.BOOLEAN)
+    private final boolean story;
+    @StoredValue(type = SqlDataType.BOOLEAN)
+    private final boolean adventure;
+    @StoredValue(type = SqlDataType.JSON)
+    private final VoyageContext context;
 }

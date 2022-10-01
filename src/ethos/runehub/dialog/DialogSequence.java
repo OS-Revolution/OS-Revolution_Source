@@ -3,9 +3,8 @@ package ethos.runehub.dialog;
 import ethos.model.players.Player;
 import ethos.runehub.entity.mob.HostileMobIdContextLoader;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class DialogSequence {
@@ -71,6 +70,17 @@ public class DialogSequence {
 //                    final String[] optionText = Arrays.stream(options).map(DialogOption::getOptionText).collect(Collectors.toList()).toArray(new String[0]);
                     player.getDH().sendOptions(options);
                     player.dialogueAction = optionId;
+                }
+            });
+            return this;
+        }
+
+        public DialogSequenceBuilder addOptions(DialogOption...options) {
+            dialogMap.put(nextChatId(), new Dialog(options) {
+                @Override
+                public void onSend() {
+                    final String[] optionText = Arrays.stream(options).map(DialogOption::getOptionText).collect(Collectors.toList()).toArray(new String[0]);
+                    player.getDH().sendOptions(optionText);
                 }
             });
             return this;
@@ -150,6 +160,72 @@ public class DialogSequence {
                 player.getAttributes().setActiveDialogSequence(null);
             }
         }).onSend();
+        System.out.println("Current Sequence: " + currentSequence);
+    }
+
+    public void onOptionOne() {
+        dialogMap.getOrDefault(currentSequence, new Dialog() {
+            @Override
+            public void onSend() {
+                player.getPA().resetVariables();
+                player.getPA().removeAllWindows();
+                player.getPA().closeAllWindows();
+                currentSequence = 1;
+                player.getAttributes().setActiveDialogSequence(null);
+            }
+        }).getOptions().get(0).onAction();
+    }
+
+    public void onOptionTwo() {
+        dialogMap.getOrDefault(currentSequence, new Dialog() {
+            @Override
+            public void onSend() {
+                player.getPA().resetVariables();
+                player.getPA().removeAllWindows();
+                player.getPA().closeAllWindows();
+                currentSequence = 1;
+                player.getAttributes().setActiveDialogSequence(null);
+            }
+        }).getOptions().get(1).onAction();
+    }
+
+    public void onOptionThree() {
+        dialogMap.getOrDefault(currentSequence, new Dialog() {
+            @Override
+            public void onSend() {
+                player.getPA().resetVariables();
+                player.getPA().removeAllWindows();
+                player.getPA().closeAllWindows();
+                currentSequence = 1;
+                player.getAttributes().setActiveDialogSequence(null);
+            }
+        }).getOptions().get(2).onAction();
+    }
+
+    public void onOptionFour() {
+        dialogMap.getOrDefault(currentSequence, new Dialog() {
+            @Override
+            public void onSend() {
+                player.getPA().resetVariables();
+                player.getPA().removeAllWindows();
+                player.getPA().closeAllWindows();
+                currentSequence = 1;
+                player.getAttributes().setActiveDialogSequence(null);
+            }
+        }).getOptions().get(3).onAction();
+    }
+
+    public void onOptionFive() {
+        dialogMap.getOrDefault(currentSequence, new Dialog() {
+            @Override
+            public void onSend() {
+                player.getPA().resetVariables();
+                player.getPA().removeAllWindows();
+                player.getPA().closeAllWindows();
+                currentSequence = 1;
+                player.getAttributes().setActiveDialogSequence(null);
+            }
+        }).getOptions().get(4).onAction();
     }
 
     public DialogSequence(DialogSequenceBuilder builder) {

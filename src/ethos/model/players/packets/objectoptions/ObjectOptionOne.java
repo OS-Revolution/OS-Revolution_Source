@@ -49,8 +49,8 @@ import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.woodcutting.Tree;
 import ethos.runehub.action.click.node.FirstClickNodeActionListener;
 import ethos.runehub.skill.gathering.fishing.action.FishingSkillAction;
-import ethos.runehub.skill.gathering.foraging.action.ActiveForagingSkillAction;
-import ethos.runehub.skill.gathering.foraging.action.ActiveRenewableForagingSkillAction;
+import ethos.runehub.skill.gathering.farming.action.ActiveForagingSkillAction;
+import ethos.runehub.skill.gathering.farming.action.ActiveRenewableForagingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAction;
 import ethos.runehub.skill.node.context.impl.FishingNodeContext;
@@ -2178,29 +2178,6 @@ public class ObjectOptionOne {
             // Sailing.startTravel(c, 15);
             // break;
 
-            case 2213:
-            case 24101:
-            case 3045:
-            case 14367:
-            case 3193:
-            case 10517:
-            case 11402:
-            case 26972:
-            case 4483:
-            case 25808:
-            case 11744:
-            case 10060:
-            case 12309:
-            case 10058:
-            case 2693:
-            case 21301:
-            case 6943:
-            case 3194:
-            case 10661:
-            case 6945:
-                c.sendAudio(1877);
-                c.getPA().openUpBank();
-                break;
 
             case 21305:
                 if (c.getItems().playerHasItem(10810, 5)) {

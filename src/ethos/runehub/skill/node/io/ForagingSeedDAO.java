@@ -1,10 +1,8 @@
 package ethos.runehub.skill.node.io;
 
 import ethos.runehub.RunehubConstants;
-import ethos.runehub.skill.gathering.foraging.ForagingSeed;
-import ethos.runehub.skill.node.impl.gatherable.impl.ForagingNode;
+import ethos.runehub.skill.gathering.farming.foraging.ForagingSeed;
 import org.runehub.api.io.data.impl.beta.BetaAbstractDataAcessObject;
-import org.runehub.api.io.file.impl.APIFileSystem;
 
 public class ForagingSeedDAO extends BetaAbstractDataAcessObject<ForagingSeed> {
 

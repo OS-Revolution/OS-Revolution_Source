@@ -1,6 +1,6 @@
 package ethos.runehub.entity.player;
 
-import ethos.model.players.skills.Skill;
+import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.support.sailing.voyage.Voyage;
 import org.runehub.api.model.math.impl.AdjustableDouble;
 import org.runehub.api.model.math.impl.AdjustableInteger;
@@ -236,6 +236,8 @@ public class PlayerSaveData {
 
 
     public List<Voyage> getAvailableVoyages() {
+        if (availableVoyages == null)
+            availableVoyages = new ArrayList<>();
         return availableVoyages;
     }
 
@@ -251,55 +253,9 @@ public class PlayerSaveData {
         return voyageRerolls;
     }
 
-//    public int getShipSlotOne() {
-//        return shipSlotOne;
-//    }
-//
-//    public int getShipSlotOneIsland() {
-//        return shipSlotOneIsland;
-//    }
-//
-//    public int getShipSlotOneRegion() {
-//        return shipSlotOneRegion;
-//    }
-//
-//    public int getShipSlotOneVoyage() {
-//        return shipSlotOneVoyage;
-//    }
-
-//    public int getShipSlotThree() {
-//        return shipSlotThree;
-//    }
-//
-//    public int getShipSlotThreeIsland() {
-//        return shipSlotThreeIsland;
-//    }
-//
-//    public int getShipSlotThreeRegion() {
-//        return shipSlotThreeRegion;
-//    }
-//
-//    public int getShipSlotThreeVoyage() {
-//        return shipSlotThreeVoyage;
-//    }
-//
-//    public int getShipSlotTwo() {
-//        return shipSlotTwo;
-//    }
-//
-//    public int getShipSlotTwoIsland() {
-//        return shipSlotTwoIsland;
-//    }
-//
-//    public int getShipSlotTwoRegion() {
-//        return shipSlotTwoRegion;
-//    }
-//
-//    public int getShipSlotTwoVoyage() {
-//        return shipSlotTwoVoyage;
-//    }
-
     public List<Integer> getIslandsVisited() {
+        if (islandsVisited == null)
+            islandsVisited = new ArrayList<>();
         return islandsVisited;
     }
 
@@ -310,14 +266,6 @@ public class PlayerSaveData {
     public long getLeaguesTravelled() {
         return leaguesTravelled;
     }
-
-//    public long getShipSlotOneEndTimestamp() {
-//        return shipSlotOneEndTimestamp;
-//    }
-//
-//    public long getShipSlotOneStartTimestamp() {
-//        return shipSlotOneStartTimestamp;
-//    }
 
     public void setRegionsVisited(List<Integer> regionsVisited) {
         this.regionsVisited = regionsVisited;
@@ -330,62 +278,6 @@ public class PlayerSaveData {
     public void setLeaguesTravelled(long leaguesTravelled) {
         this.leaguesTravelled = leaguesTravelled;
     }
-//
-//    public void setShipSlotOne(int shipSlotOne) {
-//        this.shipSlotOne = shipSlotOne;
-//    }
-//
-//    public void setShipSlotOneEndTimestamp(long shipSlotOneEndTimestamp) {
-//        this.shipSlotOneEndTimestamp = shipSlotOneEndTimestamp;
-//    }
-//
-//    public void setShipSlotOneIsland(int shipSlotOneIsland) {
-//        this.shipSlotOneIsland = shipSlotOneIsland;
-//    }
-//
-//    public void setShipSlotOneRegion(int shipSlotOneRegion) {
-//        this.shipSlotOneRegion = shipSlotOneRegion;
-//    }
-//
-//    public void setShipSlotOneStartTimestamp(long shipSlotOneStartTimestamp) {
-//        this.shipSlotOneStartTimestamp = shipSlotOneStartTimestamp;
-//    }
-//
-//    public void setShipSlotOneVoyage(int shipSlotOneVoyage) {
-//        this.shipSlotOneVoyage = shipSlotOneVoyage;
-//    }
-//
-//    public void setShipSlotThree(int shipSlotThree) {
-//        this.shipSlotThree = shipSlotThree;
-//    }
-//
-//    public void setShipSlotThreeIsland(int shipSlotThreeIsland) {
-//        this.shipSlotThreeIsland = shipSlotThreeIsland;
-//    }
-//
-//    public void setShipSlotThreeRegion(int shipSlotThreeRegion) {
-//        this.shipSlotThreeRegion = shipSlotThreeRegion;
-//    }
-//
-//    public void setShipSlotThreeVoyage(int shipSlotThreeVoyage) {
-//        this.shipSlotThreeVoyage = shipSlotThreeVoyage;
-//    }
-//
-//    public void setShipSlotTwo(int shipSlotTwo) {
-//        this.shipSlotTwo = shipSlotTwo;
-//    }
-//
-//    public void setShipSlotTwoIsland(int shipSlotTwoIsland) {
-//        this.shipSlotTwoIsland = shipSlotTwoIsland;
-//    }
-//
-//    public void setShipSlotTwoRegion(int shipSlotTwoRegion) {
-//        this.shipSlotTwoRegion = shipSlotTwoRegion;
-//    }
-//
-//    public void setShipSlotTwoVoyage(int shipSlotTwoVoyage) {
-//        this.shipSlotTwoVoyage = shipSlotTwoVoyage;
-//    }
 
     public void setVoyagesRerolled(int voyagesRerolled) {
         this.voyagesRerolled = voyagesRerolled;
@@ -395,43 +287,23 @@ public class PlayerSaveData {
         this.voyageRerolls = voyageRerolls;
     }
 
-//    public long getShipSlotThreeEndTimestamp() {
-//        return shipSlotThreeEndTimestamp;
-//    }
-//
-//    public long getShipSlotThreeStartTimestamp() {
-//        return shipSlotThreeStartTimestamp;
-//    }
-//
-//    public long getShipSlotTwoEndTimestamp() {
-//        return shipSlotTwoEndTimestamp;
-//    }
-//
-//    public long getShipSlotTwoStartTimestamp() {
-//        return shipSlotTwoStartTimestamp;
-//    }
-//
-//    public void setShipSlotThreeEndTimestamp(long shipSlotThreeEndTimestamp) {
-//        this.shipSlotThreeEndTimestamp = shipSlotThreeEndTimestamp;
-//    }
-//
-//    public void setShipSlotThreeStartTimestamp(long shipSlotThreeStartTimestamp) {
-//        this.shipSlotThreeStartTimestamp = shipSlotThreeStartTimestamp;
-//    }
-//
-//    public void setShipSlotTwoEndTimestamp(long shipSlotTwoEndTimestamp) {
-//        this.shipSlotTwoEndTimestamp = shipSlotTwoEndTimestamp;
-//    }
-//
-//    public void setShipSlotTwoStartTimestamp(long shipSlotTwoStartTimestamp) {
-//        this.shipSlotTwoStartTimestamp = shipSlotTwoStartTimestamp;
-//    }
+    public void updateShipSlot(int slot, int index, int value) {
+        if(shipSlot == null)
+            shipSlot = new int[3][4];
+        shipSlot[slot][index] = value;
+    }
 
 
     public int[][] getShipSlot() {
         if(shipSlot == null)
             shipSlot = new int[3][4];
         return shipSlot;
+    }
+
+    public int[][] getVoyageLoot() {
+        if(voyageLoot == null)
+            voyageLoot = new int[3][3];
+        return voyageLoot;
     }
 
     public void setShipSlot(int[][] shipSlot) {
@@ -444,8 +316,98 @@ public class PlayerSaveData {
         return voyageTimestamp;
     }
 
+    public List<Integer> getStoryVoyagesCompleted() {
+        if (storyVoyagesCompleted == null)
+            storyVoyagesCompleted = new ArrayList<>();
+        return storyVoyagesCompleted;
+    }
+
+    public Map<Integer,List<FarmingConfig>> getFarmingConfig() {
+//        if (farmingConfigMap == null || farmingConfigMap.isEmpty())
+//            farmingConfigMap = new HashMap<>(Map.of(
+//                    10548,List.of(
+//                            new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
+//                            new FarmingConfig(0,8,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
+//                            new FarmingConfig(0,16,false,false, PatchType.FLOWER.ordinal(),0,0),
+//                            new FarmingConfig(0,24,false,false, PatchType.HERB.ordinal(),0,0)
+//                    )));
+        return farmingConfigMap;
+    }
+
+    public int getBlackjackGamesPlayed() {
+        return blackjackGamesPlayed;
+    }
+
+    public int getBlackjackGamesWon() {
+        return blackjackGamesWon;
+    }
+
+    public long getBlackjackTotalWagers() {
+        return blackjackTotalWagers;
+    }
+
+    public void setBlackjackGamesPlayed(int blackjackGamesPlayed) {
+        this.blackjackGamesPlayed = blackjackGamesPlayed;
+    }
+
+    public void setBlackjackGamesWon(int blackjackGamesWon) {
+        this.blackjackGamesWon = blackjackGamesWon;
+    }
+
+    public void setBlackjackTotalWagers(long blackjackTotalWagers) {
+        this.blackjackTotalWagers = blackjackTotalWagers;
+    }
+
+    public int getPreferredRegion() {
+        return preferredRegion;
+    }
+
+    public void setPreferredRegion(int preferredRegion) {
+        this.preferredRegion = preferredRegion;
+    }
+
     public void setVoyageTimestamp(long[][] voyageTimestamp) {
         this.voyageTimestamp = voyageTimestamp;
+    }
+
+    public int getPortableBankUses() {
+        return portableBankUses;
+    }
+
+    public int getPortableBankUsesAvailable() {
+        return portableBankUsesAvailable;
+    }
+
+    public void setPortableBankUses(int portableBankUses) {
+        this.portableBankUses = portableBankUses;
+    }
+
+    public void setPortableBankUsesAvailable(int portableBankUsesAvailable) {
+        this.portableBankUsesAvailable = portableBankUsesAvailable;
+    }
+
+    public int getBottomlessCompostBucketCharges() {
+        return bottomlessCompostBucketCharges;
+    }
+
+    public int getBottomlessCompostBucketType() {
+        return bottomlessCompostBucketType;
+    }
+
+    public boolean isPermanentCompost() {
+        return permanentCompost;
+    }
+
+    public void setBottomlessCompostBucketCharges(int bottomlessCompostBucketCharges) {
+        this.bottomlessCompostBucketCharges = bottomlessCompostBucketCharges;
+    }
+
+    public void setBottomlessCompostBucketType(int bottomlessCompostBucketType) {
+        this.bottomlessCompostBucketType = bottomlessCompostBucketType;
+    }
+
+    public void setPermanentCompost(boolean permanentCompost) {
+        this.permanentCompost = permanentCompost;
     }
 
     @Override
@@ -475,8 +437,19 @@ public class PlayerSaveData {
         this.availableVoyages = new ArrayList<>();
         this.islandsVisited = new ArrayList<>();
         this.regionsVisited = new ArrayList<>();
+        this.storyVoyagesCompleted = new ArrayList<>();
         this.shipSlot = new int[3][4];
         this.voyageTimestamp = new long[3][2];
+        this.voyageLoot = new int[3][3];
+        this.preferredRegion = -1;
+        this.farmingConfigMap = new HashMap<>();
+//        farmingConfigMap.put(
+//                10548,List.of(
+//                        new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
+//                        new FarmingConfig(0,8,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
+//                        new FarmingConfig(0,16,false,false, PatchType.FLOWER.ordinal(),0,0),
+//                        new FarmingConfig(0,24,false,false, PatchType.HERB.ordinal(),0,0)
+//                ));
         Arrays.stream(SkillDictionary.Skill.values()).forEach(skill -> bonusXp.put(skill.getId(), new AdjustableInteger(0)));
         Arrays.stream(SkillDictionary.Skill.values()).forEach(skill -> bonusXpTimers.put(skill.getId(), 0L));
     }
@@ -498,20 +471,35 @@ public class PlayerSaveData {
     /**
      * Sailing Variables
      */
-//    private int shipSlotOne, shipSlotTwo, shipSlotThree,
-//            shipSlotOneVoyage, shipSlotTwoVoyage, shipSlotThreeVoyage,
-//            shipSlotOneRegion, shipSlotTwoRegion, shipSlotThreeRegion,
-//            shipSlotOneIsland, shipSlotTwoIsland, shipSlotThreeIsland;
+    private int[][] voyageLoot;
     private int[][] shipSlot;
     private long[][] voyageTimestamp;
-    private int crewLevel, voyagesCompleted, voyagesFailed, voyageSpeedLevel, voyagesRerolled, voyageRerolls;
+    private int crewLevel, voyagesCompleted, voyagesFailed, voyageSpeedLevel, voyagesRerolled, voyageRerolls,preferredRegion;
     private boolean crewAvailable;
-    //    private long shipSlotOneEndTimestamp, shipSlotOneStartTimestamp,
-//    shipSlotTwoEndTimestamp, shipSlotTwoStartTimestamp,
-//            shipSlotThreeEndTimestamp, shipSlotThreeStartTimestamp;
     private long leaguesTravelled;
     private List<Voyage> availableVoyages;
     private List<Integer> islandsVisited;
     private List<Integer> regionsVisited;
+    private List<Integer> storyVoyagesCompleted;
 
+    /**
+     * Portable Bank Chest
+     */
+    private int portableBankUsesAvailable;
+    private int portableBankUses;
+
+    /**
+     * blackjack
+     */
+    private int blackjackGamesPlayed;
+    private long blackjackTotalWagers;
+    private int blackjackGamesWon;
+
+    /**
+     * farming
+     */
+    private Map<Integer, List<FarmingConfig>> farmingConfigMap;
+    private int bottomlessCompostBucketCharges;
+    private int bottomlessCompostBucketType;
+    private boolean permanentCompost;
 }

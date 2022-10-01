@@ -1,19 +1,16 @@
 package ethos.model.content;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
+import ethos.model.players.Player;
+import ethos.model.players.PlayerHandler;
+import ethos.runehub.dialog.DialogSequence;
+import ethos.util.Misc;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
-
-import ethos.model.players.Player;
-import ethos.model.players.PlayerHandler;
-import ethos.net.discord.DiscordMessager;
-import ethos.runehub.dialog.DialogOption;
-import ethos.runehub.dialog.DialogSequence;
-import ethos.util.Misc;
 
 public class Tutorial {
 

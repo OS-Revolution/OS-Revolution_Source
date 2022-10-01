@@ -9,6 +9,8 @@ import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.dialog.DialogueUtils;
 import ethos.runehub.entity.mob.passive.GuideNpcUtils;
 import ethos.model.players.Player;
+import ethos.runehub.world.wushanko.region.IslandRegion;
+import ethos.runehub.world.wushanko.region.IslandRegionLoader;
 
 /*
  * @author Matt
@@ -19,9 +21,10 @@ public class TwoOptions {
     /*
      * Handles all first options on 'Two option' dialogues.
      */
+
     public static void handleOption1(Player c) {
         Player other = c.getItemOnPlayer();
-
+        IslandRegion region;
         switch (c.dialogueAction) {
             case 1:
                 c.getDH().sendDialogueSequence(GuideNpcUtils.getOptionOneSequence(c));
@@ -140,6 +143,36 @@ public class TwoOptions {
                 break;
             case 4:
                 DialogueUtils.sendEstateAgentTourDialog(c);
+                break;
+            case 55555:
+                 region = IslandRegionLoader.getInstance().read(0);
+                c.getDH().sendDialogueSequence(
+                        new DialogSequence.DialogSequenceBuilder(c)
+                                .addStatement("Preferred Region set to " + region.getName())
+                                .addDialogueAction(new Dialog() {
+                                    @Override
+                                    public void onSend() {
+                                        c.getContext().getPlayerSaveData().setPreferredRegion(
+                                                region.getId()
+                                        );
+                                    }
+                                })
+                                .build());
+                break;
+            case 55556:
+                 region = IslandRegionLoader.getInstance().read(4);
+                c.getDH().sendDialogueSequence(
+                        new DialogSequence.DialogSequenceBuilder(c)
+                                .addStatement("Preferred Region set to " + region.getName())
+                                .addDialogueAction(new Dialog() {
+                                    @Override
+                                    public void onSend() {
+                                        c.getContext().getPlayerSaveData().setPreferredRegion(
+                                                region.getId()
+                                        );
+                                    }
+                                })
+                                .build());
                 break;
 //		case 16053:
 //			c.getDH().sendDialogues(16054, 5419);
@@ -1045,6 +1078,7 @@ public class TwoOptions {
      */
     public static void handleOption2(Player c) {
         Logger.getGlobal().fine("Dialogue Option 2 for ID: " + c.dialogueAction);
+        IslandRegion region;
         switch (c.dialogueAction) {
             case 1:
                 c.getDH().sendDialogueSequence(GuideNpcUtils.getOptionTwoSequence(c));
@@ -1065,6 +1099,31 @@ public class TwoOptions {
                                         "Suit yourself.")
                                 .build()
                 );
+                break;
+            case 55555:
+                c.getDH().sendDialogueSequence(
+                        new DialogSequence.DialogSequenceBuilder(c)
+                                .addStatement("Preferred Region set to The Skull")
+                                .addDialogueAction(new Dialog() {
+                                    @Override
+                                    public void onSend() {
+                                        c.getContext().getPlayerSaveData().setPreferredRegion(
+                                                1
+                                        );
+                                    }
+                                })
+                                .build());
+                break;
+            case 55556:
+                c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
+                        .addOptions(55555,
+                                "The Arc",
+                                "The Skull",
+                                "The Hook",
+                                "The Scythe",
+                                "Next"
+                        )
+                        .build());
                 break;
 //		case 15005:
 //			case 450:

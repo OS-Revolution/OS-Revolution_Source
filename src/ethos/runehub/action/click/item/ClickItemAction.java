@@ -23,19 +23,22 @@ public abstract class ClickItemAction extends Event<Player> {
 
     }
 
-    protected void checkPrerequisites() {
+    protected boolean checkPrerequisites() {
         try {
             this.playerHasItemPrerequisite();
+            return true;
         } catch (Exception e) {
             this.getActor().sendMessage(e.getMessage());
+            this.stop();
         }
+        return false;
     }
 
     @Override
     public void execute() {
         Logger.getGlobal().fine("Executing Event Tick");
-        this.checkPrerequisites();
-        this.onTick();
+        if (this.checkPrerequisites())
+            this.onTick();
     }
 
     @Override
@@ -52,7 +55,6 @@ public abstract class ClickItemAction extends Event<Player> {
     public void initialize() {
         Logger.getGlobal().fine("Starting Event");
         super.initialize();
-        this.checkPrerequisites();
         this.onActionStart();
     }
 

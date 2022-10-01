@@ -232,31 +232,31 @@ public class ItemOptionOne implements PacketType {
         	plantBank(c);
         	break;
         	
-        case 8152:
-			if (c.inWild() && c.inDuelArena() && c.isInJail() && c.inGodwars() && c.inCwGame) {
-				c.sendMessage("@red@You are not allowed to use this item in this location!");
-				return;
-			} else {
-			if (c.bankCharges < 1) {
-				c.sendMessage("You have no charges left.");
-				return;
-			} else {
-			if (c.bankCharges > 0) {
-				c.getPA().openUpBank();
-				c.sendAudio(1877);
-				c.bankCharges --;
-				c.sendMessage("@red@You have @dre@"+c.bankCharges+" @red@charges left.");
-				return;
-				}
-			}
-		}
-		break;
+//        case 8152:
+//			if (c.inWild() && c.inDuelArena() && c.isInJail() && c.inGodwars() && c.inCwGame) {
+//				c.sendMessage("@red@You are not allowed to use this item in this location!");
+//				return;
+//			} else {
+//			if (c.bankCharges < 1) {
+//				c.sendMessage("You have no charges left.");
+//				return;
+//			} else {
+//			if (c.bankCharges > 0) {
+//				c.getPA().openUpBank();
+//				c.sendAudio(1877);
+//				c.bankCharges --;
+//				c.sendMessage("@red@You have @dre@"+c.bankCharges+" @red@charges left.");
+//				return;
+//				}
+//			}
+//		}
+//		break;
 			
-		case 3495:
-			c.bankCharges++;
-			c.getItems().deleteItem(3495, 1);
-			c.sendMessage("You gained one bank charge and now have " + c.bankCharges + ".");
-			break;
+//		case 3495:
+//			c.bankCharges++;
+//			c.getItems().deleteItem(3495, 1);
+//			c.sendMessage("You gained one bank charge and now have " + c.bankCharges + ".");
+//			break;
 			
 		case 13190:
 			if (!c.membership && c.getItems().playerHasItem(13190)) {

@@ -5,9 +5,11 @@ import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
+import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.util.SkillDictionary;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  * <p>
  * IDs
  * 8150-8153 fully grown weeds in herb patch (8152 = ardougne test patch)
+ * 8573-8576 weed cycles for falador allotment patch
  * 8550 - 8557 fully grown allotment weeds
  * 8558 - 8562 potato growth stages unaltered
  * 8563 - 8566 potato growth stages with water
@@ -43,6 +46,66 @@ import java.util.stream.Collectors;
  * 8132 empty herb patch
  */
 public class Farming extends GatheringSkill {
+
+    public static final int COMPOST = 6032;
+    public static final int SUPERCOMPOST = 6034;
+    public static final int ULTRACOMPOST = 7622;
+    public static final int BOTTOMLESS_COMPOST = 7624;
+
+    public Optional<FarmingConfig> getConfig(int nodeId, int regionId) {
+        switch (nodeId) {
+            case 8554:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+                        .filter(config -> config.getPatch() == 0).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
+            case 8555:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+                        .filter(config -> config.getPatch() == 8).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
+            case 7849:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+                        .filter(config -> config.getPatch() == 16).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
+            case 8152:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+                        .filter(config -> config.getPatch() == 24).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
+        }
+        return Optional.empty();
+    }
+
+    private double getCompostYieldBonus(int compost) {
+        switch (compost) {
+            case COMPOST:
+                return 1.2;
+            case SUPERCOMPOST:
+                return 1.4;
+            case ULTRACOMPOST:
+                return 1.6;
+        }
+        return 1.0;
+    }
+
+    public double getHarvestChanceBonus() {
+        double bonus = 1;
+        return bonus;
+    }
+
+    public double getHarvestMinMaxBonus(FarmingConfig config) {
+        return this.getCompostYieldBonus(config.getCompost());
+    }
+
+    public void updateAllConfigs() {
+        final AdjustableInteger varbit = new AdjustableInteger(0);
+        this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().keySet().forEach(key -> this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(key).forEach(config -> {
+                    varbit.add(config.varbit());
+                }
+        ));
+        this.getPlayer().getPA().sendConfig(529, varbit.value());
+    }
+
+    public void updateFarm(int regionId) {
+        if (this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().containsKey(regionId)) {
+            final int varbit = this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+            this.getPlayer().getPA().sendConfig(529,varbit);
+        }
+    }
 
     @Override
     public void train(SkillAction skillAction) {

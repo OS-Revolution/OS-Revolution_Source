@@ -1,6 +1,23 @@
 package ethos.runehub.skill;
 
+import ethos.util.Misc;
+import org.runehub.api.util.SkillDictionary;
+
+import java.util.Arrays;
+
 public class SkillUtils {
+
+    public static String getSkillName(int skillId){
+        if(Arrays.stream(SkillDictionary.Skill.values()).anyMatch(skill -> skill.getId() == skillId)) {
+            if(skillId == SkillDictionary.Skill.FARMING.getId()) {
+                return "Foraging";
+            }
+            return Misc.capitalize(SkillDictionary.getSkillNameFromId(skillId).toLowerCase());
+        } else if(skillId == 23) {
+            return "Sailing";
+        }
+        return "N/A";
+    }
 
     private static int getLow(int startingLevel, double startingChance) {
         for (int low = 0; low < 256; low++) {

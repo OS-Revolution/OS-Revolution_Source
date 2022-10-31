@@ -26,7 +26,8 @@ public class CommodityMerchant extends RotatingStockMerchant {
                         (int) loot.getId(),
                         (int) loot.getAmount(),
                         true,
-                        0.5D
+                        0.5D,
+                        false
                 ));
         });
 

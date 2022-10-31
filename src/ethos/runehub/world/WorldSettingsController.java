@@ -1,7 +1,5 @@
 package ethos.runehub.world;
 
-import ethos.clip.Region;
-import ethos.clip.WorldObject;
 import ethos.model.players.ClientGameTimer;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
@@ -9,39 +7,24 @@ import ethos.runehub.RunehubConstants;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangePriceController;
-import ethos.runehub.entity.player.PlayerCharacterContext;
-import ethos.runehub.entity.player.PlayerSaveData;
+import ethos.runehub.event.FixedScheduleEvent;
+import ethos.runehub.event.FixedScheduledEventController;
+import ethos.runehub.event.dnd.FishingPlatformUpdateFixedScheduleEvent;
+import ethos.runehub.event.dnd.SkillOfTheHourFixedScheduleEvent;
 import ethos.runehub.skill.gathering.farming.FarmController;
-import ethos.runehub.skill.gathering.farming.GrowthCycleController;
-import ethos.runehub.skill.gathering.farming.crop.Crop;
-import ethos.runehub.skill.gathering.farming.crop.CropDAO;
-import ethos.runehub.skill.gathering.farming.crop.CropPayment;
-import ethos.runehub.skill.gathering.farming.crop.GrowthStage;
-import ethos.runehub.skill.gathering.farming.patch.Patch;
-import ethos.runehub.skill.gathering.farming.patch.PatchDAO;
-import ethos.runehub.skill.gathering.farming.patch.PatchState;
-import ethos.runehub.skill.gathering.farming.patch.PatchType;
-import ethos.runehub.skill.support.sailing.voyage.Voyage;
-import ethos.runehub.skill.support.sailing.voyage.VoyageDAO;
-import ethos.runehub.world.wushanko.island.Island;
-import ethos.runehub.world.wushanko.island.IslandDAO;
-import ethos.runehub.world.wushanko.region.IslandRegion;
-import ethos.runehub.world.wushanko.region.IslandRegionDAO;
+import ethos.util.Misc;
 import org.runehub.api.model.math.AdjustableNumber;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.model.math.impl.AdjustableLong;
-import org.runehub.api.model.skill.farming.patch.PatchDatabase;
 import org.runehub.api.util.SkillDictionary;
-import org.runehub.api.util.math.geometry.Point;
-import org.runehub.api.util.math.geometry.impl.IrregularPolygon;
-import org.runehub.api.util.math.geometry.impl.Polygon;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -77,35 +60,39 @@ public class WorldSettingsController {
         serializer.write(new File(SAVE_LOCATION), serializer.serialize(worldSettings));
     }
 
-    public void addBonusXp(Player player, int time) {
-        PlayerHandler.executeGlobalMessage("@blu@[News]@red@ " + player.getName() + "@blu@ has activated a @red@" + time + "@blu@ hour XP boost for the server!");
+    public void addBonusXp(int time) {
         worldSettings.getBonusXpTimer().add((long) time * 60);
         PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.EXPERIENCE, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getBonusXpTimer().value())));
         this.saveSettings();
     }
 
+    public void addBonusXp(Player player, int time) {
+        PlayerHandler.executeGlobalMessage("^News $" + player.getName() + " has activated a $" + time + " hour $XP $boost for the server!");
+        this.addBonusXp(time);
+    }
+
     public void addMagicFind(Player player, int time) {
-        PlayerHandler.executeGlobalMessage("@blu@[News]@red@ " + player.getName() + "@blu@ has activated a @red@" + time + "@blu@ hour Magic Find boost for the server!");
+        PlayerHandler.executeGlobalMessage("^News $" + player.getName() + " has activated a $" + time + " hour $Magic $Find boost for the server!");
         worldSettings.getDoubleDropRateTimer().add((long) time * 60);
         PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.DROPS, TimeUnit.MINUTES, Math.toIntExact(worldSettings.getDoubleDropRateTimer().value())));
         this.saveSettings();
     }
 
     public void addSkillPower(Player player, int time, int skillId) {
-        PlayerHandler.executeGlobalMessage("@blu@[News]@red@ " + player.getName() + "@blu@ has activated a @red@" + time + "@blu@ hour "
-                + SkillDictionary.getSkillNameFromId(skillId) + " power boost for the server!");
+        PlayerHandler.executeGlobalMessage("^News $" + player.getName() + " has activated a $" + time + " hour $"
+                + Misc.capitalize(SkillDictionary.getSkillNameFromId(skillId).toLowerCase()) + " $power boost for the server!");
         this.addSkillPower(skillId, time);
         this.saveSettings();
     }
 
     public void addSkillEfficiency(Player player, int time, int skillId) {
-        PlayerHandler.executeGlobalMessage("@blu@[News]@red@ " + player.getName() + "@blu@ has activated a @red@" + time + "@blu@ hour "
-                + SkillDictionary.getSkillNameFromId(skillId) + " efficiency boost for the server!");
+        PlayerHandler.executeGlobalMessage("^News $" + player.getName() + " has activated a $" + time + " hour $"
+                + Misc.capitalize(SkillDictionary.getSkillNameFromId(skillId).toLowerCase()) + " $efficiency boost for the server!");
         this.addSkillEfficiency(skillId, time);
         this.saveSettings();
     }
 
-    private void addSkillPower(int skillID, int time) {
+    public void addSkillPower(int skillID, int time) {
         long hours = (long) time * 60;
         AdjustableNumber<Integer> timer = new AdjustableInteger(ClientGameTimer.SKILL_POWER.getTimerId());
         if (worldSettings.getSkillPowerTimer().containsKey(skillID)) {
@@ -116,19 +103,19 @@ public class WorldSettingsController {
         PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.getPowerTimerForSkillId(skillID), TimeUnit.MINUTES, Math.toIntExact(worldSettings.getSkillPowerTimer().get(skillID).value())));
     }
 
-    private void addSkillEfficiency(int skillID, int time) {
+    public void addSkillEfficiency(int skillID, int time) {
         long hours = (long) time * 60;
-        if (worldSettings.getSkillPowerTimer().containsKey(skillID)) {
-            worldSettings.getSkillPowerTimer().get(skillID).add(hours);
+        if (worldSettings.getSkillEfficiencyTimer().containsKey(skillID)) {
+            worldSettings.getSkillEfficiencyTimer().get(skillID).add(hours);
         } else {
-            worldSettings.getSkillPowerTimer().put(skillID, new AdjustableLong(hours));
+            worldSettings.getSkillEfficiencyTimer().put(skillID, new AdjustableLong(hours));
         }
-        PlayerHandler.getPlayers().forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.getEfficiencyTimerForSkillId(skillID), TimeUnit.MINUTES, Math.toIntExact(worldSettings.getSkillEfficiencyTimer().get(skillID).value())));
+        PlayerHandler.getPlayers().stream().filter(Objects::nonNull).forEach(p -> p.getPA().sendGameTimer(ClientGameTimer.getEfficiencyTimerForSkillId(skillID), TimeUnit.MINUTES, Math.toIntExact(worldSettings.getSkillEfficiencyTimer().get(skillID).value())));
 
     }
 
     private void sendTimer(Player player, ClientGameTimer timer, AdjustableLong number) {
-        if (number.value() > 0)
+        if (number != null && number.value() > 0)
             player.getPA().sendGameTimer(timer, TimeUnit.MINUTES, Math.toIntExact(number.value()));
     }
 
@@ -155,9 +142,9 @@ public class WorldSettingsController {
         if (isRunning(worldSettings.getDoubleDropRateTimer()))
             player.sendMessage("@blu@[News]@red@Magic Find Boost @blu@is active @red@(50% Increased Drop Rate)");
 
-        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isEfficiencyRunning(skill.getId())).forEach(skill -> player.sendMessage("^[News] $" + skill.name().toLowerCase() + " $Efficiency $Boost is active" + " (#" + worldSettings.getEfficiencyModifier() + "x $Depletion $Chance $Reduction)"));
-        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isPowerRunning(skill.getId())).forEach(skill -> player.sendMessage("^[News] $" + skill.name().toLowerCase() + " $Power $Boost is active" + " (#" + worldSettings.getPowerModifer() + "x $Increased $Success $Chance)"));
-        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isGainsRunning(skill.getId())).forEach(skill -> player.sendMessage("^[News] $" + skill.name().toLowerCase() + " $Gains $Boost is active" + " (#" + worldSettings.getGainsModifier() + "x $Increased $XP)"));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isEfficiencyRunning(skill.getId())).forEach(skill -> player.sendMessage("^News $" + Misc.capitalize(skill.name().toLowerCase()) + " $Efficiency $boost is active" + " ( $" + worldSettings.getEfficiencyModifier() + "x Depletion chance reduction)"));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isPowerRunning(skill.getId())).forEach(skill -> player.sendMessage("^News $" + Misc.capitalize(skill.name().toLowerCase()) + " $Power $boost is active" + " ( $" + worldSettings.getPowerModifer() + "x Increased success chance)"));
+        Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> isGainsRunning(skill.getId())).forEach(skill -> player.sendMessage("^News $" + Misc.capitalize(skill.name().toLowerCase()) + " $Gains $boost is active" + " ( $" + worldSettings.getGainsModifier() + "x Increased XP)"));
     }
 
     public void initializeTimers(Player player) {
@@ -178,12 +165,18 @@ public class WorldSettingsController {
         PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(ctx -> {
             if (PlayerHandler.isPlayerOn(ctx.getId())) {
                 PlayerHandler.getPlayer(ctx.getId()).ifPresent(player -> {
+                    MembershipController.getInstance().updateMembership(player);
+                    player.getContext().getPlayerSaveData().setDailiesAvailable(true);
                     player.save();
                     player.sendMessage("Your daily activities have been refreshed! Please log back in to do them.");
                 });
+            } else {
+                MembershipController.getInstance().updateMembership(ctx);
+                ctx.getPlayerSaveData().setDailiesAvailable(true);
+                PlayerCharacterContextDataAccessObject.getInstance().update(ctx);
             }
-            ctx.getPlayerSaveData().setDailiesAvailable(true);
-            PlayerCharacterContextDataAccessObject.getInstance().update(ctx);
+
+
         });
         saveSettings();
     }
@@ -218,7 +211,6 @@ public class WorldSettingsController {
     }
 
 
-
     private void startGameTick() {
         gameTickExecutorService.scheduleAtFixedRate(() -> {
                     System.out.println("Executing Game Tick");
@@ -228,19 +220,77 @@ public class WorldSettingsController {
                 TimeUnit.MILLISECONDS);
     }
 
-//    public GrowthCycleController getGrowthCycleController() {
-//        return growthCycleController;
-//    }
-
 
     public FarmController getFarmController() {
         return farmController;
     }
 
+    private void initializeTriMonthlyEvents() {
+        // Next run at midnight (UTC) - Replace with local time zone, if needed
+        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+        ZonedDateTime nextRun = now.withMonth(12).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+
+        System.out.println("Now: " + now);
+        System.out.println("Next Run: " + nextRun);
+
+        // If midnight is in the past, add one day
+        if (now.compareTo(nextRun) > 0) {
+            nextRun = nextRun.plusDays(1);
+        }
+
+        // Get duration between now and midnight
+        final Duration initialDelay = Duration.between(now, nextRun);
+
+        System.out.println("Duration Until Next Run: " + TimeUtils.getDurationString(initialDelay));
+
+        // Schedule a task to run at midnight and then every day
+        dailyScheduledExecutorService.scheduleAtFixedRate(this::resetTriMonthly,
+                initialDelay.toMillis(),
+                Duration.ofDays(90).toMillis(),
+                TimeUnit.MILLISECONDS);
+
+        // Print time to midnight (UTC!), for debugging
+        System.out.println("Time until first run: " + TimeUtils.getDurationString(initialDelay));
+    }
+
+    private ZonedDateTime getNextMonthlyCycle(int dayInterval) {
+        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+        final long difference = dayInterval - (now.getDayOfMonth() % dayInterval);
+        return now.plusDays(difference);
+    }
+
+    public String getTimeUntilNextSeason() {
+        return TimeUtils.getDurationStringDays(Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextMonthlyCycle(90)));
+    }
+
+    public int getSkillOfTheHourEffect(int sId) {
+        return skillOfTheHourEffect[sId];
+    }
+
+    public void setSkillOfTheHourEffect(int sId, int eId) {
+        skillOfTheHourEffect[sId] = eId;
+    }
+
+    private void resetTriMonthly() {
+        System.out.println("Resetting Tri-Monthly");
+    }
+
+    public FixedScheduleEvent[] getFixedScheduleEvents() {
+        return fixedScheduleEvents;
+    }
+
     private WorldSettingsController() {
+        this.skillOfTheHourEffect = new int[SkillDictionary.Skill.values().length];
+        this.fixedScheduleEvents = new FixedScheduleEvent[] {
+          new SkillOfTheHourFixedScheduleEvent(),
+          new FishingPlatformUpdateFixedScheduleEvent()
+        };
         try {
             this.worldSettings = new WorldSettingsSerializer().read(new File(SAVE_LOCATION));
+
             this.initializeDailies();
+            this.initializeTriMonthlyEvents();
+            Arrays.stream(fixedScheduleEvents).forEach(event -> FixedScheduledEventController.getInstance().startEvent(event));
         } catch (IOException e) {
             this.worldSettings = new WorldSettings();
             this.saveSettings();
@@ -248,8 +298,6 @@ public class WorldSettingsController {
         }
         this.farmController = new FarmController();
         farmController.initializeGrowthCycles();
-//        this.growthCycleController = new GrowthCycleController();
-//        growthCycleController.initializeGrowthCycles();
     }
 
 
@@ -260,6 +308,8 @@ public class WorldSettingsController {
     private WorldSettings worldSettings;
     private final ScheduledExecutorService dailyScheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final ScheduledExecutorService gameTickExecutorService = Executors.newScheduledThreadPool(1);
-//    private final GrowthCycleController growthCycleController;
+    //    private final GrowthCycleController growthCycleController;
     private final FarmController farmController;
+    private final int[] skillOfTheHourEffect;
+    private final FixedScheduleEvent[] fixedScheduleEvents;
 }

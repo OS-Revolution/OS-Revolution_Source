@@ -5,20 +5,9 @@ import com.google.common.base.Preconditions;
 import ethos.Server;
 import ethos.event.Event;
 import ethos.model.players.Player;
-import ethos.runehub.markup.MarkupParser;
-import ethos.runehub.skill.SkillActionContext;
-import ethos.runehub.skill.gathering.tool.GatheringTool;
-import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
-import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.util.PreconditionUtils;
-import ethos.util.Stream;
-import org.runehub.api.io.load.impl.LootTableLoader;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public abstract class SkillAction extends Event<Player> {
 
@@ -56,6 +45,7 @@ public abstract class SkillAction extends Event<Player> {
             this.stop();
             this.getActor().getPA().closeAllWindows();
             this.getActor().sendMessage(e.getMessage());
+
         }
     }
 
@@ -95,7 +85,7 @@ public abstract class SkillAction extends Event<Player> {
 
     protected void addXp(int baseAmount) {
         Logger.getGlobal().fine("Adding xp");
-        final double xpModifier = this.getActor().getSkillController().getSkill(this.getSkillId()).getXpGainsRate();
+        final double xpModifier = this.getActor().getSkillController().getSkill(this.getSkillId()).getGainsBonus();
         final int totalXp = Math.toIntExact(Math.round(baseAmount * xpModifier));
         this.getActor().getPA().addSkillXP(totalXp, this.getSkillId(), true);
     }

@@ -13,7 +13,7 @@ public abstract class GameUI {
 
     protected abstract void onClose();
 
-    protected abstract void onAction(int buttonId);
+//    protected abstract void onAction(int buttonId);
 
     protected abstract void onEvent();
 
@@ -38,12 +38,20 @@ public abstract class GameUI {
         this.onAction(buttonId);
     }
 
+    protected void onAction(int buttonId) {
+        this.getPlayer().getAttributes().getActionDispatcher().dispatch(buttonId);
+    }
+
     protected void writeLine(String text,int line) {
         player.getPA().sendFrame126(text,line);
     }
 
     protected void writeLine(TextComponent component) {
         player.getPA().sendFrame126(component.getText(),component.getLineId());
+    }
+
+    protected void registerButton(ActionListener actionListener, int id) {
+        this.getPlayer().getAttributes().getActionDispatcher().registerButton(actionListener, id);
     }
 
     public Player getPlayer() {

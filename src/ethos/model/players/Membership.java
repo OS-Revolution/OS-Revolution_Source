@@ -19,7 +19,7 @@ public class Membership {
 		} else if (getDaysLeft(c) <= 0) {
 			c.membership = false;
 			c.startDate = -1;
-			c.sendMessage("Your Membership Subscription Is Currently Inactive, Speak To Party Pete At Home.");
+			c.sendMessage("Your membership is inactive. Click <ref=here,url=https://os-revolution.com/forum/index.php?/store/> to activate.");
 			PlayerSave.saveGame(c);
 		}
 	}

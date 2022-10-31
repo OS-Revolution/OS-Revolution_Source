@@ -7,8 +7,6 @@ import java.util.Optional;
 
 import ethos.model.content.achievement.AchievementType;
 import ethos.model.content.achievement.Achievements;
-import ethos.runehub.entity.mob.HostileMobContextDAO;
-import ethos.runehub.entity.mob.HostileMobIdContextLoader;
 import org.apache.commons.lang3.RandomUtils;
 
 import ethos.Config;
@@ -40,12 +38,9 @@ import ethos.model.players.combat.magic.MagicData;
 import ethos.model.players.combat.range.RangeData;
 import ethos.model.players.combat.range.RangeExtras;
 import ethos.model.players.mode.ModeType;
-import ethos.model.players.skills.Skill;
 import ethos.model.players.skills.herblore.PoisonedWeapon;
 import ethos.model.players.skills.herblore.PoisonedWeapon.PoisonLevel;
 import ethos.model.players.skills.mining.Pickaxe;
-import ethos.model.players.skills.slayer.SlayerMaster;
-import ethos.model.players.skills.slayer.Task;
 import ethos.util.Misc;
 
 public class AttackNPC {
@@ -1150,16 +1145,16 @@ public class AttackNPC {
 		}
 		NPC npc = NPCHandler.npcs[i];
 		if(npc != null) {
-			String name = HostileMobContextDAO.getInstance().read(npc.npcType).getName();
-			Optional<Task> task = SlayerMaster.get(name == null ? npc.getName() : name.replaceAll("_", " "));
-			if (task.isPresent()) {
-				int level = task.get().getLevel();
-				if (c.playerLevel[Skill.SLAYER.getId()] < task.get().getLevel()) {
-					c.sendMessage("You need a slayer level of " + level + " to attack this npc.");
-					c.getCombat().resetPlayerAttack();
-					return;
-				}
-			}
+//			String name = HostileMobContextDAO.getInstance().read(npc.npcType).getName();
+//			Optional<Task> task = SlayerMaster.get(name == null ? npc.getName() : name.replaceAll("_", " "));
+//			if (task.isPresent()) {
+//				int level = task.get().getLevel();
+//				if (c.playerLevel[Skill.SLAYER.getId()] < task.get().getLevel()) {
+//					c.sendMessage("You need a slayer level of " + level + " to attack this npc.");
+//					c.getCombat().resetPlayerAttack();
+//					return;
+//				}
+//			}
 		}
 		if (NPCHandler.npcs[i].npcType == 7544) {
 			if (!Boundary.isIn(c, Boundary.TEKTON_ATTACK_BOUNDARY)) {

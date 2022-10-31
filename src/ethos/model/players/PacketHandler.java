@@ -1,60 +1,17 @@
 package ethos.model.players;
 
 import ethos.Config;
-import ethos.model.players.packets.AttackPlayer;
-import ethos.model.players.packets.Bank10;
-import ethos.model.players.packets.Bank5;
-import ethos.model.players.packets.BankAll;
-import ethos.model.players.packets.BankAllButOne;
-import ethos.model.players.packets.BankModifiableX;
-import ethos.model.players.packets.BankX1;
-import ethos.model.players.packets.BankX2;
-import ethos.model.players.packets.ChallengePlayer;
-import ethos.model.players.packets.ChangeAppearance;
-import ethos.model.players.packets.ChangeRegions;
-import ethos.model.players.packets.Chat;
-import ethos.model.players.packets.ClickNPC;
-import ethos.model.players.packets.ClickObject;
-import ethos.model.players.packets.ClickingButtons;
-import ethos.model.players.packets.ClickingInGame;
-import ethos.model.players.packets.ClickingStuff;
-import ethos.model.players.packets.Commands;
-import ethos.model.players.packets.Dialogue;
-import ethos.model.players.packets.DropItem;
-import ethos.model.players.packets.FollowPlayer;
-import ethos.model.players.packets.IdleLogout;
-import ethos.model.players.packets.InputField;
-import ethos.model.players.packets.ItemOnItem;
-import ethos.model.players.packets.ItemOnNpc;
-import ethos.model.players.packets.ItemOnObject;
-import ethos.model.players.packets.ItemOnPlayer;
-import ethos.model.players.packets.ItemOptionOneGroundItem;
-import ethos.model.players.packets.ItemOptionTwoGroundItem;
-import ethos.model.players.packets.KeyEventPacketHandler;
-import ethos.model.players.packets.MagicOnFloorItems;
-import ethos.model.players.packets.MagicOnItems;
-import ethos.model.players.packets.MagicOnObject;
-import ethos.model.players.packets.MapRegionChange;
-import ethos.model.players.packets.MapRegionFinish;
-import ethos.model.players.packets.Moderate;
-import ethos.model.players.packets.MouseMovement;
-import ethos.model.players.packets.MoveItems;
-import ethos.model.players.packets.OperateItem;
-import ethos.model.players.packets.PickupItem;
-import ethos.model.players.packets.PrivateMessaging;
-import ethos.model.players.packets.RemoveItem;
-import ethos.model.players.packets.Report;
-import ethos.model.players.packets.SelectItemOnInterface;
-import ethos.model.players.packets.SilentPacket;
-import ethos.model.players.packets.Trade;
-import ethos.model.players.packets.Walking;
-import ethos.model.players.packets.WearItem;
+import ethos.model.players.packets.*;
 import ethos.model.players.packets.action.InterfaceAction;
 import ethos.model.players.packets.action.JoinChat;
 import ethos.model.players.packets.action.ReceiveString;
 import ethos.model.players.packets.itemoptions.ItemOptionOne;
 import ethos.model.players.packets.itemoptions.ItemOptionThree;
 import ethos.model.players.packets.itemoptions.ItemOptionTwo;
+import ethos.runehub.packet.EquipItemPacket;
+import ethos.runehub.packet.AttackMobPacket;
+
+import java.util.logging.Logger;
 
 public class PacketHandler {
 
@@ -62,11 +19,11 @@ public class PacketHandler {
 
 	static {
 		SilentPacket u = new SilentPacket();
-		packetId[3] = u;
+		packetId[3] = u; //focus/unfocus game window
 		packetId[202] = u;
-		packetId[77] = u;
-		packetId[86] = u;
-		packetId[78] = u;
+		packetId[77] = u; //sent periodically ~30 seconds
+		packetId[86] = u; //moving camera
+		packetId[78] = u; //something to do with npcs on the minimap or render distance
 		packetId[36] = u;
 		packetId[226] = u;
 		packetId[246] = u;
@@ -106,6 +63,7 @@ public class PacketHandler {
 //		NpcClickPacket cn = new NpcClickPacket();//TODO Change to reset npc clicks
 		ClickNPC cn = new ClickNPC();
 		packetId[72] = cn;
+		packetId[72] = cn;
 		packetId[131] = cn;
 		packetId[155] = cn;
 		packetId[17] = cn;
@@ -115,7 +73,7 @@ public class PacketHandler {
 		packetId[16] = new ItemOptionTwo();
 		packetId[75] = new ItemOptionThree();
 		packetId[122] = new ItemOptionOne();
-		packetId[241] = new ClickingInGame();
+		packetId[241] = new ClickingInGame(); //opening a context menu
 		packetId[4] = new Chat();
 		packetId[236] = new PickupItem();
 		packetId[87] = new DropItem();
@@ -132,7 +90,7 @@ public class PacketHandler {
 		packetId[128] = new ChallengePlayer();
 		packetId[39] = new Trade();
 		packetId[139] = new FollowPlayer();
-		packetId[41] = new WearItem();
+		packetId[41] =  new WearItem();
 		packetId[145] = new RemoveItem();
 		packetId[117] = new Bank5();
 		packetId[43] = new Bank10();
@@ -172,6 +130,7 @@ public class PacketHandler {
 
 	public static void processPacket(Player c, int packetType, int packetSize) {
 		PacketType p = packetId[packetType];
+		Logger.getGlobal().fine("Received Packet ID: " + packetType);
 		if (p != null && packetType > 0 && packetType < 258 && packetType == c.packetType && packetSize == c.packetSize) {
 			if (Config.sendServerPackets && c.getRightGroup().isOrInherits(Right.OWNER)) {
 				c.sendMessage("PacketType: " + packetType + ". PacketSize: " + packetSize + ".");

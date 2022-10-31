@@ -95,7 +95,7 @@ public class FarmingConfig {
         this.type = type;
         this.crop = crop;
         this.compost = compost;
-        System.out.println("Varbit [" + varbit() + "]");
+//        System.out.println("Varbit [" + varbit() + "]");
     }
 
     //    private int startIndex;

@@ -2,6 +2,7 @@ package ethos.runehub.skill.gathering.mining.action;
 
 import ethos.model.players.Player;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
+import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.node.context.impl.MiningNodeContext;
 
 import java.util.logging.Logger;
@@ -62,8 +63,13 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
         super.addItems(id, amount);
     }
 
+    @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return this.getActor().getSkillController().getMining().getGetBestAvailableTool();
+    }
+
 
     public ActiveMiningSkillAction(Player player, int skillId, int nodeId, int nodeX, int nodeY, int nodeZ, int ticks) {
-        super(player, skillId, new MiningNodeContext(nodeId, nodeX, nodeY, nodeZ), ticks, player.getSkillController().getMining().getGetBestAvailableTool());
+        super(player, skillId, new MiningNodeContext(nodeId, nodeX, nodeY, nodeZ), ticks);
     }
 }

@@ -38,6 +38,19 @@ public class RakePatchAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return new GatheringTool(
+                5341,
+                1,
+                SkillDictionary.Skill.FARMING.getId(),
+                1.0,
+                0,
+                0f,
+                2273
+        );
+    }
+
+    @Override
     public void onTick() {
         if (config.getStage() < 3) {
             this.updateAnimation();
@@ -72,15 +85,7 @@ public class RakePatchAction extends GatheringSkillAction {
             public GatheringNode getNode() {
                 return new GatheringNode(nodeId, 1, 4, -1L, 1000, SkillDictionary.Skill.FARMING.getId(), 1000);
             }
-        }, 4, new GatheringTool(
-                5341,
-                1,
-                SkillDictionary.Skill.FARMING.getId(),
-                1.0,
-                0,
-                0f,
-                2273
-        ));
+        }, 4);
         this.config = config;
     }
 

@@ -1,5 +1,6 @@
 package ethos.model.players.packets;
 
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import ethos.Config;
@@ -75,20 +76,24 @@ public class ClickNPC implements PacketType {
 			}
 			c.npcIndex = c.getInStream().readUnsignedWordA();
 			if (c.npcIndex >= NPCHandler.npcs.length || c.npcIndex < 0) {
+				Logger.getGlobal().warning("NPC index is greater than maximum: " + c.npcIndex);
 				return;
 			}
 			if (NPCHandler.npcs[c.npcIndex] == null) {
+				Logger.getGlobal().warning("NPC is null: " + c.npcIndex);
 				c.npcIndex = 0;
 				break;
 			}
 
 			if (NPCHandler.npcs[c.npcIndex].getHealth().getMaximum() == 0) {
+				Logger.getGlobal().warning("NPC has no HP: " + c.npcIndex);
 				c.npcIndex = 0;
 				break;
 			}
-			if (NPCHandler.npcs[c.npcIndex] == null) {
-				break;
-			}
+//			if (NPCHandler.npcs[c.npcIndex] == null) {
+//				Logger.getGlobal().warning("NPC is null: " + c.npcIndex);
+//				break;
+//			}
 			if (c.getBankPin().requiresUnlock()) {
 				c.getBankPin().open(2);
 				return;
@@ -169,6 +174,7 @@ public class ClickNPC implements PacketType {
 			}
 			if (c.attackTimer <= 0) {
 				c.getCombat().attackNpc(c.npcIndex);
+//				c.getAttributes().getPvECombatController().target(NPCHandler.npcs[c.npcIndex]);
 				c.attackTimer++;
 			}
 			c.followId2 = c.npcIndex;

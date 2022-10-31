@@ -45,6 +45,19 @@ public class PlantSeedAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return new GatheringTool(
+                5343,
+                1,
+                SkillDictionary.Skill.FARMING.getId(),
+                1.0,
+                0,
+                0f,
+                2291
+        );
+    }
+
+    @Override
     public void onTick() {
         if (cycle <= CropCache.getInstance().read(interactionContext.getUsedId()).getSeedAmount()) {
             this.updateAnimation();
@@ -78,15 +91,7 @@ public class PlantSeedAction extends GatheringSkillAction {
             public GatheringNode getNode() {
                 return new GatheringNode(interactionContext.getUsedWithId(), 1, 4, -1L, 1000, SkillDictionary.Skill.FARMING.getId(), 1000);
             }
-        }, 2, new GatheringTool(
-                5343,
-                1,
-                SkillDictionary.Skill.FARMING.getId(),
-                1.0,
-                0,
-                0f,
-                2291
-        ));
+        }, 2);
         this.interactionContext = interactionContext;
         this.config = player.getSkillController().getFarming().getConfig(interactionContext.getUsedWithId(), RunehubUtils.getRegionId(interactionContext.getX(), interactionContext.getY())).orElse(null);
     }

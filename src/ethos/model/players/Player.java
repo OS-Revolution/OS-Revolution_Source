@@ -110,13 +110,22 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
+import ethos.runehub.content.rift.RiftFloorDAO;
+import ethos.runehub.entity.item.equipment.EquipmentCache;
+import ethos.runehub.entity.item.equipment.EquipmentSlot;
+import ethos.runehub.entity.player.*;
+import ethos.runehub.entity.player.action.impl.EquipmentSlotUpdateAction;
+import ethos.runehub.entity.player.action.impl.EquipmentUpdateAction;
+import ethos.runehub.entity.player.action.impl.ItemRenderUpdateAction;
+import ethos.runehub.entity.player.action.impl.PlayerAppearanceUpdateAction;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.support.sailing.Sailing;
+import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
+import ethos.runehub.ui.impl.tab.TabUI;
+import ethos.runehub.world.MembershipController;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.dialog.DialogSequence;
-import ethos.runehub.entity.player.PlayerCharacterAttribute;
-import ethos.runehub.entity.player.PlayerCharacterContext;
 import ethos.runehub.markup.MarkupParser;
 import ethos.runehub.skill.SkillController;
 import ethos.runehub.ui.GameUI;
@@ -127,6 +136,7 @@ import ethos.util.Stream;
 import ethos.world.Clan;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
+import org.menaphos.model.entity.impl.npc.impl.mob.Mob;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.model.entity.user.character.player.PlayerCharacterEntity;
 import org.runehub.api.model.math.AdjustableNumber;
@@ -134,8 +144,10 @@ import org.runehub.api.model.math.impl.AdjustableDouble;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.model.world.Face;
 import org.runehub.api.model.world.region.location.Location;
+import org.runehub.api.util.IDManager;
 import org.runehub.api.util.SkillDictionary;
 import org.runehub.api.util.StringUtils;
+import org.runehub.api.util.math.geometry.Point;
 
 import java.time.Duration;
 import java.util.*;
@@ -345,8 +357,8 @@ public class Player extends Entity implements PlayerCharacterEntity {
     private CerberusLostItems lostItemsCerberus;
     private SkotizoLostItems lostItemsSkotizo;
     private List<God> equippedGodItems;
-    private Titles titles = new Titles(this);
-    protected RightGroup rights;
+    public Titles titles = new Titles(this);
+    public RightGroup rights;
     private static Stream playerProps;
     public static PlayerSave save;
     public static Player cliento2;
@@ -359,6 +371,10 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public int[] degradableItem = new int[Degrade.MAXIMUM_ITEMS];
     public boolean[] claimDegradableItem = new boolean[Degrade.MAXIMUM_ITEMS];
     private Entity targeted;
+
+    public static Stream getPlayerProps() {
+        return playerProps;
+    }
 
     private static LinkedList<String> onlinePlayers = new LinkedList<String>();
 
@@ -598,7 +614,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public int clawDelay;
     public int previousDamage;
     public int prayerId = -1;
-    private int modHeadIcon = -1;
+    public int modHeadIcon = -1;
     public int headIcon = -1;
     public int bountyIcon = 0;
     public int headIconPk = -1;
@@ -1071,9 +1087,19 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public boolean boltTips = false;
     public boolean arrowTips = false;
     public boolean javelinHeads = false;
-    private boolean incentiveWarning, chatTextUpdateRequired = false, newWalkCmdIsRunning = false,
-            dragonfireShieldActive, forceMovement, invisible, godmode, safemode, trading, stopPlayer, isBusy = false,
-            isBusyHP = false, forceMovementActive = false;
+    private boolean incentiveWarning;
+    private boolean chatTextUpdateRequired = false;
+    private boolean newWalkCmdIsRunning = false;
+    private boolean dragonfireShieldActive;
+    private boolean forceMovement;
+    public boolean invisible;
+    private boolean godmode;
+    private boolean safemode;
+    private boolean trading;
+    private boolean stopPlayer;
+    private boolean isBusy = false;
+    private boolean isBusyHP = false;
+    private boolean forceMovementActive = false;
 
     public boolean insidePost = false;
 
@@ -1585,6 +1611,15 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
     }
 
+    public void setSidebarInterface(int menuId, TabUI ui) {
+        if (getOutStream() != null) {
+            outStream.createFrame(71);
+            outStream.writeWord(ui.getId());
+            outStream.writeByteA(menuId);
+        }
+
+    }
+
     public int diaryAmount = 0;
 
     public int amountOfDiariesComplete() {
@@ -1658,13 +1693,16 @@ public class Player extends Entity implements PlayerCharacterEntity {
         this.getContext().getPlayerSaveData().setJoinTimestamp(System.currentTimeMillis());
     }
 
-    private void initializeDailyContent() {
+    public void initializeDailyContent() {
         if (this.getContext().getPlayerSaveData().isDailyAvailable()) {
             this.getSkillController().getSailing().generateDailyVoyages();
+            getItems().addItemUnderAnyCircumstance(85, attributes.isMember() ? 2 : 1);
             if (this.getContext().getPlayerSaveData().getVoyageRerolls() < Sailing.BASE_MAX_DAILY_VOYAGES) {
                 this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
             }
-            this.sendMessage("Your daily tasks have reset.");
+            this.sendMessage("^Daily Your voyage list has been reset.");
+            this.sendMessage("^Daily You've received your daily keys");
+            this.sendMessage("^Daily Your daily tasks have reset.");
             this.getContext().getPlayerSaveData().setDailiesAvailable(false);
         }
     }
@@ -1707,20 +1745,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             if (this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
                 this.newAccountInitialization();
             }
-            this.initializeDailyContent();
-            this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() -> {
-                System.out.println("Doing Farm Tick");
-                int regionX = this.absX >> 3;
-                int regionY = this.absY >> 3;
-                int regionId = ((regionX / 8) << 8) + (regionY / 8);
-                if (context.getPlayerSaveData().getFarmingConfig().containsKey(regionId)) {
-                    final int varbit = context.getPlayerSaveData().getFarmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
-                    this.getPA().sendConfig(529,varbit);
-                }
-            }, WorldSettingsController.getInstance().getFarmController().getNextFlowerGrowthCycle().toMillis(), Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
-//            this.getAttributes().getFarmTickExecutorService().schedule(() -> {
-//                playerAssistant.sendConfig(529, 0);
-//            }, 600, TimeUnit.MILLISECONDS);
+
             this.getAttributes().setMovementResricted(false);
             this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
             loadDiaryTab();
@@ -1740,8 +1765,20 @@ public class Player extends Entity implements PlayerCharacterEntity {
              * Welcome messages
              */
             sendMessage("Welcome to " + Config.SERVER_NAME + ".");
+            this.initializeDailyContent();
+            this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() -> {
+                System.out.println("Doing Farm Tick");
+                int regionX = this.absX >> 3;
+                int regionY = this.absY >> 3;
+                int regionId = ((regionX / 8) << 8) + (regionY / 8);
+                if (context.getPlayerSaveData().farmingConfig().containsKey(regionId)) {
+                    final int varbit = context.getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+                    this.getPA().sendConfig(529, varbit);
+                }
+            }, WorldSettingsController.getInstance().getFarmController().getNextFlowerGrowthCycle().toMillis(), Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
             WorldSettingsController.getInstance().initializeTimers(this);
-            Membership.checkDate(this);
+            sendMessage("^Membership You have $" + MembershipController.getInstance().getDaysOfMembershipRemainingAsString(context) + " days of membership remaining.");
+//            Membership.checkDate(this);
             if (getSlayer().superiorSpawned) {
                 getSlayer().superiorSpawned = false;
             }
@@ -1795,32 +1832,25 @@ public class Player extends Entity implements PlayerCharacterEntity {
                 modHeadIcon = 9;
             } else if (getRightGroup().getPrimary().equals(Right.HELPER)) {
                 modHeadIcon = 10;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             } else if (getRightGroup().getPrimary().equals(Right.FMODERATOR)) {
                 modHeadIcon = 24;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             } else if (getRightGroup().getPrimary().equals(Right.GMODERATOR)) {
                 modHeadIcon = 23;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             } else if (getRightGroup().getPrimary().equals(Right.MODERATOR)) {
                 modHeadIcon = 0;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             } else if (getRightGroup().getPrimary().equals(Right.GAME_DEVELOPER)) {
                 modHeadIcon = 15;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             } else if (getRightGroup().getPrimary().equals(Right.ADMINISTRATOR)) {
                 modHeadIcon = 2;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             } else if (getRightGroup().getPrimary().equals(Right.OWNER)) {
                 modHeadIcon = 3;
-                PlayerHandler.executeGlobalMessage(
-                        "[@red@Staff@bla@]@blu@ @cr3@ <col=255>" + Misc.formatPlayerName(this.playerName) + "@bla@ has just logged in!");
+                PlayerHandler.executeGlobalMessage("^Staff @blu@" + Misc.formatPlayerName(this.playerName) + "@bla@ has logged on.");
             }
 
             //if (!Config.local) {
@@ -1850,14 +1880,17 @@ public class Player extends Entity implements PlayerCharacterEntity {
             getPA().sendFrame36(172, 1);
             getPA().sendFrame107(); // reset screen
             setSidebarInterface(0, 2423);
-            setSidebarInterface(1, 13917); // Skilltab > 3917
-            setSidebarInterface(2, 10220); // 638
+            setSidebarInterface(1, 57800); // Skilltab > 3917
+            this.sendUI(new PlayerTabUI(this));
+//            this.sendUI(new QuestTab(this));
+//            this.sendUI(new InfoTab(57000,this));
+//            setSidebarInterface(2, new PlayerTabUI(this).getId()); // 638
             setSidebarInterface(3, 3213);
             setSidebarInterface(4, 1644);
             setSidebarInterface(5, 15608);
             setSidebarInterface(13, 47500);
 
-
+            attributes.setTabUI(new PlayerTabUI(this));
             switch (playerMagicBook) {
                 case 0:
                     setSidebarInterface(6, 938); // modern
@@ -1982,6 +2015,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
                 getPA().refreshSkill(i);
                 getPA().setSkillLevel(i, playerLevel[i], playerXP[i]);
             }
+            health.setAmount(playerLevel[3]);
             health.setMaximum(getPA().getLevelForXP(playerXP[playerHitpoints]));
             BankPin pin = getBankPin();
             if (pin.requiresUnlock()) {
@@ -2084,7 +2118,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         getPA().sendFrame126("@or1@@cr21@ Inventory Weight = @gre@" + this.getInventoryWeight(), 10230);
         //getPA().sendFrame126("@or1@@cr25@ Shayzien points = @gre@" + this.shayPoints, 10230);
 
-
+        getPA().sendFrame126(">@or1@View Play Pass", 47512);
         getPA().sendFrame126(">@or1@View the forums", 47514);
         getPA().sendFrame126(">@or1@View vote page", 47515);
         getPA().sendFrame126(">@or1@View online store", 47516);
@@ -2184,6 +2218,12 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
 //        if (this.getSkilling().getSkill() != null)
 //            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
+        if (this.getAttributes().getRift() != null) {
+            final Point myPoint = new Point(absX, absY);
+            if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(floor -> floor.getBoundingBox().contains(myPoint))) {
+                this.getAttributes().getRift().leave(this);
+            }
+        }
         attributes.getFarmTickExecutorService().shutdownNow();
         this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
         this.save();
@@ -2192,6 +2232,9 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
     public void save() {
         PlayerCharacterContextDataAccessObject.getInstance().update(context);
+
+//        PlayerFarmingSaveDAO.getInstance().delete(PlayerFarmingSaveLoader.getInstance().read(context.getPlayerSaveData().getPlayerId()));
+//        PlayerFarmingSaveDAO.getInstance().create(PlayerFarmingSaveLoader.getInstance().read(context.getPlayerSaveData().getPlayerId()));
     }
 
 //    private void addIdleGatheringGains() {
@@ -2422,12 +2465,12 @@ public class Player extends Entity implements PlayerCharacterEntity {
         if (isDead && respawnTimer == -6) {
             getPA().applyDead();
         }
-        if (bonusXpTime > 0) {
-            bonusXpTime--;
-        }
-        if (bonusXpTime == 1) {
-            sendMessage("@blu@Your time is up. Your XP is no longer boosted by the voting reward.");
-        }
+//        if (bonusXpTime > 0) {
+//            bonusXpTime--;
+//        }
+//        if (bonusXpTime == 1) {
+//            sendMessage("@blu@Your time is up. Your XP is no longer boosted by the voting reward.");
+//        }
         if (respawnTimer == 7) {
             respawnTimer = -6;
             getPA().giveLife();
@@ -2452,14 +2495,14 @@ public class Player extends Entity implements PlayerCharacterEntity {
             specRestore--;
         }
 
-        if (this.playTime % 3600 == 0 && !isIdle && !trading) {
-            if (getHourlyBoxToggle()) {
-                getItems().addItemToBank(11739, 1);
-                sendMessage("[ @red@Reward @bla@] <img=1>@blu@Thank you for continuing to play Os-Revolution, here is an @red@Hourly Reward Box@bla@!");
-            } else {
-                sendMessage("You currently have hourly boxes toggled @red@off@bla@. Type '::toggle hourly' to enable them.");
-            }
-        }
+//        if (this.playTime % 3600 == 0 && !isIdle && !trading) {
+//            if (getHourlyBoxToggle()) {
+//                getItems().addItemToBank(11739, 1);
+//                sendMessage("[ @red@Reward @bla@] <img=1>@blu@Thank you for continuing to play Os-Revolution, here is an @red@Hourly Reward Box@bla@!");
+//            } else {
+//                sendMessage("You currently have hourly boxes toggled @red@off@bla@. Type '::toggle hourly' to enable them.");
+//            }
+//        }
 
         if (rangeDelay > 0) {
             rangeDelay--;
@@ -2715,8 +2758,11 @@ public class Player extends Entity implements PlayerCharacterEntity {
                     underAttackBy2 = closestNPC.getIndex();
                     lastTargeted = System.currentTimeMillis();
                 }
+
+
             }
         }
+        attributes.getActionController().handle();
     }
 
     private boolean isTargetableBy(NPC npc) {
@@ -4190,6 +4236,9 @@ public class Player extends Entity implements PlayerCharacterEntity {
     }
 
     public boolean inMulti() {
+        if (attributes.isInRift()) {
+            return true;
+        }
         if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
                 || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
                 || Boundary.isIn(this, Boundary.NECRO) || Boundary.isIn(this, Boundary.ROCK_CRAB)
@@ -4595,6 +4644,33 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
     }
 
+    public void renderMob(Mob mob, Stream str, Stream updateBlock) {
+        // synchronized(this) {
+//        int id = npc.getIndex();
+//        npcInListBitmap[id >> 3] |= 1 << (id & 7);
+//        npcList[npcListSize++] = npc;
+//
+//        str.writeBits(14, id);
+//
+//        int z = npc.absY - absY;
+//        if (z < 0)
+//            z += 32;
+//        str.writeBits(5, z);
+//        z = npc.absX - absX;
+//        if (z < 0)
+//            z += 32;
+//        str.writeBits(5, z);
+//
+//        str.writeBits(1, 0);
+//        str.writeBits(14, npc.npcType);
+//
+//        boolean savedUpdateRequired = npc.updateRequired;
+//        npc.updateRequired = true;
+//        npc.appendNPCUpdateBlock(updateBlock);
+//        npc.updateRequired = savedUpdateRequired;
+//        str.writeBits(1, 1);
+    }
+
     void addNewNPC(NPC npc, Stream str, Stream updateBlock) {
         // synchronized(this) {
         int id = npc.getIndex();
@@ -4648,6 +4724,22 @@ public class Player extends Entity implements PlayerCharacterEntity {
             z += 32;
         str.writeBits(5, z);
     }
+
+//    private void writeEquipment(EquipmentSlot slot) {
+//        if (this.getEquipmentIdInSlot(slot) > 0) {
+//            Player.getPlayerProps().writeWord(0x200 + this.getEquipmentIdInSlot(slot));
+//        } else if (slot == EquipmentSlot.BODY) {
+//            Player.getPlayerProps().writeWord(0x100 + this.playerAppearance[2]);
+//        } else if (slot == EquipmentSlot.LEGS) {
+//            Player.getPlayerProps().writeWord(0x100 + this.playerAppearance[5]);
+//        } else if (slot == EquipmentSlot.HANDS) {
+//            Player.getPlayerProps().writeWord(0x100 + this.playerAppearance[4]);
+//        } else if (slot == EquipmentSlot.FEET) {
+//            Player.getPlayerProps().writeWord(0x100 + this.playerAppearance[6]);
+//        } else {
+//            Player.getPlayerProps().writeByte(0);
+//        }
+//    }
 
     private void appendPlayerAppearance(Stream str) {
         playerProps.currentOffset = 0;
@@ -4763,6 +4855,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         str.writeByteC(playerProps.currentOffset);
         str.writeBytes(playerProps.buffer, playerProps.currentOffset, 0);
     }
+
 
     public int calculateCombatLevel() {
         int j = getLevelForXP(playerXP[playerAttack]);
@@ -4944,6 +5037,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         }
         updateRequired = true;
     }
+
 
     @Override
     protected void appendHitUpdate(Stream str) {
@@ -5164,7 +5258,10 @@ public class Player extends Entity implements PlayerCharacterEntity {
         }
 
         if (isAppearanceUpdateRequired()) {
+//            attributes.getActionController().submit(new PlayerAppearanceUpdateAction(this,str));
+//            new PlayerAppearanceUpdateAction(this,str).perform();
             appendPlayerAppearance(str);
+//            updateAppearance(str);
         }
 
         if (FocusPointX != -1) {
@@ -5180,6 +5277,146 @@ public class Player extends Entity implements PlayerCharacterEntity {
         }
 
     }
+
+//    private void updateAppearance(Stream stream) {
+//        playerProps.currentOffset = 0;
+//        playerProps.writeByte(playerAppearance[0]);
+//        StringBuilder sb = new StringBuilder(titles.getCurrentTitle());
+//        if (titles.getCurrentTitle().equalsIgnoreCase("None")) {
+//            sb.delete(0, sb.length());
+//        }
+//        playerProps.writeString(sb.toString());
+//        sb = new StringBuilder(rights.getPrimary().getColor());
+//        if (titles.getCurrentTitle().equalsIgnoreCase("None")) {
+//            sb.delete(0, sb.length());
+//        }
+//        playerProps.writeString(sb.toString());
+//        playerProps.writeByte(getHealth().getStatus().getMask());
+//        playerProps.writeByte(headIcon);
+//        playerProps.writeByte(headIconPk);
+//        playerProps.writeByte(modHeadIcon);
+//        if (!isNpc) {
+//            writeEquipment(EquipmentSlot.HEAD);
+//            writeEquipment(EquipmentSlot.CAPE);
+//            writeEquipment(EquipmentSlot.NECK);
+//            writeEquipment(EquipmentSlot.MAIN_HAND);
+//            writeEquipment(EquipmentSlot.BODY);
+//            writeEquipment(EquipmentSlot.OFF_HAND);
+//            if (!Item.isFullBody(getEquipmentIdInSlot(EquipmentSlot.BODY))) {
+//                playerProps.writeWord(0x100 + playerAppearance[3]);
+//            } else {
+//                playerProps.writeByte(0);
+//            }
+//            writeEquipment(EquipmentSlot.LEGS);
+//            if (!Item.isFullHat(getEquipmentIdInSlot(EquipmentSlot.HEAD)) && !Item.isFullMask(getEquipmentIdInSlot(EquipmentSlot.HEAD))) {
+//                playerProps.writeWord(0x100 + playerAppearance[1]);
+//            } else {
+//                playerProps.writeByte(0);
+//            }
+//            writeEquipment(EquipmentSlot.HANDS);
+//            writeEquipment(EquipmentSlot.FEET);
+//            if (playerAppearance[0] != 1 && !Item.isFullMask(getEquipmentIdInSlot(EquipmentSlot.HEAD))) {
+//                playerProps.writeWord(0x100 + playerAppearance[7]);
+//            } else {
+//                playerProps.writeByte(0);
+//            }
+//        } else {
+//            playerProps.writeWord(-1);
+//            playerProps.writeWord(npcId2);
+//        }
+//        playerProps.writeByte(playerAppearance[8]);
+//        playerProps.writeByte(playerAppearance[9]);
+//        playerProps.writeByte(playerAppearance[10]);
+//        playerProps.writeByte(playerAppearance[11]);
+//        playerProps.writeByte(playerAppearance[12]);
+//        playerProps.writeWord(playerStandIndex); // standAnimIndex
+//        playerProps.writeWord(playerTurnIndex); // standTurnAnimIndex
+//        playerProps.writeWord(playerWalkIndex); // walkAnimIndex
+//        playerProps.writeWord(playerTurn180Index); // turn180AnimIndex
+//        playerProps.writeWord(playerTurn90CWIndex); // turn90CWAnimIndex
+//        playerProps.writeWord(playerTurn90CCWIndex); // turn90CCWAnimIndex
+//        playerProps.writeWord(playerRunIndex); // runAnimIndex
+//        playerProps.writeQWord(Misc.playerNameToInt64(playerName));
+//        playerProps.writeByte(invisible ? 1 : 0);
+//        playerProps.writeByte(calculateCombatLevel()); // combat level
+//        playerProps.writeByte(rights.getPrimary().getValue());
+//        playerProps.writeWord(0);
+//        System.out.println(playerProps.currentOffset);
+//        stream.writeByteC(playerProps.currentOffset);
+//        stream.writeBytes(playerProps.buffer, playerProps.currentOffset, 0);
+//    }
+
+//    public Optional<ethos.runehub.entity.item.equipment.Equipment> getEquipmentInSlot(EquipmentSlot slot) {
+//        if (slot.ordinal() < EquipmentSlot.values().length && this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()] > 0) {
+//            return Optional.ofNullable(EquipmentCache.getInstance().read(this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()]));
+//        }
+//        return Optional.empty();
+//    }
+//
+//    public int getEquipmentIdInSlot(EquipmentSlot slot) {
+//        if (slot.ordinal() < EquipmentSlot.values().length) {
+//            return this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()] > 0 ? this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()] : -1;
+//        }
+//        return -1;
+//    }
+//
+//    public void unequip(EquipmentSlot slot) {
+//        EquipmentSlot targetSlot = slot == EquipmentSlot.TWO_HAND ? EquipmentSlot.MAIN_HAND : slot;
+//        if (canUnequipItem(targetSlot)) {
+//            this.getItems().addItem(this.getEquipmentIdInSlot(slot), this.getContext().getPlayerSaveData().getEquippedAmount()[targetSlot.ordinal()]);
+//
+//            this.getContext().getPlayerSaveData().setEquipment(targetSlot.ordinal(), -1);
+//            this.getContext().getPlayerSaveData().setEquipmentAmount(targetSlot.ordinal(), 0);
+//
+//            attributes.getActionController().submit(new EquipmentSlotUpdateAction(this, targetSlot));
+//            attributes.getActionController().submit(new EquipmentUpdateAction(this, targetSlot));
+//        }
+//    }
+//
+//    public void equip(int itemId, int inventorySlot) {
+//        EquipmentSlot slot = EquipmentSlot.values()[EquipmentCache.getInstance().read(itemId).getSlot()];
+//        EquipmentSlot targetSlot = slot == EquipmentSlot.TWO_HAND ? EquipmentSlot.MAIN_HAND : slot;
+//        if (canEquipItem(targetSlot, itemId)) {
+//            if (slot == EquipmentSlot.TWO_HAND) {
+//                unequip(EquipmentSlot.MAIN_HAND);
+//                unequip(EquipmentSlot.OFF_HAND);
+//            } else if (slot == EquipmentSlot.MAIN_HAND || slot == EquipmentSlot.OFF_HAND && this.getEquipmentInSlot(EquipmentSlot.MAIN_HAND).isPresent()
+//                    && this.getEquipmentInSlot(EquipmentSlot.MAIN_HAND).get().getSlot() == EquipmentSlot.TWO_HAND.ordinal()) {
+//                unequip(EquipmentSlot.MAIN_HAND);
+//            } else {
+//                unequip(targetSlot);
+//            }
+//
+//            int itemAmount = ItemIdContextLoader.getInstance().read(itemId).isStackable() ? this.getItems().getItemAmount(itemId) : 1;
+//            this.getItems().deleteItem(itemId, inventorySlot, itemAmount);
+//
+//            this.getContext().getPlayerSaveData().setEquipment(targetSlot.ordinal(), itemId);
+//            this.getContext().getPlayerSaveData().setEquipmentAmount(targetSlot.ordinal(), itemAmount);
+//
+//            attributes.getActionController().submit(new EquipmentSlotUpdateAction(this, targetSlot));
+//            attributes.getActionController().submit(new ItemRenderUpdateAction(this, 3214));
+//            attributes.getActionController().submit(new EquipmentUpdateAction(this, targetSlot));
+//        }
+//    }
+//
+//    private boolean canUnequipItem(EquipmentSlot slot) {
+//        int itemId = this.getEquipmentIdInSlot(slot);
+//        if (slot == EquipmentSlot.TWO_HAND) {
+//            itemId = this.getEquipmentIdInSlot(EquipmentSlot.MAIN_HAND);
+//        }
+//        return itemId == -1 || this.getItems().freeSlots() >= 1;
+//    }
+//
+//    private boolean canEquipItem(EquipmentSlot slot, int itemId) {
+//        if (slot == EquipmentSlot.TWO_HAND) {
+//            return canUnequipItem(EquipmentSlot.MAIN_HAND) && canUnequipItem(EquipmentSlot.OFF_HAND);
+//        }
+////        else if ((slot == EquipmentSlot.MAIN_HAND || slot == EquipmentSlot.OFF_HAND) &&
+////                this.getEquipmentInSlot(slot).isPresent() && this.getEquipmentInSlot(slot).get().getSlot() == EquipmentSlot.TWO_HAND.ordinal()) {
+////            return canUnequipItem;
+////        }
+//        return canUnequipItem(slot);
+//    }
 
     void clearUpdateFlags() {
         updateRequired = false;
@@ -6214,6 +6451,14 @@ public class Player extends Entity implements PlayerCharacterEntity {
         return skillController;
     }
 
+    public PlayerFarmingSave getFarmingSave() {
+        return PlayerFarmingSaveDAO.getInstance().read(this.getId());
+    }
+
     private final SkillController skillController = new SkillController(this);
+
+    public long getId() {
+        return StringUtils.longFromUUID(StringUtils.stringToUUID(playerName));
+    }
 
 }

@@ -1,14 +1,16 @@
 package ethos.runehub.skill;
 
 import ethos.model.players.Player;
+import ethos.model.players.PlayerHandler;
+import ethos.runehub.event.dnd.SkillOfTheHourFixedScheduleEvent;
 import ethos.runehub.skill.artisan.cooking.Cooking;
 import ethos.runehub.skill.artisan.herblore.Herblore;
 import ethos.runehub.skill.artisan.runecraft.Runecraft;
 import ethos.runehub.skill.artisan.smithing.Smithing;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.farming.Farming;
-import ethos.runehub.skill.gathering.fishing.Fishing;
 import ethos.runehub.skill.gathering.farming.foraging.Foraging;
+import ethos.runehub.skill.gathering.fishing.Fishing;
 import ethos.runehub.skill.gathering.mining.Mining;
 import ethos.runehub.skill.gathering.woodcutting.Woodcutting;
 import ethos.runehub.skill.node.impl.RenewableNode;
@@ -16,8 +18,100 @@ import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.support.SupportSkill;
 import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.skill.support.thieving.Thieving;
+import ethos.runehub.world.WorldSettingsController;
+import ethos.util.Misc;
+import org.runehub.api.util.SkillDictionary;
+
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class SkillController {
+
+    public int getTotalLevel() {
+        return Arrays.stream(this.getPlayer().playerXP).map(player::getLevelForXP).sum();
+    }
+
+    public void addXP(int skillId, int baseAmount) {
+        final int currentXP = player.playerXP[skillId];
+        final int startingLevel = player.getLevelForXP(player.playerXP[skillId]);
+        final int maxXpDifference = 200000000 - currentXP;
+        if (baseAmount > 0) {
+        final int amount = this.getXPWithModifiers(skillId,baseAmount);
+        final int quotient = maxXpDifference / amount;
+        final int remainder = maxXpDifference % amount;
+        player.getAttributes().getPlayPassController().addPlayPassXPFromSkillXP(baseAmount);
+        if (currentXP < 200000000) {
+            if (quotient >= 1) {
+                Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + amount);
+                player.playerXP[skillId] += amount;
+                player.getPA().sendExperienceDrop(true, amount, skillId);
+            } else {
+                Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + remainder);
+                player.playerXP[skillId] += remainder;
+                player.getPA().sendExperienceDrop(true, remainder, skillId);
+                PlayerHandler.executeGlobalMessage(
+                        "^News $" + Misc.capitalize(player.getAttributes().getName()) + " has reached $200M XP in $" + Misc.capitalize(SkillDictionary.Skill.values()[skillId].name().toLowerCase()) + "!"
+                );
+
+            }
+        }
+        }
+
+        if (startingLevel < player.getLevelForXP(player.playerXP[skillId])) {
+            this.onLevelup(skillId);
+        }
+
+        player.getPA().setSkillLevel(skillId, player.playerLevel[skillId], player.playerXP[skillId]);
+        player.getPA().refreshSkill(skillId);
+    }
+    
+    private int getXPWithModifiers(int skill,int baseAmount) {
+        int amount = baseAmount;
+        if(player.getContext().getPlayerSaveData().getBonusXp().containsKey(skill)) {
+            if (player.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > baseAmount) {
+                player.getContext().getPlayerSaveData().getBonusXp().get(skill).subtract(baseAmount);
+                player.getPA().sendBonusXp(skill, player.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+                amount *= 2;
+            } else if (player.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > 0) {
+                amount += player.getContext().getPlayerSaveData().getBonusXp().get(skill).value();
+                player.getContext().getPlayerSaveData().getBonusXp().get(skill).setValue(0);
+                player.sendMessage("You've used up all your bonus XP in $" + SkillDictionary.getSkillNameFromId(skill));
+                player.getPA().sendBonusXp(skill, player.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+            }
+        }
+
+        if (WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
+            amount *= 2.0;
+        }
+
+        if (WorldSettingsController.getInstance().getSkillOfTheHourEffect(skill) == SkillOfTheHourFixedScheduleEvent.XP) {
+            amount *= 1.5;
+        }
+        amount *= this.getSkill(skill).getGainsBonus() + this.getSkill(skill).getEquipmentBonuses();
+        return amount;
+    }
+
+    private void onLevelup(int skillId) {
+        final SkillDictionary.Skill skill = SkillDictionary.Skill.values()[skillId];
+
+        if (skill == SkillDictionary.Skill.ATTACK || skill == SkillDictionary.Skill.DEFENCE || skill == SkillDictionary.Skill.STRENGTH ||
+                skill == SkillDictionary.Skill.HITPOINTS || skill == SkillDictionary.Skill.PRAYER || skill == SkillDictionary.Skill.RANGED ||
+                skill == SkillDictionary.Skill.MAGIC && player.combatLevel < 126) {
+            player.calculateCombatLevel();
+            player.getPA().sendFrame126("Combat Level: " + player.combatLevel, 3983);
+        }
+
+        if (player.getLevelForXP(player.playerXP[skillId]) == 99) {
+            PlayerHandler.executeGlobalMessage(
+                    "^News $" + Misc.capitalize(player.getAttributes().getName()) + " has reached level $99 in $" + Misc.capitalize(SkillDictionary.Skill.values()[skillId].name().toLowerCase()) + "!"
+            );
+        }
+
+        player.gfx100(199);
+        player.getPA().requestUpdates();
+        player.getPA().levelUp(skillId);
+
+    }
 
     public GatheringSkill getGatheringSkill(int skillId) {
         switch (skillId) {
@@ -29,7 +123,8 @@ public class SkillController {
                 return mining;
             case 19:
                 return foraging;
-            default: throw new NullPointerException("No Gathering Skill with ID: " + skillId);
+            default:
+                throw new NullPointerException("No Gathering Skill with ID: " + skillId);
         }
     }
 
@@ -39,7 +134,8 @@ public class SkillController {
                 return thieving;
             case 23:
                 return sailing;
-            default: throw new NullPointerException("No Gathering Skill with ID: " + skillId);
+            default:
+                throw new NullPointerException("No Gathering Skill with ID: " + skillId);
         }
     }
 
@@ -65,10 +161,10 @@ public class SkillController {
                 return runecraft;
             case 23:
                 return sailing;
-            default: throw new NullPointerException("No Skill with ID: " + skillId);
+            default:
+                throw new NullPointerException("No Skill with ID: " + skillId);
         }
     }
-
 
 
     public RenewableNode getRenewableNode(int nodeId) {
@@ -154,4 +250,5 @@ public class SkillController {
     private final Thieving thieving;
     private final Sailing sailing;
     private final Farming farming;
+
 }

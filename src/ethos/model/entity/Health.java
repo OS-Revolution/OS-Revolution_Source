@@ -213,10 +213,7 @@ public final class Health {
 	 * @param amount the amount the health amount is to be reduced by
 	 */
 	public void reduce(int amount) {
-//		if (entity instanceof Player) {
-//			Player player = (Player) entity;
-//			Server.npcHandler.ringOfLife(player);
-//		}
+
 		if (amount <= 0) {
 			return;
 		}
@@ -224,6 +221,10 @@ public final class Health {
 			amount = this.amount;
 		}
 		this.amount -= amount;
+		if (entity instanceof Player) {
+			Player player = (Player) entity;
+			player.playerLevel[3] = this.amount;
+		}
 		requestUpdate();
 	}
 
@@ -237,6 +238,10 @@ public final class Health {
 			amount = maximum - this.amount;
 		}
 		this.amount += amount;
+		if (entity instanceof Player) {
+			Player player = (Player) entity;
+			player.playerLevel[3] = this.amount;
+		}
 		requestUpdate();
 	}
 

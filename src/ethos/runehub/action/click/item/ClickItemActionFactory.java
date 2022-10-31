@@ -3,7 +3,9 @@ package ethos.runehub.action.click.item;
 import ethos.Server;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubConstants;
+import ethos.runehub.action.click.item.consumable.MembershipBond;
 import ethos.runehub.action.click.item.consumable.PortableBankChargeScroll;
+import ethos.runehub.action.click.item.consumable.booster.EfficiencyBooster;
 import ethos.runehub.action.click.item.consumable.star.ClickPrismaticStarAction;
 import ethos.runehub.action.click.item.consumable.TeleportChargeScroll;
 import ethos.runehub.action.click.item.consumable.potion.ClickPotionConsumableAction;
@@ -84,6 +86,7 @@ public class ClickItemActionFactory {
             case 2454:
             case 2456:
             case 2458:
+            case 739:
                 action = new ClickPotionConsumableAction(
                         player,
                         itemId,
@@ -115,6 +118,22 @@ public class ClickItemActionFactory {
                 break;
             case 3495:
                 action = new PortableBankChargeScroll(player,1,slot);
+                break;
+            case 13190:
+            case 13192:
+                action = new MembershipBond(player,itemId,1,slot);
+                break;
+            case 8023:
+                action = new EfficiencyBooster(player,itemId,1,slot,1,8);
+                break;
+            case 8024:
+                action = new EfficiencyBooster(player,itemId,1,slot,6,8);
+                break;
+            case 8025:
+                action = new EfficiencyBooster(player,itemId,1,slot,12,8);
+                break;
+            case 8026:
+                action = new EfficiencyBooster(player,itemId,1,slot,24,8);
                 break;
         }
         if (action != null)

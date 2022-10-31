@@ -20,6 +20,8 @@ public class RunehubConstants {
     public static final String LOOT_DB = DB_ROOT + "loot.db";
     public static final String SAILING_DB = DB_ROOT + "sailing.db";
     public static final String FARMING_DB = DB_ROOT + "farming.db";
+    public static final String RIFT_DB = DB_ROOT + "rift.db";
+    public static final String EQUIPMENT = DB_ROOT + "equipment.db";
     public static final String WORLD_SETTINGS = ROOT + "world-settings.json";
 
 

@@ -43,6 +43,19 @@ public class ClearPatchAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return new GatheringTool(
+                952,
+                1,
+                SkillDictionary.Skill.FARMING.getId(),
+                1.0,
+                0,
+                0f,
+                830
+        );
+    }
+
+    @Override
     public void onTick() {
         if (cycle <= 4) {
             this.updateAnimation();
@@ -75,15 +88,7 @@ public class ClearPatchAction extends GatheringSkillAction {
             public GatheringNode getNode() {
                 return new GatheringNode(nodeId, 1, 4, -1L, 1000, SkillDictionary.Skill.FARMING.getId(), 1000);
             }
-        }, 2, new GatheringTool(
-                952,
-                1,
-                SkillDictionary.Skill.FARMING.getId(),
-                1.0,
-                0,
-                0f,
-                830
-        ));
+        }, 2);
         this.config = config;
     }
 

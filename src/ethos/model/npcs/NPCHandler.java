@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import ethos.Config;
 import ethos.Server;
@@ -62,12 +63,14 @@ import ethos.model.players.combat.effects.SerpentineHelmEffect;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.skills.hunter.impling.PuroPuro;
 import ethos.model.players.skills.necromancy.Necromancy;
-import ethos.runehub.skill.support.thieving.Thieving;
+import ethos.runehub.content.rift.RiftFloorDAO;
+import ethos.runehub.entity.mob.AnimationDefinitionCache;
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
-import org.runehub.api.model.world.Face;
-import org.runehub.api.model.world.region.location.Location;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 public class NPCHandler {
 
@@ -314,41 +317,57 @@ public class NPCHandler {
         return false;
     }
 
-    public int getCloseRandomPlayer(int i) {
-        ArrayList<Integer> players = new ArrayList<>();
-        for (int j = 0; j < PlayerHandler.players.length; j++) {
-            if (PlayerHandler.players[j] != null) {
-                if (Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
-                    if (!Boundary.isIn(PlayerHandler.players[j], Boundary.CORPOREAL_BEAST_LAIR)) {
-                        npcs[i].killerId = 0;
-                        continue;
-                    }
-                }
-                /**
-                 * Skips attacking a player if mode set to invisible
-                 */
-                if (PlayerHandler.players[j].isInvisible()) {
-                    continue;
-                }
-                if (Boundary.isIn(npcs[i], Boundary.GODWARS_BOSSROOMS)) {
-                    if (!Boundary.isIn(PlayerHandler.players[j], Boundary.GODWARS_BOSSROOMS)) {
-                        npcs[i].killerId = 0;
-                        continue;
-                    }
-                }
-                if (goodDistance(PlayerHandler.players[j].absX, PlayerHandler.players[j].absY, npcs[i].absX,
-                        npcs[i].absY, distanceRequired(i) + followDistance(i)) || isFightCaveNpc(i)) {
-                    if ((PlayerHandler.players[j].underAttackBy <= 0 && PlayerHandler.players[j].underAttackBy2 <= 0)
-                            || PlayerHandler.players[j].inMulti())
-                        if (PlayerHandler.players[j].heightLevel == npcs[i].heightLevel)
-                            players.add(j);
-                }
+    private int getNearestPlayer(int i) {
+        if (!PlayerHandler.getPlayers().isEmpty()) {
+            final NPC npc = npcs[i];
+            final int targetingRange = 5;
+            final Rectangle targetingArea = new Rectangle(new Point(npc.getX() - targetingRange, npc.getY() - targetingRange), new Point(npc.getX() + targetingRange, npc.getY() + targetingRange));
+            final Player nearestPlayer = PlayerHandler.getPlayers().stream().filter(player -> targetingArea.contains(new Point(player.absX, player.absY))).findFirst().orElse(null);
+            if (nearestPlayer != null) {
+               if (npc.riftMobType > 0 && nearestPlayer.getAttributes().getRift() != null)
+                   nearestPlayer.getAttributes().getRift().engagePlayer(nearestPlayer,npc.npcType,npc.riftMobType);
+                return nearestPlayer.getIndex();
             }
         }
-        if (players.size() > 0)
-            return players.get(Misc.random(players.size() - 1));
-        else
-            return 0;
+        return -1;
+    }
+
+    public int getCloseRandomPlayer(int i) {
+//        ArrayList<Integer> players = new ArrayList<>();
+//        for (int j = 0; j < PlayerHandler.players.length; j++) {
+//            if (PlayerHandler.players[j] != null) {
+//                if (Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
+//                    if (!Boundary.isIn(PlayerHandler.players[j], Boundary.CORPOREAL_BEAST_LAIR)) {
+//                        npcs[i].killerId = 0;
+//                        continue;
+//                    }
+//                }
+//                /**
+//                 * Skips attacking a player if mode set to invisible
+//                 */
+//                if (PlayerHandler.players[j].isInvisible()) {
+//                    continue;
+//                }
+//                if (Boundary.isIn(npcs[i], Boundary.GODWARS_BOSSROOMS)) {
+//                    if (!Boundary.isIn(PlayerHandler.players[j], Boundary.GODWARS_BOSSROOMS)) {
+//                        npcs[i].killerId = 0;
+//                        continue;
+//                    }
+//                }
+//                if (goodDistance(PlayerHandler.players[j].absX, PlayerHandler.players[j].absY, npcs[i].absX,
+//                        npcs[i].absY, distanceRequired(i) + followDistance(i)) || isFightCaveNpc(i)) {
+//                    if ((PlayerHandler.players[j].underAttackBy <= 0 && PlayerHandler.players[j].underAttackBy2 <= 0)
+//                            || PlayerHandler.players[j].inMulti())
+//                        if (PlayerHandler.players[j].heightLevel == npcs[i].heightLevel)
+//                            players.add(j);
+//                }
+//            }
+//        }
+//        if (players.size() > 0)
+//            return players.get(Misc.random(players.size() - 1));
+//        else
+//            return 0;
+        return this.getNearestPlayer(i);
     }
 
     public int culinomancer = 0;
@@ -361,446 +380,447 @@ public class NPCHandler {
      * @return
      */
     public boolean isAggressive(int i, boolean searching) {
-        if (!searching) {
-            if (Boundary.isIn(npcs[i], Boundary.GODWARS_BOSSROOMS)
-                    || Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
-                return true;
-            }
-        }
-
-        if (searching) {
-            switch (i) {
-                case 4708:
-                    return npcs[i].summonedBy > 0;
-                case 5916:
-                case 690:
-                case 963:
-                case 965:
-                case 955:
-                case 957:
-                case 959:
-                case 5867:
-                case 5868:
-                case 5869:
-                case 2042:
-                case 239:
-                case 7413:
-                case 1739:
-                case 1740:
-                case 1741:
-                case 1742:
-                case 2044:
-                case 2043:
-                case 465:
-                case 7706:
-                case Zulrah.SNAKELING:
-                case 5054:
-                case 6611:
-                case 6612:
-                case 6610:
-                case 494:
-                case 5535:
-                case 2550:
-                case 2551:
-                case 50:
-                case 28:
-                case 2552:
-                case 6609:
-                case 2553:
-                case 2558:
-                case 2559:
-                case 2560:
-                case 2561:
-                case 2562:
-                case 2563:
-                case 2564:
-                case 2565:
-                case 2892:
-                case 2894:
-                case 2265:
-                case 2266:
-                case 2267:
-                case 2035:
-                case 5779:
-                case 291:
-                case 435:
-                case 135:
-                case 7276:
-                case 5944: // Rock lobster
-
-                    // Godwars
-                case 3138:
-                case 2205:
-                case 2206:
-                case 2207:
-                case 2208:
-                case 2209:
-                case 2211:
-                case 2212:
-                case 2215:
-                case 2216:
-                case 2217:
-                case 2218:
-                case 2233:
-                case 2234:
-                case 2235:
-                case 2237:
-                case 2242:
-                case 2243:
-                case 2244:
-                case 2245:
-                case 3129:
-                case 3130:
-                case 3131:
-                case 3132:
-                case 3133:
-                case 3134:
-                case 3135:
-                case 3137:
-                case 3139:
-                case 3140:
-                case 3141:
-                case 3159:
-                case 3160:
-                case 3161:
-                case 3162:
-                case 3163:
-                case 3164:
-                case 3165:
-                case 3166:
-                case 3167:
-                case 3168:
-                case 3174:
-
-                    // Barrows tunnel monsters
-                case 1678:
-                case 1679:
-                case 1683:
-                case 1684:
-                case 1685:
-
-                case 6295:
-
-                case Skotizo.SKOTIZO_ID:
-                case Skotizo.REANIMATED_DEMON:
-                case Skotizo.DARK_ANKOU:
-                    // GWD
-                case 6230:
-                case 6231:
-                case 6229:
-                case 6232:
-                case 6240:
-                case 6241:
-                case 6242:
-                case 6233:
-                case 6234:
-                case 6243:
-                case 6244:
-                case 6245:
-                case 6246:
-                case 6238:
-                case 6239:
-                case 6625:
-                case 122:// Npcs That Give BandosKC
-                case 6278:
-                case 6277:
-                case 6276:
-                case 6283:
-                case 6282:
-                case 6281:
-                case 6280:
-                case 6279:
-                case 6271:
-                case 6272:
-                case 6273:
-                case 6274:
-                case 6269:
-                case 6270:
-                case 6268:
-                case 6221:
-                case 6219:
-                case 6220:
-                case 6217:
-                case 6216:
-                case 6215:
-                case 6214:
-                case 6213:
-                case 6212:
-                case 6211:
-                case 6218:
-                case 6275:
-                case 6257:// Npcs That Give SaraKC
-                case 6255:
-                case 6256:
-                case 6259:
-                case 6254:
-                case 1689:
-                case 1694:
-                case 1699:
-                case 1704:
-                case 1709:
-                case 1714:
-                case 1724:
-                case 1734:
-                case 6914: // Lizardman, Lizardman brute
-                case 6915:
-                case 6916:
-                case 6917:
-                case 6918:
-                case 6919:
-                case 6766:
-                case 7573:
-                case 7617: // Tekton magers
-                case 7544: // Tekton
-                case 7604: // Skeletal mystic
-                case 7605: // Skeletal mystic
-                case 7606: // Skeletal mystic
-                case 7585: //
-                case 7554:
-                case 7563: // muttadiles
-                case 5129:
-                case 4922:
-
-                    return true;
-                case 1524:
-                case 6600:
-                case 6601:
-                case 7553:
-                case 7555:
-                case 6602:
-                case 1049:
-                case 6617:
-                case 6620:
-                    return false;
-            }
-        } else {
-            switch (npcs[i].npcType) {
-                case 5916:
-                case 690:
-                case 963:
-                case 965:
-                case 955:
-                case 957:
-                case 959:
-                case 5867:
-                case 5868:
-                case 5869:
-                case 2042:
-                case 239:
-                case 7413:
-                case 1739:
-                case 1740:
-                case 1741:
-                case 1742:
-                case 2044:
-                case 2043:
-                case 465:
-                case Zulrah.SNAKELING:
-                case 5054:
-                case 6611:
-                case 6612:
-                case 6610:
-                case 494:
-                case 5535:
-                case 2550:
-                case 2551:
-                case 50:
-                case 28:
-                case 2552:
-                case 6609:
-                case 2553:
-                case 2558:
-                case 2559:
-                case 2560:
-                case 2561:
-                case 2562:
-                case 2563:
-                case 2564:
-                case 2565:
-                case 2892:
-                case 2894:
-                case 2265:
-                case 2266:
-                case 2267:
-                case 2035:
-                case 5779:
-                case 291:
-                case 435:
-                case 135:
-                case 484:
-                case 7276:
-                case 5944: // Rock lobster
-
-                    // Godwars
-                case 3138:
-                case 2205:
-                case 2206:
-                case 2207:
-                case 2208:
-                case 2209:
-                case 2211:
-                case 2212:
-                case 2215:
-                case 2216:
-                case 2217:
-                case 2218:
-                case 2233:
-                case 2234:
-                case 2235:
-                case 2237:
-                case 2242:
-                case 2243:
-                case 2244:
-                case 2245:
-                case 3129:
-                case 3130:
-                case 3131:
-                case 3132:
-                case 3133:
-                case 3134:
-                case 3135:
-                case 3137:
-                case 3139:
-                case 3140:
-                case 3141:
-                case 3159:
-                case 3160:
-                case 3161:
-                case 3162:
-                case 3163:
-                case 3164:
-                case 3165:
-                case 3166:
-                case 3167:
-                case 3168:
-                case 3174:
-
-                case Skotizo.SKOTIZO_ID:
-                case Skotizo.REANIMATED_DEMON:
-                case Skotizo.DARK_ANKOU:
-
-                    // Barrows tunnel monsters
-                case 1678:
-                case 1679:
-                case 1683:
-                case 1684:
-                case 1685:
-                    // GWD
-                case 6230:
-                case 6231:
-                case 6229:
-                case 6232:
-                case 6240:
-                case 6241:
-                case 6242:
-                case 6233:
-                case 6234:
-                case 6243:
-                case 6244:
-                case 6245:
-                case 6246:
-                case 6238:
-                case 6239:
-                case 6625:
-                case 122:// Npcs That Give BandosKC
-                case 6278:
-                case 6277:
-                case 6276:
-                case 6283:
-                case 6282:
-                case 6281:
-                case 6280:
-                case 6279:
-                case 6271:
-                case 6272:
-                case 6273:
-                case 6274:
-                case 6269:
-                case 6270:
-                case 6268:
-                case 6221:
-                case 6219:
-                case 6220:
-                case 6217:
-                case 6216:
-                case 6215:
-                case 6214:
-                case 6213:
-                case 6212:
-                case 6211:
-                case 6218:
-                case 6275:
-                case 6257:// Npcs That Give SaraKC
-                case 6255:
-                case 6256:
-                case 6259:
-                case 6254:
-                case 1689:
-                case 1694:
-                case 1699:
-                case 1704:
-                case 1709:
-                case 1714:
-                case 1724:
-                case 1734:
-                case 6914: // Lizardman, Lizardman brute
-                case 6915:
-                case 6916:
-                case 6917:
-                case 6918:
-                case 6919:
-                case 6766:
-                case 7573:
-                case 7617: // Tekton magers
-                case 7544: // Tekton
-                case 7604: // Skeletal mystic
-                case 7605: // Skeletal mystic
-                case 7606: // Skeletal mystic
-                case 5129:
-                case 4922:
-                case 7388: // Start of superior
-                case 7389:
-                case 7390:
-                case 7391:
-                case 7392:
-                case 7393:
-                case 7394:
-                case 7395:
-                case 7396:
-                case 7397:
-                case 7398:
-                case 7399:
-                case 7400:
-                case 7401:
-                case 7402:
-                case 7403:
-                case 7404:
-                case 7405:
-                case 7406:
-                case 7407:
-                case 7409:
-                case 7410:
-                case 7411: // end of superior
-                    return true;
-                case 1524:
-                case 6600:
-                case 6601:
-                case 6602:
-                case 1049:
-                case 6617:
-                case 6620:
-                    return false;
-
-                case 8028:
-                    return true;
-            }
-            if (npcs[i].inWild() && npcs[i].getHealth().getMaximum() > 0)
-                return true;
-            if (npcs[i].inRaids() && npcs[i].getHealth().getMaximum() > 0)
-                return true;
-            return isFightCaveNpc(i);
-        }
-        return false;
+//        if (!searching) {
+//            if (Boundary.isIn(npcs[i], Boundary.GODWARS_BOSSROOMS)
+//                    || Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
+//                return true;
+//            }
+//        }
+//
+//        if (searching) {
+//            switch (i) {
+//                case 4708:
+//                    return npcs[i].summonedBy > 0;
+//                case 5916:
+//                case 690:
+//                case 963:
+//                case 965:
+//                case 955:
+//                case 957:
+//                case 959:
+//                case 5867:
+//                case 5868:
+//                case 5869:
+//                case 2042:
+//                case 239:
+//                case 7413:
+//                case 1739:
+//                case 1740:
+//                case 1741:
+//                case 1742:
+//                case 2044:
+//                case 2043:
+//                case 465:
+//                case 7706:
+//                case Zulrah.SNAKELING:
+//                case 5054:
+//                case 6611:
+//                case 6612:
+//                case 6610:
+//                case 494:
+//                case 5535:
+//                case 2550:
+//                case 2551:
+//                case 50:
+//                case 28:
+//                case 2552:
+//                case 6609:
+//                case 2553:
+//                case 2558:
+//                case 2559:
+//                case 2560:
+//                case 2561:
+//                case 2562:
+//                case 2563:
+//                case 2564:
+//                case 2565:
+//                case 2892:
+//                case 2894:
+//                case 2265:
+//                case 2266:
+//                case 2267:
+//                case 2035:
+//                case 5779:
+//                case 291:
+//                case 435:
+//                case 135:
+//                case 7276:
+//                case 5944: // Rock lobster
+//
+//                    // Godwars
+//                case 3138:
+//                case 2205:
+//                case 2206:
+//                case 2207:
+//                case 2208:
+//                case 2209:
+//                case 2211:
+//                case 2212:
+//                case 2215:
+//                case 2216:
+//                case 2217:
+//                case 2218:
+//                case 2233:
+//                case 2234:
+//                case 2235:
+//                case 2237:
+//                case 2242:
+//                case 2243:
+//                case 2244:
+//                case 2245:
+//                case 3129:
+//                case 3130:
+//                case 3131:
+//                case 3132:
+//                case 3133:
+//                case 3134:
+//                case 3135:
+//                case 3137:
+//                case 3139:
+//                case 3140:
+//                case 3141:
+//                case 3159:
+//                case 3160:
+//                case 3161:
+//                case 3162:
+//                case 3163:
+//                case 3164:
+//                case 3165:
+//                case 3166:
+//                case 3167:
+//                case 3168:
+//                case 3174:
+//
+//                    // Barrows tunnel monsters
+//                case 1678:
+//                case 1679:
+//                case 1683:
+//                case 1684:
+//                case 1685:
+//
+//                case 6295:
+//
+//                case Skotizo.SKOTIZO_ID:
+//                case Skotizo.REANIMATED_DEMON:
+//                case Skotizo.DARK_ANKOU:
+//                    // GWD
+//                case 6230:
+//                case 6231:
+//                case 6229:
+//                case 6232:
+//                case 6240:
+//                case 6241:
+//                case 6242:
+//                case 6233:
+//                case 6234:
+//                case 6243:
+//                case 6244:
+//                case 6245:
+//                case 6246:
+//                case 6238:
+//                case 6239:
+//                case 6625:
+//                case 122:// Npcs That Give BandosKC
+//                case 6278:
+//                case 6277:
+//                case 6276:
+//                case 6283:
+//                case 6282:
+//                case 6281:
+//                case 6280:
+//                case 6279:
+//                case 6271:
+//                case 6272:
+//                case 6273:
+//                case 6274:
+//                case 6269:
+//                case 6270:
+//                case 6268:
+//                case 6221:
+//                case 6219:
+//                case 6220:
+//                case 6217:
+//                case 6216:
+//                case 6215:
+//                case 6214:
+//                case 6213:
+//                case 6212:
+//                case 6211:
+//                case 6218:
+//                case 6275:
+//                case 6257:// Npcs That Give SaraKC
+//                case 6255:
+//                case 6256:
+//                case 6259:
+//                case 6254:
+//                case 1689:
+//                case 1694:
+//                case 1699:
+//                case 1704:
+//                case 1709:
+//                case 1714:
+//                case 1724:
+//                case 1734:
+//                case 6914: // Lizardman, Lizardman brute
+//                case 6915:
+//                case 6916:
+//                case 6917:
+//                case 6918:
+//                case 6919:
+//                case 6766:
+//                case 7573:
+//                case 7617: // Tekton magers
+//                case 7544: // Tekton
+//                case 7604: // Skeletal mystic
+//                case 7605: // Skeletal mystic
+//                case 7606: // Skeletal mystic
+//                case 7585: //
+//                case 7554:
+//                case 7563: // muttadiles
+//                case 5129:
+//                case 4922:
+//
+//                    return true;
+//                case 1524:
+//                case 6600:
+//                case 6601:
+//                case 7553:
+//                case 7555:
+//                case 6602:
+//                case 1049:
+//                case 6617:
+//                case 6620:
+//                    return false;
+//            }
+//        } else {
+//            switch (npcs[i].npcType) {
+//                case 5916:
+//                case 690:
+//                case 963:
+//                case 965:
+//                case 955:
+//                case 957:
+//                case 959:
+//                case 5867:
+//                case 5868:
+//                case 5869:
+//                case 2042:
+//                case 239:
+//                case 7413:
+//                case 1739:
+//                case 1740:
+//                case 1741:
+//                case 1742:
+//                case 2044:
+//                case 2043:
+//                case 465:
+//                case Zulrah.SNAKELING:
+//                case 5054:
+//                case 6611:
+//                case 6612:
+//                case 6610:
+//                case 494:
+//                case 5535:
+//                case 2550:
+//                case 2551:
+//                case 50:
+//                case 28:
+//                case 2552:
+//                case 6609:
+//                case 2553:
+//                case 2558:
+//                case 2559:
+//                case 2560:
+//                case 2561:
+//                case 2562:
+//                case 2563:
+//                case 2564:
+//                case 2565:
+//                case 2892:
+//                case 2894:
+//                case 2265:
+//                case 2266:
+//                case 2267:
+//                case 2035:
+//                case 5779:
+//                case 291:
+//                case 435:
+//                case 135:
+//                case 484:
+//                case 7276:
+//                case 5944: // Rock lobster
+//
+//                    // Godwars
+//                case 3138:
+//                case 2205:
+//                case 2206:
+//                case 2207:
+//                case 2208:
+//                case 2209:
+//                case 2211:
+//                case 2212:
+//                case 2215:
+//                case 2216:
+//                case 2217:
+//                case 2218:
+//                case 2233:
+//                case 2234:
+//                case 2235:
+//                case 2237:
+//                case 2242:
+//                case 2243:
+//                case 2244:
+//                case 2245:
+//                case 3129:
+//                case 3130:
+//                case 3131:
+//                case 3132:
+//                case 3133:
+//                case 3134:
+//                case 3135:
+//                case 3137:
+//                case 3139:
+//                case 3140:
+//                case 3141:
+//                case 3159:
+//                case 3160:
+//                case 3161:
+//                case 3162:
+//                case 3163:
+//                case 3164:
+//                case 3165:
+//                case 3166:
+//                case 3167:
+//                case 3168:
+//                case 3174:
+//
+//                case Skotizo.SKOTIZO_ID:
+//                case Skotizo.REANIMATED_DEMON:
+//                case Skotizo.DARK_ANKOU:
+//
+//                    // Barrows tunnel monsters
+//                case 1678:
+//                case 1679:
+//                case 1683:
+//                case 1684:
+//                case 1685:
+//                    // GWD
+//                case 6230:
+//                case 6231:
+//                case 6229:
+//                case 6232:
+//                case 6240:
+//                case 6241:
+//                case 6242:
+//                case 6233:
+//                case 6234:
+//                case 6243:
+//                case 6244:
+//                case 6245:
+//                case 6246:
+//                case 6238:
+//                case 6239:
+//                case 6625:
+//                case 122:// Npcs That Give BandosKC
+//                case 6278:
+//                case 6277:
+//                case 6276:
+//                case 6283:
+//                case 6282:
+//                case 6281:
+//                case 6280:
+//                case 6279:
+//                case 6271:
+//                case 6272:
+//                case 6273:
+//                case 6274:
+//                case 6269:
+//                case 6270:
+//                case 6268:
+//                case 6221:
+//                case 6219:
+//                case 6220:
+//                case 6217:
+//                case 6216:
+//                case 6215:
+//                case 6214:
+//                case 6213:
+//                case 6212:
+//                case 6211:
+//                case 6218:
+//                case 6275:
+//                case 6257:// Npcs That Give SaraKC
+//                case 6255:
+//                case 6256:
+//                case 6259:
+//                case 6254:
+//                case 1689:
+//                case 1694:
+//                case 1699:
+//                case 1704:
+//                case 1709:
+//                case 1714:
+//                case 1724:
+//                case 1734:
+//                case 6914: // Lizardman, Lizardman brute
+//                case 6915:
+//                case 6916:
+//                case 6917:
+//                case 6918:
+//                case 6919:
+//                case 6766:
+//                case 7573:
+//                case 7617: // Tekton magers
+//                case 7544: // Tekton
+//                case 7604: // Skeletal mystic
+//                case 7605: // Skeletal mystic
+//                case 7606: // Skeletal mystic
+//                case 5129:
+//                case 4922:
+//                case 7388: // Start of superior
+//                case 7389:
+//                case 7390:
+//                case 7391:
+//                case 7392:
+//                case 7393:
+//                case 7394:
+//                case 7395:
+//                case 7396:
+//                case 7397:
+//                case 7398:
+//                case 7399:
+//                case 7400:
+//                case 7401:
+//                case 7402:
+//                case 7403:
+//                case 7404:
+//                case 7405:
+//                case 7406:
+//                case 7407:
+//                case 7409:
+//                case 7410:
+//                case 7411: // end of superior
+//                    return true;
+//                case 1524:
+//                case 6600:
+//                case 6601:
+//                case 6602:
+//                case 1049:
+//                case 6617:
+//                case 6620:
+//                    return false;
+//
+//                case 8028:
+//                    return true;
+//            }
+//            if (npcs[i].inWild() && npcs[i].getHealth().getMaximum() > 0)
+//                return true;
+//            if (npcs[i].inRaids() && npcs[i].getHealth().getMaximum() > 0)
+//                return true;
+//            return isFightCaveNpc(i);
+//        }
+//        System.out.println(npcs[i].npcType + " is aggressive: " + npcs[i].aggressive);
+        return npcs[i].aggressive;
     }
 
     public static boolean isDagannothMother(int i) {
@@ -942,22 +962,28 @@ public class NPCHandler {
      * @return the animation to be performed.
      */
     public static int getAttackEmote(int i) {
-        switch (npcs[i].npcType) {
-            case 6295: //boss
-                if (Misc.random(3) == 1) {
-                    NPCHandler.getNpc(6295).forceChat("Come on I'm just getting started, Hahaha!");
-                } else {
-                    if (Misc.random(5) == 1) {
-                        NPCHandler.getNpc(6295).forceChat("I feast on puny humans like you!");
-                    } else {
-                        if (Misc.random(10) == 1) {
-                            NPCHandler.getNpc(6295).forceChat("You dare to challenge the all mighty? Waste of time!");
-                        }
-                    }
-                }
-                return 64;
+        try {
+            return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
+        } catch (Exception e) {
+            Logger.getGlobal().warning("No animation definition for npc: " + npcs[i].npcType);
         }
         return AttackAnimation.handleEmote(i);
+//        switch (npcs[i].npcType) {
+//            case 6295: //boss
+//                if (Misc.random(3) == 1) {
+//                    NPCHandler.getNpc(6295).forceChat("Come on I'm just getting started, Hahaha!");
+//                } else {
+//                    if (Misc.random(5) == 1) {
+//                        NPCHandler.getNpc(6295).forceChat("I feast on puny humans like you!");
+//                    } else {
+//                        if (Misc.random(10) == 1) {
+//                            NPCHandler.getNpc(6295).forceChat("You dare to challenge the all mighty? Waste of time!");
+//                        }
+//                    }
+//                }
+//                return 64;
+//        }
+
     }
 
     /**
@@ -967,9 +993,15 @@ public class NPCHandler {
      * @return the animation to be performed.
      */
     public int getDeadEmote(int i) {
-        switch (npcs[i].npcType) {
-            case 6295: //boss
-                return 67;
+//        switch (npcs[i].npcType) {
+//            case 6295: //boss
+//                return 67;
+//        }
+//        return DeathAnimation.handleEmote(i);
+        try {
+            return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getDeathAnimation();
+        } catch (Exception e) {
+            Logger.getGlobal().warning("No animation definition for npc: " + npcs[i].npcType);
         }
         return DeathAnimation.handleEmote(i);
     }
@@ -1475,31 +1507,31 @@ public class NPCHandler {
 //                if (npcs[i].npcType == 3953) {
 //                    npcs[i].startAnimation(346);
 //                }
-                if (Thieving.isMarketGuard(npcs[i].npcType) != -1) {
-                    if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
-                        int playerIndex = getCloseRandomPlayer(i);
-                        Player player = PlayerHandler.players[playerIndex];
-                        if (player != null) {
-                            if (npc.getFacingDirection() == new Location(npcs[i].getX(), npcs[i].getY()).directionFrom(new Location(player.getX(), player.getY())).ordinal()
-                                    && (System.currentTimeMillis() - player.getAttributes().getCaughtThievingTimestamp()) < Thieving.CAUGHT_DELAY_SECONDS * 1000 && !player.getAttributes().getGuardsAttacking().contains(i)) {
-                                npc.forceChat("Hey! What do you think you are doing?");
-                                player.getAttributes().getGuardsAttacking().add(i);
-                                npcs[i].killerId = playerIndex;
-                                player.underAttackBy = i;
-                                player.underAttackBy2 = i;
-                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
-                            } else if (player.getAttributes().getGuardsAttacking().contains(i)) {
-                                npcs[i].killerId = playerIndex;
-                                player.underAttackBy = i;
-                                player.underAttackBy2 = i;
-                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
-                            }
-//                        System.out.println("NPC FACE INDEX: " + npc.getFacingDirection());
-//                            System.out.println("NPC IS FACING: " + Face.values()[npc.getFacingDirection()]);
-////                            System.out.println("PLAYER IS TO THE: " + new Location(npcs[i].getX(),npcs[i].getY()).directionFrom(new Location(player.getX(),player.getY())));
-                        }
-                    }
-                }
+//                if (Thieving.isMarketGuard(npcs[i].npcType) != -1) {
+//                    if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
+//                        int playerIndex = getCloseRandomPlayer(i);
+//                        Player player = PlayerHandler.players[playerIndex];
+//                        if (player != null) {
+//                            if (npc.getFacingDirection() == new Location(npcs[i].getX(), npcs[i].getY()).directionFrom(new Location(player.getX(), player.getY())).ordinal()
+//                                    && (System.currentTimeMillis() - player.getAttributes().getCaughtThievingTimestamp()) < Thieving.CAUGHT_DELAY_SECONDS * 1000 && !player.getAttributes().getGuardsAttacking().contains(i)) {
+//                                npc.forceChat("Hey! What do you think you are doing?");
+//                                player.getAttributes().getGuardsAttacking().add(i);
+//                                npcs[i].killerId = playerIndex;
+//                                player.underAttackBy = i;
+//                                player.underAttackBy2 = i;
+//                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+//                            } else if (player.getAttributes().getGuardsAttacking().contains(i)) {
+//                                npcs[i].killerId = playerIndex;
+//                                player.underAttackBy = i;
+//                                player.underAttackBy2 = i;
+//                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+//                            }
+////                        System.out.println("NPC FACE INDEX: " + npc.getFacingDirection());
+////                            System.out.println("NPC IS FACING: " + Face.values()[npc.getFacingDirection()]);
+//////                            System.out.println("PLAYER IS TO THE: " + new Location(npcs[i].getX(),npcs[i].getY()).directionFrom(new Location(player.getX(),player.getY())));
+//                        }
+//                    }
+//                }
                 /**
                  * Tekton walking
                  */
@@ -1648,34 +1680,34 @@ public class NPCHandler {
                 if (isAggressive(i, false) && !npc.underAttack && npc.killerId <= 0 && !npc.isDead
                         && !switchesAttackers(i) && npc.inMulti() && !Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS)
                         && !Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
-                    Player closestPlayer = null;
+                    Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
                     int closestDistance = Integer.MAX_VALUE;
                     God god = GodwarsNPCs.NPCS.get(npc.npcType);
 
-                    for (Player player : PlayerHandler.players) {
-                        if (player == null) {
-                            continue;
-                        }
-                        if (player.isIdle)
-                            continue;
-
-                        if (god != null && player.inGodwars() && player.getEquippedGodItems() != null
-                                && player.getEquippedGodItems().contains(god)) {
-                            continue;
-                        }
-                        /**
-                         * Skips attacking a player if mode set to invisible
-                         */
-                        if (player.isInvisible()) {
-                            continue;
-                        }
-
-                        int distance = Misc.distanceToPoint(npc.absX, npc.absY, player.absX, player.absY);
-                        if (distance < closestDistance && distance <= distanceRequired(i) + followDistance(i)) {
-                            closestDistance = distance;
-                            closestPlayer = player;
-                        }
-                    }
+//                    for (Player player : PlayerHandler.players) {
+//                        if (player == null) {
+//                            continue;
+//                        }
+//                        if (player.isIdle)
+//                            continue;
+//
+//                        if (god != null && player.inGodwars() && player.getEquippedGodItems() != null
+//                                && player.getEquippedGodItems().contains(god)) {
+//                            continue;
+//                        }
+//                        /**
+//                         * Skips attacking a player if mode set to invisible
+//                         */
+//                        if (player.isInvisible()) {
+//                            continue;
+//                        }
+//
+//                        int distance = Misc.distanceToPoint(npc.absX, npc.absY, player.absX, player.absY);
+//                        if (distance < closestDistance && distance <= distanceRequired(i) + followDistance(i)) {
+//                            closestDistance = distance;
+//                            closestPlayer = player;
+//                        }
+//                    }
                     if (closestPlayer != null) {
                         npc.killerId = closestPlayer.getIndex();
                         closestPlayer.underAttackBy = npc.getIndex();
@@ -1687,12 +1719,14 @@ public class NPCHandler {
 
                     if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
                         int playerIndex = getCloseRandomPlayer(i);
-                        Player player = PlayerHandler.players[playerIndex];
-                        if (player != null) {
-                            npcs[i].killerId = playerIndex;
-                            player.underAttackBy = i;
-                            player.underAttackBy2 = i;
-                            npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+                        if (playerIndex > -1) {
+                            Player player = PlayerHandler.players[playerIndex];
+                            if (player != null) {
+                                npcs[i].killerId = playerIndex;
+                                player.underAttackBy = i;
+                                player.underAttackBy2 = i;
+                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+                            }
                         }
                     }
                 }
@@ -1907,9 +1941,9 @@ public class NPCHandler {
                                 player.chosenSandCrab = true;
                                 Necromancy.main(player);
                             }
-                            if(player.getAttributes().getGuardsAttacking().contains(i)) {
-                                player.getAttributes().getGuardsAttacking().remove(i);
-                            }
+//                            if (player.getAttributes().getGuardsAttacking().contains(i)) {
+//                                player.getAttributes().getGuardsAttacking().remove(i);
+//                            }
                         }
                         /*
                          * End Necro
@@ -2000,6 +2034,7 @@ public class NPCHandler {
                             resetPlayersInCombat(i);
                         }
                     } else if (npcs[i].actionTimer == 0 && npcs[i].applyDead && !npcs[i].needRespawn) {
+
                         int killerIndex = npcs[i].killedBy;
                         npcs[i].needRespawn = true;
                         npcs[i].actionTimer = getRespawnTime(i); // respawn time
@@ -2009,6 +2044,7 @@ public class NPCHandler {
 
                             if (target != null) {
                                 target.getSlayer().killTaskMonster(npcs[i]);
+                                target.getAttributes().getPlayPassController().addPlayPassXPFromMonsterHP(npcs[i].getHealth().getMaximum());
                                 /*
                                  * if (target.getSlayer().isSuperiorNpc()) {
                                  * target.getSlayer().handleSuperiorExp(npcs[i]); }
@@ -2030,6 +2066,16 @@ public class NPCHandler {
                         npcs[i].animNumber = 0x328;
                         npcs[i].updateRequired = true;
                         npcs[i].animUpdateRequired = true;
+                        Player killer = PlayerHandler.players[npcs[i].killedBy];
+                        if ( killer!= null && killer.getAttributes().getRift() != null) {
+                            npcs[i] = null;
+                            if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getTrashMobPool()).anyMatch(value -> value == npc.npcType))) {
+                                killer.getAttributes().getRift().increaseProgress(0.1f);
+                            } else if(RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getEliteMobPool()).anyMatch(value -> value == npc.npcType))) {
+                                killer.getAttributes().getRift().increaseProgress(0.3f);
+                            }
+                            return;
+                        }
 
                         /**
                          * Actions on certain npc deaths
@@ -3623,6 +3669,43 @@ public class NPCHandler {
         newNPC.maxHit = maxHit;
         newNPC.attack = attack;
         newNPC.defence = defence;
+        newNPC.aggressive = attackPlayer;
+        npcs[slot] = newNPC;
+        return newNPC;
+    }
+
+    public static NPC spawnRiftNpc(int npcType, int x, int y, int heightLevel, int WalkingType, int HP, int maxHit, int attack,
+                                   int defence) {
+        // first, search for a free slot
+        int slot = -1;
+        for (int i = 1; i < maxNPCs; i++) {
+            if (npcs[i] == null) {
+                slot = i;
+                break;
+            }
+        }
+        if (slot == -1) {
+            System.out.println("Cannot find any available slots to spawn npc into + npchandler @spawnNpc - line 2287");
+            return null;
+        }
+        NPCDefinitions definition = NPCDefinitions.get(npcType);
+        NPC newNPC = new NPC(slot, npcType, definition);
+        newNPC.absX = x;
+        newNPC.absY = y;
+        newNPC.makeX = x;
+        newNPC.makeY = y;
+        newNPC.heightLevel = heightLevel;
+        newNPC.walkingType = WalkingType;
+        newNPC.getHealth().setMaximum(HP);
+        newNPC.getHealth().reset();
+        newNPC.maxHit = maxHit;
+        newNPC.attack = attack;
+        newNPC.defence = defence;
+        newNPC.aggressive = true;
+        newNPC.spawnType = 1;
+        newNPC.respawns = false;
+        newNPC.needRespawn = false;
+
         npcs[slot] = newNPC;
         return newNPC;
     }

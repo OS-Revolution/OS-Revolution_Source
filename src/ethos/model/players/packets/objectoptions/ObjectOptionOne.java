@@ -48,12 +48,11 @@ import ethos.model.players.skills.crafting.JewelryMaking;
 import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.woodcutting.Tree;
 import ethos.runehub.action.click.node.FirstClickNodeActionListener;
-import ethos.runehub.skill.gathering.fishing.action.FishingSkillAction;
+import ethos.runehub.entity.player.action.FirstClickNodeActionFactory;
 import ethos.runehub.skill.gathering.farming.action.ActiveForagingSkillAction;
 import ethos.runehub.skill.gathering.farming.action.ActiveRenewableForagingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAction;
-import ethos.runehub.skill.node.context.impl.FishingNodeContext;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
@@ -226,62 +225,62 @@ public class ObjectOptionOne {
                         c.heightLevel
                 ));
                 break;
-            case 20927:
-                c.getSkillController().getFishing().train(
-                        new FishingSkillAction(
-                                c,
-                                new FishingNodeContext(
-                                        1,
-                                        obX,
-                                        obY,
-                                        c.heightLevel
-                                ),
-                                objectType
-                        )
-                );
-                break;
-            case 20926:
-                c.getSkillController().getFishing().train(
-                        new FishingSkillAction(
-                                c,
-                                new FishingNodeContext(
-                                        7,
-                                        obX,
-                                        obY,
-                                        c.heightLevel
-                                ),
-                                objectType
-                        )
-                );
-                break;
-            case 20929:
-                c.getSkillController().getFishing().train(
-                        new FishingSkillAction(
-                                c,
-                                new FishingNodeContext(
-                                        5,
-                                        obX,
-                                        obY,
-                                        c.heightLevel
-                                ),
-                                objectType
-                        )
-                );
-                break;
-            case 20928:
-                c.getSkillController().getFishing().train(
-                        new FishingSkillAction(
-                                c,
-                                new FishingNodeContext(
-                                        3,
-                                        obX,
-                                        obY,
-                                        c.heightLevel
-                                ),
-                                objectType
-                        )
-                );
-                break;
+//            case 20927:
+//                c.getSkillController().getFishing().train(
+//                        new FishingSkillAction(
+//                                c,
+//                                new FishingNodeContext(
+//                                        1,
+//                                        obX,
+//                                        obY,
+//                                        c.heightLevel
+//                                ),
+//                                objectType
+//                        )
+//                );
+//                break;
+//            case 20926:
+//                c.getSkillController().getFishing().train(
+//                        new FishingSkillAction(
+//                                c,
+//                                new FishingNodeContext(
+//                                        7,
+//                                        obX,
+//                                        obY,
+//                                        c.heightLevel
+//                                ),
+//                                objectType
+//                        )
+//                );
+//                break;
+//            case 20929:
+//                c.getSkillController().getFishing().train(
+//                        new FishingSkillAction(
+//                                c,
+//                                new FishingNodeContext(
+//                                        5,
+//                                        obX,
+//                                        obY,
+//                                        c.heightLevel
+//                                ),
+//                                objectType
+//                        )
+//                );
+//                break;
+//            case 20928:
+//                c.getSkillController().getFishing().train(
+//                        new FishingSkillAction(
+//                                c,
+//                                new FishingNodeContext(
+//                                        3,
+//                                        obX,
+//                                        obY,
+//                                        c.heightLevel
+//                                ),
+//                                objectType
+//                        )
+//                );
+//                break;
             case 31990:
                 if (c.absY == 4054) {
                     Vorkath.exit(c);
@@ -2681,7 +2680,11 @@ public class ObjectOptionOne {
             Server.getEventHandler().stop("click-object");
             Server.getEventHandler().submit(FirstClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel));
         } catch (NullPointerException e) {
-            c.sendMessage("Nothing interesting happens.");
+            try {
+                c.getAttributes().getActionController().submit(FirstClickNodeActionFactory.getAction(c,obX,obY,objectType));
+            } catch (NullPointerException e1) {
+                c.sendMessage("Nothing interesting happens.");
+            }
         }
     }
 

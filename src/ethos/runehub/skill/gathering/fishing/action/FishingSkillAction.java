@@ -5,12 +5,10 @@ import ethos.Server;
 import ethos.clip.Region;
 import ethos.clip.WorldObject;
 import ethos.model.items.Item;
-import ethos.model.npcs.NPC;
-import ethos.model.npcs.NPCHandler;
 import ethos.model.players.Player;
-import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
 import ethos.runehub.skill.gathering.fishing.FishLevel;
+import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.node.context.impl.FishingNodeContext;
 import ethos.runehub.skill.node.impl.RenewableNode;
 import ethos.runehub.skill.node.impl.gatherable.impl.FishingNode;
@@ -88,15 +86,15 @@ public class FishingSkillAction extends GatheringSkillAction {
             }
         });
         return canCatch.value() == 1 && super.isSuccessful(
-                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()),
-                (int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()));
+                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus()),
+                (int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus()));
     }
 
     @Override
     protected void addXp(int baseAmount) {
         Logger.getGlobal().fine("Adding xp");
         final int baseXp = caughtFish.getXp();
-        final double xpModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getXpGainsRate();
+        final double xpModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getGainsBonus();
         final int totalXp = Math.toIntExact(Math.round(baseXp * xpModifier));
         this.getActor().getPA().addSkillXP(totalXp, this.getSkillId(), true);
     }
@@ -114,8 +112,13 @@ public class FishingSkillAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return null;
+    }
+
+    @Override
     protected boolean depleteNode() {
-        return this.getElapsedTicks() >= durationTicks + this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEfficiency();
+        return this.getElapsedTicks() >= durationTicks + this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEfficiencyBonus();
     }
 
     private boolean canCatchFish(FishLevel fish) {
@@ -141,7 +144,7 @@ public class FishingSkillAction extends GatheringSkillAction {
     }
 
     public FishingSkillAction(Player player, FishingNodeContext targetedNodeContext, int spotId) {
-        super(player, 10, targetedNodeContext, 4, null);
+        super(player, 10, targetedNodeContext, 4);
         this.durationTicks = new IntegerRange(280, 530).getRandomValue();//280,530
         this.spotId = spotId;
     }

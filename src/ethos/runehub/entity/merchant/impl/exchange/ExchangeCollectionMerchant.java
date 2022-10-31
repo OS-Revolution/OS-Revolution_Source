@@ -96,14 +96,16 @@ public class ExchangeCollectionMerchant extends Merchant {
                     itemId,
                     itemMap.get(itemId).value(),
                     false,
-                    0.D));
+                    0.D,
+                    false));
         });
         if (account.getAvailableRevenue() <= Integer.MAX_VALUE) {
             this.getMerchandise().add(new MerchandiseSlot(
                     995,
                     Math.toIntExact(account.getAvailableRevenue()),
                     false,
-                    0.0D
+                    0.0D,
+                    false
             ));
         } else {
             final int platinumTokens = Math.toIntExact(account.getAvailableRevenue() / 1000);
@@ -115,13 +117,15 @@ public class ExchangeCollectionMerchant extends Merchant {
                     13204,
                     platinumTokens,
                     false,
-                    0.0D
+                    0.0D,
+                    false
             ));
             this.getMerchandise().add(new MerchandiseSlot(
                     995,
                     coins,
                     false,
-                    0.0D
+                    0.0D,
+                    false
             ));
         }
     }

@@ -19,7 +19,7 @@ public abstract class ClickItemAction extends Event<Player> {
 
     protected void playerHasItemPrerequisite() {
 
-        Preconditions.checkArgument(this.getActor().getItems().playerHasItem(itemId), "You have run out of " + ItemAssistant.getItemName(itemId));
+        Preconditions.checkArgument(this.getActor().getItems().playerHasItem(itemId), "You have run out of $" + ItemAssistant.getItemName(itemId));
 
     }
 

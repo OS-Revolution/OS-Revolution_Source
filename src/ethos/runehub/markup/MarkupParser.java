@@ -10,7 +10,7 @@ public class MarkupParser {
         final String[] words = text.split(" ");
         final RSString.RSStringBuilder builder = new RSString.RSStringBuilder();
         for (int i = 0; i < words.length; i++) {
-            String word = words[i];
+            String word = words[i].replaceAll("_", " ");
             try {
                 if (word.startsWith("@")) {
                     builder

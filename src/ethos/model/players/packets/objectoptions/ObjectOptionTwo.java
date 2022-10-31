@@ -8,11 +8,9 @@ import ethos.model.players.packets.objectoptions.impl.DarkAltar;
 import ethos.model.players.skills.FlaxPicking;
 import ethos.model.players.skills.necromancy.Necromancy;
 import ethos.model.players.skills.thieving.Thieving.Stall;
-import ethos.runehub.action.click.node.FirstClickNodeActionListener;
 import ethos.runehub.action.click.node.SecondClickNodeActionListener;
 import ethos.runehub.entity.merchant.MerchantCache;
-import ethos.runehub.skill.gathering.fishing.action.FishingSkillAction;
-import ethos.runehub.skill.node.context.impl.FishingNodeContext;
+import ethos.runehub.entity.player.action.SecondClickNodeActionFactory;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 
@@ -43,62 +41,62 @@ public class ObjectOptionTwo {
 			case 6945:
 				MerchantCache.getInstance().read(2148).openShop(c);
 				break;
-			case 20927:
-				c.getSkillController().getFishing().train(
-						new FishingSkillAction(
-								c,
-								new FishingNodeContext(
-										2,
-										obX,
-										obY,
-										c.heightLevel
-								),
-								objectType
-						)
-				);
-				break;
-			case 20926:
-				c.getSkillController().getFishing().train(
-						new FishingSkillAction(
-								c,
-								new FishingNodeContext(
-										8,
-										obX,
-										obY,
-										c.heightLevel
-								),
-								objectType
-						)
-				);
-				break;
-			case 20929:
-				c.getSkillController().getFishing().train(
-						new FishingSkillAction(
-								c,
-								new FishingNodeContext(
-										6,
-										obX,
-										obY,
-										c.heightLevel
-								),
-								objectType
-						)
-				);
-				break;
-			case 20928:
-				c.getSkillController().getFishing().train(
-						new FishingSkillAction(
-								c,
-								new FishingNodeContext(
-										4,
-										obX,
-										obY,
-										c.heightLevel
-								),
-								objectType
-						)
-				);
-				break;
+//			case 20927:
+//				c.getSkillController().getFishing().train(
+//						new FishingSkillAction(
+//								c,
+//								new FishingNodeContext(
+//										2,
+//										obX,
+//										obY,
+//										c.heightLevel
+//								),
+//								objectType
+//						)
+//				);
+//				break;
+//			case 20926:
+//				c.getSkillController().getFishing().train(
+//						new FishingSkillAction(
+//								c,
+//								new FishingNodeContext(
+//										8,
+//										obX,
+//										obY,
+//										c.heightLevel
+//								),
+//								objectType
+//						)
+//				);
+//				break;
+//			case 20929:
+//				c.getSkillController().getFishing().train(
+//						new FishingSkillAction(
+//								c,
+//								new FishingNodeContext(
+//										6,
+//										obX,
+//										obY,
+//										c.heightLevel
+//								),
+//								objectType
+//						)
+//				);
+//				break;
+//			case 20928:
+//				c.getSkillController().getFishing().train(
+//						new FishingSkillAction(
+//								c,
+//								new FishingNodeContext(
+//										4,
+//										obX,
+//										obY,
+//										c.heightLevel
+//								),
+//								objectType
+//						)
+//				);
+//				break;
 		case 29778:
 			c.sendMessage("hello");
 			break;
@@ -365,9 +363,14 @@ public class ObjectOptionTwo {
 		}
 		System.out.println("Option 2");
 		try {
+			Server.getEventHandler().stop("click-object");
 			Server.getEventHandler().submit(SecondClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel));
 		} catch (NullPointerException e) {
-			c.sendMessage("Nothing interesting happens.");
+			try {
+				c.getAttributes().getActionController().submit(SecondClickNodeActionFactory.getAction(c,obX,obY,objectType));
+			} catch (NullPointerException e1) {
+				c.sendMessage("Nothing interesting happens.");
+			}
 		}
 	}
 }

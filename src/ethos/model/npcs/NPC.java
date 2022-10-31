@@ -2,7 +2,9 @@ package ethos.model.npcs;
 
 import ethos.Server;
 import ethos.model.entity.Entity;
+import ethos.model.entity.Health;
 import ethos.model.entity.HealthStatus;
+import ethos.model.npcs.animations.AttackAnimation;
 import ethos.model.npcs.bosses.zulrah.Zulrah;
 import ethos.model.players.Boundary;
 import ethos.model.players.Player;
@@ -10,6 +12,11 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.Position;
 import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
+import ethos.runehub.LootTableContainerUtils;
+import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.rift.impl.NephalemRift;
+import ethos.runehub.entity.mob.AnimationDefinitionCache;
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -18,6 +25,14 @@ import org.menaphos.entity.impl.impl.NonPlayableCharacter;
 import org.menaphos.entity.impl.impl.PlayableCharacter;
 import org.menaphos.model.world.location.Location;
 import org.menaphos.util.StopWatch;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.io.load.impl.TierLoader;
+import org.runehub.api.model.entity.EntityContext;
+import org.runehub.api.model.entity.item.loot.ContainerType;
+import org.runehub.api.model.entity.item.loot.Tier;
+import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
+import org.runehub.api.model.world.Face;
 
 import java.awt.*;
 import java.util.logging.Logger;
@@ -35,7 +50,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public int viewX, viewY;
     public int hp;
     public int lastX, lastY;
-    public boolean summoner = false;
+    public boolean aggressive, summoner = false;
     public long singleCombatDelay = 0;
     public boolean teleporting = false;
     private int facingDirection;
@@ -82,6 +97,9 @@ public class NPC extends Entity implements NonPlayableCharacter {
     private long randomWalkDelay;
     private long randomStopDelay;
 
+    public int riftMobType;
+    public boolean sentEngageMessage;
+
     public NPC(int _npcId, int _npcType, NPCDefinitions definition) {
         super(_npcId, definition.getNpcName());
         this.definition = definition;
@@ -91,6 +109,14 @@ public class NPC extends Entity implements NonPlayableCharacter {
         applyDead = false;
         actionTimer = 0;
         randomWalk = true;
+        try {
+            definition.setNpcHealth(HostileMobIdContextLoader.getInstance().read(npcType).getHitpoints());
+            definition.setNpcCombat(HostileMobIdContextLoader.getInstance().read(npcType).getCombatLevel());
+            definition.setSize(HostileMobIdContextLoader.getInstance().read(npcType).getSize());
+            defence = HostileMobIdContextLoader.getInstance().read(npcType).getDefenceLevel();
+            maxHit = HostileMobIdContextLoader.getInstance().read(npcType).getMaxHit();
+        } catch (Exception e) {
+        }
         if (_npcType == 2888) {
             System.out.println(definition);
         }
@@ -174,6 +200,8 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     public long lastHit;
     public int nextHit;
+    public int spawnType;
+
 
     public void followNPC() {
         // int follow = followPlayer;
@@ -595,6 +623,11 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public int appendDamage(Player player, int damage, Hitmark h) {
         appendDamage(damage, h);
         addDamageTaken(player, damage);
+        try {
+            startAnimation(AnimationDefinitionCache.getInstance().read(npcType).getBlockAnimation());
+        } catch (Exception e) {
+            Logger.getGlobal().warning("No animation definition for npc: " + npcType);
+        }
         return damage;
     }
 
@@ -611,6 +644,9 @@ public class NPC extends Entity implements NonPlayableCharacter {
      */
 
     public boolean inMulti() {
+        if (spawnType == 1) {
+            return true;
+        }
         if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
                 || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR) || Boundary.isIn(this, Boundary.NECRO)
                 || Boundary.isIn(this, Boundary.CERBERUS_BOSSROOMS) || Boundary.isIn(this, Boundary.INFERNO)
@@ -766,6 +802,21 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public void dropLootFor(Player player) {
         final Location3D dropLocation = new Location3D(this.getX(), this.getY(), player.getHeight());
         Logger.getGlobal().info("Dropping Loot @: X:" + this.getX() + " Y: " + this.getY() + " Height: " + player.getHeight());
+        if (player.getAttributes().getRift() == null || player.getAttributes().getRift() instanceof NephalemRift) {
+            LootTableContainerUtils.getLootTableContainer(npcType, ContainerType.NPC).ifPresent(lootTableContainer -> {
+                lootTableContainer.roll(player.getAttributes().getMagicFind()).forEach(lootTable -> {
+                    LootTableLoader.getInstance().read(lootTable.getId()).roll(player.getAttributes().getMagicFind()).forEach(loot -> {
+                        final Tier tier = Tier.getTier(loot.getRarity());
+                        if (tier.getId() == 5 || tier.getId() == 6 || tier.getId() == 7) { //very rare
+                            player.sendMessage("@or@" + tier.getName() + " drop " + loot.getAmount() + "x " + ItemIdContextLoader.getInstance().read((int) loot.getId()).getName() + ".");
+                            PlayerHandler.executeGlobalMessage("^Loot $" + player.getAttributes().getName() + " received $" + tier.getName() + " drop $" + loot.getAmount() + "x @" + loot.getId() + "!");
+                        }
+                        Server.itemHandler.createGroundItem(player, (int) loot.getId(), dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(), (int) loot.getAmount());
+                    });
+                });
+            });
+        }
+
     }
 
 
@@ -827,6 +878,31 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     @Override
     public boolean moveTo(Location location) {
+        return false;
+    }
+
+    @Override
+    public EntityContext getContext() {
+        return null;
+    }
+
+    @Override
+    public CharacterEntityAttribute getAttributes() {
+        return null;
+    }
+
+    @Override
+    public boolean walkTo(org.runehub.api.model.world.region.location.Location location) {
+        return false;
+    }
+
+    @Override
+    public boolean setLocation(org.runehub.api.model.world.region.location.Location location) {
+        return false;
+    }
+
+    @Override
+    public boolean face(Face face) {
         return false;
     }
 }

@@ -14,6 +14,8 @@ import org.runehub.api.model.entity.item.loot.ContainerType;
 import org.runehub.api.model.entity.item.loot.LootTableContainer;
 import org.runehub.api.model.world.Face;
 
+import java.text.NumberFormat;
+
 public class ClickShinyChestAction extends ClickNodeAction {
 
     @Override
@@ -24,7 +26,7 @@ public class ClickShinyChestAction extends ClickNodeAction {
     @Override
     protected void onActionStart() {
         this.getActor().startAnimation(881);
-        this.getActor().sendMessage("You open the Shiny Chest...");
+        this.getActor().sendMessage("^Loot You open the Shiny Chest...");
     }
 
     @Override
@@ -43,7 +45,7 @@ public class ClickShinyChestAction extends ClickNodeAction {
                         LootTableLoader.getInstance().read(lootTable.getId()).roll(this.getActor().getAttributes().getMagicFind())
                                 .forEach(loot -> {
                                     this.getActor().getItems().addItem((int) loot.getId(), (int) loot.getAmount());
-                                    this.getActor().sendMessage("You received #" + loot.getAmount() + " @" + loot.getId() + " !");
+                                    this.getActor().sendMessage("^Loot You received $" + NumberFormat.getInstance().format(loot.getAmount()) + " @" + loot.getId() + " @bla@!");
                                 });
                     });
                 });

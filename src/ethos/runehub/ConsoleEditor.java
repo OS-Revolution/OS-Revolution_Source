@@ -1,9 +1,6 @@
 package ethos.runehub;
 
-import ethos.runehub.editor.HerbloreItemActionEditor;
-import ethos.runehub.editor.RunecraftAltarNodeEditor;
-import ethos.runehub.editor.SmeltingItemActionEditor;
-import ethos.runehub.editor.ThievingStallEditor;
+import ethos.runehub.editor.*;
 import ethos.runehub.entity.item.ItemInteraction;
 import ethos.runehub.entity.item.ItemInteractionLoader;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReaction;
@@ -138,6 +135,12 @@ public class ConsoleEditor {
                 break;
             case "smelt-editor":
                 SmeltingItemActionEditor.getInstance().run(this);
+                break;
+            case "equipment-editor":
+                new EquipmentEditor().run(this);
+                break;
+            case "mob":
+                new MobEditor().run(this);
                 break;
             default:
                 runEditor(this.getPrompt("No Such Editor. Enter an Editor Type"));

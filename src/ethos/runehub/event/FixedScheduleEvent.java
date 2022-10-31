@@ -1,16 +1,28 @@
 package ethos.runehub.event;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
-public abstract class FixedScheduleEvent {
+public abstract class FixedScheduleEvent implements Runnable {
 
     public abstract void execute();
 
-
-    public FixedScheduleEvent() {
-
+    @Override
+    public void run() {
+        execute();
     }
 
+    public long getRate() {
+        return rate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public FixedScheduleEvent(long rate, String name) {
+        this.rate = rate;
+        this.name = name;
+    }
+
+    private final long rate;
+    private final String name;
 
 }

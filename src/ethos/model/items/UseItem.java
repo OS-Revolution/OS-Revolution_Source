@@ -165,10 +165,18 @@ public class UseItem {
                 });
 
         switch (objectID) {
-            case 8554:
-            case 8555:
             case 7849:
-            case 8142:
+            case 8554:
+            case 8552:
+            case 8556:
+            case 8555:
+            case 8553:
+            case 8557:
+            case 7848:
+            case 7850:
+            case 8152:
+            case 8151:
+            case 8153:
                 if (itemId == Farming.COMPOST || itemId == Farming.SUPERCOMPOST || itemId == Farming.ULTRACOMPOST || itemId == Farming.BOTTOMLESS_COMPOST)
                     c.getSkillController().getFarming().train(new ApplyCompostAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
                 else

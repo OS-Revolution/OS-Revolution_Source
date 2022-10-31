@@ -1,7 +1,6 @@
 package ethos.runehub.dialog;
 
 import ethos.model.players.Player;
-import ethos.runehub.entity.mob.HostileMobIdContextLoader;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -160,10 +159,10 @@ public class DialogSequence {
                 player.getAttributes().setActiveDialogSequence(null);
             }
         }).onSend();
-        System.out.println("Current Sequence: " + currentSequence);
     }
 
     public void onOptionOne() {
+        try {
         dialogMap.getOrDefault(currentSequence, new Dialog() {
             @Override
             public void onSend() {
@@ -174,9 +173,13 @@ public class DialogSequence {
                 player.getAttributes().setActiveDialogSequence(null);
             }
         }).getOptions().get(0).onAction();
+        } catch (IndexOutOfBoundsException e) {
+            Logger.getGlobal().warning(e.getMessage());
+        }
     }
 
     public void onOptionTwo() {
+        try {
         dialogMap.getOrDefault(currentSequence, new Dialog() {
             @Override
             public void onSend() {
@@ -187,9 +190,13 @@ public class DialogSequence {
                 player.getAttributes().setActiveDialogSequence(null);
             }
         }).getOptions().get(1).onAction();
+        } catch (IndexOutOfBoundsException e) {
+            Logger.getGlobal().warning(e.getMessage());
+        }
     }
 
     public void onOptionThree() {
+        try {
         dialogMap.getOrDefault(currentSequence, new Dialog() {
             @Override
             public void onSend() {
@@ -200,9 +207,13 @@ public class DialogSequence {
                 player.getAttributes().setActiveDialogSequence(null);
             }
         }).getOptions().get(2).onAction();
+        } catch (IndexOutOfBoundsException e) {
+            Logger.getGlobal().warning(e.getMessage());
+        }
     }
 
     public void onOptionFour() {
+        try {
         dialogMap.getOrDefault(currentSequence, new Dialog() {
             @Override
             public void onSend() {
@@ -213,19 +224,26 @@ public class DialogSequence {
                 player.getAttributes().setActiveDialogSequence(null);
             }
         }).getOptions().get(3).onAction();
+        } catch (IndexOutOfBoundsException e) {
+            Logger.getGlobal().warning(e.getMessage());
+        }
     }
 
     public void onOptionFive() {
-        dialogMap.getOrDefault(currentSequence, new Dialog() {
-            @Override
-            public void onSend() {
-                player.getPA().resetVariables();
-                player.getPA().removeAllWindows();
-                player.getPA().closeAllWindows();
-                currentSequence = 1;
-                player.getAttributes().setActiveDialogSequence(null);
-            }
-        }).getOptions().get(4).onAction();
+        try {
+            dialogMap.getOrDefault(currentSequence, new Dialog() {
+                @Override
+                public void onSend() {
+                    player.getPA().resetVariables();
+                    player.getPA().removeAllWindows();
+                    player.getPA().closeAllWindows();
+                    currentSequence = 1;
+                    player.getAttributes().setActiveDialogSequence(null);
+                }
+            }).getOptions().get(4).onAction();
+        } catch (IndexOutOfBoundsException e) {
+            Logger.getGlobal().warning(e.getMessage());
+        }
     }
 
     public DialogSequence(DialogSequenceBuilder builder) {

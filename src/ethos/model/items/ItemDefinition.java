@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import ethos.runehub.entity.item.equipment.EquipmentCache;
+import ethos.runehub.entity.item.equipment.EquipmentDAO;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
 
 /**
  * Holds information regarding items
@@ -223,7 +226,7 @@ public class ItemDefinition {
 	 * @return The slot.
 	 */
 	public byte getSlot() {
-		return slot;
+		return EquipmentDAO.getInstance().getAllEntries().stream().anyMatch(equipment -> equipment.getItemId() == id) ?(byte) EquipmentCache.getInstance().read((int) id).getSlot() : slot;
 	}
 
 	/**
@@ -277,7 +280,7 @@ public class ItemDefinition {
 	 * @return
 	 */
 	public boolean isWearable() {
-		return wearable;
+		return ItemIdContextLoader.getInstance().read((int) id).isEquippable();
 	}
 
 	/**

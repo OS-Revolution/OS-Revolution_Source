@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import ethos.runehub.entity.mob.hostile.HostileMobContext;
 import org.runehub.api.io.load.JsonSerializer;
 import org.runehub.api.model.entity.item.Drop;
 

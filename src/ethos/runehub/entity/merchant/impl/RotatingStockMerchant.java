@@ -19,7 +19,8 @@ public class RotatingStockMerchant extends Merchant {
                         (int) loot.getId(),
                         (int) loot.getAmount(),
                         false,
-                        0.0D
+                        0.0D,
+                        false
                 ));
         });
     }

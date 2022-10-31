@@ -35,8 +35,8 @@ public class StealFromStallAction extends SupportSkillAction {
     protected void onTick() {
         this.updateAnimation();
         if (this.isSuccessful(
-                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getEfficiency())
-                , (int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getEfficiency()))) {
+                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getEfficiencyBonus())
+                , (int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getEfficiencyBonus()))) {
             this.onSuccess();
         } else {
             this.onFailure();
@@ -92,7 +92,7 @@ public class StealFromStallAction extends SupportSkillAction {
         final RenewableNode node = RenewableNodeLoader.getInstance().read(targetedNodeContext.getNodeId());
         final int baseMinRoll = node.getDepletionMinRoll();
         final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getDepletionOdds());
-        final double minRollModifier = this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getEfficiency();
+        final double minRollModifier = this.getActor().getSkillController().getSupportSkill(this.getSkillId()).getEfficiencyBonus();
         final double minRoll = baseMinRoll + minRollModifier;
 
         return baseMinRoll <= 0 || playerBaseRoll >= minRoll;

@@ -19,6 +19,7 @@ public class PortableBankChest extends Item {
         protected void playerHasItemPrerequisite() {
             super.playerHasItemPrerequisite();
             Preconditions.checkArgument(PreconditionUtils.isTrue(this.getActor().getContext().getPlayerSaveData().getPortableBankUsesAvailable() > 0), "Your @8152 is out of charges.");
+            Preconditions.checkArgument(this.getActor().getAttributes().isMember(),"You must be a member to use this.");
         }
 
         @Override

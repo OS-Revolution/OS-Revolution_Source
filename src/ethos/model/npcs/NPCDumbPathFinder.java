@@ -318,38 +318,39 @@ private static final int NORTH = 0, EAST = 1,  SOUTH = 2, WEST = 3;
 	
 	@SuppressWarnings("static-access")
 	public static boolean canMoveTo(final NPC mob, final int direction) {
-		if (direction == -1) {
-			return false;
-		}
-		
-		final int x = mob.getX();
-		final int y = mob.getY();
-		final int z = mob.heightLevel > 3 ? mob.heightLevel % 4 : mob.heightLevel;
+		try {
+			if (direction == -1) {
+				return false;
+			}
 
-		final int x5 = mob.getX() + NPCClipping.DIR[direction][0];
-		final int y5 = mob.getY() + NPCClipping.DIR[direction][1];
+			final int x = mob.getX();
+			final int y = mob.getY();
+			final int z = mob.heightLevel > 3 ? mob.heightLevel % 4 : mob.heightLevel;
 
-		final int size = mob.getSize();
+			final int x5 = mob.getX() + NPCClipping.DIR[direction][0];
+			final int y5 = mob.getY() + NPCClipping.DIR[direction][1];
 
-		for (int i = 1; i < size + 1; i++) {
-			for (int k = 0; k < NPCClipping.SIZES[i].length; k++) {
-				int x3 = x + NPCClipping.SIZES[i][k][0];
-				int y3 = y + NPCClipping.SIZES[i][k][1];
+			final int size = mob.getSize();
 
-				int x2 = x5 + NPCClipping.SIZES[i][k][0];
-				int y2 = y5 + NPCClipping.SIZES[i][k][1];
+			for (int i = 1; i < size + 1; i++) {
+				for (int k = 0; k < NPCClipping.SIZES[i].length; k++) {
+					int x3 = x + NPCClipping.SIZES[i][k][0];
+					int y3 = y + NPCClipping.SIZES[i][k][1];
 
-				if (NPCClipping.withinBlock(x, y, size, x2, y2)) {
-					continue;
-				}
+					int x2 = x5 + NPCClipping.SIZES[i][k][0];
+					int y2 = y5 + NPCClipping.SIZES[i][k][1];
 
-				Region region = Region.getRegion(x3, y3);
-				if (region == null)
-					return false;
-				
-				if (!Region.getRegion(x3, y3).canMove(x3, y3, z, direction)) {
-					return false;
-				}
+					if (NPCClipping.withinBlock(x, y, size, x2, y2)) {
+						continue;
+					}
+
+					Region region = Region.getRegion(x3, y3);
+					if (region == null)
+						return false;
+
+					if (!Region.getRegion(x3, y3).canMove(x3, y3, z, direction)) {
+						return false;
+					}
 
 				/*if (!virtual) {
 					if (Region.getRegion(x2, y2).isNpcOnTile(x2, y2, z))
@@ -359,19 +360,21 @@ private static final int NORTH = 0, EAST = 1,  SOUTH = 2, WEST = 3;
 						return false;
 				}*/
 
-				for (int j = 0; j < 8; j++) {
-					int x6 = x3 + NPCClipping.DIR[j][0];
-					int y6 = y3 + NPCClipping.DIR[j][1];
+					for (int j = 0; j < 8; j++) {
+						int x6 = x3 + NPCClipping.DIR[j][0];
+						int y6 = y3 + NPCClipping.DIR[j][1];
 
-					if (NPCClipping.withinBlock(x5, y5, size, x6, y6)) {
-						if (!Region.getRegion(x3, y3).canMove(x3, y3, z, j)) {
-							return false;
+						if (NPCClipping.withinBlock(x5, y5, size, x6, y6)) {
+							if (!Region.getRegion(x3, y3).canMove(x3, y3, z, j)) {
+								return false;
+							}
 						}
 					}
 				}
 			}
-		}
+		} catch (NullPointerException e) {
 
+		}
 		return true;
 	}
 

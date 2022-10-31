@@ -39,6 +39,19 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return new GatheringTool(
+                952,
+                1,
+                SkillDictionary.Skill.FARMING.getId(),
+                1.0,
+                0,
+                0f,
+                830
+        );
+    }
+
+    @Override
     public void onTick() {
         if (cycle < this.getMinHarvest()) {
             this.updateAnimation();
@@ -100,15 +113,7 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
             public GatheringNode getNode() {
                 return new GatheringNode(nodeId, 1, 4, -1L, 1000, SkillDictionary.Skill.FARMING.getId(), 1000);
             }
-        }, 3, new GatheringTool(
-                952,
-                1,
-                SkillDictionary.Skill.FARMING.getId(),
-                1.0,
-                0,
-                0f,
-                830
-        ));
+        }, 3);
         this.config = config;
     }
 

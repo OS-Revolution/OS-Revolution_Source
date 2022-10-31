@@ -110,6 +110,8 @@ public class PotionEffectFactory extends LazyLoader<Integer, Effect> {
                 return new SkillAdjustmentEffect(key,6,4,1.0f,false);
             case 46: //antifire
                 return new AntiFireEffect(key,360);
+            case 47:
+                return new XPBoostingEffect(key,10000,8);
 
             default: throw new NullPointerException("No Effect with ID: " + key);
         }

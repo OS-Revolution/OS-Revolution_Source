@@ -24,12 +24,6 @@ import java.util.*;
 
 public class SailingUI extends GameUI {
 
-    private void registerButton(ActionListener actionListener, int id) {
-        Button button = new Button(id);
-        button.addActionListener(actionListener);
-        buttonMap.put(id,button);
-    }
-
     private void drawShipName() {
         if (this.getPlayer().getContext().getPlayerSaveData().getShipSlot()[selectedShipSlot][Sailing.SHIP_ID] > 0) {
             final String shipName = ShipLoader.getInstance().read(this.getPlayer().getContext().getPlayerSaveData().getShipSlot()[selectedShipSlot][Sailing.SHIP_ID]).getName();
@@ -80,7 +74,7 @@ public class SailingUI extends GameUI {
 
     @Override
     protected void onAction(int buttonId) {
-        buttonMap.get(buttonId).onAction();
+        super.onAction(buttonId);
         this.refresh();
     }
 

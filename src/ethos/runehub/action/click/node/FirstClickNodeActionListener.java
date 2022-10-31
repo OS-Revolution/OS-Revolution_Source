@@ -77,6 +77,14 @@ public class FirstClickNodeActionListener {
                 return new CloseDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 10:
             case 11:
+            case 19004:
+            case 20785:
+            case 23706:
+            case 23732:
+            case 19003:
+            case 20784:
+            case 23705:
+            case 23731:
                 return new LadderAction(player, nodeId, nodeX, nodeY, nodeZ);
 //            case 16902:
 //            case 16903:
@@ -150,13 +158,31 @@ public class FirstClickNodeActionListener {
             case 6945:
                 return new OpenBankAction(player,nodeId,nodeX,nodeY);
             case 8554:
+            case 8552:
+            case 8556:
             case 8555:
+            case 8553:
+            case 8557:
             case 7849:
+            case 7848:
+            case 7850:
             case 8152:
+            case 8151:
+            case 8153:
                 return new FirstClickFarmingPatchAction(player,nodeId,nodeX,nodeY);
             case 19206:
             case 19207:
+            case 17100:
+            case 17009:
+            case 23653:
+            case 23654:
+            case 23727:
+            case 23728:
                 return new FirstClickRiftDoorAction(player,nodeId,nodeX,nodeY,nodeZ);
+            case 13636:
+                return new FirstClickRiftPortal(player,nodeId,nodeX,nodeY);
+            case 13615:
+                return new FirstClickOpenRiftPortal(player,nodeId,nodeX,nodeY);
             default:
                 Logger.getGlobal().fine("First Click Action[Id:" + nodeId + ", X:" +nodeX +", Y:" + nodeY + ", Z:" + nodeZ + "]");
                 throw new NullPointerException("Nothing interesting happens.");

@@ -2,6 +2,7 @@ package ethos.runehub.skill.gathering.woodcutting.action;
 
 import ethos.model.players.Player;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
+import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.node.context.impl.WoodcuttingNodeContext;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.Loot;
@@ -14,6 +15,11 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
     @Override
     protected void onDeplete() {
         this.onRespawn();
+    }
+
+    @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool();
     }
 
     @Override
@@ -35,6 +41,6 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
     }
 
     public ActiveWoodcuttingSkillAction(Player player, int skillId, int nodeId, int nodeX, int nodeY, int nodeZ) {
-        super(player, skillId, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4, player.getSkillController().getWoodcutting().getGetBestAvailableTool());
+        super(player, skillId, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4 );
     }
 }

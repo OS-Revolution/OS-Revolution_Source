@@ -6,7 +6,6 @@ import ethos.runehub.action.click.node.ClickNodeAction;
 import ethos.runehub.skill.gathering.mining.action.ActiveMiningSkillAction;
 import ethos.runehub.skill.node.impl.gatherable.impl.MiningNode;
 import ethos.runehub.skill.node.io.MiningNodeLoader;
-import org.runehub.api.util.math.MathUtils;
 
 import java.util.logging.Logger;
 
@@ -56,7 +55,7 @@ public class FirstClickRockAction extends ClickNodeAction {
         this.activeNode = MiningNodeLoader.getInstance().read(nodeId);
         this.nodeZ = nodeZ;
         this.baseCycle = activeNode.getMiningCycleTicks();
-        this.cycleModifier = (int) attachment.getSkillController().getMining().getEfficiency();
+        this.cycleModifier = (int) attachment.getSkillController().getMining().getEfficiencyBonus();
         this.miningTicks = Math.max(baseCycle - cycleModifier, 4);
     }
 

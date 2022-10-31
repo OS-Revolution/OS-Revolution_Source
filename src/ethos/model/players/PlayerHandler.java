@@ -373,6 +373,15 @@ public class PlayerHandler {
 		return Arrays.asList(clients).stream().filter(Objects::nonNull).collect(Collectors.toList());
 	}
 
+	public static Optional<Player> getPlayer(int index) {
+		try {
+			return Optional.of(players[index]);
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+		return Optional.empty();
+	}
+
 	@Deprecated
 	public static List<Player> getPlayerList() {
 		return Arrays.asList(players).stream().filter(Objects::nonNull).collect(Collectors.toList());

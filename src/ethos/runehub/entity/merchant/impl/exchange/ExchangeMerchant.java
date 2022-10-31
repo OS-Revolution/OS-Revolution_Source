@@ -76,7 +76,7 @@ public class ExchangeMerchant extends Merchant {
     @Override
     public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
         final int unitPrice = this.getPriceMerchantWillBuyFor(itemId);
-        if (player.getContext().getPlayerSaveData().getExchangeSlots() > ExchangeAccountDatabase.getInstance().read(player.getContext().getId()).getTotalActiveOffers()) {
+        if (player.getAttributes().getExchangeSlots() > ExchangeAccountDatabase.getInstance().read(player.getContext().getId()).getTotalActiveOffers()) {
             if (player.getItems().playerHasItem(itemId, amount)) {
                 player.getItems().deleteItem2(itemId, amount);
                 if (!ItemIdContextLoader.getInstance().read(itemId).isNoted())
@@ -92,7 +92,7 @@ public class ExchangeMerchant extends Merchant {
                 player.sendMessage("You can't sell what you don't have.");
             }
         } else {
-            player.sendMessage("You've reached your maximum offer limit of #" + player.getContext().getPlayerSaveData().getExchangeSlots());
+            player.sendMessage("You've reached your maximum offer limit of #" + player.getAttributes().getExchangeSlots());
         }
         return false;
     }
@@ -140,7 +140,8 @@ public class ExchangeMerchant extends Merchant {
                     itemId,
                     itemMap.get(itemId).value(),
                     false,
-                    0.D));
+                    0.D,
+                    false));
         });
     }
 

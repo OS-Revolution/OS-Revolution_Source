@@ -35,14 +35,14 @@ public class Trade extends Multiplayer {
 		if (requested.getBankPin().requiresUnlock()) {
 			return false;
 		}
-		if (!player.getMode().isTradingPermitted()) {
-			player.sendMessage("You are not permitted to trade other players.");
-			return false;
-		}
-		if (!requested.getMode().isTradingPermitted()) {
-			player.sendMessage("That player is on a game mode that restricts trading.");
-			return false;
-		}
+//		if (!player.getMode().isTradingPermitted()) {
+//			player.sendMessage("You are not permitted to trade other players.");
+//			return false;
+//		}
+//		if (!requested.getMode().isTradingPermitted()) {
+//			player.sendMessage("That player is on a game mode that restricts trading.");
+//			return false;
+//		}
 		if (player.playTime < (3000)) {
 			player.sendMessage("You cannot request a trade, you must play for at least 30 minutes.");
 			return false;
@@ -107,7 +107,7 @@ public class Trade extends Multiplayer {
 			session = new TradeSession(Arrays.asList(player, requested), MultiplayerSessionType.TRADE);
 			if (Server.getMultiplayerSessionListener().appendable(session)) {
 				player.sendMessage("Sending trade offer...");
-				requested.sendMessage(player.playerName + ":tradereq:");
+				requested.sendMessage(player.playerName + " :tradereq:");
 				session.getStage().setAttachment(player);
 				Server.getMultiplayerSessionListener().add(session);
 			}

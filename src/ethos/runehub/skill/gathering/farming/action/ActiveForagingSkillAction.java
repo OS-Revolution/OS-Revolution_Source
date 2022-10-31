@@ -3,6 +3,7 @@ package ethos.runehub.skill.gathering.farming.action;
 import ethos.Server;
 import ethos.model.players.Player;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
+import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.node.context.impl.ForagingNodeContext;
 import ethos.runehub.skill.node.io.ForagingSeedLoader;
 import ethos.world.objects.GlobalObject;
@@ -21,6 +22,11 @@ public class ActiveForagingSkillAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return this.getActor().getSkillController().getForaging().getGetBestAvailableTool();
+    }
+
+    @Override
     protected void onEvent() {
         final int nodeId = this.getTargetedNodeContext().getNodeId();
         final int seedId = ForagingSeedLoader.getInstance().read(nodeId).getSeedId();
@@ -36,6 +42,6 @@ public class ActiveForagingSkillAction extends GatheringSkillAction {
     }
 
     public ActiveForagingSkillAction(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
-        super(player, 19, new ForagingNodeContext(nodeId,nodeX,nodeY,nodeZ), 4,player.getSkillController().getForaging().getGetBestAvailableTool());
+        super(player, 19, new ForagingNodeContext(nodeId,nodeX,nodeY,nodeZ), 4);
     }
 }

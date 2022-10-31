@@ -55,16 +55,24 @@ public class Farming extends GatheringSkill {
     public Optional<FarmingConfig> getConfig(int nodeId, int regionId) {
         switch (nodeId) {
             case 8554:
-                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+            case 8552:
+            case 8556:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 0).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
             case 8555:
-                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+            case 8553:
+            case 8557:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 8).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
             case 7849:
-                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+            case 7848:
+            case 7850:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 16).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
             case 8152:
-                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream()
+            case 8151:
+            case 8153:
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 24).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
         }
         return Optional.empty();
@@ -93,7 +101,7 @@ public class Farming extends GatheringSkill {
 
     public void updateAllConfigs() {
         final AdjustableInteger varbit = new AdjustableInteger(0);
-        this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().keySet().forEach(key -> this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(key).forEach(config -> {
+        this.getPlayer().getContext().getPlayerSaveData().farmingConfig().keySet().forEach(key -> this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(key).forEach(config -> {
                     varbit.add(config.varbit());
                 }
         ));
@@ -101,8 +109,8 @@ public class Farming extends GatheringSkill {
     }
 
     public void updateFarm(int regionId) {
-        if (this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().containsKey(regionId)) {
-            final int varbit = this.getPlayer().getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+        if (this.getPlayer().getContext().getPlayerSaveData().farmingConfig().containsKey(regionId)) {
+            final int varbit = this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
             this.getPlayer().getPA().sendConfig(529,varbit);
         }
     }

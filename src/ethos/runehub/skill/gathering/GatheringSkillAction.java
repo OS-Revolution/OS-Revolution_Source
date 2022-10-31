@@ -5,19 +5,22 @@ import ethos.Server;
 import ethos.clip.Region;
 import ethos.clip.WorldObject;
 import ethos.model.players.Player;
+import ethos.runehub.RunehubUtils;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
+import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.context.impl.GatheringNodeContext;
 import ethos.runehub.skill.node.impl.RenewableNode;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.util.PreconditionUtils;
 import ethos.world.objects.GlobalObject;
 import org.runehub.api.io.load.impl.LootTableLoader;
-import org.runehub.api.util.SkillDictionary;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public abstract class GatheringSkillAction extends SkillAction {
 
@@ -40,8 +43,8 @@ public abstract class GatheringSkillAction extends SkillAction {
         Logger.getGlobal().fine("Starting Harvest Sequence");
         this.updateAnimation();
         if (this.isSuccessful(
-                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower())
-                ,(int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()))) {
+                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus())
+                ,(int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus()))) {
             this.onGather();
         }
     }
@@ -51,6 +54,9 @@ public abstract class GatheringSkillAction extends SkillAction {
         this.getActor().startAnimation(this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
                 this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().get(this.getSkillId()) : tool.getAnimationId());
         this.getActor().turnPlayerTo(this.getTargetedNodeContext().getX(),this.getTargetedNodeContext().getY());
+        this.getActor().getSkillController().getFishing().setPower(this.getGetBestAvailableTool().getBasePower());
+        this.getActor().getSkillController().getFishing().setEfficiency(this.getGetBestAvailableTool().getBaseEfficiency());
+        this.getActor().getSkillController().getFishing().setGains(this.getGetBestAvailableTool().getXpGainMultiplier());
     }
 
     @Override
@@ -71,9 +77,9 @@ public abstract class GatheringSkillAction extends SkillAction {
     @Override
     protected void validateLevelRequirements() {
         Preconditions.checkArgument(PreconditionUtils.isTrue(this.getActor().getSkillController().getLevel(this.getSkillId()) >= this.getTargetedNodeContext().getNode().getLevelRequirement()),
-                "You need a ?"
-                        + SkillDictionary.getSkillNameFromId(this.getSkillId())
-                        + " level of at least #"
+                "You need a $"
+                        + RunehubUtils.getSkillName(this.getSkillId())
+                        + " level of at least $"
                         + this.getTargetedNodeContext().getNode().getLevelRequirement()
                         + " to do this.");
 
@@ -87,7 +93,7 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     @Override
     protected void validateInventory() {
-        Preconditions.checkArgument(this.getActor().getItems().freeSlots() >= 1, "You must have at least #" + 1 + " free inventory slot to do this.");
+        Preconditions.checkArgument(this.getActor().getItems().freeSlots() >= 1, "You must have at least $" + 1 + " free inventory slot to do this.");
     }
 
     @Override
@@ -107,7 +113,7 @@ public abstract class GatheringSkillAction extends SkillAction {
         final RenewableNode node = RenewableNodeLoader.getInstance().read(this.getTargetedNodeContext().getNode().getId());
         final int baseMinRoll = node.getDepletionMinRoll();
         final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getDepletionOdds());
-        final double minRollModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEfficiency();
+        final double minRollModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEfficiencyBonus();
         final double minRoll = baseMinRoll + minRollModifier;
 
         return baseMinRoll <= 0 || playerBaseRoll >= minRoll;
@@ -181,11 +187,12 @@ public abstract class GatheringSkillAction extends SkillAction {
         this.tool = tool;
     }
 
+    protected abstract GatheringTool getGetBestAvailableTool() throws NullPointerException;
 
-    public GatheringSkillAction(Player player, int skillId, GatheringNodeContext<?> targetedNodeContext, int ticks, GatheringTool tool) {
+    public GatheringSkillAction(Player player, int skillId, GatheringNodeContext<?> targetedNodeContext, int ticks) {
         super(player, skillId, ticks);
         this.targetedNodeContext = targetedNodeContext;
-        this.tool = tool;
+        this.tool = this.getGetBestAvailableTool();
     }
 
     private GatheringTool tool;

@@ -22,7 +22,8 @@ public class Merchant {
                     lootTableEntry.getId(),
                     lootTableEntry.getAmount().getMax(),
                     false,
-                    0.D));
+                    0.D,
+                    false));
         });
     }
 
@@ -154,7 +155,7 @@ public class Merchant {
     public Merchant(int currencyId, int shopId, String name, long merchandiseTableId, List<Integer> buyBackIds) {
         this(
                 LootTableLoader.getInstance().read(merchandiseTableId).getLootTableEntries().stream()
-                        .map(lootTableEntry -> new MerchandiseSlot(lootTableEntry.getId(), lootTableEntry.getAmount().getMax(), false, 0.0D))
+                        .map(lootTableEntry -> new MerchandiseSlot(lootTableEntry.getId(), lootTableEntry.getAmount().getMax(), false, 0.0D,false))
                         .collect(Collectors.toList()),
                 currencyId,
                 shopId,

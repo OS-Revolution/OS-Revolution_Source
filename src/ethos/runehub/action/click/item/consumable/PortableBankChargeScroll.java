@@ -1,9 +1,17 @@
 package ethos.runehub.action.click.item.consumable;
 
+import com.google.common.base.Preconditions;
+import ethos.model.items.ItemAssistant;
 import ethos.model.players.Player;
 import ethos.runehub.action.click.item.ClickConsumableItemAction;
 
 public class PortableBankChargeScroll extends ClickConsumableItemAction {
+
+    @Override
+    protected void playerHasItemPrerequisite() {
+        super.playerHasItemPrerequisite();
+        Preconditions.checkArgument(this.getActor().getAttributes().isMember(),"You must be a member to use this.");
+    }
 
     @Override
     protected void removeItem() {

@@ -3,6 +3,7 @@ package ethos.runehub.loot;
 import com.google.common.base.Preconditions;
 import ethos.model.items.ItemDefinition;
 import ethos.model.players.Player;
+import ethos.runehub.markup.RSString;
 import ethos.util.PreconditionUtils;
 import org.runehub.api.io.data.impl.LootTableContainerDAO;
 import org.runehub.api.io.load.impl.LootTableContainerDefinitionLoader;
@@ -55,8 +56,6 @@ public class Lootbox extends LootTableContainer {
             this.openInterface();
             this.drawPrizes();
             player.getAttributes().setActiveLootBox(this);
-
-//            this.spin();
         } catch (IllegalArgumentException e) {
             player.sendMessage(e.getMessage());
         }
@@ -68,16 +67,13 @@ public class Lootbox extends LootTableContainer {
     }
 
     public List<Loot> spin() {
-//        this.openInterface();
         player.boxCurrentlyUsing = this.getContainerId();
         player.sendPlainMessage(":spin");
-//        player.getAttributes().setActiveLootBox(this);
         player.getItems().deleteItem(this.getContainerId(), 1);
         return this.selectPrize(prize);
     }
 
     private Loot getPrize() {
-//        new ArrayList<>(lootable.roll(player.getAttributes().getMagicFind())).get(0);
         final Loot loot = new ArrayList<>(LootTableLoader.getInstance().read(lootTable.getId()).roll(player.getAttributes().getMagicFind())).get(0);
         return loot;
     }
@@ -91,9 +87,6 @@ public class Lootbox extends LootTableContainer {
 
         int prizeSlot = 55;
         for (int i = 0; i < 66; i++) {
-//            LootTableEntry entry = potentialLoot.get(random.nextInt(potentialLoot.size()));
-//            Loot item = new Loot(entry.getId(),entry.getAmount().getRandomValue(),entry.getChance(),lootTable.getSourceId());
-//            final int previousId = (int) item.getId();
             int prizeIndex = random.nextInt(prizePool.size());
             if (i != prizeSlot)
                 sendItem(i, prizeSlot, (int) prize.getId(), (int) prizePool.get(prizeIndex).getId(), (int) prizePool.get(prizeIndex).getAmount());
@@ -103,22 +96,8 @@ public class Lootbox extends LootTableContainer {
     }
 
     private List<Loot> selectPrize(Loot loot) {
-
-//        final Loot lootTable = new ArrayList<>(this.roll(player.getAttributes().getMagicFind())).get(0);
-//        final Loot loot = new ArrayList<>(LootTableLoader.getInstance().read(lootTable.getId()).roll(player.getAttributes().getMagicFind())).get(0);
         final List<Loot> items = new ArrayList<>();
-//        final List<LootTableEntry> potentialLoot = new ArrayList<>();
-//
-//        this.getLootTables().forEach(table -> {
-//            potentialLoot.addAll(LootTableLoader.getInstance().read(table.getId()).getLootTableEntries());
-//        });
-
         items.add(loot);
-//        for (int i=0; i<66; i++) {
-//            final int previousId = potentialLoot.get(new Random().nextInt(potentialLoot.size())).getId();
-//            sendItem(i, 55, (int) loot.getId(), previousId,1);
-//        }
-
         final String name = ItemDefinition.forId((int) loot.getId()).getName();
         final Tier tier = getPrizeTier(loot);
         final long amount = loot.getAmount();
@@ -127,9 +106,9 @@ public class Lootbox extends LootTableContainer {
             @Override
             public void run() {
                 if (name.endsWith("s") || amount > 1) {
-                    player.sendMessage("Congratulations, you have won " + "[" + tier + "] " + name + " x" + amount + "@bla@!");
+                    player.sendMessage("^Lootbox Congratulations, you have won " + "[" + "<col=" + getColor(tier) + tier + "@bla@] @blu@" + name + " @red@x" + amount + "@bla@!");
                 } else {
-                    player.sendMessage("Congratulations, you have won a " + "[" + tier + "] " + name + " x" + amount + "@bla@!");
+                    player.sendMessage("^Lootbox Congratulations, you have won a " + "[" + "<col=" + getColor(tier) + tier + "@bla@] @blu@" + name + " @red@ x" + amount + "@bla@!");
                 }
                 player.getItems().addItem((int) loot.getId(), (int) loot.getAmount());
                 player.getItems().updateItems();
@@ -142,7 +121,26 @@ public class Lootbox extends LootTableContainer {
         return items;
     }
 
-    private void clearWheel( ) {
+    private String getColor(Tier tier) {
+        if (tier.getId() == 1) {
+            return "0cc1c4>";
+        } else if (tier.getId() == 2) {
+            return "2c8f18>";
+        }else if (tier.getId() == 3) {
+            return "d7de10>";
+        }else if (tier.getId() == 4) {
+            return "de8810>";
+        }else if (tier.getId() == 5) {
+            return "de1010>";
+        }else if (tier.getId() == 6) {
+            return "7e10de>";
+        }else if (tier.getId() == 7) {
+            return "DE10D7>";
+        }
+        return "0";
+    }
+
+    private void clearWheel() {
         player.sendPlainMessage(":resetBox");
         for (int i = 0; i < 66; i++) {
             this.prizeWheelInterface(-1, 1, ITEM_FRAME, i);

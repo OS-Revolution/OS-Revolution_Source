@@ -14,13 +14,15 @@ import java.util.zip.GZIPInputStream;
 
 import ethos.model.npcs.NPC;
 import ethos.model.players.Player;
+import ethos.runehub.world.WorldController;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.util.Misc;
 
 public class Region {
 
 	private static Region[] regions;
 	private int id;
-	private int[][][] clips = new int[4][][];
+	public int[][][] clips = new int[4][][];
 	private int[][][] shootable = new int[4][][];
 	private boolean members = false;
 
@@ -312,7 +314,7 @@ public class Region {
 	 * @param height the object z pos
 	 * @return true if the object exists in the region, otherwise false
 	 */
-	private static boolean objectExists(int region, int id, int x, int y, int height) {
+	public static boolean objectExists(int region, int id, int x, int y, int height) {
 		List<WorldObject> objects = worldObjects.get(region);
 		for (WorldObject object : objects) {
 			if (object == null) {
@@ -325,7 +327,7 @@ public class Region {
 		return false;
 	}
 
-	private void addProjectileClip(int x, int y, int height, int shift) {
+	public void addProjectileClip(int x, int y, int height, int shift) {
 		int regionAbsX = (id >> 8) * 64;
 		int regionAbsY = (id & 0xff) * 64;
 		if (shootable[height] == null) {
@@ -334,7 +336,7 @@ public class Region {
 		shootable[height][x - regionAbsX][y - regionAbsY] |= shift;
 	}
 
-	private void removeProjectileClip(int x, int y, int height, int shift) {
+	public void removeProjectileClip(int x, int y, int height, int shift) {
 		int regionAbsX = (id >> 8) * 64;
 		int regionAbsY = (id & 0xff) * 64;
 		if (shootable[height] == null) {
@@ -659,7 +661,7 @@ public class Region {
 				return region;
 			}
 		}
-		return null;
+		return null ;
 	}
 
 	public Region(int id, boolean members) {
@@ -1090,6 +1092,45 @@ public class Region {
 		}
 	}
 
+	public static void loadRegion(int regionId) {
+		try {
+			System.out.println("Loading mapdata..");
+			File f = new File("./Data/world/map_index.dat");
+			byte[] buffer = new byte[(int) f.length()];
+			DataInputStream dis = new DataInputStream(new FileInputStream(f));
+			dis.readFully(buffer);
+			dis.close();
+			ByteStream in = new ByteStream(buffer);
+			int size = in.readUnsignedWord();
+			int groundFileId = 0;
+			int mapObjectId = 0;
+			for (int i = 0; i < size; i++) {
+				if (regionId == in.readUnsignedWord()) {
+					System.out.println("Loading Region");
+					groundFileId = in.readUnsignedWord();
+					mapObjectId = in.readUnsignedWord();
+					break;
+				}
+			}
+//
+				byte[] file1 = getBuffer(new File("./Data/world/map/" + mapObjectId + ".gz"));
+				byte[] file2 = getBuffer(new File("./Data/world/map/" + groundFileId + ".gz"));
+
+				try {
+					loadMaps(regionId, new ByteStream(file1), new ByteStream(file2));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			Arrays.asList(EXISTANT_OBJECTS).forEach(Region::addWorldObject);
+			int numberOfRegions = worldObjects.size();
+			long totalObjects = worldObjects.values().stream().mapToInt(ArrayList::size).sum();
+			Misc.println("Loaded region configuration: " + numberOfRegions + " regions and " + totalObjects + " total objects.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void load() {
 		try {
 			System.out.println("Loading mapdata..");
@@ -1122,8 +1163,6 @@ public class Region {
 				try {
 					loadMaps(regionIds[i], new ByteStream(file1), new ByteStream(file2));
 				} catch (Exception e) {
-					//System.out.println("Error loading map region: " + regionIds[i] + ", objectFile: " + mapObjectsFileIds[i] + ", floorFile: " + mapGroundFileIds[i]);
-					//e.printStackTrace();
 				}
 			}
 			Arrays.asList(EXISTANT_OBJECTS).forEach(Region::addWorldObject);
@@ -1135,7 +1174,7 @@ public class Region {
 		}
 	}
 
-	private static void loadMaps(int regionId, ByteStream str1, ByteStream str2) {
+	public static void loadMaps(int regionId, ByteStream str1, ByteStream str2) {
 		int absX = (regionId >> 8) * 64;
 		int absY = (regionId & 0xff) * 64;
 		int[][][] someArray = new int[4][64][64];
@@ -1202,7 +1241,7 @@ public class Region {
 		}
 	}
 
-	private static byte[] getBuffer(File f) throws Exception {
+	public static byte[] getBuffer(File f) throws Exception {
 		if (!f.exists()) {
 			return null;
 		}

@@ -6,7 +6,7 @@ import ethos.runehub.skill.Skill;
 public abstract class ArtisanSkill extends Skill {
 
     @Override
-    public double getEfficiency() {
+    public double getEfficiencyBonus() {
         return this.getEfficiencyModifier();
     }
 

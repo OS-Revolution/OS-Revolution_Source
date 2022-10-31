@@ -30,6 +30,7 @@ import ethos.punishments.PunishmentCycleEvent;
 import ethos.punishments.Punishments;
 import ethos.runehub.RunehubConstants;
 import ethos.runehub.TimeUtils;
+import ethos.runehub.skill.gathering.fishing.FishingPlatformController;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
@@ -343,14 +344,14 @@ public class Server {
 			events.submit(new TravellingCommodityMerchantEvent());
 //			events.submit(new ExchangePriceUpdateEvent());
 //			ForageNodeClusterController.getInstance().spawnCluster();
-
+			FishingPlatformController.getInstance().initializePlatform();
 			Listing.loadNextSale();
 			Wogw.init();
 			ItemDefinition.load();
-			DoorDefinition.load();
+//			DoorDefinition.load();
 			GodwarsEquipment.load();
 			GodwarsNPCs.load();
-			dropManager.read();
+//			dropManager.read();
 			CasketRewards.read();
 			ObjectDef.loadConfig();
 			globalObjects.loadGlobalObjectFile();

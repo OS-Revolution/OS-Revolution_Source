@@ -1,21 +1,12 @@
 package ethos.runehub.skill.gathering.woodcutting.action;
 
-import ethos.Server;
-import ethos.clip.Region;
-import ethos.clip.WorldObject;
 import ethos.model.players.Player;
-import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
+import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.node.context.impl.WoodcuttingNodeContext;
-import ethos.world.objects.GlobalObject;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.Loot;
-import org.runehub.api.util.math.geometry.Point;
-import org.runehub.api.util.math.geometry.impl.IrregularPolygon;
-import org.runehub.api.util.math.geometry.impl.Polygon;
-import org.runehub.api.util.math.geometry.impl.Rectangle;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -32,13 +23,18 @@ public class ChopCinnamonTreeSkillAction extends GatheringSkillAction {
         Logger.getGlobal().fine("Starting Harvest Sequence");
         this.updateAnimation();
         if (this.isSuccessful(
-                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower())
-                ,(int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower()))) {
+                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus())
+                ,(int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus()))) {
             this.onGather();
         } else if(this.isSuccessful(32,32)) {
             this.onRespawn();
             this.getActor().sendMessage("Your prolonged chopping has destroyed the bark within!");
         }
+    }
+
+    @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool();
     }
 
     @Override
@@ -60,6 +56,6 @@ public class ChopCinnamonTreeSkillAction extends GatheringSkillAction {
     }
 
     public ChopCinnamonTreeSkillAction(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
-        super(player, 8, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4, player.getSkillController().getWoodcutting().getGetBestAvailableTool());
+        super(player, 8, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4);
     }
 }

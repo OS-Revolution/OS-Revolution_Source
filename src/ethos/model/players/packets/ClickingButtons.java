@@ -12,6 +12,7 @@ import ethos.runehub.action.click.DefaultHomeTeleportAction;
 import ethos.runehub.action.click.InstantHomeTeleportAction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
+import ethos.runehub.ui.impl.PlayPassUI;
 import org.apache.commons.lang3.text.WordUtils;
 
 import ethos.Config;
@@ -107,9 +108,15 @@ public class ClickingButtons implements PacketType {
             return;
         }
 
-        if (c.getAttributes().getActiveUI() != null) {
-            c.getAttributes().getActiveUI().action(actionButtonId);
-        }
+        c.getAttributes().getActionDispatcher().dispatch(actionButtonId);
+
+//        if (c.getAttributes().getActiveUI() != null || c.getAttributes().getTabUI() != null) {
+//            if (c.getAttributes().getActiveUI() != null)
+//                c.getAttributes().getActiveUI().action(actionButtonId);
+//            else if (c.getAttributes().getTabUI() != null) {
+//                c.getAttributes().getTabUI().action(actionButtonId);
+//            }
+//        }
 //		if (c.getTutorial().isActive()) {
 //			if (actionButtonId == 165179) {
 //				c.getTutorial().getIronmanInterface().confirm();
@@ -1261,7 +1268,9 @@ public class ClickingButtons implements PacketType {
                 }
                 break;
 
-
+            case 185152:
+                c.sendUI(new PlayPassUI(c));
+                break;
             case 185148:
                 c.getPA().showInterface(36000);
                 c.getAchievements().drawInterface(0);

@@ -27,6 +27,7 @@ public class SkillAdjustmentEffect extends Effect {
         }
 
         player.getPA().refreshSkill(skillId);
+//        player.getPA().requestUpdates();
     }
 
     public int getSkillId() {

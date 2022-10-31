@@ -39,39 +39,49 @@ public abstract class GatheringSkill extends Skill {
             return bestTool;
     }
 
-    @Override
-    public double getXpGainsRate() {
-        return xpGainsRate * this.getGetBestAvailableTool().getXpGainMultiplier() * this.getGainsModifier();
-    }
+//    @Override
+//    public double getXpGainsRate() {
+//        return xpGainsRate * this.getGetBestAvailableTool().getXpGainMultiplier() * this.getGainsModifier();
+//    }
+//
+//    @Override
+//    public double getEfficiency() {
+//        return Math.toIntExact(Math.round((efficiency + this.getGetBestAvailableTool().getBaseEfficiency())
+//                        * this.getEfficiencyModifier()
+//                )
+//        );
+//    }
+//
+//    public double getPower() {
+//        return this.getGetBestAvailableTool().getBasePower() * this.getPowerModifier();
+//
+//    }
 
-    @Override
-    public double getEfficiency() {
-        return Math.toIntExact(Math.round((efficiency + this.getGetBestAvailableTool().getBaseEfficiency())
-                        * this.getEfficiencyModifier()
-                )
-        );
-    }
+//    public void setPower(double power) {
+//        this.power = power;
+//    }
+//
+//    public void setEfficiency(double efficiency) {
+//        this.efficiency = efficiency;
+//    }
+//
+//    public void setXpGainsRate(double xpGainsRate) {
+//        this.xpGainsRate = xpGainsRate;
+//    }
 
-    public double getPower() {
-        return this.getGetBestAvailableTool().getBasePower() * this.getPowerModifier();
-
-    }
-
-    public ActiveSkillNodeContext<? extends GatheringNode> getActiveNodeContext() {
-        return activeNodeContext;
-    }
-
-    public void setActiveNodeContext(ActiveSkillNodeContext<? extends GatheringNode> activeNodeContext) {
-        this.activeNodeContext = activeNodeContext;
-    }
+//    public ActiveSkillNodeContext<? extends GatheringNode> getActiveNodeContext() {
+//        return activeNodeContext;
+//    }
+//
+//    public void setActiveNodeContext(ActiveSkillNodeContext<? extends GatheringNode> activeNodeContext) {
+//        this.activeNodeContext = activeNodeContext;
+//    }
 
     protected GatheringSkill(Player player) {
         super(player);
-        this.xpGainsRate = 1.0f;
+//        this.xpGainsRate = 1.0f;
     }
 
-    private ActiveSkillNodeContext<? extends GatheringNode> activeNodeContext;
-    private int power; //adds to roll for chance to harvest node
-    private int efficiency; //adds to min roll required to deplete node
-    private float xpGainsRate; //multiplier for xp
+//    private ActiveSkillNodeContext<? extends GatheringNode> activeNodeContext;
+
 }

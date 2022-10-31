@@ -1,6 +1,7 @@
 package ethos.runehub.entity.player;
 
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
+import ethos.runehub.skill.gathering.farming.patch.PatchType;
 import ethos.runehub.skill.support.sailing.voyage.Voyage;
 import org.runehub.api.model.math.impl.AdjustableDouble;
 import org.runehub.api.model.math.impl.AdjustableInteger;
@@ -163,6 +164,8 @@ public class PlayerSaveData {
     }
 
     public Map<Integer, AdjustableInteger> getBonusXp() {
+        if (!bonusXp.containsKey(SkillDictionary.Skill.SAILING.getId()))
+            bonusXp.put(SkillDictionary.Skill.SAILING.getId(),new AdjustableInteger(0));
         return bonusXp;
     }
 
@@ -322,16 +325,39 @@ public class PlayerSaveData {
         return storyVoyagesCompleted;
     }
 
-    public Map<Integer,List<FarmingConfig>> getFarmingConfig() {
-//        if (farmingConfigMap == null || farmingConfigMap.isEmpty())
-//            farmingConfigMap = new HashMap<>(Map.of(
-//                    10548,List.of(
-//                            new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
-//                            new FarmingConfig(0,8,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
-//                            new FarmingConfig(0,16,false,false, PatchType.FLOWER.ordinal(),0,0),
-//                            new FarmingConfig(0,24,false,false, PatchType.HERB.ordinal(),0,0)
-//                    )));
+    public boolean[] getClaimedPassLevel() {
+        if(claimedPassLevel == null)
+            claimedPassLevel = new boolean[50];
+        return claimedPassLevel;
+    }
+
+    public void updateClaimedPassLevel(int index, boolean value) {
+        claimedPassLevel[index] = value;
+    }
+
+    public Map<Integer,List<FarmingConfig>> farmingConfig() {
+        if (farmingConfigMap == null || farmingConfigMap.isEmpty()) {
+            farmingConfigMap = new HashMap<>();
+            farmingConfigMap.put(14391,configForFarm(14391));
+            farmingConfigMap.put(10548,configForFarm(10548));
+            farmingConfigMap.put(11062,configForFarm(11062));
+        }
         return farmingConfigMap;
+    }
+
+    private List<FarmingConfig> configForFarm(int regionId) {
+        final List<FarmingConfig> configs = new ArrayList<>();
+        switch (regionId) {
+            case 14391: //canafis
+            case 10548: //ardougne
+            case 11062: //catherby
+                configs.add(new FarmingConfig(0, 0, false, false, PatchType.ALLOTMENT.ordinal(), 0, 0));
+                configs.add(new FarmingConfig(0, 8, false, false, PatchType.ALLOTMENT.ordinal(), 0, 0));
+                configs.add(new FarmingConfig(0, 16, false, false, PatchType.FLOWER.ordinal(), 0, 0));
+                configs.add(new FarmingConfig(0, 24, false, false, PatchType.HERB.ordinal(), 0, 0));
+                break;
+        }
+        return configs;
     }
 
     public int getBlackjackGamesPlayed() {
@@ -410,6 +436,50 @@ public class PlayerSaveData {
         this.permanentCompost = permanentCompost;
     }
 
+    public long getMembershipDurationMS() {
+        return membershipDurationMS;
+    }
+
+    public long getMembershipStartDateMS() {
+        return membershipStartDateMS;
+    }
+
+    public void setMembershipDurationMS(long membershipDurationMS) {
+        this.membershipDurationMS = membershipDurationMS;
+    }
+
+    public void setMembershipStartDateMS(long membershipStartDateMS) {
+        this.membershipStartDateMS = membershipStartDateMS;
+    }
+
+    public int getPlayPassXp() {
+        return playPassXp;
+    }
+
+    public void setPlayPassXp(int playPassXp) {
+        this.playPassXp = playPassXp;
+    }
+
+    public int[] getEquipment() {
+        if (equipment == null || equipment.length != 10)
+            equipment = new int[10];
+        return equipment;
+    }
+
+    public void setEquipment(int slot, int itemId) {
+        this.equipment[slot] = itemId;
+    }
+
+    public int[] getEquippedAmount() {
+        if (equippedAmount == null || equippedAmount.length != 10)
+            equippedAmount = new int[10];
+        return equippedAmount;
+    }
+
+    public void setEquipmentAmount(int slot, int amount) {
+        this.equippedAmount[slot] = amount;
+    }
+
     @Override
     public String toString() {
         return new PlayerSaveDataSerializer().serialize(this);
@@ -442,7 +512,10 @@ public class PlayerSaveData {
         this.voyageTimestamp = new long[3][2];
         this.voyageLoot = new int[3][3];
         this.preferredRegion = -1;
+        this.claimedPassLevel = new boolean[50];
         this.farmingConfigMap = new HashMap<>();
+        this.equipment = new int[10];
+        this.equippedAmount = new int[10];
 //        farmingConfigMap.put(
 //                10548,List.of(
 //                        new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
@@ -498,8 +571,26 @@ public class PlayerSaveData {
     /**
      * farming
      */
-    private Map<Integer, List<FarmingConfig>> farmingConfigMap;
+    private Map<Integer,List<FarmingConfig>> farmingConfigMap;
     private int bottomlessCompostBucketCharges;
     private int bottomlessCompostBucketType;
     private boolean permanentCompost;
+
+    /**
+     * membership
+     */
+    private long membershipStartDateMS;
+    private long membershipDurationMS;
+
+    /**
+     * play pass
+     */
+    private int playPassXp;
+    private boolean[] claimedPassLevel;
+
+    /**
+     * equipment
+     */
+    private int[] equipment;
+    private int[] equippedAmount;
 }

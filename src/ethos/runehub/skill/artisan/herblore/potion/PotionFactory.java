@@ -15,6 +15,8 @@ public class PotionFactory extends LazyLoader<Integer,Potion> {
     @Override
     protected Potion load(Integer key) {
         switch (key) {
+            case 739:
+                return new Potion(739,-1,-1,-1,-1,47);
             case 2428:
             case 121:
             case 123:

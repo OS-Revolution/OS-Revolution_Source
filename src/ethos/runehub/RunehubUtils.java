@@ -1,5 +1,11 @@
 package ethos.runehub;
 
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.util.Misc;
+import org.runehub.api.util.SkillDictionary;
+
+import java.util.*;
+
 public class RunehubUtils {
 
     public static boolean beginsWithVowel(String text) {
@@ -18,8 +24,37 @@ public class RunehubUtils {
         return regionId;
     }
 
+    public static String getSkillName(int id) {
+        if (id >= 0 && id <= 22) {
+            return Misc.capitalize(SkillDictionary.getSkillNameFromId(id).toLowerCase());
+        }
+        return "Sailing";
+    }
+
     public static String getIndefiniteArticle(String noun) {
         return beginsWithVowel(noun) ? "an" : "a";
+    }
+
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
+    }
+
+    public static Set<Long> getPlayPassHiscores() {
+        final Map<Long,Integer> scoreMap = new HashMap<>();
+
+        PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(ctx -> {
+            scoreMap.put(ctx.getId(),ctx.getPlayerSaveData().getPlayPassXp());
+        });
+
+        return sortByValue(scoreMap).keySet();
     }
 
 }

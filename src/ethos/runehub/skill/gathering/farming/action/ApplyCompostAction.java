@@ -46,6 +46,19 @@ public class ApplyCompostAction extends GatheringSkillAction {
     }
 
     @Override
+    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
+        return new GatheringTool(
+                interactionContext.getUsedId(),
+                1,
+                SkillDictionary.Skill.FARMING.getId(),
+                1.0,
+                0,
+                0f,
+                2283
+        );
+    }
+
+    @Override
     public void onTick() {
         if (interactionContext.getUsedId() == Farming.COMPOST) {
             this.getActor().getPA().addSkillXP(18,SkillDictionary.Skill.FARMING.getId(), true);
@@ -93,15 +106,7 @@ public class ApplyCompostAction extends GatheringSkillAction {
             public GatheringNode getNode() {
                 return new GatheringNode(interactionContext.getUsedWithId(), 1, 4, -1L, 1000, SkillDictionary.Skill.FARMING.getId(), 1000);
             }
-        }, 6, new GatheringTool(
-                interactionContext.getUsedId(),
-                1,
-                SkillDictionary.Skill.FARMING.getId(),
-                1.0,
-                0,
-                0f,
-                2283
-        ));
+        }, 6);
         this.interactionContext = interactionContext;
         this.config = player.getSkillController().getFarming().getConfig(interactionContext.getUsedWithId(), RunehubUtils.getRegionId(interactionContext.getX(), interactionContext.getY())).orElse(null);
     }

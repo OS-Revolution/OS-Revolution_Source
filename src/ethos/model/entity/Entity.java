@@ -14,6 +14,7 @@ import ethos.model.players.Player;
 import ethos.model.players.combat.Damage;
 import ethos.model.players.combat.Hitmark;
 import ethos.util.Stream;
+import org.runehub.api.model.entity.user.character.CharacterEntity;
 
 /**
  * Represents a game-world presence that exists among others of the same nature.
@@ -23,7 +24,7 @@ import ethos.util.Stream;
  * @author Jason MacKeigan
  * @date Mar 27, 2015, 2015, 8:00:45 PM
  */
-public abstract class Entity {
+public abstract class Entity implements CharacterEntity {
 
 	/**
 	 * The visual alias or name of the entity that describes and separates this

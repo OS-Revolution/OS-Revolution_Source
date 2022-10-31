@@ -1,5 +1,6 @@
 package ethos.runehub.entity.merchant;
 
+import ethos.runehub.entity.merchant.impl.MinnowMerchant;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeCollectionMerchant;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeMerchant;
 import org.runehub.api.io.load.LazyLoader;
@@ -24,6 +25,8 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
                 return new ExchangeCollectionMerchant();
             case 1328:
                 return new CommodityMerchant();
+            case 7727:
+                return new MinnowMerchant();
             default: return null;
         }
     }

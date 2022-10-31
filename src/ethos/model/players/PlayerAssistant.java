@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import ethos.runehub.RunehubUtils;
+import ethos.runehub.entity.node.Node;
 import ethos.runehub.world.WorldSettingsController;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -740,6 +742,15 @@ public class PlayerAssistant {
         }
     }
 
+    public void sendProgressUpdate(int interfaceId, int state, int percentage) {
+        c.outStream.createFrameVarSize(77);
+        c.outStream.writeDWord(interfaceId);
+        c.outStream.writeByte(state);
+        c.outStream.writeByte(percentage);
+        c.outStream.endFrameVarSize();
+        c.flushOutStream();
+    }
+
     public void setSkillLevel(int skillNum, int currentLevel, int XP) {
         if (c.getOutStream() != null && c != null) {
             c.getOutStream().createFrame(134);
@@ -1005,7 +1016,7 @@ public class PlayerAssistant {
         // synchronized(c) {
         if (c.getOutStream() != null && c != null) {
             c.getOutStream().createFrame(75);
-            c.getOutStream().writeByte(6);
+//            c.getOutStream().writeByte(6);
             c.getOutStream().writeWord(npcId);
             c.getOutStream().writeDWord(interfaceId);
         }
@@ -1311,6 +1322,24 @@ public class PlayerAssistant {
         x = (x - (c.getMapRegionX() * 8)) - (subtract ? 3 : 0);
         c.getOutStream().writeByteC(x);
         c.flushOutStream();
+    }
+
+    public void checkObjectSpawn(Node node) {
+        Region.addWorldObject(node.getId(), node.getX(), node.getY(), node.getZ(), node.getFace());
+        if (c.getOutStream() != null && c != null) {
+            sendPosition(node.getX(), node.getY(), false);
+            c.getOutStream().createFrame(101);
+            c.getOutStream().writeByteC((node.getType() << 2) + (node.getFace() & 3));
+            c.getOutStream().writeByte(0);
+            c.flushOutStream();
+            if (node.getId() != -1) { // removing
+                c.getOutStream().createFrame(151);
+                c.getOutStream().writeByteS(0);
+                c.getOutStream().writeWordBigEndian(node.getId());
+                c.getOutStream().writeByteS((node.getType() << 2) + (node.getFace() & 3));
+            }
+            c.flushOutStream();
+        }
     }
 
     public void checkObjectSpawn(int objectId, int objectX, int objectY, int face, int objectType) {
@@ -3431,170 +3460,188 @@ public class PlayerAssistant {
         c.nextChat = 0;
     }
 
-    public void refreshSkill(int i) {
-        c.combatLevel = c.calculateCombatLevel();
-        switch (i) {
-            case 0:
-                sendFrame126("" + c.playerLevel[0] + "", 4004);
-                sendFrame126("" + getLevelForXP(c.playerXP[0]) + "", 4005);
-                sendFrame126("" + c.playerXP[0] + "", 4044);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[0]) + 1) + "", 4045);
-                requestUpdates();
-                break;
-
-            case 1:
-                sendFrame126("" + c.playerLevel[1] + "", 4008);
-                sendFrame126("" + getLevelForXP(c.playerXP[1]) + "", 4009);
-                sendFrame126("" + c.playerXP[1] + "", 4056);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[1]) + 1) + "", 4057);
-                break;
-
-            case 2:
-                sendFrame126("" + c.playerLevel[2] + "", 4006);
-                sendFrame126("" + getLevelForXP(c.playerXP[2]) + "", 4007);
-                sendFrame126("" + c.playerXP[2] + "", 4050);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[2]) + 1) + "", 4051);
-                break;
-
-            case 3:
-                sendFrame126("" + c.getHealth().getAmount() + "", 4016);
-                sendFrame126("" + getLevelForXP(c.playerXP[3]) + "", 4017);
-                sendFrame126("" + c.playerXP[3] + "", 4080);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[3]) + 1) + "", 4081);
-                break;
-
-            case 4:
-                sendFrame126("" + c.playerLevel[4] + "", 4010);
-                sendFrame126("" + getLevelForXP(c.playerXP[4]) + "", 4011);
-                sendFrame126("" + c.playerXP[4] + "", 4062);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[4]) + 1) + "", 4063);
-                break;
-
-            case 5:
-                sendFrame126("" + c.playerLevel[5] + "", 4012);
-                sendFrame126("" + getLevelForXP(c.playerXP[5]) + "", 4013);
-                sendFrame126("" + c.playerXP[5] + "", 4068);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[5]) + 1) + "", 4069);
-                sendFrame126("" + c.playerLevel[5] + "/" + getLevelForXP(c.playerXP[5]) + "", 687);// Prayer
-                // frame
-                break;
-
-            case 6:
-                sendFrame126("" + c.playerLevel[6] + "", 4014);
-                sendFrame126("" + getLevelForXP(c.playerXP[6]) + "", 4015);
-                sendFrame126("" + c.playerXP[6] + "", 4074);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[6]) + 1) + "", 4075);
-                break;
-
-            case 7:
-                sendFrame126("" + c.playerLevel[7] + "", 4034);
-                sendFrame126("" + getLevelForXP(c.playerXP[7]) + "", 4035);
-                sendFrame126("" + c.playerXP[7] + "", 4134);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[7]) + 1) + "", 4135);
-                break;
-
-            case 8:
-                sendFrame126("" + c.playerLevel[8] + "", 4038);
-                sendFrame126("" + getLevelForXP(c.playerXP[8]) + "", 4039);
-                sendFrame126("" + c.playerXP[8] + "", 4146);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[8]) + 1) + "", 4147);
-                break;
-
-            case 9:
-                sendFrame126("" + c.playerLevel[9] + "", 4026);
-                sendFrame126("" + getLevelForXP(c.playerXP[9]) + "", 4027);
-                sendFrame126("" + c.playerXP[9] + "", 4110);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[9]) + 1) + "", 4111);
-                break;
-
-            case 10:
-                sendFrame126("" + c.playerLevel[10] + "", 4032);
-                sendFrame126("" + getLevelForXP(c.playerXP[10]) + "", 4033);
-                sendFrame126("" + c.playerXP[10] + "", 4128);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[10]) + 1) + "", 4129);
-                break;
-
-            case 11:
-                sendFrame126("" + c.playerLevel[11] + "", 4036);
-                sendFrame126("" + getLevelForXP(c.playerXP[11]) + "", 4037);
-                sendFrame126("" + c.playerXP[11] + "", 4140);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[11]) + 1) + "", 4141);
-                break;
-
-            case 12:
-                sendFrame126("" + c.playerLevel[12] + "", 4024);
-                sendFrame126("" + getLevelForXP(c.playerXP[12]) + "", 4025);
-                sendFrame126("" + c.playerXP[12] + "", 4104);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[12]) + 1) + "", 4105);
-                break;
-
-            case 13:
-                sendFrame126("" + c.playerLevel[13] + "", 4030);
-                sendFrame126("" + getLevelForXP(c.playerXP[13]) + "", 4031);
-                sendFrame126("" + c.playerXP[13] + "", 4122);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[13]) + 1) + "", 4123);
-                break;
-
-            case 14:
-                sendFrame126("" + c.playerLevel[14] + "", 4028);
-                sendFrame126("" + getLevelForXP(c.playerXP[14]) + "", 4029);
-                sendFrame126("" + c.playerXP[14] + "", 4116);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[14]) + 1) + "", 4117);
-                break;
-
-            case 15:
-                sendFrame126("" + c.playerLevel[15] + "", 4020);
-                sendFrame126("" + getLevelForXP(c.playerXP[15]) + "", 4021);
-                sendFrame126("" + c.playerXP[15] + "", 4092);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[15]) + 1) + "", 4093);
-                break;
-
-            case 16:
-                sendFrame126("" + c.playerLevel[16] + "", 4018);
-                sendFrame126("" + getLevelForXP(c.playerXP[16]) + "", 4019);
-                sendFrame126("" + c.playerXP[16] + "", 4086);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[16]) + 1) + "", 4087);
-                break;
-
-            case 17:
-                sendFrame126("" + c.playerLevel[17] + "", 4022);
-                sendFrame126("" + getLevelForXP(c.playerXP[17]) + "", 4023);
-                sendFrame126("" + c.playerXP[17] + "", 4098);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[17]) + 1) + "", 4099);
-                break;
-
-            case 18:
-                sendFrame126("" + c.playerLevel[18] + "", 12166);
-                sendFrame126("" + getLevelForXP(c.playerXP[18]) + "", 12167);
-                sendFrame126("" + c.playerXP[18] + "", 12171);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[18]) + 1) + "", 12172);
-                break;
-
-            case 19:
-                sendFrame126("" + c.playerLevel[19] + "", 13926);
-                sendFrame126("" + getLevelForXP(c.playerXP[19]) + "", 13927);
-                sendFrame126("" + c.playerXP[19] + "", 13921);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[19]) + 1) + "", 13922);
-                break;
-
-            case 20:
-                sendFrame126("" + c.playerLevel[20] + "", 4152);
-                sendFrame126("" + getLevelForXP(c.playerXP[20]) + "", 4153);
-                sendFrame126("" + c.playerXP[20] + "", 4157);
-                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[20]) + 1) + "", 4159);
-                break;
-
-            case 21:
-                sendFrame126("" + c.playerLevel[21] + "", 18799);
-                sendFrame126("" + getLevelForXP(c.playerXP[21]) + "", 18800);
-                break;
-
-            case 22:
-                sendFrame126("" + c.playerLevel[22] + "", 18797);
-                sendFrame126("" + getLevelForXP(c.playerXP[22]) + "", 18798);
-                break;
-
+    public void refreshSkill(int skillId) {
+        if(skillId <= 23 ) {
+            c.combatLevel = c.calculateCombatLevel();
+            int currentLevel = c.playerLevel[skillId];
+            int actualLevel = c.getPA().getLevelForXP(c.playerXP[skillId]);
+            String skillName = RunehubUtils.getSkillName(skillId);
+            String levelString = currentLevel + "/" + actualLevel;
+            if (currentLevel > actualLevel) {
+                levelString = "@gre@" + currentLevel + "@yel@/" + actualLevel;
+            } else if (currentLevel < actualLevel) {
+                levelString = "@red@" + currentLevel + "@yel@/" + actualLevel;
+            } else {
+                levelString = "@yel@" + currentLevel + "/" + actualLevel;
+            }
+//            System.out.println("Refreshing Skill: " + SkillDictionary.Skill.values()[skillId] + " ID: " + skillId + " Line: " + (skillId + 57902));
+//            System.out.println("Current Level: " + c.playerLevel[skillId]);
+            sendFrame126(skillName + " " + levelString, skillId + 57902);
+            setSkillLevel(skillId, c.playerLevel[skillId], c.playerXP[skillId]);
+            requestUpdates();
         }
+//        switch (i) {
+//            case 0:
+//                sendFrame126("" + c.playerLevel[0] + "", 4004);
+//                sendFrame126("" + getLevelForXP(c.playerXP[0]) + "", 4005);
+//                sendFrame126("" + c.playerXP[0] + "", 4044);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[0]) + 1) + "", 4045);
+//                requestUpdates();
+//                break;
+//
+//            case 1:
+//                sendFrame126("" + c.playerLevel[1] + "", 4008);
+//                sendFrame126("" + getLevelForXP(c.playerXP[1]) + "", 4009);
+//                sendFrame126("" + c.playerXP[1] + "", 4056);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[1]) + 1) + "", 4057);
+//                break;
+//
+//            case 2:
+//                sendFrame126("" + c.playerLevel[2] + "", 4006);
+//                sendFrame126("" + getLevelForXP(c.playerXP[2]) + "", 4007);
+//                sendFrame126("" + c.playerXP[2] + "", 4050);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[2]) + 1) + "", 4051);
+//                break;
+//
+//            case 3:
+//                sendFrame126("" + c.getHealth().getAmount() + "", 4016);
+//                sendFrame126("" + getLevelForXP(c.playerXP[3]) + "", 4017);
+//                sendFrame126("" + c.playerXP[3] + "", 4080);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[3]) + 1) + "", 4081);
+//                break;
+//
+//            case 4:
+//                sendFrame126("" + c.playerLevel[4] + "", 4010);
+//                sendFrame126("" + getLevelForXP(c.playerXP[4]) + "", 4011);
+//                sendFrame126("" + c.playerXP[4] + "", 4062);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[4]) + 1) + "", 4063);
+//                break;
+//
+//            case 5:
+//                sendFrame126("" + c.playerLevel[5] + "", 4012);
+//                sendFrame126("" + getLevelForXP(c.playerXP[5]) + "", 4013);
+//                sendFrame126("" + c.playerXP[5] + "", 4068);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[5]) + 1) + "", 4069);
+//                sendFrame126("" + c.playerLevel[5] + "/" + getLevelForXP(c.playerXP[5]) + "", 687);// Prayer
+//                // frame
+//                break;
+//
+//            case 6:
+//                sendFrame126("" + c.playerLevel[6] + "", 4014);
+//                sendFrame126("" + getLevelForXP(c.playerXP[6]) + "", 4015);
+//                sendFrame126("" + c.playerXP[6] + "", 4074);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[6]) + 1) + "", 4075);
+//                break;
+//
+//            case 7:
+//                sendFrame126("" + c.playerLevel[7] + "", 4034);
+//                sendFrame126("" + getLevelForXP(c.playerXP[7]) + "", 4035);
+//                sendFrame126("" + c.playerXP[7] + "", 4134);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[7]) + 1) + "", 4135);
+//                break;
+//
+//            case 8:
+//                sendFrame126("" + c.playerLevel[8] + "", 4038);
+//                sendFrame126("" + getLevelForXP(c.playerXP[8]) + "", 4039);
+//                sendFrame126("" + c.playerXP[8] + "", 4146);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[8]) + 1) + "", 4147);
+//                break;
+//
+//            case 9:
+//                sendFrame126("" + c.playerLevel[9] + "", 4026);
+//                sendFrame126("" + getLevelForXP(c.playerXP[9]) + "", 4027);
+//                sendFrame126("" + c.playerXP[9] + "", 4110);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[9]) + 1) + "", 4111);
+//                break;
+//
+//            case 10:
+//                sendFrame126("" + c.playerLevel[10] + "", 4032);
+//                sendFrame126("" + getLevelForXP(c.playerXP[10]) + "", 4033);
+//                sendFrame126("" + c.playerXP[10] + "", 4128);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[10]) + 1) + "", 4129);
+//                break;
+//
+//            case 11:
+//                sendFrame126("" + c.playerLevel[11] + "", 4036);
+//                sendFrame126("" + getLevelForXP(c.playerXP[11]) + "", 4037);
+//                sendFrame126("" + c.playerXP[11] + "", 4140);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[11]) + 1) + "", 4141);
+//                break;
+//
+//            case 12:
+//                sendFrame126("" + c.playerLevel[12] + "", 4024);
+//                sendFrame126("" + getLevelForXP(c.playerXP[12]) + "", 4025);
+//                sendFrame126("" + c.playerXP[12] + "", 4104);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[12]) + 1) + "", 4105);
+//                break;
+//
+//            case 13:
+//                sendFrame126("" + c.playerLevel[13] + "", 4030);
+//                sendFrame126("" + getLevelForXP(c.playerXP[13]) + "", 4031);
+//                sendFrame126("" + c.playerXP[13] + "", 4122);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[13]) + 1) + "", 4123);
+//                break;
+//
+//            case 14:
+//                sendFrame126("" + c.playerLevel[14] + "", 4028);
+//                sendFrame126("" + getLevelForXP(c.playerXP[14]) + "", 4029);
+//                sendFrame126("" + c.playerXP[14] + "", 4116);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[14]) + 1) + "", 4117);
+//                break;
+//
+//            case 15:
+//                sendFrame126("" + c.playerLevel[15] + "", 4020);
+//                sendFrame126("" + getLevelForXP(c.playerXP[15]) + "", 4021);
+//                sendFrame126("" + c.playerXP[15] + "", 4092);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[15]) + 1) + "", 4093);
+//                break;
+//
+//            case 16:
+//                sendFrame126("" + c.playerLevel[16] + "", 4018);
+//                sendFrame126("" + getLevelForXP(c.playerXP[16]) + "", 4019);
+//                sendFrame126("" + c.playerXP[16] + "", 4086);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[16]) + 1) + "", 4087);
+//                break;
+//
+//            case 17:
+//                sendFrame126("" + c.playerLevel[17] + "", 4022);
+//                sendFrame126("" + getLevelForXP(c.playerXP[17]) + "", 4023);
+//                sendFrame126("" + c.playerXP[17] + "", 4098);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[17]) + 1) + "", 4099);
+//                break;
+//
+//            case 18:
+//                sendFrame126("" + c.playerLevel[18] + "", 12166);
+//                sendFrame126("" + getLevelForXP(c.playerXP[18]) + "", 12167);
+//                sendFrame126("" + c.playerXP[18] + "", 12171);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[18]) + 1) + "", 12172);
+//                break;
+//
+//            case 19:
+//                sendFrame126("" + c.playerLevel[19] + "", 13926);
+//                sendFrame126("" + getLevelForXP(c.playerXP[19]) + "", 13927);
+//                sendFrame126("" + c.playerXP[19] + "", 13921);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[19]) + 1) + "", 13922);
+//                break;
+//
+//            case 20:
+//                sendFrame126("" + c.playerLevel[20] + "", 4152);
+//                sendFrame126("" + getLevelForXP(c.playerXP[20]) + "", 4153);
+//                sendFrame126("" + c.playerXP[20] + "", 4157);
+//                sendFrame126("" + getXPForLevel(getLevelForXP(c.playerXP[20]) + 1) + "", 4159);
+//                break;
+//
+//            case 21:
+//                sendFrame126("" + c.playerLevel[21] + "", 18799);
+//                sendFrame126("" + getLevelForXP(c.playerXP[21]) + "", 18800);
+//                break;
+//
+//            case 22:
+//                sendFrame126("" + c.playerLevel[22] + "", 18797);
+//                sendFrame126("" + getLevelForXP(c.playerXP[22]) + "", 18798);
+//                break;
+
+//        }
     }
 
     public int getXPForLevel(int level) {
@@ -3626,74 +3673,76 @@ public class PlayerAssistant {
     }
 
     public boolean addSkillXP(int amount, int skill, boolean dropExperience) {
-        if (c.skillLock[skill]) {
-            return false;
-        }
-        if (Boundary.isIn(c, Boundary.FOUNTAIN_OF_RUNE_BOUNDARY)) {
-            return false;
-        }
-        if (c.expLock && skill <= 6) {
-            return false;
-        }
-        if (amount + c.playerXP[skill] < 0) {
-            return false;
-        }
-        // Amount applied
-
-        // If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
-        // off
-        if(c.getContext().getPlayerSaveData().getBonusXp().containsKey(skill)) {
-            if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > amount) {
-                c.getContext().getPlayerSaveData().getBonusXp().get(skill).subtract(amount);
-                sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
-                amount *= 2;
-            } else if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > 0) {
-                amount += c.getContext().getPlayerSaveData().getBonusXp().get(skill).value();
-                c.getContext().getPlayerSaveData().getBonusXp().get(skill).setValue(0);
-                c.sendMessage("You've used up all your bonus XP in $" + SkillDictionary.getSkillNameFromId(skill));
-                sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
-            }
-        }
-        if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
-                && Config.BONUS_WEEKEND == false) {
-            amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED;
-        } else if (WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
-            amount *= 2.0;
-        } else {
-            amount *= Config.SERVER_EXP_BONUS;
-        }
-
-        if (dropExperience) {
-            c.getPA().sendExperienceDrop(true, amount, skill);
-        }
-
-        int oldLevel = getLevelForXP(c.playerXP[skill]);
-        int oldExperience = c.playerXP[skill];
-        if (oldExperience < 200_000_000 && oldExperience + amount >= 200_000_000) {
-            Skill s = Skill.forId(skill);
-            PlayerHandler.executeGlobalMessage(
-                    "@red@" + Misc.capitalize(c.playerName) + " has reached 200M XP in " + s.toString() + "!");
-        }
-        amount = amount * 2;
-        if (c.playerXP[skill] + amount > 200000000) {
-            c.playerXP[skill] = 200000000;
-        } else {
-            c.playerXP[skill] += amount;
-        }
-        if (oldLevel < getLevelForXP(c.playerXP[skill])) {
-            if (c.playerLevel[skill] < c.getLevelForXP(c.playerXP[skill]) && skill != 3 && skill != 5)
-                c.playerLevel[skill] = c.getLevelForXP(c.playerXP[skill]);
-            c.combatLevel = c.calculateCombatLevel();
-            c.getPA().sendFrame126("Combat Level: " + c.combatLevel + "", 3983);
-            levelUp(skill);
-            if (getLevelForXP(c.playerXP[skill]) == 99) {
-                // TODO Skill Activity feed
-            }
-            c.gfx100(199);
-            requestUpdates();
-        }
-        setSkillLevel(skill, c.playerLevel[skill], c.playerXP[skill]);
-        refreshSkill(skill);
+        c.getSkillController().addXP(skill, amount);
+//        if (c.skillLock[skill]) {
+//            return false;
+//        }
+//        if (Boundary.isIn(c, Boundary.FOUNTAIN_OF_RUNE_BOUNDARY)) {
+//            return false;
+//        }
+//        if (c.expLock && skill <= 6) {
+//            return false;
+//        }
+//        if (amount + c.playerXP[skill] < 0) {
+//            return false;
+//        }
+//        // Amount applied
+//
+//        // If within thedonator zone, VIP accounts get bonus xp while bonus weekend is
+//        // off
+//        c.getAttributes().getPlayPassController().addPlayPassXPFromSkillXP(amount);
+//        if(c.getContext().getPlayerSaveData().getBonusXp().containsKey(skill)) {
+//            if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > amount) {
+//                c.getContext().getPlayerSaveData().getBonusXp().get(skill).subtract(amount);
+//                sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+//                amount *= 2;
+//            } else if (c.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > 0) {
+//                amount += c.getContext().getPlayerSaveData().getBonusXp().get(skill).value();
+//                c.getContext().getPlayerSaveData().getBonusXp().get(skill).setValue(0);
+//                c.sendMessage("You've used up all your bonus XP in $" + SkillDictionary.getSkillNameFromId(skill));
+//                sendBonusXp(skill, c.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
+//            }
+//        }
+//        if (Boundary.isIn(c, Boundary.DONATOR_ZONE) && c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)
+//                && Config.BONUS_WEEKEND == false) {
+//            amount *= Config.SERVER_EXP_BONUS_WEEKEND_BOOSTED;
+//        } else if (WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
+//            amount *= 2.0;
+//        } else {
+//            amount *= Config.SERVER_EXP_BONUS;
+//        }
+//
+//        if (dropExperience) {
+//            c.getPA().sendExperienceDrop(true, amount, skill);
+//        }
+//
+//        int oldLevel = getLevelForXP(c.playerXP[skill]);
+//        int oldExperience = c.playerXP[skill];
+//        if (oldExperience < 200_000_000 && oldExperience + amount >= 200_000_000) {
+//            Skill s = Skill.forId(skill);
+//            PlayerHandler.executeGlobalMessage(
+//                    "@red@" + Misc.capitalize(c.playerName) + " has reached 200M XP in " + s.toString() + "!");
+//        }
+//        amount = amount * 2;
+//        if (c.playerXP[skill] + amount > 200000000) {
+//            c.playerXP[skill] = 200000000;
+//        } else {
+//            c.playerXP[skill] += amount;
+//        }
+//        if (oldLevel < getLevelForXP(c.playerXP[skill])) {
+//            if (c.playerLevel[skill] < c.getLevelForXP(c.playerXP[skill]) && skill != 3 && skill != 5)
+//                c.playerLevel[skill] = c.getLevelForXP(c.playerXP[skill]);
+//            c.combatLevel = c.calculateCombatLevel();
+//            c.getPA().sendFrame126("Combat Level: " + c.combatLevel + "", 3983);
+//            levelUp(skill);
+//            if (getLevelForXP(c.playerXP[skill]) == 99) {
+//                // TODO Skill Activity feed
+//            }
+//            c.gfx100(199);
+//            requestUpdates();
+//        }
+//        setSkillLevel(skill, c.playerLevel[skill], c.playerXP[skill]);
+//        refreshSkill(skill);
         return true;
     }
 
@@ -4550,6 +4599,8 @@ public class PlayerAssistant {
         c.updateRequired = true;
         c.appearanceUpdateRequired = true;
     }
+
+
 
     /*
      * c.getHealth().removeAllStatuses(); c.getHealth().reset(); c.setRunEnergy(99);

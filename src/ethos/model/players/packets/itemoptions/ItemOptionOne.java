@@ -258,13 +258,13 @@ public class ItemOptionOne implements PacketType {
 //			c.sendMessage("You gained one bank charge and now have " + c.bankCharges + ".");
 //			break;
 			
-		case 13190:
-			if (!c.membership && c.getItems().playerHasItem(13190)) {
-					c.getItems().deleteItem(13190, 1);
-					Membership.giveMembership(c);
-				}
-					c.sendMessage("You already have member benefits.");
-			break;
+//		case 13190:
+//			if (!c.membership && c.getItems().playerHasItem(13190)) {
+//					c.getItems().deleteItem(13190, 1);
+//					Membership.giveMembership(c);
+//				}
+//					c.sendMessage("You already have member benefits.");
+//			break;
 			
         	//StaffPotato
 		case 5733:

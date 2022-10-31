@@ -23,16 +23,22 @@ public class MerchandiseSlot implements Comparable<MerchandiseSlot> {
         return maxDiscount;
     }
 
-    public MerchandiseSlot(int itemId, int amount, boolean salePossible, double maxDiscount) {
+    public boolean isMembers() {
+        return members;
+    }
+
+    public MerchandiseSlot(int itemId, int amount, boolean salePossible, double maxDiscount, boolean members) {
         this.itemId = itemId;
         this.amount = amount;
         this.salePossible = salePossible;
         this.maxDiscount = maxDiscount;
+        this.members = members;
     }
 
     private final int itemId;
     private final int amount;
     private final boolean salePossible;
     private final double maxDiscount;
+    private final boolean members;
 
 }

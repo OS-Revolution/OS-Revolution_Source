@@ -1,17 +1,11 @@
 package ethos.model.players.packets.commands.admin;
 
-import ethos.Server;
-import ethos.event.Event;
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
-import ethos.runehub.content.rift.Rift;
-import ethos.runehub.skill.gathering.farming.FarmingConfig;
-import ethos.runehub.skill.gathering.farming.action.RakePatchAction;
-import ethos.runehub.skill.gathering.farming.crop.Allotment;
-import ethos.runehub.skill.gathering.farming.crop.Flower;
-import ethos.runehub.skill.gathering.farming.crop.Herb;
-
-import java.util.List;
+import ethos.runehub.RunehubUtils;
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.entity.mob.AnimationDefinitionCache;
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 
 /**
  * Force the player to perform a given emote.
@@ -106,21 +100,13 @@ public class E extends Command {
     @Override
     public void execute(Player c, String input) {
         String[] args = input.split(" ");
-        Rift rift = new Rift(c);
-
-rift.start();
-
-//        c.getItems().sendWeight(5);
-//        c.getPA().sendConfig(149,10);
-//c.getPA().sendConfig(529,);
-//        if (args.length == 1) {
-////            c.getPA().sendConfig(529, Integer.parseInt(args[0]));
-//            int patchId = Integer.parseInt(args[0]);
-//            Server.getEventHandler().submit(new RakePatchAction(c, patchId));
-//        } else if (args.length < 6) {
-//            this.doCustomFullFarm(args, c);
+        System.out.println(AnimationDefinitionCache.getInstance().read(2005).getAttackAnimation());
+//        RunehubUtils.getPlayPassHiscores().forEach(aLong -> System.out.println("ID: " + aLong + " score: " + PlayerCharacterContextDataAccessObject.getInstance().read(aLong).getPlayerSaveData().getPlayPassXp()));
+//        c.getPA().showInterface(50100);
+//
+//        for (int i = 0; i < 15; i++) {
+//            c.getPA().itemOnInterface(1038 + (i * 2),1,50103,i);
 //        }
-//        Server.getGlobalObjects().updateRegionObjects(c);
 
     }
 }

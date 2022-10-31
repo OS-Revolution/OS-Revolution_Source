@@ -118,6 +118,17 @@ public class ItemOnObject implements PacketType {
                 case FarmingConstants.HERB_OBJECT:
                 case FarmingConstants.HERB_PATCH_DEPLETED:
                 case 7849:
+                case 8554:
+                case 8552:
+                case 8556:
+                case 8555:
+                case 8553:
+                case 8557:
+                case 7848:
+                case 7850:
+                case 8152:
+                case 8151:
+                case 8153:
                     c.objectDistance = 6;
                     c.objectXOffset = 3;
                     c.objectYOffset = 3;

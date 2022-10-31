@@ -2,23 +2,15 @@ package ethos.runehub.skill.gathering.farming;
 
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
-import ethos.runehub.RunehubUtils;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
-import ethos.runehub.entity.item.ItemInteraction;
-import ethos.runehub.entity.item.ItemInteractionDAO;
-import ethos.runehub.entity.item.ItemReactionProcessor;
 import ethos.runehub.entity.player.PlayerCharacterContext;
-import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.gathering.farming.crop.*;
 import ethos.runehub.skill.gathering.farming.patch.PatchType;
-import org.runehub.api.util.IDManager;
-import org.runehub.api.util.SkillDictionary;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -85,8 +77,8 @@ public class FarmController {
     }
 
     private void doGrowthCycle(PlayerCharacterContext player, PatchType patchType) {
-        player.getPlayerSaveData().getFarmingConfig().keySet().forEach(regionId -> {
-            List<FarmingConfig> patches = player.getPlayerSaveData().getFarmingConfig().get(regionId);
+        player.getPlayerSaveData().farmingConfig().keySet().forEach(regionId -> {
+            List<FarmingConfig> patches = player.getPlayerSaveData().farmingConfig().get(regionId);
             patches.stream()
                     .filter(config -> config.getType() == patchType.ordinal())
                     .filter(farmingConfig -> !isOvergrown(farmingConfig)) //filters patches with nothing
@@ -112,19 +104,19 @@ public class FarmController {
         int regionX = player.absX >> 3;
         int regionY = player.absY >> 3;
         int regionId = ((regionX / 8) << 8) + (regionY / 8);
-        if (player.getContext().getPlayerSaveData().getFarmingConfig().containsKey(regionId)) {
-            final int varbit = player.getContext().getPlayerSaveData().getFarmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+        if (player.getContext().getPlayerSaveData().farmingConfig().containsKey(regionId)) {
+            final int varbit = player.getContext().getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
             player.getPA().sendConfig(529, varbit);
         }
     }
 
     public void initializeGrowthCycles() {
-        this.startGrowthCycle(2, () -> {
+        this.startGrowthCycle(10, () -> {
             System.out.println("Allotment Growth Cycle");
             System.out.println("Hops Growth Cycle");
             this.grow(PatchType.ALLOTMENT);
         });
-        this.startGrowthCycle(2, () -> {
+        this.startGrowthCycle(5, () -> {
             System.out.println("Flower Growth Cycle");
             System.out.println("Weed Growth Cycle");
             this.growWeeds();
@@ -144,15 +136,15 @@ public class FarmController {
 
     private void growWeeds() {
         PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(player -> {
-            player.getPlayerSaveData().getFarmingConfig().keySet().forEach(key -> {
-                player.getPlayerSaveData().getFarmingConfig().get(key).stream()
+            player.getPlayerSaveData().farmingConfig().keySet().forEach(key -> {
+                player.getPlayerSaveData().farmingConfig().get(key).stream()
                         .filter(config -> config.getCrop() == 0)
                         .filter(config -> config.getStage() != 0)
                         .forEach(config -> {
                             Optional<Player> playerOptional = PlayerHandler.getPlayer(player.getId());
                             if (playerOptional.isPresent()) {
                                 Player p = playerOptional.get();
-                                p.getContext().getPlayerSaveData().getFarmingConfig().get(key).stream()
+                                p.getContext().getPlayerSaveData().farmingConfig().get(key).stream()
                                         .filter(patch -> patch.getPatch() == config.getPatch())
                                         .findAny().ifPresent(patch -> patch.setStage(patch.getStage() - 1));
                                 p.save();
@@ -201,7 +193,7 @@ public class FarmController {
     }
 
     public Duration getNextFlowerGrowthCycle() {
-        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(2));
+        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(5));
     }
 
     private ZonedDateTime getNextGrowthCycle(int minuteInterval) {

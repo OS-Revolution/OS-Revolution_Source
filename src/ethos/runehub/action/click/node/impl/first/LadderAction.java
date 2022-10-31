@@ -37,6 +37,15 @@ public class LadderAction extends ClickNodeAction {
                 this.getActor().getPA().movePlayer(out.getX(), out.getY(), nodeZ - 1);
             else
                 this.getActor().sendMessage("The way is blocked.");
+        } else if (this.getNodeId() == 19004 || this.getNodeId() == 20785 || this.getNodeId() == 23706 || this.getNodeId() == 23732) {
+            if (this.getNodeId() != 23732 || (this.getNodeId() == 23732 && this.getNodeX() == 2350 && this.getNodeY() == 5215)) {
+                this.getActor().getAttributes().getRift().nextFloor(this.getActor());
+            } else {
+                this.getActor().getAttributes().getRift().previousFloor(this.getActor());
+            }
+
+        } else if (this.getNodeId() == 19003 || this.getNodeId() == 20784 || this.getNodeId() == 23705) {
+            this.getActor().getAttributes().getRift().previousFloor(this.getActor());
         }
         this.stop();
     }

@@ -10,7 +10,7 @@ public abstract class SupportSkill extends Skill {
     private static final int EVENT_ODDS = Short.MAX_VALUE;
 
     @Override
-    public double getEfficiency() {
+    public double getEfficiencyBonus() {
         return this.getEfficiencyModifier();
     }
 

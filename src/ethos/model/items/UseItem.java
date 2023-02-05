@@ -143,27 +143,26 @@ public class UseItem {
             }
         }
 
-        ItemInteractionLoader.getInstance().readAll()
-                .stream()
-                .filter(itemInteraction -> itemInteraction.getUsedId() == itemId)
-                .filter(itemInteraction -> itemInteraction.getUsedOnId() == objectID)
-                .filter(itemInteraction -> itemInteraction.getInteractionTypeId() == ItemInteraction.OBJECT_INTERACTION)
-                .findAny().ifPresent(itemInteraction -> {
-                    try {
-                        Logger.getGlobal().fine("Processing Object Item Interaction: " + itemInteraction.getUuid()
-                                + "\nReaction ID: " + itemInteraction.getReactionUuid());
-                        c.getAttributes().getItemReactionProcessor().process(
-                                new ItemInteractionContext(objectX, objectY, c.heightLevel, itemId, objectID, c.getItems().getItemAmount(itemId), 1),
-                                itemInteraction,
-                                ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
-                                        itemInteraction.getReactionUuid()),
-                                c
-                        );
-                    } catch (NullPointerException e) {
-                        c.sendMessage("Nothing interesting happens.");
-                    }
-                });
-
+            ItemInteractionLoader.getInstance().readAll()
+                    .stream()
+                    .filter(itemInteraction -> itemInteraction.getUsedId() == itemId)
+                    .filter(itemInteraction -> itemInteraction.getUsedOnId() == objectID)
+                    .filter(itemInteraction -> itemInteraction.getInteractionTypeId() == ItemInteraction.OBJECT_INTERACTION)
+                    .findAny().ifPresent(itemInteraction -> {
+                        try {
+                            Logger.getGlobal().fine("Processing Object Item Interaction: " + itemInteraction.getUuid()
+                                    + "\nReaction ID: " + itemInteraction.getReactionUuid());
+                            c.getAttributes().getItemReactionProcessor().process(
+                                    new ItemInteractionContext(objectX, objectY, c.heightLevel, itemId, objectID, c.getItems().getItemAmount(itemId), 1),
+                                    itemInteraction,
+                                    ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
+                                            itemInteraction.getReactionUuid()),
+                                    c
+                            );
+                        } catch (NullPointerException e) {
+                            c.sendMessage("Nothing interesting happens.");
+                        }
+                    });
         switch (objectID) {
             case 7849:
             case 8554:
@@ -1118,19 +1117,19 @@ public class UseItem {
             c.getFletching().fletchUnfinishedBolt(item);
             c.getFletching().fletchDart(item);
         }
-        if (itemUsed == 1733 || useWith == 1733) {
-            LeatherMaking.craftLeatherDialogue(c, itemUsed, useWith);
-        }
-        if (itemUsed == 1391 || useWith == 1391) {
-            BattlestaveMaking.craftBattlestaveDialogue(c, itemUsed, useWith);
-        }
-        if (itemUsed == 1759 || useWith == 1759) {
-            JewelryMaking.stringAmulet(c, itemUsed, useWith);
-        }
-        if (itemUsed == 1755 || useWith == 1755) {
-            c.getFletching().fletchGem(useWith, itemUsed);
-            c.getCrafting().cut(useWith, itemUsed);
-        }
+//        if (itemUsed == 1733 || useWith == 1733) {
+//            LeatherMaking.craftLeatherDialogue(c, itemUsed, useWith);
+//        }
+//        if (itemUsed == 1391 || useWith == 1391) {
+//            BattlestaveMaking.craftBattlestaveDialogue(c, itemUsed, useWith);
+//        }
+//        if (itemUsed == 1759 || useWith == 1759) {
+//            JewelryMaking.stringAmulet(c, itemUsed, useWith);
+//        }
+//        if (itemUsed == 1755 || useWith == 1755) {
+////            c.getFletching().fletchGem(useWith, itemUsed);
+////            c.getCrafting().cut(useWith, itemUsed);
+//        }
         if (useWith == 946 || itemUsed == 946) {
             c.getFletching().combine(useWith, itemUsed);
         }

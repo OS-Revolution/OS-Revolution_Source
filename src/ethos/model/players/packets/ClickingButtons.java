@@ -442,9 +442,9 @@ public class ClickingButtons implements PacketType {
 //            case 154078:
 //                c.getPA().closeAllWindows();
 //                break;
-            case 183155:
-                c.getAttributes().getActiveLootBox().close();
-                break;
+//            case 183155:
+//                c.getAttributes().getActiveLootBox().close();
+//                break;
 
             case 148120: // Drops
                 // if (Wogw.DOUBLE_DROPS_TIMER > 0) {
@@ -660,6 +660,7 @@ public class ClickingButtons implements PacketType {
                 if (c.getAttributes().getActiveDialogSequence() != null)
                     c.getAttributes().getActiveDialogSequence().onOptionFive();
                 break;
+
 
             case 255255:
                 c.sendMessage("You reset your experience counter.");
@@ -1762,12 +1763,18 @@ public class ClickingButtons implements PacketType {
                 break;
             case 9167:
                 ThreeOptions.handleOption1(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionOne();
                 break;
             case 9168:
                 ThreeOptions.handleOption2(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionTwo();
                 break;
             case 9169:
                 ThreeOptions.handleOption3(c);
+                if (c.getAttributes().getActiveDialogSequence() != null)
+                    c.getAttributes().getActiveDialogSequence().onOptionThree();
                 break;
             /* VENG */
             case 118098:

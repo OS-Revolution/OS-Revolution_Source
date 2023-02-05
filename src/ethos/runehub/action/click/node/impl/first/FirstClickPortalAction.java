@@ -31,6 +31,7 @@ public class FirstClickPortalAction extends ClickNodeAction {
         this.teleportX = teleportX;
         this.teleportY = teleportY;
         this.teleportZ = teleportZ;
+        attachment.objectDistance = 2;
     }
 
     private final int nodeZ, teleportX, teleportY, teleportZ;

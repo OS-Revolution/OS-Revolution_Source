@@ -32,8 +32,20 @@ public class FixedScheduledEventController {
                 TimeUnit.MILLISECONDS);
     }
 
+    public void forceEvent(FixedScheduleEvent event) {
+        executorService.execute(event);
+    }
+
     public ZonedDateTime getNextCycle(FixedScheduleEvent event) {
         return this.getNextCycle(event.getRate());
+    }
+    public ZonedDateTime getFirstRun(FixedScheduleEvent event) {
+        final ZoneId ZID = ZoneId.of("UTC");
+        final ZonedDateTime now = ZonedDateTime.now(ZID);
+        final ZonedDateTime start = now.withMonth(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+        System.out.println(event.getName() + " rate: " + event.getRate());
+        final ZonedDateTime firstRun = start.plus(event.getRate(), ChronoUnit.MILLIS);
+        return firstRun;
     }
 
     private ZonedDateTime getNextCycle(long msRate) {
@@ -44,7 +56,7 @@ public class FixedScheduledEventController {
         final long firstRunMS = now.toInstant().toEpochMilli() - firstRun.toInstant().toEpochMilli();
         final long quotient = firstRunMS / msRate;
         final ZonedDateTime previousRun = firstRun.plus(quotient * msRate, ChronoUnit.MILLIS);
-        return previousRun.plus(msRate,ChronoUnit.MILLIS);
+        return firstRun.isAfter(now) ? firstRun : previousRun.plus(msRate,ChronoUnit.MILLIS);
     }
 
     private FixedScheduledEventController() {

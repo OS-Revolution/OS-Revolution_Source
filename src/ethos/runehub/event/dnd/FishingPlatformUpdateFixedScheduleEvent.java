@@ -2,6 +2,8 @@ package ethos.runehub.event.dnd;
 
 import ethos.runehub.event.FixedScheduleEvent;
 import ethos.runehub.skill.gathering.fishing.FishingPlatformController;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 import java.time.Duration;
 
@@ -9,6 +11,7 @@ public class FishingPlatformUpdateFixedScheduleEvent extends FixedScheduleEvent 
 
     @Override
     public void execute() {
+
         FishingPlatformController.getInstance().moveFishingSpots();
     }
 

@@ -361,7 +361,6 @@ public class ObjectOptionTwo {
 			break;
 
 		}
-		System.out.println("Option 2");
 		try {
 			Server.getEventHandler().stop("click-object");
 			Server.getEventHandler().submit(SecondClickNodeActionListener.onClick(c,objectType,obX,obY,c.heightLevel));

@@ -25,6 +25,9 @@ public class Walking implements PacketType {
 		c.nextChat = 0;
 		c.dialogueOptions = 0;
 		c.homeTeleport = 50;
+		if (c.teleporting) {
+			return;
+		}
 		if (!c.inWild() && c.teleBlockLength > 0) {
 			c.getPA().resetTb();
 		}

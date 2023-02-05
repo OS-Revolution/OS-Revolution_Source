@@ -16,6 +16,10 @@ public class ActionDispatcher {
         actionMap.put(id, button);
     }
 
+    public void registerButton(Button button) {
+        actionMap.put(button.getLineId(), button);
+    }
+
     public void dispatch(int id) {
         if (actionMap.containsKey(id)) {
             actionMap.get(id).onAction();

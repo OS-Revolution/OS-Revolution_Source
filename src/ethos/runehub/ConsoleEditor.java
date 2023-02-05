@@ -142,6 +142,9 @@ public class ConsoleEditor {
             case "mob":
                 new MobEditor().run(this);
                 break;
+            case "tablet":
+                new MagicTabletEditor().run(this);
+                break;
             default:
                 runEditor(this.getPrompt("No Such Editor. Enter an Editor Type"));
                 break;

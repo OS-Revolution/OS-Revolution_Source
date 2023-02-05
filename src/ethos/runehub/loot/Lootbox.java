@@ -7,6 +7,7 @@ import ethos.runehub.markup.RSString;
 import ethos.util.PreconditionUtils;
 import org.runehub.api.io.data.impl.LootTableContainerDAO;
 import org.runehub.api.io.load.impl.LootTableContainerDefinitionLoader;
+import org.runehub.api.io.load.impl.LootTableContainerLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.*;
 
@@ -52,6 +53,7 @@ public class Lootbox extends LootTableContainer {
         try {
             Preconditions.checkArgument(PreconditionUtils.isNull(player.getAttributes().getActiveLootBox()), "Please finish your current spin.");
             Preconditions.checkArgument(player.getItems().playerHasItem(this.getContainerId()), "You're out of lootboxes.");
+
             this.initPrizePool();
             this.openInterface();
             this.drawPrizes();
@@ -105,6 +107,7 @@ public class Lootbox extends LootTableContainer {
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+
                 if (name.endsWith("s") || amount > 1) {
                     player.sendMessage("^Lootbox Congratulations, you have won " + "[" + "<col=" + getColor(tier) + tier + "@bla@] @blu@" + name + " @red@x" + amount + "@bla@!");
                 } else {

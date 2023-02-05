@@ -110,7 +110,9 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
+import ethos.runehub.content.instance.BossArenaInstanceController;
 import ethos.runehub.content.rift.RiftFloorDAO;
+import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
 import ethos.runehub.entity.item.equipment.EquipmentSlot;
 import ethos.runehub.entity.player.*;
@@ -1325,6 +1327,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         // }
         this.attributes = new PlayerCharacterAttribute(this);
         this.context = PlayerCharacterContextDataAccessObject.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
+
     }
 
     public Player getClient(String name) {
@@ -1767,13 +1770,16 @@ public class Player extends Entity implements PlayerCharacterEntity {
             sendMessage("Welcome to " + Config.SERVER_NAME + ".");
             this.initializeDailyContent();
             this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() -> {
-                System.out.println("Doing Farm Tick");
-                int regionX = this.absX >> 3;
-                int regionY = this.absY >> 3;
-                int regionId = ((regionX / 8) << 8) + (regionY / 8);
-                if (context.getPlayerSaveData().farmingConfig().containsKey(regionId)) {
-                    final int varbit = context.getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
-                    this.getPA().sendConfig(529, varbit);
+                if (!this.disconnected) {
+                    int regionX = this.absX >> 3;
+                    int regionY = this.absY >> 3;
+                    int regionId = ((regionX / 8) << 8) + (regionY / 8);
+                    if (context.getPlayerSaveData().farmingConfig().containsKey(regionId)) {
+                        final int varbit = context.getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+                        this.getPA().sendConfig(529, varbit);
+                    }
+                } else {
+                    attributes.getFarmTickExecutorService().shutdownNow();
                 }
             }, WorldSettingsController.getInstance().getFarmController().getNextFlowerGrowthCycle().toMillis(), Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
             WorldSettingsController.getInstance().initializeTimers(this);
@@ -2225,9 +2231,111 @@ public class Player extends Entity implements PlayerCharacterEntity {
             }
         }
         attributes.getFarmTickExecutorService().shutdownNow();
+//        this.getContext().getPlayerSaveData().setItems(getAllItems().toArray(GameItem[]::new));
+        if (attributes.getInstanceId() != -1) {
+            BossArenaInstanceController.getInstance().closeInstanceForPlayer(this);
+        }
         this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
         this.save();
 
+    }
+
+    private List<GameItem> getAllItems() {
+        final List<GameItem> items = new ArrayList<>(this.getBankItems());
+        final List<GameItem> inventory = this.getInventory();
+        final List<GameItem> equipment = this.getEquipmentItems();
+        for (int j = 0; j < inventory.size(); j++) {
+            if (items.contains(inventory.get(j))) {
+                int slot = j;
+                items.stream().filter(gameItem -> gameItem.getId() == inventory.get(slot).getId()).findAny().ifPresent(gameItem -> {
+                    gameItem.setAmount(gameItem.getAmount() + inventory.get(slot).getAmount());
+                });
+            } else {
+                items.add(inventory.get(j));
+            }
+        }
+        for (int j = 0; j < equipment.size(); j++) {
+            if (items.contains(equipment.get(j))) {
+                int slot = j;
+                items.stream().filter(gameItem -> gameItem.getId() == equipment.get(slot).getId()).findAny().ifPresent(gameItem -> {
+                    gameItem.setAmount(gameItem.getAmount() + equipment.get(slot).getAmount());
+                });
+            } else {
+                items.add(equipment.get(j));
+            }
+        }
+        return items;
+    }
+
+
+    private List<GameItem> addItems(List<GameItem> originalList, List<GameItem> newList) {
+        for (int j = 0; j < newList.size(); j++) {
+            if (originalList.contains(newList.get(j))) {
+                int slot = j;
+                originalList.stream().filter(gameItem -> gameItem.getId() == newList.get(slot).getId()).findAny().ifPresent(gameItem -> {
+                    gameItem.setAmount(gameItem.getAmount() + newList.get(slot).getAmount());
+                });
+            } else {
+                originalList.add(newList.get(j));
+            }
+        }
+        return originalList;
+    }
+
+    private List<GameItem> getInventory() {
+        final List<GameItem> items = new ArrayList<>();
+        for (int j = 0; j < playerItems.length; j++) {
+            for (int k = 0; k < playerItemsN.length; k++) {
+                int itemId = playerItems[j];
+                int amount = playerItemsN[k];
+                if (items.stream().anyMatch(gameItem -> gameItem.getId() == itemId)) {
+                    items.stream().filter(gameItem -> gameItem.getId() == itemId).findAny().ifPresent(gameItem -> {
+                        gameItem.setAmount(gameItem.getAmount() + amount);
+                    });
+                } else {
+                    items.add(new GameItem(itemId, amount));
+                }
+            }
+        }
+        return items;
+    }
+
+    private List<GameItem> getEquipmentItems() {
+        final List<GameItem> items = new ArrayList<>();
+        for (int j = 0; j < playerEquipment.length; j++) {
+            for (int k = 0; k < playerEquipmentN.length; k++) {
+                int itemId = playerEquipment[j];
+                int amount = playerEquipmentN[k];
+                if (items.stream().anyMatch(gameItem -> gameItem.getId() == itemId)) {
+                    items.stream().filter(gameItem -> gameItem.getId() == itemId).findAny().ifPresent(gameItem -> {
+                        gameItem.setAmount(gameItem.getAmount() + amount);
+                    });
+                } else {
+                    items.add(new GameItem(itemId, amount));
+                }
+            }
+        }
+        return items;
+    }
+
+    private List<GameItem> getBankItems() {
+        final List<GameItem> items = new ArrayList<>();
+        for (int j = 0; j < 9; j++) {
+            for (int k = 0; k < Config.BANK_SIZE; k++) {
+                if (j > this.getBank().getBankTab()[j].size() - 1)
+                    break;
+                int itemId = this.getBank().getBankTab()[j].getItem(k).getId();
+                int amount = this.getBank().getBankTab()[j].getItem(k).getAmount();
+                if (items.stream().anyMatch(gameItem -> gameItem.getId() == itemId)) {
+                    items.stream().filter(gameItem -> gameItem.getId() == itemId).findAny().ifPresent(gameItem -> {
+                        gameItem.setAmount(gameItem.getAmount() + amount);
+                    });
+                } else {
+                    items.add(new GameItem(itemId, amount));
+                }
+            }
+        }
+        return items;
     }
 
     public void save() {
@@ -4239,17 +4347,22 @@ public class Player extends Entity implements PlayerCharacterEntity {
         if (attributes.isInRift()) {
             return true;
         }
-        if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
-                || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
-                || Boundary.isIn(this, Boundary.NECRO) || Boundary.isIn(this, Boundary.ROCK_CRAB)
-                || Boundary.isIn(this, Boundary.CERBERUS_BOSSROOMS) || Boundary.isIn(this, Boundary.INFERNO)
-                || Boundary.isIn(this, Boundary.SKOTIZO_BOSSROOM) || Boundary.isIn(this, Boundary.LIZARDMAN_CANYON)
-                || Boundary.isIn(this, Boundary.BANDIT_CAMP_BOUNDARY) || Boundary.isIn(this, Boundary.COMBAT_DUMMY)
-                || Boundary.isIn(this, Boundary.TEKTON) || Boundary.isIn(this, Boundary.SKELETAL_MYSTICS)
-                || Boundary.isIn(this, Boundary.RAIDS) || Boundary.isIn(this, Boundary.OLM)
-                || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.CATACOMBS)) {
+        if (attributes.getInstanceId() != -1 &&
+                BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getArea().contains(new Point(absX, absY))
+                && heightLevel == BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getFloodId()) {
             return true;
         }
+            if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
+                    || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
+                    || Boundary.isIn(this, Boundary.NECRO) || Boundary.isIn(this, Boundary.ROCK_CRAB)
+                    || Boundary.isIn(this, Boundary.CERBERUS_BOSSROOMS) || Boundary.isIn(this, Boundary.INFERNO)
+                    || Boundary.isIn(this, Boundary.SKOTIZO_BOSSROOM) || Boundary.isIn(this, Boundary.LIZARDMAN_CANYON)
+                    || Boundary.isIn(this, Boundary.BANDIT_CAMP_BOUNDARY) || Boundary.isIn(this, Boundary.COMBAT_DUMMY)
+                    || Boundary.isIn(this, Boundary.TEKTON) || Boundary.isIn(this, Boundary.SKELETAL_MYSTICS)
+                    || Boundary.isIn(this, Boundary.RAIDS) || Boundary.isIn(this, Boundary.OLM)
+                    || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.CATACOMBS)) {
+                return true;
+            }
         if (inRevs()) {
             return true;
         }
@@ -4784,6 +4897,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             }
 
             if (playerEquipment[playerChest] > 1) {
+            
                 playerProps.writeWord(0x200 + playerEquipment[playerChest]);
             } else {
                 playerProps.writeWord(0x100 + playerAppearance[2]);

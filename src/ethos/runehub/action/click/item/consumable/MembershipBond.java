@@ -32,7 +32,7 @@ public class MembershipBond extends ClickConsumableItemAction {
             case 13190:
                 return 30;
             case 13192:
-                return 14;
+                return 7;
             default:return 30;
         }
     }

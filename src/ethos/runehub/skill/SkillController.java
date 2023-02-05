@@ -4,9 +4,11 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.event.dnd.SkillOfTheHourFixedScheduleEvent;
 import ethos.runehub.skill.artisan.cooking.Cooking;
+import ethos.runehub.skill.artisan.crafting.Crafting;
 import ethos.runehub.skill.artisan.herblore.Herblore;
 import ethos.runehub.skill.artisan.runecraft.Runecraft;
 import ethos.runehub.skill.artisan.smithing.Smithing;
+import ethos.runehub.skill.combat.magic.Magic;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.farming.Farming;
 import ethos.runehub.skill.gathering.farming.foraging.Foraging;
@@ -36,25 +38,25 @@ public class SkillController {
         final int startingLevel = player.getLevelForXP(player.playerXP[skillId]);
         final int maxXpDifference = 200000000 - currentXP;
         if (baseAmount > 0) {
-        final int amount = this.getXPWithModifiers(skillId,baseAmount);
-        final int quotient = maxXpDifference / amount;
-        final int remainder = maxXpDifference % amount;
-        player.getAttributes().getPlayPassController().addPlayPassXPFromSkillXP(baseAmount);
-        if (currentXP < 200000000) {
-            if (quotient >= 1) {
-                Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + amount);
-                player.playerXP[skillId] += amount;
-                player.getPA().sendExperienceDrop(true, amount, skillId);
-            } else {
-                Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + remainder);
-                player.playerXP[skillId] += remainder;
-                player.getPA().sendExperienceDrop(true, remainder, skillId);
-                PlayerHandler.executeGlobalMessage(
-                        "^News $" + Misc.capitalize(player.getAttributes().getName()) + " has reached $200M XP in $" + Misc.capitalize(SkillDictionary.Skill.values()[skillId].name().toLowerCase()) + "!"
-                );
+            final int amount = this.getXPWithModifiers(skillId, baseAmount);
+            final int quotient = maxXpDifference / amount;
+            final int remainder = maxXpDifference % amount;
+            player.getAttributes().getPlayPassController().addPlayPassXPFromSkillXP(baseAmount);
+            if (currentXP < 200000000) {
+                if (quotient >= 1) {
+                    Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + amount);
+                    player.playerXP[skillId] += amount;
+                    player.getPA().sendExperienceDrop(true, amount, skillId);
+                } else {
+                    Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + remainder);
+                    player.playerXP[skillId] += remainder;
+                    player.getPA().sendExperienceDrop(true, remainder, skillId);
+                    PlayerHandler.executeGlobalMessage(
+                            "^News $" + Misc.capitalize(player.getAttributes().getName()) + " has reached $200M XP in $" + Misc.capitalize(SkillDictionary.Skill.values()[skillId].name().toLowerCase()) + "!"
+                    );
 
+                }
             }
-        }
         }
 
         if (startingLevel < player.getLevelForXP(player.playerXP[skillId])) {
@@ -64,10 +66,10 @@ public class SkillController {
         player.getPA().setSkillLevel(skillId, player.playerLevel[skillId], player.playerXP[skillId]);
         player.getPA().refreshSkill(skillId);
     }
-    
-    private int getXPWithModifiers(int skill,int baseAmount) {
+
+    private int getXPWithModifiers(int skill, int baseAmount) {
         int amount = baseAmount;
-        if(player.getContext().getPlayerSaveData().getBonusXp().containsKey(skill)) {
+        if (player.getContext().getPlayerSaveData().getBonusXp().containsKey(skill)) {
             if (player.getContext().getPlayerSaveData().getBonusXp().get(skill).value() > baseAmount) {
                 player.getContext().getPlayerSaveData().getBonusXp().get(skill).subtract(baseAmount);
                 player.getPA().sendBonusXp(skill, player.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
@@ -87,7 +89,18 @@ public class SkillController {
         if (WorldSettingsController.getInstance().getSkillOfTheHourEffect(skill) == SkillOfTheHourFixedScheduleEvent.XP) {
             amount *= 1.5;
         }
-        amount *= this.getSkill(skill).getGainsBonus() + this.getSkill(skill).getEquipmentBonuses();
+        if (skill == SkillDictionary.Skill.CRAFTING.getId() && player.getAttributes().getSkillStationId() == 6799) {
+            amount += (baseAmount * 0.1) < 1 ? 1 : (baseAmount * 0.1);
+        } else if(skill == SkillDictionary.Skill.COOKING.getId() && player.getAttributes().getSkillStationId() == 13542) {
+            amount += (baseAmount * 0.21) < 1 ? 1 : (baseAmount * 0.21);
+        } else if(skill == SkillDictionary.Skill.HERBLORE.getId() && player.getAttributes().getSkillStationId() == 878) {
+            amount += (baseAmount * 0.1) < 1 ? 1 : (baseAmount * 0.1);
+        } else if(skill == SkillDictionary.Skill.FIREMAKING.getId() && player.getAttributes().getSkillStationId() == 11017) {
+            amount += (baseAmount * 0.1) < 1 ? 1 : (baseAmount * 0.1);
+        }
+
+        if (this.getSkill(skill) != null)
+            amount *= this.getSkill(skill).getGainsBonus() + this.getSkill(skill).getEquipmentBonuses();
         return amount;
     }
 
@@ -147,6 +160,8 @@ public class SkillController {
                 return cooking;
             case 8:
                 return woodcutting;
+            case 12:
+                return crafting;
             case 13:
                 return smithing;
             case 14:
@@ -162,7 +177,8 @@ public class SkillController {
             case 23:
                 return sailing;
             default:
-                throw new NullPointerException("No Skill with ID: " + skillId);
+                return null;
+//                throw new NullPointerException("No Skill with ID: " + skillId);
         }
     }
 
@@ -223,6 +239,14 @@ public class SkillController {
         return farming;
     }
 
+    public Magic getMagic() {
+        return magic;
+    }
+
+    public Crafting getCrafting() {
+        return crafting;
+    }
+
     public SkillController(Player player) {
         this.player = player;
         this.woodcutting = new Woodcutting(player);
@@ -236,6 +260,8 @@ public class SkillController {
         this.thieving = new Thieving(player);
         this.sailing = new Sailing(player);
         this.farming = new Farming(player);
+        this.magic = new Magic(player);
+        this.crafting = new Crafting(player);
     }
 
     private final Player player;
@@ -250,5 +276,7 @@ public class SkillController {
     private final Thieving thieving;
     private final Sailing sailing;
     private final Farming farming;
+    private final Magic magic;
+    private final Crafting crafting;
 
 }

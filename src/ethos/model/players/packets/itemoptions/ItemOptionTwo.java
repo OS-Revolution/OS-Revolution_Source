@@ -60,7 +60,7 @@ public class ItemOptionTwo implements PacketType {
 			duelSession.finish(MultiplayerSessionFinalizeType.WITHDRAW_ITEMS);
 			return;
 		}
-		TeleportTablets.operate(player, itemId);
+//		TeleportTablets.operate(player, itemId);
 		ItemDefinition def = ItemDefinition.forId(itemId);
 		switch (itemId) {
 

@@ -24,7 +24,6 @@ public abstract class TravellingMerchantEvent extends Event<Merchant> {
 
     protected void spawn() {
         this.currentPoint = this.getNextSpawnPoint();
-        System.out.println("Spawning: " + currentPoint);
         NPCHandler.spawn(attachment.getMerchantId(), currentPoint.getXCoordinate(), currentPoint.getZCoordinate(), currentPoint.getYCoordinate(), 0, 1000, 0, 0, 0, false);
         this.onSpawn();
     }
@@ -33,7 +32,6 @@ public abstract class TravellingMerchantEvent extends Event<Merchant> {
         NPC npc = NPCHandler.getNpc(attachment.getMerchantId());
         spawnPoints.offer(currentPoint);
         this.currentPoint = this.getNextSpawnPoint();
-        System.out.println("Relocating: " + currentPoint);
         npc.absX = currentPoint.getXCoordinate();
         npc.absY = currentPoint.getZCoordinate();
         npc.heightLevel = currentPoint.getYCoordinate();

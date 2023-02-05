@@ -14,6 +14,11 @@ public class GameItem {
         this.amount = amount;
     }
 
+    @Override
+    public boolean equals(Object gameItem) {
+        return gameItem instanceof GameItem && ((GameItem) gameItem).getId() == this.id;
+    }
+
     public GameItem(int id, int amount) {
         this.id = id;
         this.amount = amount;

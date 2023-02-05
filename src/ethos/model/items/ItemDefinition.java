@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import ethos.model.players.Equipment;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
 import ethos.runehub.entity.item.equipment.EquipmentDAO;
 import org.apache.commons.io.FileUtils;
@@ -226,7 +227,11 @@ public class ItemDefinition {
 	 * @return The slot.
 	 */
 	public byte getSlot() {
-		return EquipmentDAO.getInstance().getAllEntries().stream().anyMatch(equipment -> equipment.getItemId() == id) ?(byte) EquipmentCache.getInstance().read((int) id).getSlot() : slot;
+		byte slot = EquipmentDAO.getInstance().getAllEntries().stream().anyMatch(equipment -> equipment.getItemId() == id) ?(byte) EquipmentCache.getInstance().read((int) id).getSlot() : this.slot;
+		if (slot == 11) {
+			slot = (byte) Equipment.Slot.WEAPON.getSlot();
+		}
+		return slot;
 	}
 
 	/**

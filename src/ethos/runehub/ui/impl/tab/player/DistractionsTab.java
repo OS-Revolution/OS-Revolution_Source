@@ -67,7 +67,7 @@ public class DistractionsTab extends InfoTab {
         this.registerEventTimeLabels();
     }
 
-    private final int totalChildren = WorldSettingsController.getInstance().getFixedScheduleEvents().length;
+    private final int totalChildren =3;
     private final int startIndex = 57315;
     private final TextComponent[] eventNameLabel, eventTimeLabel;
 }

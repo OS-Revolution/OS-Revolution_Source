@@ -2,8 +2,8 @@ package ethos.model.players.packets.dialogueoptions;
 
 import ethos.runehub.dialog.Dialog;
 import ethos.runehub.dialog.DialogSequence;
-import ethos.runehub.ui.impl.VoyageUI;
 import ethos.runehub.ui.impl.sailing.SailingUI;
+import ethos.runehub.ui.impl.sailing.VoyageUI;
 import ethos.runehub.world.wushanko.region.IslandRegion;
 import ethos.runehub.world.wushanko.region.IslandRegionLoader;
 import org.apache.commons.lang3.RandomUtils;
@@ -651,6 +651,7 @@ public class FourOptions {
         switch (c.dialogueAction) {
             case 1:
                 c.sendUI(new SailingUI(c,c.getContext().getPlayerSaveData().getAvailableVoyages()));
+//                c.sendUI(new VoyageUI(c));
                 break;
             case 55555:
                 IslandRegion region = IslandRegionLoader.getInstance().read(3);

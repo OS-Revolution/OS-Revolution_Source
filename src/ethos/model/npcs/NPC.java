@@ -54,6 +54,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public long singleCombatDelay = 0;
     public boolean teleporting = false;
     private int facingDirection;
+    private boolean instanceSpawn;
 
     public long lastRandomlySelectedPlayer = System.currentTimeMillis();
 
@@ -99,6 +100,24 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     public int riftMobType;
     public boolean sentEngageMessage;
+
+    private int respawnTicks;
+
+    public int getRespawnTicks() {
+        return respawnTicks;
+    }
+
+    public void setRespawnTicks(int respawnTicks) {
+        this.respawnTicks = respawnTicks;
+    }
+
+    public boolean isInstanceSpawn() {
+        return instanceSpawn;
+    }
+
+    public void setInstanceSpawn(boolean instanceSpawn) {
+        this.instanceSpawn = instanceSpawn;
+    }
 
     public NPC(int _npcId, int _npcType, NPCDefinitions definition) {
         super(_npcId, definition.getNpcName());

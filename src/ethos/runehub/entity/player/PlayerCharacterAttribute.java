@@ -4,36 +4,21 @@ import ethos.model.npcs.NPC;
 import ethos.model.players.Player;
 import ethos.runehub.content.PlayPassController;
 import ethos.runehub.content.rift.RiftFloorDAO;
-import ethos.runehub.content.rift.impl.NephalemRift;
 import ethos.runehub.content.rift.party.Party;
 import ethos.runehub.content.rift.Rift;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.combat.CombatController;
 import ethos.runehub.entity.combat.impl.PvECombatController;
 import ethos.runehub.entity.item.ItemReactionProcessor;
-import ethos.runehub.entity.item.equipment.Equipment;
-import ethos.runehub.entity.item.equipment.EquipmentCache;
-import ethos.runehub.entity.item.equipment.EquipmentSlot;
-import ethos.runehub.entity.mob.hostile.HostileMob;
 import ethos.runehub.entity.node.Node;
 import ethos.runehub.entity.player.action.ActionController;
-import ethos.runehub.entity.player.action.impl.EquipmentSlotUpdateAction;
-import ethos.runehub.entity.player.action.impl.EquipmentUpdateAction;
-import ethos.runehub.entity.player.action.impl.ItemRenderUpdateAction;
 import ethos.runehub.loot.Lootbox;
-import ethos.runehub.skill.gathering.farming.FarmingConfig;
-import ethos.runehub.skill.gathering.farming.patch.PatchType;
-import ethos.runehub.skill.node.context.impl.GatheringNodeContext;
+import ethos.runehub.skill.gathering.hunter.Trap;
 import ethos.runehub.ui.ActionDispatcher;
 import ethos.runehub.ui.GameUI;
 import ethos.runehub.ui.impl.tab.TabUI;
-import ethos.runehub.ui.impl.tab.player.AchievementTab;
-import ethos.runehub.ui.impl.tab.player.DistractionsTab;
-import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
-import ethos.runehub.ui.impl.tab.player.QuestTab;
-import org.runehub.api.io.load.impl.ItemIdContextLoader;
-import org.runehub.api.model.entity.user.character.CharacterEntity;
 import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
+import org.runehub.api.net.Connection;
 import org.runehub.api.util.math.geometry.Point;
 
 import java.util.*;
@@ -52,8 +37,12 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.actionDispatcher = new ActionDispatcher();
         this.actionController = new ActionController();
         this.pvECombatController = new PvECombatController(owner);
-
+        this.deployedTrapList = new ArrayList<>(5);
         this.actionDispatcher.registerButton(actionEvent -> this.getOwner().getPA().closeAllWindows(),250002);
+    }
+
+    public List<Trap> getDeployedTrapList() {
+        return deployedTrapList;
     }
 
     public CombatController<Player, NPC> getPvECombatController() {
@@ -236,7 +225,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.party = party;
     }
 
-    public Map<Integer, List<Node>> getInstanceNodes() {
+    public Map<Integer, ArrayList<Node>> getInstanceNodes() {
         return instanceNodes;
     }
 
@@ -244,7 +233,9 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         if (instanceNodes.containsKey(regionId)) {
             instanceNodes.get(regionId).add(node);
         } else {
-            instanceNodes.put(regionId, List.of(node));
+            ArrayList<Node> nodes = new ArrayList<>();
+            nodes.add(node);
+            instanceNodes.put(regionId, nodes);
         }
     }
 
@@ -252,6 +243,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         if (instanceNodes.containsKey(regionId)) {
             List<Node> update = new ArrayList<>();
             instanceNodes.get(regionId).stream().filter(n -> n.getId() != node.getId()).forEach(update::add);
+//            instanceNodes.get(regionId).remove(node);
             instanceNodes.get(regionId).clear();
             instanceNodes.get(regionId).addAll(update);
         }
@@ -281,7 +273,6 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         if (rift != null && RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> riftFloor.getBoundingBox().contains(new Point(this.getOwner().getX(),this.getOwner().getY())))) {
             mf += 0.05f * rift.getDifficulty().ordinal();
         }
-        System.out.println("Magic Find: " + mf);
         return mf;
     }
 
@@ -293,8 +284,40 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         return slots;
     }
 
+    public int getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(int instanceId) {
+        this.instanceId = instanceId;
+    }
+
     public String getName() {
         return this.getOwner().playerName.replaceAll(" ", "_");
+    }
+
+    public Connection getRunehubConnnection() {
+        return runehubConnnection;
+    }
+
+    public void setRunehubConnnection(Connection runehubConnnection) {
+        this.runehubConnnection = runehubConnnection;
+    }
+
+    public int getSkillStationId() {
+        return skillStationId;
+    }
+
+    public void setSkillStationId(int skillStationId) {
+        this.skillStationId = skillStationId;
+    }
+
+    public boolean isEnteringSkillStationTicket() {
+        return enteringSkillStationTicket;
+    }
+
+    public void setEnteringSkillStationTicket(boolean enteringSkillStationTicket) {
+        this.enteringSkillStationTicket = enteringSkillStationTicket;
     }
 
     @Override
@@ -304,7 +327,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
     private boolean movementResricted, actionLocked, enteringValue, usingStar, inRift;
     private float magicFind, teleportRechargeReduction;
-    private int integerInput = 0;
+    private int integerInput = 0,instanceId = -1;
     private final ItemReactionProcessor itemReactionProcessor;
     private DialogSequence activeDialogSequence;
     private int selectedOption, interactingWithNodeId, skillSelected = -1;
@@ -317,14 +340,21 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
     private final ScheduledExecutorService farmTickExecutorService = Executors.newScheduledThreadPool(1);
 
-    private final Map<Integer, List<Node>> instanceNodes;
+    private final Map<Integer, ArrayList<Node>> instanceNodes;
 
     private Rift rift;
     private int startingFloor;
     private Party party;
 
+    private Connection runehubConnnection;
+
     private final PlayPassController playPassController;
     private final ActionDispatcher actionDispatcher;
     private final ActionController actionController;
     private final CombatController<Player, NPC> pvECombatController;
+    private final List<Trap> deployedTrapList;
+
+    private int skillStationId;
+
+    private boolean enteringSkillStationTicket;
 }

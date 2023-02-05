@@ -17,6 +17,8 @@ import ethos.model.players.Player;
 import ethos.runehub.world.WorldController;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.util.Misc;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 public class Region {
 
@@ -1044,6 +1046,9 @@ public class Region {
 	public static int getClipping(int x, int y, int height) {
 		if (height > 3)
 			height = 0;
+		if (new Rectangle(new Point(1807, 5135), new Point(1841, 5168)).contains(new Point(x,y))) {
+			height = 2;
+		}
 		int regionX = x >> 3;
 		int regionY = y >> 3;
 		int regionId = ((regionX / 8) << 8) + (regionY / 8);

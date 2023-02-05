@@ -66,7 +66,7 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     @Override
     protected void onUpdate() {
-//        this.updateAnimation();
+        this.updateAnimation();
     }
 
     @Override

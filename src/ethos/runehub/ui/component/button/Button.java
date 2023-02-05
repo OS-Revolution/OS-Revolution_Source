@@ -29,5 +29,9 @@ public class Button extends UIComponent {
         actionListeners.add(new SystemActionListener());
     }
 
+    public List<ActionListener> getActionListeners() {
+        return actionListeners;
+    }
+
     private List<ActionListener> actionListeners;
 }

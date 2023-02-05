@@ -15,5 +15,7 @@ public class AnimationDefinitionDAO extends BetaAbstractDataAcessObject<Animatio
 
     private AnimationDefinitionDAO() {
         super(RunehubConstants.OS_DEFINTIONS_DB, AnimationDefinition.class);
+
+        create(new AnimationDefinition(5126,new int[] {6510,6513,6515,6512}));
     }
 }

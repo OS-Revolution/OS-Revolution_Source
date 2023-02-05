@@ -1,6 +1,8 @@
 package ethos.runehub.entity.merchant;
 
 import ethos.model.players.Player;
+import ethos.model.players.PlayerHandler;
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.entity.CommodityTrader;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.ui.impl.ShopUI;
@@ -11,6 +13,7 @@ import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.math.impl.DoubleRange;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -40,7 +43,7 @@ public class Merchant {
         player.getItems().resetItems(3823);
         player.isShopping = true;
         player.myShopId = merchantId;
-        player.sendUI(new ShopUI(player,name));
+        player.sendUI(new ShopUI(player, name));
 //        player.getPA().sendFrame248(64000, 3822);
 //        player.getPA().sendFrame126(name, 64003);
 //        player.getPA().sendFrame171(1, 64017);
@@ -62,45 +65,97 @@ public class Merchant {
     }
 
     public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
-        final int price = this.getPriceMerchantWillBuyFor(itemId) * amount;
-        if (player.getItems().playerHasItem(itemId, amount)) {
-            if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(itemId).isStackable() ? 0 : amount)) {
-                player.getItems().deleteItem(itemId, slot, amount);
-                player.getItems().addItem(currencyId, price);
-                player.getItems().resetItems(3823);
-                player.sendMessage("You sell your #" + amount + " @" + itemId + " in exchange for #"
-                        + price + " @" + currencyId);
-                return true;
+        if (ItemIdContextLoader.getInstance().read(itemId).isTradable() && itemId != currencyId) {
+            final int price = this.getPriceMerchantWillBuyFor(itemId) * amount;
+            if (player.getItems().playerHasItem(itemId, amount)) {
+                if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(currencyId).isStackable() ? 0 : amount)) {
+                    player.getItems().deleteItem2(itemId, amount);
+                    player.getItems().addItem(currencyId, price);
+                    player.getItems().resetItems(3823);
+                    player.sendMessage("You sell your #" + amount + " @" + itemId + " in exchange for #"
+                            + price + " @" + currencyId);
+                    this.updateStock(itemId, amount);
+                    this.updateShop(player);
+                    return true;
+                } else {
+                    player.sendMessage("You do not have enough inventory space.");
+                }
             } else {
-                player.sendMessage("You do not have enough inventory space.");
+                player.sendMessage("You can't sell what you don't have.");
             }
         } else {
-            player.sendMessage("You can't sell what you don't have.");
+            player.sendMessage("The shop will not buy this");
         }
         return false;
     }
 
     public boolean sellItemToPlayer(int itemId, int amount, int slot, Player player) {
         final int price = this.getPriceMerchantWillSellFor(itemId) * amount;
-        if (player.getItems().playerHasItem(currencyId, price)) {
-            if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(itemId).isStackable() ? 0 : amount)) {
-                player.getItems().deleteItem(currencyId, price);
-                player.getItems().addItem(itemId, amount);
-                player.getItems().resetItems(3823);
-                player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + currencyId);
-                return true;
+        if (amount <= this.getMerchandise().get(slot).getAmount()) {
+            if (player.getItems().playerHasItem(currencyId, price)) {
+                if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(itemId).isStackable() ? 0 : amount)) {
+                    player.getItems().deleteItem(currencyId, price);
+                    player.getItems().addItem(itemId, amount);
+                    player.getItems().resetItems(3823);
+                    player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + currencyId);
+                    this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() - amount);
+                    this.updateShop(player);
+                    return true;
+                } else {
+                    player.sendMessage("You do not have enough inventory space.");
+                }
             } else {
-                player.sendMessage("You do not have enough inventory space.");
+                player.sendMessage("Come back when you're a little bit...richer!");
             }
-        } else {
-            player.sendMessage("Come back when you're a little bit...richer!");
         }
         return false;
     }
 
 
+    protected void updateStock(int itemId, int amount) {
+        if (this.getMerchandiseSlot(itemId) == null) {
+            MerchandiseSlot merchandiseSlot = new MerchandiseSlot(itemId, amount, false, 0.0D, false);
+            this.getMerchandise().add(merchandiseSlot);
+            RunehubConstants.GENERAL_STORE_ITEMS.add(merchandiseSlot);
+        } else {
+            this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() + amount);
+            Optional<MerchandiseSlot> merchandise = RunehubConstants.GENERAL_STORE_ITEMS.stream().filter(merchandiseSlot -> merchandiseSlot.getItemId() == itemId).findAny();
+            merchandise.ifPresent(merchandiseSlot -> merchandiseSlot.setAmount(merchandiseSlot.getAmount() + amount));
+        }
+    }
+
+    protected void updateShop(Player player) {
+        player.getOutStream().createFrameVarSizeWord(53);
+        player.getOutStream().writeWord(64016);
+        player.getOutStream().writeWord(this.getMerchandise().size());
+        this.getMerchandise().forEach(merchandiseSlot -> {
+            if (merchandiseSlot.getAmount() > 254) {
+                player.getOutStream().writeByte(255);
+                player.getOutStream().writeDWord_v2(merchandiseSlot.getAmount());
+            } else {
+                player.getOutStream().writeByte(merchandiseSlot.getAmount());
+            }
+            player.getOutStream().writeWordBigEndianA(merchandiseSlot.getItemId() + 1);
+        });
+        player.getOutStream().writeWordBigEndianA(0);
+        player.getOutStream().endFrameVarSizeWord();
+        player.flushOutStream();
+    }
+
+    public void restock() {
+        this.getLootTable().getLootTableEntries().forEach(lootTableEntry -> {
+            int itemId = lootTableEntry.getId();
+            if (this.getMerchandiseSlot(itemId) != null && this.getMerchandiseSlot(itemId).getAmount() < lootTableEntry.getAmount().getMax()) {
+                this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() + 1);
+            } else if (this.getMerchandiseSlot(itemId) == null) {
+                this.getMerchandise().add(new MerchandiseSlot(itemId, 1, false, 0.0D, false));
+            }
+        });
+        PlayerHandler.getPlayers().stream().filter(player -> player.myShopId == merchantId).forEach(this::updateShop);
+    }
+
     public String getPriceForItemBeingSoldToShop(int itemId) {
-        if (buyBackIds.contains(-1) || buyBackIds.contains(itemId))
+        if ((buyBackIds.contains(-1) || buyBackIds.contains(itemId)) && itemId != currencyId)
             return "The shop will pay #" + this.getPriceMerchantWillBuyFor(itemId) + " @"
                     + currencyId + " per @" + itemId;
         return "The shop will not buy this";
@@ -155,7 +210,7 @@ public class Merchant {
     public Merchant(int currencyId, int shopId, String name, long merchandiseTableId, List<Integer> buyBackIds) {
         this(
                 LootTableLoader.getInstance().read(merchandiseTableId).getLootTableEntries().stream()
-                        .map(lootTableEntry -> new MerchandiseSlot(lootTableEntry.getId(), lootTableEntry.getAmount().getMax(), false, 0.0D,false))
+                        .map(lootTableEntry -> new MerchandiseSlot(lootTableEntry.getId(), lootTableEntry.getAmount().getMax(), false, 0.0D, false))
                         .collect(Collectors.toList()),
                 currencyId,
                 shopId,

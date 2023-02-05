@@ -10,6 +10,8 @@ import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.Right;
+import ethos.runehub.skill.combat.magic.action.EnchantLevel1JewellerySkillAction;
+import ethos.runehub.skill.combat.magic.spell.SpellCache;
 import ethos.util.Misc;
 
 /**
@@ -43,6 +45,13 @@ public class MagicOnItems implements PacketType {
 			return;
 		}
 		c.getPA().magicOnItems(slot, itemId, spellId);
+
+		switch (spellId) {
+			case 1155:
+				c.getSkillController().getMagic().train(new EnchantLevel1JewellerySkillAction(c,itemId, SpellCache.getInstance().read(spellId)));
+				break;
+		}
+
 		c.usingMagic = false;
 
 		if (c.getRightGroup().isOrInherits(Right.OWNER)) {

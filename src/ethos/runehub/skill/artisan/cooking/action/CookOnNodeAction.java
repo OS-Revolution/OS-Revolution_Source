@@ -6,7 +6,10 @@ import ethos.model.players.Player;
 import ethos.runehub.entity.item.ItemInteractionContext;
 import ethos.runehub.skill.artisan.ArtisanSkillAction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
+import ethos.util.Misc;
 import ethos.util.PreconditionUtils;
+
+import java.util.logging.Logger;
 
 public class CookOnNodeAction extends ArtisanSkillAction {
 
@@ -32,6 +35,15 @@ public class CookOnNodeAction extends ArtisanSkillAction {
     @Override
     protected float getRollModifier() {
         return this.getContext().getUsedWithId() == 114 ? 1.05f : 1.0f;
+    }
+
+    @Override
+    protected void onSuccess() {
+        super.onSuccess();
+        if (Misc.random(100) <= 5 && this.getActor().getAttributes().getSkillStationId() == 13542) {
+            this.getActor().getItems().addItemToBank(this.getReaction().getProductItemId(),1);
+            this.getActor().sendMessage("You make two portions of food thanks to the range! The extra was sent to your bank.");
+        }
     }
 
     public CookOnNodeAction(Player player, CookingItemReaction reaction, ItemInteractionContext context) {

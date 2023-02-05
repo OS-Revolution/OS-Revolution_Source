@@ -1,10 +1,11 @@
-package ethos.runehub.entity.player.action.impl;
+package ethos.runehub.entity.player.action.impl.node;
 
 import com.google.common.base.Preconditions;
 import ethos.model.players.Player;
+import ethos.runehub.entity.player.action.impl.node.ClickNodeAction;
 import org.runehub.api.util.SkillDictionary;
 
-public class FirstClickFishingPlatformBoat extends ClickNodeAction{
+public class FirstClickFishingPlatformBoat extends ClickNodeAction {
 
 
     @Override

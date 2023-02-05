@@ -48,7 +48,7 @@ public class ItemOptionThree implements PacketType {
 			c.getRunePouch().withdrawAll();
 			return;
 		}
-		TeleportTablets.operate(c, itemId);
+//		TeleportTablets.operate(c, itemId);
 		DuelSession duelSession = (DuelSession) Server.getMultiplayerSessionListener().getMultiplayerSession(c, MultiplayerSessionType.DUEL);
 		if (Objects.nonNull(duelSession) && duelSession.getStage().getStage() > MultiplayerSessionStage.REQUEST
 				&& duelSession.getStage().getStage() < MultiplayerSessionStage.FURTHER_INTERATION) {

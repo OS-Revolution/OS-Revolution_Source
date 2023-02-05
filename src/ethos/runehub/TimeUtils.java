@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 
 public class TimeUtils {
 
@@ -26,8 +28,16 @@ public class TimeUtils {
         return DurationFormatUtils.formatDuration(ms, "dd' days, 'HH' hours, 'mm' minutes, 'ss' seconds.'", true);
     }
 
+    public static Duration getDurationFromMS(long ms) {
+        return Duration.ofMillis(ms);
+    }
+
     public static String getShortDurationString(long ms) {
         return DurationFormatUtils.formatDuration(ms, "dd' days' - HH:mm:ss", true);
+    }
+
+    public static String getHoursDurationString(long ms) {
+        return DurationFormatUtils.formatDuration(ms, "HH:mm:ss", true);
     }
 
     public static String getShortDurationString(Duration duration) {
@@ -44,6 +54,18 @@ public class TimeUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm");
         String formattedString = zdt.format(formatter);
         return formattedString;
+    }
+
+    public static long dateTimeDifference(Temporal d1, Temporal d2, ChronoUnit unit){
+        return unit.between(d1, d2);
+    }
+
+    public static long dateTimeDifference(ZonedDateTime d1, ZonedDateTime d2){
+        return (d1.toInstant().toEpochMilli() - d2.toInstant().toEpochMilli()) + d1.toInstant().toEpochMilli();
+    }
+
+    public static long getMSUntilDate(ZonedDateTime date) {
+        return date.toInstant().toEpochMilli();
     }
 
     public static String getDurationStringDays(Duration duration) {

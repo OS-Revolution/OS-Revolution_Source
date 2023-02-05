@@ -27,6 +27,10 @@ public class MerchandiseSlot implements Comparable<MerchandiseSlot> {
         return members;
     }
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
     public MerchandiseSlot(int itemId, int amount, boolean salePossible, double maxDiscount, boolean members) {
         this.itemId = itemId;
         this.amount = amount;
@@ -36,7 +40,7 @@ public class MerchandiseSlot implements Comparable<MerchandiseSlot> {
     }
 
     private final int itemId;
-    private final int amount;
+    private int amount;
     private final boolean salePossible;
     private final double maxDiscount;
     private final boolean members;

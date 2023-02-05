@@ -28,8 +28,12 @@ import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
 import ethos.net.discord.DiscordMessager;
 import ethos.runehub.action.click.item.ClickItemActionFactory;
+import ethos.runehub.action.click.node.FirstClickNodeActionListener;
+import ethos.runehub.entity.player.action.FirstClickItemActionFactory;
+import ethos.runehub.entity.player.action.FirstClickNodeActionFactory;
 import ethos.runehub.loot.Lootbox;
 import ethos.runehub.skill.artisan.herblore.action.CleanHerbAction;
+import ethos.runehub.skill.gathering.hunter.HunterTest;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 
@@ -156,6 +160,16 @@ public class ItemOptionOne implements PacketType {
         c.lastClickedItem = itemId;
         ClickItemActionFactory.onClick(c,itemId,itemSlot);
 //        c.getHerblore().clean(itemId);
+        try {
+            Server.getEventHandler().stop("click-item");
+            Server.getEventHandler().submit(ClickItemActionFactory.onClick(c,itemId,itemSlot));
+        } catch (NullPointerException e) {
+            try {
+                c.getAttributes().getActionController().submit(FirstClickItemActionFactory.getAction(c,c.absX,c.absY,itemId));
+            } catch (NullPointerException e1) {
+                c.sendMessage("Nothing interesting happens.");
+            }
+        }
         if (c.getFood().isFood(itemId)) {
             c.getFood().eat(itemId, itemSlot);
         } else if (c.getPotions().isPotion(itemId)) {
@@ -168,7 +182,7 @@ public class ItemOptionOne implements PacketType {
             c.getPrayer().bury(bone.get());
             return;
         }
-        TeleportTablets.operate(c, itemId);
+//        TeleportTablets.operate(c, itemId);
         Packs.openPack(c, itemId);
         if (LootingBag.isLootingBag(c, itemId)) {
             c.getLootingBag().openWithdrawalMode();
@@ -337,6 +351,7 @@ public class ItemOptionOne implements PacketType {
                 Hunter.lay(c, new BirdSnare(c));
                 break;
             case 10008:
+//                HunterTest.deployTrap(c);
                 Hunter.lay(c, new BoxTrap(c));
                 break;
             case 13249:

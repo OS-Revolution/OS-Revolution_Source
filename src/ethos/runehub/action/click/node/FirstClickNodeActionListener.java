@@ -42,6 +42,7 @@ public class FirstClickNodeActionListener {
             case 7493:
             case 7492:
             case 7489:
+            case 7471:
                 return new FirstClickRockAction(player,nodeId,nodeX,nodeY,nodeZ);
             case 29183:
             case 29191:
@@ -70,6 +71,7 @@ public class FirstClickNodeActionListener {
             case 11773:
             case 16902:
             case 4964:
+            case 23972:
                 return new OpenDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 11774:
             case 11772:

@@ -375,6 +375,26 @@ public class PetHandler {
                 8337,
                 "",
                 -1,
+                "second"),SEASON_1_SPHINX(
+                4691,
+                156,
+                "",
+                -1,
+                "second"),PLAY_PASS_LOVECATS(
+                8236,
+                6990,
+                "",
+                -1,
+                "second"),PLAY_PASS_LION(
+                13216,
+                4709,
+                "",
+                -1,
+                "second"),PLAY_PASS_PENGUIN(
+                7121,
+                233,
+                "",
+                -1,
                 "second");
 
         private final int itemId;

@@ -11,7 +11,12 @@ public class FirstClickNPCActionFactory {
         Logger.getGlobal().fine("First Click NPC Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
             case 7727:
-                return new FirstClickOpenShopAction(player, nodeX, nodeY, nodeId,npcIndex);
+            case 5567:
+            case 506:
+                return new FirstClickOpenShopAction(player, nodeX, nodeY, nodeId, npcIndex);
+            case 637:
+            case 1328:
+                return new FirstClickDialogueAction(player,nodeX,nodeY,nodeId,npcIndex);
         }
         return null;
     }

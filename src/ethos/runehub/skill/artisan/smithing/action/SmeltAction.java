@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.entity.item.ItemInteractionContext;
+import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.artisan.ArtisanSkillAction;
 import ethos.runehub.skill.artisan.ArtisanSkillItemReaction;
@@ -11,6 +12,8 @@ import ethos.runehub.skill.artisan.smithing.Smeltable;
 import ethos.util.PreconditionUtils;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.util.SkillDictionary;
+
+import java.util.logging.Logger;
 
 public class SmeltAction extends SkillAction {
 
@@ -33,9 +36,13 @@ public class SmeltAction extends SkillAction {
         this.updateAnimation();
         this.getActor().getItems().deleteItem(smeltable.getPrimaryOre(), smeltable.getPrimaryOreAmount());
         this.getActor().getItems().deleteItem(smeltable.getSecondaryOre(), smeltable.getSecondaryOreAmount());
-        if (this.isSuccessful(smeltable.getLowRoll(), smeltable.getHighRoll())) {
-            this.getActor().getItems().addItem(smeltable.getProductId(), smeltable.getProductAmount());
-            this.addXp(smeltable.getXpPerAction());
+        if (this.isSuccessful(smeltable.getLowRoll(), smeltable.getHighRoll()) || this.getActor().getItems().isWearingItem(2568)) {
+            this.getActor().getItems().addItem(smeltable.getProductId(), getAmountSmelted(smeltable.getProductAmount()));
+            if (this.getActor().getItems().isWearingItem(776) && smeltable == Smeltable.GOLD) {
+                this.addXp((int) (smeltable.getXpPerAction() * 2.5));
+            } else {
+                this.addXp(smeltable.getXpPerAction());
+            }
             this.getActor().sendMessage("You successfully smelt the @" + smeltable.getProductId());
         } else {
             this.getActor().sendMessage("You fail to smelt the @" + smeltable.getPrimaryOre());
@@ -88,12 +95,26 @@ public class SmeltAction extends SkillAction {
     protected void addItems(int id, int amount) {
     }
 
-    public SmeltAction(Player actor, int ticks, Smeltable smeltable, int iterations) {
-        super(actor, SkillDictionary.Skill.SMITHING.getId(), ticks);
-        this.smeltable = smeltable;
-        this.iterations = iterations;
+    private int getAmountSmelted(int baseAmount) {
+        int amount = baseAmount;
+        if (Skill.SKILL_RANDOM.nextInt(100) <= 10) {
+            if (this.getActor().getItems().isWearingItem(13104) && smeltable.ordinal() <= Smeltable.STEEL.ordinal()
+                    || this.getActor().getItems().isWearingItem(13105) && smeltable.ordinal() <= Smeltable.MITHRIL.ordinal()
+                    || this.getActor().getItems().isWearingItem(13106) && smeltable.ordinal() <= Smeltable.ADAMANTITE.ordinal()
+                    || this.getActor().getItems().isWearingItem(13107) && smeltable.ordinal() <= Smeltable.RUNITE.ordinal()
+            ) {
+                amount = baseAmount * 2;
+            }
+        }
+        return amount;
     }
 
-    private int iterations;
-    private final Smeltable smeltable;
-}
+    public SmeltAction(Player actor, int ticks, Smeltable smeltable,int iterations){
+            super(actor, SkillDictionary.Skill.SMITHING.getId(), ticks);
+            this.smeltable = smeltable;
+            this.iterations = iterations;
+        }
+
+        private int iterations;
+        private final Smeltable smeltable;
+    }

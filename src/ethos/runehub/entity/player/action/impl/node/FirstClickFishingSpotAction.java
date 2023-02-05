@@ -1,6 +1,7 @@
-package ethos.runehub.entity.player.action.impl;
+package ethos.runehub.entity.player.action.impl.node;
 
 import ethos.model.players.Player;
+import ethos.runehub.entity.player.action.impl.node.ClickNodeAction;
 import ethos.runehub.skill.gathering.fishing.action.CageFishingAction;
 import ethos.runehub.skill.gathering.fishing.action.FishingPlatformFishingAction;
 import ethos.runehub.skill.gathering.fishing.action.LureFishingAction;

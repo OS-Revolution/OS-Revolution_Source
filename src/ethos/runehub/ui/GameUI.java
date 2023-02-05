@@ -1,6 +1,7 @@
 package ethos.runehub.ui;
 
 import ethos.model.players.Player;
+import ethos.runehub.ui.component.button.Button;
 import ethos.runehub.ui.component.impl.TextComponent;
 import ethos.runehub.ui.event.action.ActionEvent;
 import ethos.runehub.ui.event.action.ActionListener;
@@ -23,6 +24,10 @@ public abstract class GameUI {
         this.setState(State.ACTIVE);
         player.getAttributes().setActiveUI(this);
         player.getPA().showInterface(id);
+        if (walkable) {
+            player.getPA().walkableInterface(id);
+        }
+
     }
 
     public void close() {
@@ -42,16 +47,20 @@ public abstract class GameUI {
         this.getPlayer().getAttributes().getActionDispatcher().dispatch(buttonId);
     }
 
-    protected void writeLine(String text,int line) {
-        player.getPA().sendFrame126(text,line);
+    protected void writeLine(String text, int line) {
+        player.getPA().sendFrame126(text, line);
     }
 
     protected void writeLine(TextComponent component) {
-        player.getPA().sendFrame126(component.getText(),component.getLineId());
+        player.getPA().sendFrame126(component.getText(), component.getLineId());
     }
 
     protected void registerButton(ActionListener actionListener, int id) {
         this.getPlayer().getAttributes().getActionDispatcher().registerButton(actionListener, id);
+    }
+
+    protected void registerButton(Button button) {
+        this.getPlayer().getAttributes().getActionDispatcher().registerButton(button);
     }
 
     public Player getPlayer() {
@@ -105,7 +114,7 @@ public abstract class GameUI {
     private State state;
 
     public enum State {
-        ACTIVE,COMPLETED,CANCELLED;
+        ACTIVE, COMPLETED, CANCELLED;
     }
 
     public class UICloseActionListener implements ActionListener {

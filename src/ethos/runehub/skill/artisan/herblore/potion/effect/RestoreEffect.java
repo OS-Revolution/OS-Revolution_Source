@@ -7,6 +7,7 @@ public class RestoreEffect extends SkillAdjustmentEffect {
     @Override
     public void doEffectOnPlayer(Player player) {
         int adjustedSkillLevel = (int) ((player.playerLevel[getSkillId()] * this.getModifier()) + this.getBaseChange());
+
         if(player.playerLevel[this.getSkillId()] < adjustedSkillLevel) {
             if (adjustedSkillLevel <= player.getLevelForXP(player.playerXP[this.getSkillId()])) {
                 player.playerLevel[this.getSkillId()] = adjustedSkillLevel;

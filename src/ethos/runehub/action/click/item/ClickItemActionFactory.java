@@ -10,6 +10,7 @@ import ethos.runehub.action.click.item.consumable.star.ClickPrismaticStarAction;
 import ethos.runehub.action.click.item.consumable.TeleportChargeScroll;
 import ethos.runehub.action.click.item.consumable.potion.ClickPotionConsumableAction;
 import ethos.runehub.action.click.item.consumable.star.ClickSkillStarAction;
+import ethos.runehub.action.click.item.consumable.tablet.BreakTeleportTabletAction;
 import ethos.runehub.entity.item.impl.PortableBankChest;
 import org.runehub.api.io.load.impl.LootTableContainerLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class ClickItemActionFactory {
 
 
-    public static void onClick(Player player, int itemId, int slot) {
+    public static ClickItemAction onClick(Player player, int itemId, int slot) {
         ClickItemAction action = null;
         if (RunehubConstants.STAR_IDS.contains(itemId)) {
             action = new ClickSkillStarAction(player,itemId,slot);
@@ -59,9 +60,9 @@ public class ClickItemActionFactory {
             case 6689:
             case 6691:
             case 2434:
-            case 140:
-            case 142:
-            case 144:
+            case 139:
+            case 141:
+            case 143:
             case 3024:
             case 3026:
             case 3028:
@@ -135,8 +136,28 @@ public class ClickItemActionFactory {
             case 8026:
                 action = new EfficiencyBooster(player,itemId,1,slot,24,8);
                 break;
+            case 8007:
+            case 8008:
+            case 8009:
+            case 8010:
+            case 8011:
+            case 8115:
+            case 8116:
+            case 8117:
+            case 8118:
+            case 8119:
+            case 8120:
+            case 8121:
+            case 8246:
+            case 8247:
+            case 8248:
+            case 8380:
+            case 8381:
+                action = new BreakTeleportTabletAction(player,itemId,1,slot);
+                break;
         }
-        if (action != null)
-            Server.getEventHandler().submit(action);
+//        if (action != null)
+//            Server.getEventHandler().submit(action);
+        return action;
     }
 }

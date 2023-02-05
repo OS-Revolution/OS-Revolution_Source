@@ -205,7 +205,7 @@ public class Item {
 			case 3767:
 //			case 20:
 				return true;
-//			case 9054:
+//			case 3767:
 //				return false;
 		}
 		for (int i = 0; i < fullbody.length; i++) {

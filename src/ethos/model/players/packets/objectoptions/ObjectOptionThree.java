@@ -4,7 +4,10 @@ import ethos.Server;
 import ethos.model.content.tradingpost.Listing;
 import ethos.model.players.Player;
 import ethos.model.players.Right;
+import ethos.runehub.action.click.node.SecondClickNodeActionListener;
 import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.entity.player.action.SecondClickNodeActionFactory;
+import ethos.runehub.entity.player.action.ThirdClickNodeActionFactory;
 
 /*
  * @author Matt
@@ -50,6 +53,16 @@ public class ObjectOptionThree {
 			c.getDH().sendDialogues(818, 6773);
 			break;
 		}
+//		try {
+//			Server.getEventHandler().stop("click-object");
+//			Server.getEventHandler().submit(ThirdClickNodeActionFactory.onClick(c,objectType,obX,obY,c.heightLevel));
+//		} catch (NullPointerException e) {
+			try {
+				c.getAttributes().getActionController().submit(ThirdClickNodeActionFactory.getAction(c,obX,obY,objectType));
+			} catch (NullPointerException e1) {
+				c.sendMessage("Nothing interesting happens.");
+			}
+//		}
 	}
 
 }

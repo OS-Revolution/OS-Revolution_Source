@@ -8,6 +8,10 @@ import java.util.*;
 
 public class RunehubUtils {
 
+    public static String getBooleanAsYesOrNo(boolean value) {
+        return value ? "Yes" : "No";
+    }
+
     public static boolean beginsWithVowel(String text) {
         try {
             return text.charAt(0) == 'a' || text.charAt(0) == 'e' || text.charAt(0) == 'i' || text.charAt(0) == 'o' || text.charAt(0) == 'u';

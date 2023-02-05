@@ -715,7 +715,9 @@ public class AttackNPC {
 			case 3118: //Tz-kek small
 				c.appendDamage(1, Hitmark.HIT);
 				break;
-				
+				case 5126:
+
+					break;
 			case 5862:
 				if (Boundary.isIn(c, Boundary.WITHIN_BOUNDARY_CERB)) {
 					c.getCerberus().cerberusSpecials();
@@ -1223,7 +1225,7 @@ public class AttackNPC {
 				c.npcIndex = 0;
 				return;
 			}
-			
+
 			if (c.playerEquipment[c.playerWeapon] == 4734 && c.playerEquipment[c.playerArrows] != 4740) {
 				c.sendMessage("You must use bolt racks with the karil's crossbow.");
 				c.npcIndex = 0;
@@ -1266,6 +1268,7 @@ public class AttackNPC {
 			if (c.getX() == NPCHandler.npcs[i].getX() && c.getY() == NPCHandler.npcs[i].getY()) {
 				c.getPA().walkTo(0, 1);
 			}
+
 			if (c.isInvisible() && !c.getRightGroup().isOrInherits(Right.OWNER)) {
 				c.sendMessage("You cannot attack npcs while being invisible.");
 				c.getCombat().resetPlayerAttack();
@@ -1416,6 +1419,7 @@ public class AttackNPC {
 					c.attackTimer = 1;
 					return;
 				}
+
 				if(NPCHandler.npcs[i].npcType == 7706 && c.usingBow || c.usingMagic || c.autocasting || c.playerEquipment[c.playerWeapon] == 11907 || c.playerEquipment[c.playerWeapon] == 12899){
 					distance = 20;
 				}

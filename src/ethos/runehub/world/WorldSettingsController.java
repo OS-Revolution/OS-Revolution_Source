@@ -9,8 +9,8 @@ import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangePriceController;
 import ethos.runehub.event.FixedScheduleEvent;
 import ethos.runehub.event.FixedScheduledEventController;
-import ethos.runehub.event.dnd.FishingPlatformUpdateFixedScheduleEvent;
-import ethos.runehub.event.dnd.SkillOfTheHourFixedScheduleEvent;
+import ethos.runehub.event.dnd.*;
+import ethos.runehub.event.shop.impl.GeneralStoreRestockEvent;
 import ethos.runehub.skill.gathering.farming.FarmController;
 import ethos.util.Misc;
 import org.runehub.api.model.math.AdjustableNumber;
@@ -48,7 +48,7 @@ public class WorldSettingsController {
             worldSettings.getBonusXpTimer().decrement();
         if (isRunning(worldSettings.getDoubleDropRateTimer()))
             worldSettings.getDoubleDropRateTimer().decrement();
-
+        Arrays.stream(worldSettings.getSkillStationExpirationTimeMS()).filter(this::isRunning).forEach(timer -> timer.subtract(60000L));
         Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> worldSettings.getSkillPowerTimer().containsKey(skill.getId())).forEach(skill -> worldSettings.getSkillPowerTimer().get(skill.getId()).decrement());
         Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> worldSettings.getSkillGainsTimer().containsKey(skill.getId())).forEach(skill -> worldSettings.getSkillGainsTimer().get(skill.getId()).decrement());
         Arrays.stream(SkillDictionary.Skill.values()).filter(skill -> worldSettings.getSkillEfficiencyTimer().containsKey(skill.getId())).forEach(skill -> worldSettings.getSkillEfficiencyTimer().get(skill.getId()).decrement());
@@ -58,6 +58,33 @@ public class WorldSettingsController {
     public void saveSettings() {
         final WorldSettingsSerializer serializer = new WorldSettingsSerializer();
         serializer.write(new File(SAVE_LOCATION), serializer.serialize(worldSettings));
+    }
+
+    public void addTicketToSkillStation(Player player,int stationId,int amount) {
+        int ticketId = -1;
+        switch (stationId) {
+            case 6799:
+                ticketId = 5020;
+                break;
+            case 878:
+                ticketId = 5022;
+                break;
+            case 13542:
+                ticketId = 5021;
+                break;
+            case 15468:
+                ticketId = 5023;
+                break;
+            case 11017:
+                ticketId = 8548;
+                break;
+        }
+        if (player.getItems().playerHasItem(ticketId,amount)) {
+            worldSettings.setSkillStationExpirationTimeMS(stationId,amount * 300000L);
+            player.getItems().deleteItem2(ticketId,amount);
+            player.sendMessage("You activate the station for " + (amount * 5) + " minutes.");
+            saveSettings();
+        }
     }
 
     public void addBonusXp(int time) {
@@ -225,33 +252,33 @@ public class WorldSettingsController {
         return farmController;
     }
 
-    private void initializeTriMonthlyEvents() {
-        // Next run at midnight (UTC) - Replace with local time zone, if needed
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        ZonedDateTime nextRun = now.withMonth(12).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
-
-        System.out.println("Now: " + now);
-        System.out.println("Next Run: " + nextRun);
-
-        // If midnight is in the past, add one day
-        if (now.compareTo(nextRun) > 0) {
-            nextRun = nextRun.plusDays(1);
-        }
-
-        // Get duration between now and midnight
-        final Duration initialDelay = Duration.between(now, nextRun);
-
-        System.out.println("Duration Until Next Run: " + TimeUtils.getDurationString(initialDelay));
-
-        // Schedule a task to run at midnight and then every day
-        dailyScheduledExecutorService.scheduleAtFixedRate(this::resetTriMonthly,
-                initialDelay.toMillis(),
-                Duration.ofDays(90).toMillis(),
-                TimeUnit.MILLISECONDS);
-
-        // Print time to midnight (UTC!), for debugging
-        System.out.println("Time until first run: " + TimeUtils.getDurationString(initialDelay));
-    }
+//    private void initializeTriMonthlyEvents() {
+//        // Next run at midnight (UTC) - Replace with local time zone, if needed
+//        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+//        ZonedDateTime nextRun = now.withMonth(12).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+//
+//        System.out.println("Now: " + now);
+//        System.out.println("Next Run: " + nextRun);
+//
+//        // If midnight is in the past, add one day
+//        if (now.compareTo(nextRun) > 0) {
+//            nextRun = nextRun.plusDays(1);
+//        }
+//
+//        // Get duration between now and midnight
+//        final Duration initialDelay = Duration.between(now, nextRun);
+//
+//        System.out.println("Duration Until Next Run: " + TimeUtils.getDurationString(initialDelay));
+//
+//        // Schedule a task to run at midnight and then every day
+//        dailyScheduledExecutorService.scheduleAtFixedRate(this::resetTriMonthly,
+//                initialDelay.toMillis(),
+//                Duration.ofDays(90).toMillis(),
+//                TimeUnit.MILLISECONDS);
+//
+//        // Print time to midnight (UTC!), for debugging
+//        System.out.println("Time until first run: " + TimeUtils.getDurationString(initialDelay));
+//    }
 
     private ZonedDateTime getNextMonthlyCycle(int dayInterval) {
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -260,7 +287,11 @@ public class WorldSettingsController {
     }
 
     public String getTimeUntilNextSeason() {
-        return TimeUtils.getDurationStringDays(Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextMonthlyCycle(90)));
+//        return TimeUtils.getDurationStringDays(Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextMonthlyCycle(90)));
+
+        return TimeUtils.getShortDurationString(
+                TimeUtils.getDurationBetween(System.currentTimeMillis(),
+                        FixedScheduledEventController.getInstance().getNextCycle(playPassSeasonalEvent).toInstant().toEpochMilli()));
     }
 
     public int getSkillOfTheHourEffect(int sId) {
@@ -280,17 +311,25 @@ public class WorldSettingsController {
     }
 
     private WorldSettingsController() {
+        this.playPassSeasonalEvent = new PlayPassStartSeasonEvent();
         this.skillOfTheHourEffect = new int[SkillDictionary.Skill.values().length];
-        this.fixedScheduleEvents = new FixedScheduleEvent[] {
-          new SkillOfTheHourFixedScheduleEvent(),
-          new FishingPlatformUpdateFixedScheduleEvent()
+        this.fixedScheduleEvents = new FixedScheduleEvent[]{
+                new SkillOfTheHourFixedScheduleEvent(),
+                new FishingPlatformUpdateFixedScheduleEvent(),
+                new TravellingCommodityMerchantEvent(),
+                new Test3Event(),
+                new GeneralStoreRestockEvent()
         };
+//        System.out.println("Next Season: " + TimeUtils.getShortDurationString(
+//                TimeUtils.getDurationBetween(System.currentTimeMillis(),
+//                        FixedScheduledEventController.getInstance().getNextCycle(playPassSeasonalEvent).toInstant().toEpochMilli())));
         try {
             this.worldSettings = new WorldSettingsSerializer().read(new File(SAVE_LOCATION));
 
             this.initializeDailies();
-            this.initializeTriMonthlyEvents();
+//            this.initializeTriMonthlyEvents();
             Arrays.stream(fixedScheduleEvents).forEach(event -> FixedScheduledEventController.getInstance().startEvent(event));
+            FixedScheduledEventController.getInstance().startEvent(playPassSeasonalEvent);
         } catch (IOException e) {
             this.worldSettings = new WorldSettings();
             this.saveSettings();
@@ -305,6 +344,7 @@ public class WorldSettingsController {
         return worldSettings;
     }
 
+    private final FixedScheduleEvent playPassSeasonalEvent;
     private WorldSettings worldSettings;
     private final ScheduledExecutorService dailyScheduledExecutorService = Executors.newScheduledThreadPool(1);
     private final ScheduledExecutorService gameTickExecutorService = Executors.newScheduledThreadPool(1);

@@ -47,6 +47,7 @@ import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.crafting.JewelryMaking;
 import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.woodcutting.Tree;
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.action.click.node.FirstClickNodeActionListener;
 import ethos.runehub.entity.player.action.FirstClickNodeActionFactory;
 import ethos.runehub.skill.gathering.farming.action.ActiveForagingSkillAction;
@@ -56,6 +57,8 @@ import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAct
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -149,7 +152,7 @@ public class ObjectOptionOne {
             return;
         }
         ObjectDef def = ObjectDef.getObjectDef(objectType);
-        if ((def != null ? def.name : null) != null && def.name.toLowerCase().contains("bank")) {
+        if ((def != null ? def.name : null) != null && def.name.toLowerCase().contains("bank") && def.name.toLowerCase().contains("deposit")) {
             c.sendAudio(1877);
             c.getPA().openUpBank();
         }
@@ -435,24 +438,24 @@ public class ObjectOptionOne {
                 c.getPA().refreshSkill(5);
                 c.sendMessage("You feel rejuvinated.");
                 break;
-            case 6150:
-            case 2031:
-                if (c.getItems().playerHasItem(barType[0])) {
-                    c.getSmithingInt().showSmithInterface(barType[0]);
-                } else if (c.getItems().playerHasItem(barType[1])) {
-                    c.getSmithingInt().showSmithInterface(barType[1]);
-                } else if (c.getItems().playerHasItem(barType[2])) {
-                    c.getSmithingInt().showSmithInterface(barType[2]);
-                } else if (c.getItems().playerHasItem(barType[3])) {
-                    c.getSmithingInt().showSmithInterface(barType[3]);
-                } else if (c.getItems().playerHasItem(barType[4])) {
-                    c.getSmithingInt().showSmithInterface(barType[4]);
-                } else if (c.getItems().playerHasItem(barType[5])) {
-                    c.getSmithingInt().showSmithInterface(barType[5]);
-                } else {
-                    c.sendMessage("You don't have any bars.");
-                }
-                break;
+//            case 6150:
+//            case 2031:
+//                if (c.getItems().playerHasItem(barType[0])) {
+//                    c.getSmithingInt().showSmithInterface(barType[0]);
+//                } else if (c.getItems().playerHasItem(barType[1])) {
+//                    c.getSmithingInt().showSmithInterface(barType[1]);
+//                } else if (c.getItems().playerHasItem(barType[2])) {
+//                    c.getSmithingInt().showSmithInterface(barType[2]);
+//                } else if (c.getItems().playerHasItem(barType[3])) {
+//                    c.getSmithingInt().showSmithInterface(barType[3]);
+//                } else if (c.getItems().playerHasItem(barType[4])) {
+//                    c.getSmithingInt().showSmithInterface(barType[4]);
+//                } else if (c.getItems().playerHasItem(barType[5])) {
+//                    c.getSmithingInt().showSmithInterface(barType[5]);
+//                } else {
+//                    c.sendMessage("You don't have any bars.");
+//                }
+//                break;
             case 11846:
                 if (c.combatLevel >= 100) {
                     if (c.getY() > 5175) {
@@ -1517,7 +1520,8 @@ public class ObjectOptionOne {
             case 2492:
             case 15638:
             case 7479:
-                c.getPA().startTeleport(3092, 3249, 0, "modern", false);
+                final Point point = RunehubConstants.HOME_TELEPORT_AREA.getAllPoints().get(ethos.runehub.skill.Skill.SKILL_RANDOM.nextInt(RunehubConstants.HOME_TELEPORT_AREA.getAllPoints().size()));;
+                c.getPA().startTeleport(point.getX(), point.getY(),0, "modern", false);
                 break;
             case 11803:
                 if (c.getRightGroup().isOrInherits(Right.CONTRIBUTOR)) {

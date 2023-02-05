@@ -1,5 +1,6 @@
 package ethos.runehub.entity.player;
 
+import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.gathering.farming.patch.PatchType;
 import ethos.runehub.skill.support.sailing.voyage.Voyage;
@@ -476,9 +477,30 @@ public class PlayerSaveData {
         return equippedAmount;
     }
 
+    public long[][] getJob() {
+        return job;
+    }
+
+    public int getLecternHotspot() {
+        return lecternHotspot;
+    }
+
+
+    public void setLecternHotspot(int lecternHotspot) {
+        this.lecternHotspot = lecternHotspot;
+    }
+
     public void setEquipmentAmount(int slot, int amount) {
         this.equippedAmount[slot] = amount;
     }
+
+    public List<GameItem> getReclaimableItems() {
+        if (reclaimableItems == null)
+            reclaimableItems = new ArrayList<>();
+        return reclaimableItems;
+    }
+
+
 
     @Override
     public String toString() {
@@ -516,6 +538,8 @@ public class PlayerSaveData {
         this.farmingConfigMap = new HashMap<>();
         this.equipment = new int[10];
         this.equippedAmount = new int[10];
+        this.job = new long[2][5];
+        this.reclaimableItems = new ArrayList<>();
 //        farmingConfigMap.put(
 //                10548,List.of(
 //                        new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
@@ -593,4 +617,16 @@ public class PlayerSaveData {
      */
     private int[] equipment;
     private int[] equippedAmount;
+
+    /**
+     * jobs
+     */
+    private long[][] job;
+
+    /**
+     * hotspots
+     */
+    private int lecternHotspot;
+
+    private List<GameItem> reclaimableItems;
 }

@@ -3,15 +3,12 @@ package ethos.model.players;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.instance.BossArenaInstanceController;
 import ethos.runehub.entity.node.Node;
 import ethos.runehub.world.WorldSettingsController;
 import org.apache.commons.lang3.ArrayUtils;
@@ -80,7 +77,9 @@ import ethos.net.outgoing.messages.ComponentVisibility;
 import ethos.util.Misc;
 import ethos.util.Stream;
 import ethos.world.Clan;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.util.SkillDictionary;
+import org.runehub.api.util.math.geometry.Point;
 
 public class PlayerAssistant {
 
@@ -1325,6 +1324,7 @@ public class PlayerAssistant {
     }
 
     public void checkObjectSpawn(Node node) {
+        System.out.println("Spawning " + node.getId() + " @ " + node.getX() + " " + node.getY());
         Region.addWorldObject(node.getId(), node.getX(), node.getY(), node.getZ(), node.getFace());
         if (c.getOutStream() != null && c != null) {
             sendPosition(node.getX(), node.getY(), false);
@@ -1414,7 +1414,6 @@ public class PlayerAssistant {
     }
 
     public void openUpBank() {
-        System.out.println("Opening bank");
         c.getPA().sendChangeSprite(58014, c.placeHolders ? (byte) 1 : (byte) 0);
         if (c.viewingLootBag || c.addingItemsToLootBag || c.viewingRunePouch) {
             c.sendMessage("You should stop what you are doing before opening the bank.");
@@ -2051,6 +2050,54 @@ public class PlayerAssistant {
         }
     }
 
+    private void dropItemsOnDeath() {
+        final List<ethos.runehub.entity.item.GameItem> itemsLost = new ArrayList<>();
+        for (int i = 0; i < c.playerItems.length; i++) {
+            final int itemId = c.playerItems[i] - 1;
+            final int amount = c.playerItemsN[i];
+            if (itemId > 0) {
+                itemsLost.add(new ethos.runehub.entity.item.GameItem(itemId, amount));
+            }
+        }
+
+        for (int i = 0; i < c.playerEquipment.length; i++) {
+            final int itemId = c.playerEquipment[i];
+            final int amount = c.playerEquipmentN[i];
+            if (itemId > 0) {
+                itemsLost.add(new ethos.runehub.entity.item.GameItem(itemId, amount));
+            }
+        }
+        final List<ethos.runehub.entity.item.GameItem> keptItems = itemsLost.stream()
+                .sorted(Comparator.comparingInt(item -> {
+                    if (ItemIdContextLoader.getInstance().read(item.getId()) != null)
+                        return ItemIdContextLoader.getInstance().read(item.getId()).getValue();
+                    return 0;
+                }))
+                .collect(Collectors.toList());
+        Collections.reverse(keptItems);
+        c.getItems().deleteAllItems();
+        for (int i = 0; i < keptItems.size(); i++) {
+            int kept = c.prayerActive[10] ? 4 : 3;
+            if (i < kept) {
+                c.getItems().addItem(keptItems.get(i).getId(), keptItems.get(i).getAmount());
+            } else {
+                ethos.runehub.entity.item.GameItem keptItem = keptItems.get(i);
+                if (c.getContext().getPlayerSaveData().getReclaimableItems().contains(keptItems.get(i))) {
+                    c.getContext().getPlayerSaveData().getReclaimableItems().stream().filter(gameItem -> gameItem.getId() == keptItem.getId()).findFirst().ifPresent(gameItem -> {
+                        gameItem.setAmount(gameItem.getAmount() + keptItem.getAmount());
+                    });
+
+                } else {
+                    c.getContext().getPlayerSaveData().getReclaimableItems().add(keptItems.get(i));
+                }
+
+            }
+        }
+
+        c.sendMessage("Speak to $Death to re-claim your items.");
+
+    }
+
     /**
      * Handles what happens after a player death
      */
@@ -2105,28 +2152,32 @@ public class PlayerAssistant {
 
             // Degrade, unequip venomous items
             c.getCombat().degradeVenemousItems(killer);
+            this.dropItemsOnDeath();
+
 
             // If a player is not an ultimate ironman, update the items kept on death
 //			if (c.getMode().isUltimateIronman() || c.getMode().isIronman() || c.getMode().isOsrs() || c.getMode().isRegular()) {
 //				c.getItems().resetKeepItems();
 //				c.updateItemsOnDeath();
 //			}
+
+
             // Handles the items kept on death
-            for (int item = 0; item < Config.ITEMS_KEPT_ON_DEATH.length; item++) {
-                int itemId = Config.ITEMS_KEPT_ON_DEATH[item];
-                int itemAmount = c.getItems().getItemAmount(itemId) + c.getItems().getWornItemAmount(itemId);
-                if (c.getItems().playerHasItem(itemId) || c.getItems().isWearingItem(itemId)) {
-//					if (c.getMode().isUltimateIronman()) {
-//						Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount, c.getIndex());
-//					}
-                    if (c.inClanWars() || c.inClanWarsSafe()) {
-                        Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount,
-                                c.getIndex());
-                    } else {
-                        c.getItems().sendItemToAnyTab(itemId, 1);
-                    }
-                }
-            }
+//            for (int item = 0; item < Config.ITEMS_KEPT_ON_DEATH.length; item++) {
+//                int itemId = Config.ITEMS_KEPT_ON_DEATH[item];
+//                int itemAmount = c.getItems().getItemAmount(itemId) + c.getItems().getWornItemAmount(itemId);
+//                if (c.getItems().playerHasItem(itemId) || c.getItems().isWearingItem(itemId)) {
+////					if (c.getMode().isUltimateIronman()) {
+////						Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount, c.getIndex());
+////					}
+//                    if (c.inClanWars() || c.inClanWarsSafe()) {
+//                        Server.itemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel, itemAmount,
+//                                c.getIndex());
+//                    } else {
+//                        c.getItems().sendItemToAnyTab(itemId, 1);
+//                    }
+//                }
+//            }
 
             // If ultimate ironman, delete all items and drop all of them
 //			if (c.getMode().isUltimateIronman() || c.getMode().isIronman() || c.getMode().isOsrs() || c.getMode().isRegular()) {
@@ -2324,7 +2375,7 @@ public class PlayerAssistant {
             c.setSkeletalMysticDamageCounter3(0);
             c.setVasaDamageCounter(0);
             c.setMuttadileDamageCounter(0);
-            c.sendMessage("You pull the lever..");
+//            c.sendMessage("You pull the lever..");
         }
         c.getSkilling().stop();
         if (Server.getMultiplayerSessionListener().inAnySession(c)) {
@@ -2482,6 +2533,11 @@ public class PlayerAssistant {
         }
         if (c.getBankPin().requiresUnlock()) {
             c.getBankPin().open(2);
+            return;
+        }
+        if (c.getAttributes().getInstanceId() != -1 && BossArenaInstanceController.getInstance().getInstance(c.getAttributes().getInstanceId())
+                .getArea().contains(new Point(c.absX,c.absY))) {
+            c.sendMessage("You must use the book to exit.");
             return;
         }
         if (Server.getMultiplayerSessionListener().inAnySession(c)) {
@@ -2893,6 +2949,7 @@ public class PlayerAssistant {
                     if (Misc.distance(x3, y3, x, y) < lowDist) {
                         if (!projectile && PathChecker.isMeleePathClear(x3, y3, z, otherX, otherY)
                                 || projectile && PathChecker.isProjectilePathClear(x3, y3, z, otherX, otherY)) {
+
                             if (PathFinder.getPathFinder().accessable(c, x3, y3)) {
                                 lowDist = Misc.distance(x3, y3, x, y);
                                 lowX = x3;
@@ -2910,7 +2967,6 @@ public class PlayerAssistant {
             }
 
         } else {
-
             if (otherX == c.absX && otherY == c.absY) {
                 int r = Misc.random(3);
                 switch (r) {
@@ -3461,7 +3517,7 @@ public class PlayerAssistant {
     }
 
     public void refreshSkill(int skillId) {
-        if(skillId <= 23 ) {
+        if (skillId <= 23) {
             c.combatLevel = c.calculateCombatLevel();
             int currentLevel = c.playerLevel[skillId];
             int actualLevel = c.getPA().getLevelForXP(c.playerXP[skillId]);

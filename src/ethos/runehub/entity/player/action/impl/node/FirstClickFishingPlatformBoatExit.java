@@ -1,8 +1,9 @@
-package ethos.runehub.entity.player.action.impl;
+package ethos.runehub.entity.player.action.impl.node;
 
 import ethos.model.players.Player;
+import ethos.runehub.entity.player.action.impl.node.ClickNodeAction;
 
-public class FirstClickFishingPlatformBoatExit extends ClickNodeAction{
+public class FirstClickFishingPlatformBoatExit extends ClickNodeAction {
 
 
     @Override

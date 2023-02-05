@@ -8,6 +8,8 @@ public class ExchangePriceController {
 
     private static final int UPDATE_RATE_MINUTES = 1440;
     private static final int BUY_LIMIT_MULTIPLIER = 1;
+    public static final double MAX_PRICE_INCREASE = 11.5;
+    public static final double MAX_PRICE_DECREASE = 0.5;
 
     private static ExchangePriceController instance = null;
 
@@ -31,10 +33,14 @@ public class ExchangePriceController {
             final int exchangePrice = ItemIdContextLoader.getInstance().read(itemId).getExchange();
 
             int updatedPrice = (int) (exchangePrice - (totalOffers * (exchangePrice * 0.15d)));
-            if (updatedPrice < (int) (basePrice * 0.5) && totalOffers > 1) {
-                updatedPrice = (int) (basePrice * 0.5);
-            } else if(totalOffers <= 1 && (exchangePrice * 1.15d) < basePrice * 2.15) {
-                updatedPrice = (int) (exchangePrice * 1.15d);
+            if (updatedPrice < (int) (basePrice * MAX_PRICE_DECREASE) && totalOffers > 1) {
+                updatedPrice = (int) (basePrice * MAX_PRICE_DECREASE);
+            } else if(totalOffers <= 1 && (exchangePrice * 1.15d) < basePrice * MAX_PRICE_INCREASE) {
+                if ((int) (exchangePrice * 1.15d) == exchangePrice) {
+                    updatedPrice = exchangePrice+1;
+                } else {
+                    updatedPrice = (int) (exchangePrice * 1.15d);
+                }
             }
             System.out.println("Updated Price of " + context.getName() + " from " + context.getExchange() + " to " + updatedPrice);
             context.setExchange(updatedPrice);

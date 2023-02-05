@@ -21,6 +21,47 @@ public class SmeltingUI extends GameUI {
         this.getPlayer().getAttributes().setActiveUI(this);
         this.drawItems();
         this.getPlayer().getPA().sendFrame164(2400);
+
+        this.registerButton(actionEvent -> this.smelt(15147),15147);
+        this.registerButton(actionEvent -> this.smelt(15146),15146);
+        this.registerButton(actionEvent -> this.smelt(10247),10247);
+        this.registerButton(actionEvent -> this.smelt(9110),9110);
+
+        this.registerButton(actionEvent -> this.smelt(15151),15151);
+        this.registerButton(actionEvent -> this.smelt(15150),15150);
+        this.registerButton(actionEvent -> this.smelt(15149),15149);
+        this.registerButton(actionEvent -> this.smelt(15148),15148);
+
+        this.registerButton(actionEvent -> this.smelt(15155),15155);
+        this.registerButton(actionEvent -> this.smelt(15154),15154);
+        this.registerButton(actionEvent -> this.smelt(15153),15153);
+        this.registerButton(actionEvent -> this.smelt(15152),15152);
+
+        this.registerButton(actionEvent -> this.smelt(15159),15159);
+        this.registerButton(actionEvent -> this.smelt(15158),15158);
+        this.registerButton(actionEvent -> this.smelt(15157),15157);
+        this.registerButton(actionEvent -> this.smelt(15156),15156);
+
+        this.registerButton(actionEvent -> this.smelt(15163),15163);
+        this.registerButton(actionEvent -> this.smelt(15162),15162);
+        this.registerButton(actionEvent -> this.smelt(15161),15161);
+        this.registerButton(actionEvent -> this.smelt(15160),15160);
+
+        this.registerButton(actionEvent -> this.smelt(29017),29017);
+        this.registerButton(actionEvent -> this.smelt(29017),29017);
+        this.registerButton(actionEvent -> this.smelt(24253),24253);
+        this.registerButton(actionEvent -> this.smelt(16062),16062);
+
+        this.registerButton(actionEvent -> this.smelt(29022),29022);
+        this.registerButton(actionEvent -> this.smelt(29021),29021);
+        this.registerButton(actionEvent -> this.smelt(29019),29019);
+        this.registerButton(actionEvent -> this.smelt(29018),29018);
+
+        this.registerButton(actionEvent -> this.smelt(29026),29026);
+        this.registerButton(actionEvent -> this.smelt(29025),29025);
+        this.registerButton(actionEvent -> this.smelt(29024),29024);
+        this.registerButton(actionEvent -> this.smelt(29023),29023);
+
     }
 
     @Override
@@ -33,8 +74,7 @@ public class SmeltingUI extends GameUI {
 
     }
 
-    @Override
-    protected void onAction(int buttonId) {
+    protected void smelt(int buttonId) {
         switch (buttonId) {
             case 15147:// Bronze, 1
                 this.getPlayer().getSkillController().getSmithing().train(new SmeltAction(this.getPlayer(), 5, Smeltable.BRONZE, 1));

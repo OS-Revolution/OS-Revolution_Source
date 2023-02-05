@@ -408,6 +408,8 @@ public class ClickObject implements PacketType {
                         c.objectDistance = 3;
                         break;
                     case 7674:
+                    case 13637:
+                    case 13620:
                         c.objectDistance = 2;
                         break;
                     case 11758:

@@ -40,7 +40,7 @@ public abstract class FirstClickAbyssalNodeAction extends ClickNodeAction {
     protected boolean successCheck(int skill, String failureMessage) {
         final int level = this.getActor().getSkillController().getLevel(skill);
         final int roll = Skill.SKILL_RANDOM.nextInt(100) + 1;
-        if ((roll + level) >= 100) {
+        if ((roll + level) >= 90) {
             return true;
         } else {
             this.getActor().sendMessage(failureMessage);

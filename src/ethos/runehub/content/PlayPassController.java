@@ -1,6 +1,12 @@
 package ethos.runehub.content;
 
 import ethos.model.players.Player;
+import ethos.model.players.PlayerHandler;
+import ethos.runehub.RunehubUtils;
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.world.WorldSettingsController;
+
+import java.util.Arrays;
 
 public class PlayPassController {
 
@@ -17,6 +23,28 @@ public class PlayPassController {
         if (endingLevel > startingLevel) {
             player.sendMessage("^Play-Pass Level up! You are now level $" + endingLevel);
         }
+    }
+
+    public static void resetPreviousSeasonData() {
+        PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(ctx -> {
+            if (PlayerHandler.isPlayerOn(ctx.getId())) {
+                PlayerHandler.getPlayer(ctx.getId()).ifPresent(player -> {
+                    player.getContext().getPlayerSaveData().setPlayPassXp(0);
+                    Arrays.fill(player.getContext().getPlayerSaveData().getClaimedPassLevel(), false);
+                    player.save();
+                    player.sendMessage("^Play-Pass Season $" + WorldSettingsController.getInstance().getWorldSettings().getActiveSeason()
+                    + " has ended.");
+                });
+            } else {
+                ctx.getPlayerSaveData().setPlayPassXp(0);
+                Arrays.fill(ctx.getPlayerSaveData().getClaimedPassLevel(), false);
+                PlayerCharacterContextDataAccessObject.getInstance().update(ctx);
+            }
+        });
+        RunehubUtils.getPlayPassHiscores().clear();
+        PlayerHandler.executeGlobalMessage("^Play-Pass Season $" + WorldSettingsController.getInstance().getWorldSettings().getActiveSeason() + " Hi-scores have been reset.");
+        WorldSettingsController.getInstance().getWorldSettings().setActiveSeason(WorldSettingsController.getInstance().getWorldSettings().getActiveSeason() + 1);
+        WorldSettingsController.getInstance().saveSettings();
     }
 
     public void addPlayPassXPFromMonsterHP(int baseHP) {

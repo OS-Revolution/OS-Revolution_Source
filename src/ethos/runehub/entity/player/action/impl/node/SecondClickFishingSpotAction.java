@@ -1,8 +1,8 @@
-package ethos.runehub.entity.player.action.impl;
+package ethos.runehub.entity.player.action.impl.node;
 
 import ethos.model.players.Player;
+import ethos.runehub.entity.player.action.impl.node.ClickNodeAction;
 import ethos.runehub.skill.gathering.fishing.action.*;
-import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.context.impl.FishingNodeContext;
 
 public class SecondClickFishingSpotAction extends ClickNodeAction {

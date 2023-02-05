@@ -2,10 +2,45 @@ package ethos.model.players.packets.commands.admin;
 
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.instance.BossArenaInstanceController;
+import ethos.runehub.content.instance.impl.TimedInstance;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.entity.merchant.impl.exchange.ExchangePriceController;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
 import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
+import ethos.runehub.event.FixedScheduledEventController;
+import ethos.runehub.skill.artisan.construction.Hotspot;
+import ethos.runehub.skill.support.sailing.SailingUtils;
+import ethos.runehub.skill.support.sailing.voyage.Voyage;
+import ethos.runehub.skill.support.sailing.voyage.VoyageContext;
+import ethos.runehub.skill.support.sailing.voyage.VoyageDAO;
+import ethos.runehub.ui.impl.InstanceTimerUI;
+import ethos.runehub.ui.impl.LootContainerUI;
+import ethos.runehub.ui.impl.SelectionParentUI;
+import ethos.runehub.ui.impl.construction.BuildNodeUI;
+import ethos.runehub.ui.impl.smithing.SmithingUI;
+import ethos.runehub.ui.impl.tab.player.InstanceTab;
+import ethos.runehub.world.WorldSettingsController;
+import ethos.runehub.world.wushanko.island.IslandLoader;
+import org.runehub.api.io.data.impl.LootTableDAO;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.io.load.impl.LootTableContainerDefinitionLoader;
+import org.runehub.api.io.load.impl.LootTableContainerLoader;
+import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.model.entity.item.GameItem;
+import org.runehub.api.model.entity.item.loot.ContainerType;
+import org.runehub.api.model.entity.item.loot.LootTable;
+import org.runehub.api.model.entity.item.loot.LootTableEntry;
+import org.runehub.api.model.entity.item.loot.Tier;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Force the player to perform a given emote.
@@ -97,15 +132,98 @@ public class E extends Command {
 //        c.getPA().sendConfig(529, (allotmentNorthConfig == null ? 0 : allotmentNorthConfig.getVarbit()) + (allotmentSouthConfig == null ? 0 : allotmentSouthConfig.getVarbit()));
 //    }
 
+//    private int getBestBar(Player player) {
+//        Arrays.stream(player.playerItems).filter(itemId -> Arrays.stream(SmithingUI.BARS).anyMatch(barId -> barId == itemId))
+//                .
+//    }
+
+    private Voyage getVoyage(int id, int region, int island) {
+        return new Voyage(
+                id,
+                IslandLoader.getInstance().read(island).getName(),
+                SailingUtils.getStatRangeBasedOnRegion(region),
+                SailingUtils.getStatRangeBasedOnRegion(region),
+                SailingUtils.getStatRangeBasedOnRegion(region),
+                SailingUtils.getDistanceFromRegion(region),
+                region,
+                island,
+                false,
+                false,
+                new VoyageContext(
+                        new int[]{
+                                0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0,
+                                0, 0, 0, 0
+                        },
+                        new int[]{SailingUtils.getLootTableContainerIdForRegion(region), SailingUtils.getLootTableContainerIdForIsland(island)}
+                )
+        );
+    }
+
     @Override
     public void execute(Player c, String input) {
         String[] args = input.split(" ");
-        System.out.println(AnimationDefinitionCache.getInstance().read(2005).getAttackAnimation());
+//        LootTable lootTable = LootTableLoader.getInstance().read(-2682234896335024906L);
+//        List<LootTableEntry> newEntries = new ArrayList<>();
+//        List<LootTableEntry> removedEntries = new ArrayList<>();
+//        lootTable.getLootTableEntries().stream().filter(lootTableEntry -> RunehubConstants.STAR_IDS.contains(lootTableEntry.getId())).forEach(star -> {
+//            System.out.println(ItemIdContextLoader.getInstance().read(star.getId()).getName() + " is Tier: " + Tier.getTier(star.getChance()) + " @ " + star.getChance() + "%");
+//            String name = ItemIdContextLoader.getInstance().read(star.getId()).getName();
+//            if (name.toLowerCase().contains("dull")) {
+//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.6D));
+//            } else if (name.toLowerCase().contains("shining")) {
+//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.006D));
+//            } else if (name.toLowerCase().contains("glorious")) {
+//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.0006D));
+//            } else {
+//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.03D));
+//            }
+//            removedEntries.add(star);
+//        });
+//        removedEntries.forEach(lootTableEntry -> lootTable.getLootTableEntries().remove(lootTableEntry));
+//        lootTable.getLootTableEntries().addAll(newEntries);
+//
+//        LootTableDAO.getInstance().update(lootTable);
+//        FixedScheduledEventController.getInstance().forceEvent(WorldSettingsController.getInstance().getFixedScheduleEvents()[Integer.parseInt(args[0])]);
+//        for (int i = 0; i < 52; i++) {
+//            if (i < 7) {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 0, i));
+//            } else if (i < 13) {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 1, i));
+//            } else if (i < 22) {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 2, i));
+//            } else if (i < 27) {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 3, i));
+//            }  else if (i < 34) {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 4, i));
+//            } else if (i < 41) {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 5, i));
+//            }  else {
+//                VoyageDAO.getInstance().create(this.getVoyage(i, 6, i));
+//            }
+//        }
+//
+//        VoyageDAO.getInstance().create(this.getVoyage(2,0,0));
+//        VoyageDAO.getInstance().create(this.getVoyage(3,0,0));
+//        VoyageDAO.getInstance().create(this.getVoyage(4,0,0));
+//        VoyageDAO.getInstance().create(this.getVoyage(5,0,0));
+//        VoyageDAO.getInstance().create(this.getVoyage(6,0,0));
+//        VoyageDAO.getInstance().create(this.getVoyage(1,0,0));
+//        VoyageDAO.getInstance().create(this.getVoyage(1,0,0));
+//        ExchangePriceController.getInstance().updatePrices();
+//        TimedInstance instance = new TimedInstance(6,c,new Rectangle(new Point(0,0),new Point(0,0)),10000);
+//        c.getAttributes().setInstanceDurationMS(instance.getDurationMS());
+//        c.getAttributes().setInstanceStartTimestamp(System.currentTimeMillis());
+//        c.sendUI(new InstanceTab(c,instance));
+//        BossArenaInstanceController.getInstance().createInstanceForPlayer(c);
 //        RunehubUtils.getPlayPassHiscores().forEach(aLong -> System.out.println("ID: " + aLong + " score: " + PlayerCharacterContextDataAccessObject.getInstance().read(aLong).getPlayerSaveData().getPlayPassXp()));
 //        c.getPA().showInterface(50100);
 //
+//        c.getPA().showInterface(49000);
 //        for (int i = 0; i < 15; i++) {
-//            c.getPA().itemOnInterface(1038 + (i * 2),1,50103,i);
+//            c.getPA().itemOnInterface(1038 + (i * 2),1,49006,i);
 //        }
 
     }

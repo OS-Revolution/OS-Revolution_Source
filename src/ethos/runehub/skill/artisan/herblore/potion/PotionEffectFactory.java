@@ -87,7 +87,7 @@ public class PotionEffectFactory extends LazyLoader<Integer, Effect> {
             case 34: //end super restore
                 return new RestoreEffect(key,22,8,1.25f);
             case 35: //prayer potion
-                return new RestoreEffect(key,5,7,25);
+                return new RestoreEffect(key,5,7,1.25f);
             case 36: //saradomin brew
                 return new SkillAdjustmentEffect(key,3,2,1.15f);
             case 37: //saradomin brew

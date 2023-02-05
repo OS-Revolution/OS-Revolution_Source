@@ -1,11 +1,18 @@
 package ethos.runehub;
 
+import ethos.runehub.entity.merchant.MerchandiseSlot;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class RunehubConstants {
 
     public static boolean DEBUG = false;
+    public static Level DEBUG_LEVEL = Level.SEVERE;
 
     public static final String ROOT = "./Data/runehub/";
     public static final String DB_ROOT = ROOT + "db/";
@@ -22,8 +29,13 @@ public class RunehubConstants {
     public static final String FARMING_DB = DB_ROOT + "farming.db";
     public static final String RIFT_DB = DB_ROOT + "rift.db";
     public static final String EQUIPMENT = DB_ROOT + "equipment.db";
+    public static final String SKILL_DB = DB_ROOT + "skills.db";
     public static final String WORLD_SETTINGS = ROOT + "world-settings.json";
 
+
+    public static final Rectangle HOME_TELEPORT_AREA = new Rectangle(new Point(3102,3248),new Point(3106,3251));
+
+    public static final List<MerchandiseSlot> GENERAL_STORE_ITEMS = new ArrayList<>();
 
     public final static List<Integer> STAR_IDS = Arrays.asList(22009, 22010, 22011, 22012, 22013, 22014, 22015, 22016, 22017, 22018, 22019, 22020, 22021, 22022, 22023, 22024, 22025, 22026, 22027, 22028, 22029, 22030, 22031, 22032, 22033, 22034, 22035, 22036, 22037, 22038, 22039, 22040, 22041, 22042, 22043, 22044, 22045, 22046, 22047, 22048, 22049, 22050, 22051, 22052, 22053, 22054, 22055, 22056, 22057, 22058, 22059, 22060, 22061, 22062, 22063, 22064, 22065, 22066, 22067, 22068, 22069, 22070, 22071, 22072, 22073, 22074, 22075, 22076, 22077, 22078, 22079, 22080, 22081, 22082, 22083, 22084, 22085, 22086, 22087, 22088, 22089, 22090, 22091, 22092,22191,22227,22228,22229,22230,21873,21874,21875);
 }

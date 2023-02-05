@@ -542,9 +542,6 @@ case 4625:
 		case 3220:
 			player.getShops().openShop(25);
 			break;
-		case 637:
-			player.getShops().openShop(6);
-			break;
 			case 6875:
 				player.specRestore = 120;
 				player.specAmount = 10.0;
@@ -773,13 +770,6 @@ case 4625:
 			player.getShops().openShop(8);
 			break;
 
-		case 506:
-			if (player.getMode().isIronman() || player.getMode().isUltimateIronman()) {
-				player.getShops().openShop(41);
-			} else {
-				player.sendMessage("You must be an Iron Man to access this shop.");
-			}
-			break;
 		case 507:
 			player.getShops().openShop(2);
 			break;

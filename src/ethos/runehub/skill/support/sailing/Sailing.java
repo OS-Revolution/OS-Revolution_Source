@@ -52,6 +52,10 @@ public class Sailing extends SupportSkill {
         return true;
     }
 
+    public boolean onVoyage(int slot) {
+        return this.getPlayer().getContext().getPlayerSaveData().getShipSlot()[slot][Sailing.VOYAGE_ID]  > -1;
+    }
+
     public void startVoyage(Voyage voyage, int slot) {
         if (!this.getShipSlot(slot).hasShip()) { // no ship
             this.getPlayer().sendMessage("You have no $ship in this $slot.");
@@ -91,6 +95,10 @@ public class Sailing extends SupportSkill {
         }
     }
 
+    public boolean canCancelVoyage(Voyage voyage, int slot) {
+        return (System.currentTimeMillis() - this.getVoyageStartTime(slot)) < CANCEL_TIME || this.getShipSlot(slot).getVoyageDuration(voyage) >= CANCEL_TIME;
+    }
+
     public void claimVoyage(Voyage voyage, int slot) {
         if (!this.getShipSlot(slot).hasShip()) { // no ship
             this.getPlayer().sendMessage("You have no $ship in this $slot.");
@@ -103,7 +111,7 @@ public class Sailing extends SupportSkill {
         } else {
             this.getShipSlot(slot).resetShip();
             if (SKILL_RANDOM.nextFloat() <= this.getShipSlot(slot).getVoyageSuccessRate(voyage)) {
-                this.getPlayer().sendMessage("Your ship successfully completed it's voyage.");
+                this.getPlayer().sendMessage("Your ship successfully completed its voyage.");
                 this.removeVoyage(voyage);
                 this.updatePlayerVoyageStats(voyage);
                 this.getShipSlot(slot).resetShip();
@@ -134,7 +142,6 @@ public class Sailing extends SupportSkill {
             this.getPlayer().getContext().getPlayerSaveData().setVoyageRerolls(this.getPlayer().getContext().getPlayerSaveData().getVoyageRerolls() - 1);
             this.getPlayer().sendMessage("You have #" + this.getPlayer().getContext().getPlayerSaveData().getVoyageRerolls() + " re-rolls available.");
             this.removeVoyage(voyage);
-            System.out.println("index: " + index);
 //            this.getPlayer().getContext().getPlayerSaveData().getAvailableVoyages().remove(index);
             this.getPlayer().getContext().getPlayerSaveData().getAvailableVoyages().add(index, generateVoyage());
             this.getPlayer().getContext().getPlayerSaveData().setVoyagesRerolled(this.getPlayer().getContext().getPlayerSaveData().getVoyagesRerolled() + 1);
@@ -181,32 +188,34 @@ public class Sailing extends SupportSkill {
                 return voyage;
             }
         } else {
-            final int id = new IntegerRange(1, 500000).getRandomValue();
+
+//            final int id = new IntegerRange(1, 500000).getRandomValue();
             final int region = this.getScaledVoyageRegion();
             final int island = SailingUtils.getIslandFromRegion(region);
             if (this.getPlayer().getContext().getPlayerSaveData().getAvailableVoyages().stream().noneMatch(voyage -> voyage.getIsland() == island))
-                return new Voyage(
-                        id,
-                        IslandLoader.getInstance().read(island).getName(),
-                        SailingUtils.getStatRangeBasedOnRegion(region),
-                        SailingUtils.getStatRangeBasedOnRegion(region),
-                        SailingUtils.getStatRangeBasedOnRegion(region),
-                        SailingUtils.getDistanceFromRegion(region),
-                        region,
-                        island,
-                        false,
-                        false,
-                        new VoyageContext(
-                                new int[]{
-                                        0, 0, 0, 0, 0,
-                                        0, 0, 0, 0, 0,
-                                        0, 0, 0, 0, 0,
-                                        0, 0, 0, 0, 0,
-                                        0, 0, 0, 0
-                                },
-                                new int[]{SailingUtils.getLootTableContainerIdForRegion(region), SailingUtils.getLootTableContainerIdForIsland(island)}
-                        )
-                );
+                return VoyageDAO.getInstance().read(island);
+//                return new Voyage(
+//                        id,
+//                        IslandLoader.getInstance().read(island).getName(),
+//                        SailingUtils.getStatRangeBasedOnRegion(region),
+//                        SailingUtils.getStatRangeBasedOnRegion(region),
+//                        SailingUtils.getStatRangeBasedOnRegion(region),
+//                        SailingUtils.getDistanceFromRegion(region),
+//                        region,
+//                        island,
+//                        false,
+//                        false,
+//                        new VoyageContext(
+//                                new int[]{
+//                                        0, 0, 0, 0, 0,
+//                                        0, 0, 0, 0, 0,
+//                                        0, 0, 0, 0, 0,
+//                                        0, 0, 0, 0, 0,
+//                                        0, 0, 0, 0
+//                                },
+//                                new int[]{SailingUtils.getLootTableContainerIdForRegion(region), SailingUtils.getLootTableContainerIdForIsland(island)}
+//                        )
+//                );
         }
         return generateVoyage();
     }

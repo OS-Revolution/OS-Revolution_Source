@@ -4,17 +4,17 @@ import ethos.model.players.Player;
 import ethos.runehub.entity.player.action.Action;
 import ethos.runehub.entity.player.action.ActionPriority;
 
-public abstract class ClickNodeAction extends Action {
+public abstract class ClickItemAction extends Action {
 
 
-    public ClickNodeAction(Player player, int nodeX, int nodeY, int nodeId) {
+    public ClickItemAction(Player player, int playerX, int playerY, int itemId) {
         super(ActionPriority.MEDIUM, false, true, false);
         this.player = player;
-        this.nodeX = nodeX;
-        this.nodeY = nodeY;
-        this.nodeId = nodeId;
+        this.playerX = playerX;
+        this.playerY = playerY;
+        this.itemId = itemId;
     }
 
     protected final Player player;
-    protected final int nodeX, nodeY, nodeId;
+    protected final int playerX, playerY, itemId;
 }

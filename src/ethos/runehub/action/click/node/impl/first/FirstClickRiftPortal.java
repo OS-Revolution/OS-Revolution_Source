@@ -58,7 +58,7 @@ public class FirstClickRiftPortal extends ClickNodeAction {
                                 .build());
                     }
                 },
-                new DialogOption("Great Rift") {
+                new DialogOption("Greater Rift") {
                     @Override
                     public void onAction() {
                         riftType = 1;

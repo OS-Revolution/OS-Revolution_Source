@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import ethos.Config;
 import ethos.Server;
 import ethos.clip.PathChecker;
+import ethos.clip.Region;
 import ethos.event.CycleEvent;
 import ethos.event.CycleEventContainer;
 import ethos.event.CycleEventHandler;
@@ -61,11 +62,15 @@ import ethos.model.players.combat.Special;
 import ethos.model.players.combat.Specials;
 import ethos.model.players.combat.effects.SerpentineHelmEffect;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
+import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.hunter.impling.PuroPuro;
 import ethos.model.players.skills.necromancy.Necromancy;
 import ethos.runehub.content.rift.RiftFloorDAO;
+import ethos.runehub.entity.combat.impl.RatKingCombatMechanics;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
-import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
+import ethos.runehub.skill.Skill;
+import ethos.runehub.skill.gathering.hunter.HunterTest;
+import ethos.runehub.skill.gathering.hunter.Trap;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
@@ -324,8 +329,8 @@ public class NPCHandler {
             final Rectangle targetingArea = new Rectangle(new Point(npc.getX() - targetingRange, npc.getY() - targetingRange), new Point(npc.getX() + targetingRange, npc.getY() + targetingRange));
             final Player nearestPlayer = PlayerHandler.getPlayers().stream().filter(player -> targetingArea.contains(new Point(player.absX, player.absY))).findFirst().orElse(null);
             if (nearestPlayer != null) {
-               if (npc.riftMobType > 0 && nearestPlayer.getAttributes().getRift() != null)
-                   nearestPlayer.getAttributes().getRift().engagePlayer(nearestPlayer,npc.npcType,npc.riftMobType);
+                if (npc.riftMobType > 0 && nearestPlayer.getAttributes().getRift() != null)
+                    nearestPlayer.getAttributes().getRift().engagePlayer(nearestPlayer, npc.npcType, npc.riftMobType);
                 return nearestPlayer.getIndex();
             }
         }
@@ -963,7 +968,17 @@ public class NPCHandler {
      */
     public static int getAttackEmote(int i) {
         try {
-            return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
+            switch (npcs[i].npcType) {
+                case 5126:
+                    if (npcs[i].attackType != CombatType.MELEE) {
+                        return 6514;
+                    } else {
+                        return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
+                    }
+                default:
+                    return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
+            }
+//            return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
         } catch (Exception e) {
             Logger.getGlobal().warning("No animation definition for npc: " + npcs[i].npcType);
         }
@@ -1817,6 +1832,34 @@ public class NPCHandler {
                             int direction = Misc.random3(8);
                             int movingToX = npcs[i].getX() + NPCClipping.DIR[direction][0];
                             int movingToY = npcs[i].getY() + NPCClipping.DIR[direction][1];
+                            final NPC walkingNpc = npcs[i];
+//                            if (Arrays.stream(HunterTest.HUNTER_MOBS).anyMatch(value -> value == walkingNpc.npcType)) {
+//                                final Rectangle trapArea = new Rectangle(new Point(walkingNpc.absX - 5, walkingNpc.absY - 5),
+//                                        new Point(walkingNpc.absX + 5, walkingNpc.absY + 5));
+//                                Optional<Player> hunter = PlayerHandler.getPlayers().stream()
+//                                        .filter(player -> !player.getAttributes().getDeployedTrapList().isEmpty())
+//                                        .filter(player -> player.getAttributes().getDeployedTrapList().stream()
+//                                                .anyMatch(trap -> trapArea.contains(new Point(trap.getX(), trap.getY()))))
+//                                        .findAny();
+//                                if (hunter.isPresent()) {
+//                                    if (Skill.SKILL_RANDOM.nextInt(5) <= 3) {
+//                                        System.out.println("Pathing to trap");
+//                                        Optional<Trap> trapOptional = hunter.get().getAttributes().getDeployedTrapList().stream().filter(t -> trapArea.contains(new Point(t.getX(), t.getY()))).findFirst();
+//                                        trapOptional.ifPresent(trap -> {
+//                                            NPCDumbPathFinder.walkTowards(walkingNpc, trap.getX(), trap.getY());
+//                                            System.out.println("Trapping");
+//                                        });
+//                                    } else {
+//                                        System.out.println("Avoiding Trap");
+//                                    }
+//                                } else {
+//                                    if (Math.abs(npcs[i].makeX - movingToX) <= 1 && Math.abs(npcs[i].makeY - movingToY) <= 1
+//                                            && NPCDumbPathFinder.canMoveTo(npcs[i], direction)) {
+//                                        NPCDumbPathFinder.walkTowards(npcs[i], movingToX, movingToY);
+//                                    }
+//                                }
+
+//                                NPCDumbPathFinder.walkTowards(walkingNpc,);
                             if (npcs[i].npcType >= 1635 && npcs[i].npcType <= 1643 || npcs[i].npcType == 1654
                                     || npcs[i].npcType == 7302) {
                                 NPCDumbPathFinder.walkTowards(npcs[i], npcs[i].getX() - 1 + Misc.random(8),
@@ -2037,7 +2080,7 @@ public class NPCHandler {
 
                         int killerIndex = npcs[i].killedBy;
                         npcs[i].needRespawn = true;
-                        npcs[i].actionTimer = getRespawnTime(i); // respawn time
+                        npcs[i].actionTimer = npcs[i].isInstanceSpawn() ? npcs[i].getRespawnTicks() : getRespawnTime(i); // respawn time
                         dropItems(i);
                         if (killerIndex < PlayerHandler.players.length - 1) {
                             Player target = PlayerHandler.players[npcs[i].killedBy];
@@ -2067,11 +2110,11 @@ public class NPCHandler {
                         npcs[i].updateRequired = true;
                         npcs[i].animUpdateRequired = true;
                         Player killer = PlayerHandler.players[npcs[i].killedBy];
-                        if ( killer!= null && killer.getAttributes().getRift() != null) {
+                        if (killer != null && killer.getAttributes().getRift() != null) {
                             npcs[i] = null;
                             if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getTrashMobPool()).anyMatch(value -> value == npc.npcType))) {
                                 killer.getAttributes().getRift().increaseProgress(0.1f);
-                            } else if(RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getEliteMobPool()).anyMatch(value -> value == npc.npcType))) {
+                            } else if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getEliteMobPool()).anyMatch(value -> value == npc.npcType))) {
                                 killer.getAttributes().getRift().increaseProgress(0.3f);
                             }
                             return;
@@ -4907,6 +4950,9 @@ public class NPCHandler {
                     npcs[i].attackTimer = 8;
                 }
                 break;
+            case 5126:
+                RatKingCombatMechanics.getInstance().onAttack(player, npcs[i]);
+                break;
             /**
              * Glod
              */
@@ -5235,7 +5281,8 @@ public class NPCHandler {
      **/
     public int distanceRequired(int i) {
         switch (npcs[i].npcType) {
-
+            case 5126:
+                return npcs[i].attackType == CombatType.RANGE ? 15 : 1;
             case Skotizo.SKOTIZO_ID:
                 return npcs[i].attackType == CombatType.MAGE ? 15 : 2;
             case 7706:

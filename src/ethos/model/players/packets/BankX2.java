@@ -20,6 +20,7 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.skills.TabletCreation;
 import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.world.WorldSettingsController;
 
 /**
  * Bank X Items
@@ -42,8 +43,10 @@ public class BankX2 implements PacketType {
 			Xamount = 1;
 		}
 
-		if(c.getAttributes().isEnteringValue()) {
+		if(c.getAttributes().isEnteringSkillStationTicket()) {
 			int amount = Xamount;
+			WorldSettingsController.getInstance().addTicketToSkillStation(c,c.getAttributes().getSkillStationId(),amount);
+//			c.getAttributes().setIntegerInput(amount);
 		}
 		
 		if (c.buyingX) {

@@ -22,7 +22,7 @@ public class InstantHomeTeleportAction extends HomeTeleportAction {
     @Override
     protected void onTick() {
         final Point selectedTeleportPoint = teleportArea.getAllPoints().get(Skill.SKILL_RANDOM.nextInt(teleportArea.getAllPoints().size()));
-        this.getActor().getPA().movePlayer(selectedTeleportPoint.getX(),selectedTeleportPoint.getY());
+        this.getActor().getPA().movePlayer(selectedTeleportPoint.getX(),selectedTeleportPoint.getY(),0);
         if (this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().value() <= 0) {
             this.getActor().getContext().getPlayerSaveData().setLastHomeTeleportTimestamp(System.currentTimeMillis());
         } else {

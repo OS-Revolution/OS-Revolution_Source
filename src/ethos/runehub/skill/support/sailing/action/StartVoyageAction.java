@@ -41,4 +41,9 @@ public class StartVoyageAction extends VoyageMenuAction{
     public StartVoyageAction(Player actor, int shipSlot, int voyageSlot) {
         super(actor,shipSlot,voyageSlot);
     }
+
+    @Override
+    protected void onEvent() {
+
+    }
 }

@@ -1,9 +1,11 @@
 package ethos.model.players.packets.commands.admin;
 
+import ethos.Server;
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
 import ethos.runehub.RunehubConstants;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.TimeUtils;
 import ethos.runehub.content.instance.BossArenaInstanceController;
 import ethos.runehub.content.instance.impl.TimedInstance;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
@@ -38,6 +40,8 @@ import org.runehub.api.model.entity.item.loot.Tier;
 import org.runehub.api.util.math.geometry.Point;
 import org.runehub.api.util.math.geometry.impl.Rectangle;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -165,6 +169,8 @@ public class E extends Command {
     @Override
     public void execute(Player c, String input) {
         String[] args = input.split(" ");
+        c.getSkillController().getFletching().sendItemSelectionFrame(1511);
+        System.out.println(TimeUtils.getZDTString(FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[3])));
 //        LootTable lootTable = LootTableLoader.getInstance().read(-2682234896335024906L);
 //        List<LootTableEntry> newEntries = new ArrayList<>();
 //        List<LootTableEntry> removedEntries = new ArrayList<>();
@@ -186,7 +192,8 @@ public class E extends Command {
 //        lootTable.getLootTableEntries().addAll(newEntries);
 //
 //        LootTableDAO.getInstance().update(lootTable);
-//        FixedScheduledEventController.getInstance().forceEvent(WorldSettingsController.getInstance().getFixedScheduleEvents()[Integer.parseInt(args[0])]);
+
+        
 //        for (int i = 0; i < 52; i++) {
 //            if (i < 7) {
 //                VoyageDAO.getInstance().create(this.getVoyage(i, 0, i));

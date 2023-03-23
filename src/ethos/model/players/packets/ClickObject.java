@@ -118,6 +118,11 @@ public class ClickObject implements PacketType {
                     break;
                 }
                 switch (c.objectId) {
+                    case 26709:
+                        c.objectDistance = 1;
+                        c.objectXOffset = 2;
+                        c.objectYOffset = 2;
+                        break;
                     case 9354:
                         if (c.getItems().playerHasItem(952, 1)) {
                             if (System.currentTimeMillis() - c.foodDelay > 2500) {
@@ -182,14 +187,14 @@ public class ClickObject implements PacketType {
                     case 27785:
                         c.getDH().sendDialogues(70300, -1);
                         break;
-                    case 26709:// strongholdslayer cave
-                        c.getPA().movePlayer(2429, 9825, 0);
-                        c.sendMessage("Welcome to the Stronghold slayer cave, you can find many slayer monsters here!");
-                        break;
-                    case 26710:// strongholdslayer caveexit
-                    case 27258:
-                        c.getPA().movePlayer(2430, 3425, 0);
-                        break;
+//                    case 26709:// strongholdslayer cave
+//                        c.getPA().movePlayer(2429, 9825, 0);
+//                        c.sendMessage("Welcome to the Stronghold slayer cave, you can find many slayer monsters here!");
+//                        break;
+//                    case 26710:// strongholdslayer caveexit
+//                    case 27258:
+//                        c.getPA().movePlayer(2430, 3425, 0);
+//                        break;
                     case 28892:// catacomb agility
                         if (c.playerLevel[16] < 34) {
                             c.sendMessage("You need an Agility level of 34 to pass this.");
@@ -754,6 +759,7 @@ public class ClickObject implements PacketType {
                     case 3192:
                         c.objectDistance = 7;
                         break;
+
                     default:
                         c.objectDistance = 1;
                         c.objectXOffset = 0;

@@ -14,6 +14,18 @@ public class PlayerCharacterContext extends EntityContext {
         this.playerSaveData = new PlayerSaveDataSerializer().deserialize(json);
     }
 
+    public void addGoldAccumulatorGold(int amount) {
+        playerSaveData.setGoldAccumulatorAccumulated(playerSaveData.getGoldAccumulatorAccumulated() + amount);
+    }
+
+    public void addAdvancedGoldAccumulatorGold(int amount) {
+        playerSaveData.setAdvancedGoldAccumulatorAccumulated(playerSaveData.getAdvancedGoldAccumulatorAccumulated() + amount);
+    }
+
+    public void addMasterGoldAccumulatorGold(int amount) {
+        playerSaveData.setMasterGoldAccumulatorAccumulated(playerSaveData.getMasterGoldAccumulatorAccumulated() + amount);
+    }
+
     private PlayerCharacterContext(PlayerCharacterContextBuilder builder) {
         super(builder.id);
         this.playerSaveData = builder.playerSaveData;

@@ -3,6 +3,8 @@ package ethos.model.players.packets.npcoptions;
 import ethos.Server;
 import ethos.model.players.Player;
 import ethos.model.players.skills.agility.AgilityHandler;
+import ethos.runehub.entity.player.action.FirstClickNPCActionFactory;
+import ethos.runehub.entity.player.action.FourthClickNPCActionFactory;
 
 /*
  * @author Matt
@@ -34,14 +36,6 @@ public class NpcOptionFour {
 			player.teleAction = -1;
 			break;
 
-		case 402:
-		case 401:
-		case 405:
-		case 6797:
-		case 7663:
-			player.getSlayer().handleInterface("buy");
-			break;
-			
 		case 1501:
 			player.getShops().openShop(23);
 			break;
@@ -49,6 +43,13 @@ public class NpcOptionFour {
 		case 315:
 			player.getDH().sendDialogues(545, npcType);
 			break;
+			default:
+				try {
+					player.getAttributes().getActionController().submit(FourthClickNPCActionFactory.getAction(player,player.absX,player.absY,npcType,player.rememberNpcIndex));
+				} catch (NullPointerException e1) {
+					player.sendMessage("Nothing interesting happens.");
+				}
+				break;
 		}
 	}
 

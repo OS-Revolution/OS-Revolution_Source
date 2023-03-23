@@ -233,7 +233,7 @@ public class ItemHandler {
 	/**
 	 * Shows items for everyone who is within 60 squares
 	 **/
-	private void createGlobalItem(GroundItem i) {
+	public void createGlobalItem(GroundItem i) {
 		for (Player p : PlayerHandler.players) {
 			if (p != null) {
 				Player person = p;

@@ -3,7 +3,10 @@ package ethos.runehub.entity.player.action;
 import ethos.model.players.Player;
 import ethos.runehub.content.instance.BossArenaInstanceController;
 import ethos.runehub.entity.player.action.impl.node.*;
+import ethos.runehub.skill.node.impl.support.SupportNode;
+import ethos.runehub.skill.support.firemaking.action.LightBurnerAction;
 import ethos.runehub.ui.impl.BossInstanceUI;
+import org.runehub.api.util.SkillDictionary;
 
 import java.util.logging.Logger;
 
@@ -12,6 +15,41 @@ public class FirstClickNodeActionFactory {
     public static ClickNodeAction getAction(Player player, int nodeX, int nodeY, int nodeId) {
         Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
+            case 13212:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getSkillController().getFiremaking().train(new LightBurnerAction(player,nodeId,nodeX,nodeY,player.heightLevel));
+                    }
+                };
+            case 11806:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.startAnimation(827);
+                        player.getPA().movePlayer(3125,3240);
+                    }
+                };
+            case 882:
+            case 10321:
+                return new ClickOpenManholeNodeAction(player, nodeX, nodeY, nodeId);
+            case 881:
+                return new ClickClosedManholeNodeAction(player, nodeX, nodeY, nodeId);
+            case 27258:
+            case 27257://stronghold slayer cave exit
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getPA().movePlayer(2430, 3425, 0);
+                    }
+                };
+            case 26709://stronghold slayer cave entrance
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getPA().movePlayer(2429, 9825, 0);
+                    }
+                };
             case 6799:
                 return new FirstClickPortableCrafter4Action(player,nodeX,nodeY,nodeId);
             case 878:

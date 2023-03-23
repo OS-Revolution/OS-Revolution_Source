@@ -15,6 +15,8 @@ import ethos.model.players.Player;
 import ethos.model.players.Right;
 import ethos.model.players.combat.Degrade;
 import ethos.model.players.combat.Degrade.DegradableItem;
+import ethos.runehub.entity.player.action.SecondClickItemActionFactory;
+import ethos.runehub.entity.player.action.ThirdClickItemActionFactory;
 import ethos.util.Misc;
 
 /**
@@ -265,6 +267,11 @@ public class ItemOptionThree implements PacketType {
 			break;
 
 		default:
+			try {
+				c.getAttributes().getActionController().submit(ThirdClickItemActionFactory.getAction(c,c.absX,c.absY,itemId));
+			} catch (NullPointerException e1) {
+				c.sendMessage("Nothing interesting happens.");
+			}
 			if (c.getRightGroup().isOrInherits(Right.OWNER)) {
 				Misc.println("[DEBUG] Item Option #3-> Item id: " + itemId);
 			}

@@ -24,7 +24,7 @@ public enum WeaponType {
     STAB_SWORD(2276),
     BLASTER(0),
     CHINCHOMPA(0),
-    CROSSBOW(0),
+    CROSSBOW(1764),
     THROWN(4446),
     BLADED_STAFF(28500),
     POWERED_STAFF(0),

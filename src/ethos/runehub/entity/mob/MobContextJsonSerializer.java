@@ -33,21 +33,22 @@ public class MobContextJsonSerializer extends JsonSerializer<MobContextJsonSeria
 
     @Override
     public NpcContextList deserialize(String json) {
-//        Logger.getGlobal().info("Deserializing Npc: " + json);
-        final JsonElement element = new JsonParser().parse(json);
-        final JsonObject jsonObject = element.getAsJsonObject();
-        final List<HostileMobContext> npcContexts = new ArrayList<>();
-        if (jsonObject.entrySet().stream().anyMatch(stringJsonElementEntry -> stringJsonElementEntry.getKey().contains("_items"))) {
-            element.getAsJsonObject().get("_items").getAsJsonArray().forEach(jsonElement -> {
-                Logger.getGlobal().info("Parsed NPC from Array: " + this.parse(jsonElement));
-                npcContexts.add(this.parse(jsonElement));
-            });
-        } else {
-            Logger.getGlobal().info("Parsed NPC: " + this.parse(element));
-            npcContexts.add(this.parse(element));
-        }
-
-        return new NpcContextList(npcContexts);
+////        Logger.getGlobal().info("Deserializing Npc: " + json);
+//        final JsonElement element = new JsonParser().parse(json);
+//        final JsonObject jsonObject = element.getAsJsonObject();
+//        final List<HostileMobContext> npcContexts = new ArrayList<>();
+//        if (jsonObject.entrySet().stream().anyMatch(stringJsonElementEntry -> stringJsonElementEntry.getKey().contains("_items"))) {
+//            element.getAsJsonObject().get("_items").getAsJsonArray().forEach(jsonElement -> {
+//                Logger.getGlobal().info("Parsed NPC from Array: " + this.parse(jsonElement));
+//                npcContexts.add(this.parse(jsonElement));
+//            });
+//        } else {
+//            Logger.getGlobal().info("Parsed NPC: " + this.parse(element));
+//            npcContexts.add(this.parse(element));
+//        }
+//
+//        return new NpcContextList(npcContexts);
+        return null;
     }
 
     private List<Drop> parseDrops(JsonArray jsonArray) {
@@ -74,38 +75,38 @@ public class MobContextJsonSerializer extends JsonSerializer<MobContextJsonSeria
         return drops;
     }
 
-    private HostileMobContext parse(JsonElement element) {
-        final JsonObject jsonObject = element.getAsJsonObject();
-        final Parser parser = new Parser(jsonObject);
-        return new HostileMobContext.NpcContextBuilder(parser.getInt("id"), parser.getString("name"))
-                .setAggressive(parser.getBoolean("aggressive"))
-                .setPoisonous(parser.getBoolean("poisonous"))
-                .setVenomous(parser.getBoolean("venomous"))
-                .setPoisonImmune(parser.getBoolean("immune_poison"))
-                .setVenomImmune(parser.getBoolean("immune_venom"))
-                .setMembers(parser.getBoolean("members"))
-                .setDuplicate(parser.getBoolean("duplicate"))
-                .setSlayerMonster(parser.getBoolean("slayer_monster"))
-                .setCombatLevel(parser.getInt("combat_level"))
-                .setExamine(parser.getString("examine"))
-                .setMaxHit(parser.getInt("max_hit"))
-                .setHitpoints(parser.getInt("hitpoints"))
-                .setSize(parser.getInt("size"))
-                .setReleaseDate(parser.getString("release_date"))
-                .setSlayerLevel(parser.getInt("slayer_level"))
-                .setAttackTypes(parser.getListOfStrings("attack_type"))
-                .setAttributes(parser.getListOfStrings("attributes"))
-                .setCategories(parser.getListOfStrings("category"))
-                .setWiki(parser.getString("wiki_url"))
-                .setDefenceLevel(parser.getInt("defence_level"))
-                .setDefenceCrush(parser.getInt("defence_crush"))
-                .setDefenceMage(parser.getInt("defence_magic"))
-                .setDefenceRanged(parser.getInt("defence_ranged"))
-                .setDefenceSlash(parser.getInt("defence_slash"))
-                .setDefenceStab(parser.getInt("defence_stab"))
-                .setDrops(this.parseDrops(jsonObject.get("drops").getAsJsonArray()))
-                .build();
-    }
+//    private HostileMobContext parse(JsonElement element) {
+//        final JsonObject jsonObject = element.getAsJsonObject();
+//        final Parser parser = new Parser(jsonObject);
+//        return new HostileMobContext.NpcContextBuilder(parser.getInt("id"), parser.getString("name"))
+//                .setAggressive(parser.getBoolean("aggressive"))
+//                .setPoisonous(parser.getBoolean("poisonous"))
+//                .setVenomous(parser.getBoolean("venomous"))
+//                .setPoisonImmune(parser.getBoolean("immune_poison"))
+//                .setVenomImmune(parser.getBoolean("immune_venom"))
+//                .setMembers(parser.getBoolean("members"))
+//                .setDuplicate(parser.getBoolean("duplicate"))
+//                .setSlayerMonster(parser.getBoolean("slayer_monster"))
+//                .setCombatLevel(parser.getInt("combat_level"))
+//                .setExamine(parser.getString("examine"))
+//                .setMaxHit(parser.getInt("max_hit"))
+//                .setHitpoints(parser.getInt("hitpoints"))
+//                .setSize(parser.getInt("size"))
+//                .setReleaseDate(parser.getString("release_date"))
+//                .setSlayerLevel(parser.getInt("slayer_level"))
+//                .setAttackTypes(parser.getListOfStrings("attack_type"))
+//                .setAttributes(parser.getListOfStrings("attributes"))
+//                .setCategories(parser.getListOfStrings("category"))
+//                .setWiki(parser.getString("wiki_url"))
+//                .setDefenceLevel(parser.getInt("defence_level"))
+//                .setDefenceCrush(parser.getInt("defence_crush"))
+//                .setDefenceMage(parser.getInt("defence_magic"))
+//                .setDefenceRanged(parser.getInt("defence_ranged"))
+//                .setDefenceSlash(parser.getInt("defence_slash"))
+//                .setDefenceStab(parser.getInt("defence_stab"))
+//                .setDrops(this.parseDrops(jsonObject.get("drops").getAsJsonArray()))
+//                .build();
+//    }
 
     private static class Parser {
         private final JsonObject jsonObject;

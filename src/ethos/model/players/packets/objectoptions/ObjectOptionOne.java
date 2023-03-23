@@ -2571,13 +2571,13 @@ public class ObjectOptionOne {
                 break;
 
 
-            case 5126:
-            case 2100:
-                if (c.absY == 3554)
-                    c.getPA().walkTo(0, 1);
-                else
-                    c.getPA().walkTo(0, -1);
-                break;
+//            case 5126:
+//            case 2100:
+//                if (c.absY == 3554)
+//                    c.getPA().walkTo(0, 1);
+//                else
+//                    c.getPA().walkTo(0, -1);
+//                break;
 
             case 1759:
                 if (c.objectX == 2884 && c.objectY == 3397)

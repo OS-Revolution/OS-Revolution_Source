@@ -108,4 +108,9 @@ public class RerollVoyageAction extends VoyageMenuAction {
     public RerollVoyageAction(Player actor, int slot, int voyage) {
         super(actor,slot,voyage);
     }
+
+    @Override
+    protected void onEvent() {
+
+    }
 }

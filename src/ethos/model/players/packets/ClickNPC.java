@@ -1,5 +1,6 @@
 package ethos.model.players.packets;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -16,6 +17,7 @@ import ethos.model.players.Boundary;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.combat.magic.MagicData;
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.action.click.node.FirstClickNodeActionListener;
 import ethos.runehub.action.click.npc.FirstClickNpcListener;
 
@@ -49,12 +51,15 @@ public class ClickNPC implements PacketType {
 		if (c.teleTimer > 0) {
 			return;
 		}
+		System.out.println("Packet Type: " + packetType);
 		switch (packetType) {
 
 		/**
 		 * Attack npc melee or range
 		 **/
 		case ATTACK_NPC:
+//			final int mobIndex = c.getInStream().readUnsignedWordA();
+//			c.getAttributes().getPvECombatController().target(NPCHandler.npcs[mobIndex]);
 			if (c.morphed) {
 				return;
 			}
@@ -108,8 +113,7 @@ public class ClickNPC implements PacketType {
 			boolean usingBow = false;
 			boolean usingOtherRangeWeapons = false;
 			boolean usingArrows = false;
-			boolean usingCross = c.playerEquipment[c.playerWeapon] == 9185 || c.playerEquipment[c.playerWeapon] == 11785
-					|| c.playerEquipment[c.playerWeapon] == 21012;
+			boolean usingCross = Arrays.stream(RunehubConstants.CBOW).anyMatch(value -> c.playerEquipment[c.playerWeapon] == value);
 			if (c.playerEquipment[c.playerWeapon] >= 4214 && c.playerEquipment[c.playerWeapon] <= 4223)
 				usingBow = true;
 			for (int bowId : c.BOWS) {

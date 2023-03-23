@@ -12,6 +12,8 @@ import ethos.model.npcs.pets.PetHandler;
 import ethos.model.players.Boundary;
 import ethos.model.players.Player;
 import ethos.model.players.skills.agility.AgilityHandler;
+import ethos.runehub.entity.player.action.SecondClickNPCActionFactory;
+import ethos.runehub.entity.player.action.ThirdClickNPCActionFactory;
 
 /*
  * @author Matt
@@ -94,14 +96,14 @@ public class NpcOptionThree {
 			player.getDiaryManager().getFremennikDiary().progress(FremennikDiaryEntry.TRAVEL_NEITIZNOT);
 			break;
 			
-		case 402:
-		case 401:
-		case 405:
-		case 6797:
-		case 7663:
-			player.getShops().openShop(44);
-			player.sendMessage("I currently have @blu@" + player.getSlayer().getPoints() + " @bla@slayer points.");
-			break;
+//		case 402:
+//		case 401:
+//		case 405:
+//		case 6797:
+//		case 7663:
+//			player.getShops().openShop(44);
+//			player.sendMessage("I currently have @blu@" + player.getSlayer().getPoints() + " @bla@slayer points.");
+//			break;
 		case 315:
 			player.getDH().sendDialogues(548, 315);
 			break;
@@ -131,6 +133,13 @@ public class NpcOptionThree {
 			}
 			player.getPA().startTeleport(2929, 4813, 0, "modern", false);
 			break;
+			default:
+				try {
+					player.getAttributes().getActionController().submit(ThirdClickNPCActionFactory.getAction(player,player.absX,player.absY,npcType,player.rememberNpcIndex));
+				} catch (NullPointerException e1) {
+					player.sendMessage("Nothing interesting happens.");
+				}
+				break;
 		}
 	}
 

@@ -22,6 +22,8 @@ import ethos.model.players.skills.hunter.impling.Impling;
 import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
 import ethos.runehub.entity.item.impl.PortableBankChest;
+import ethos.runehub.entity.player.action.FirstClickItemActionFactory;
+import ethos.runehub.entity.player.action.SecondClickItemActionFactory;
 import ethos.util.Misc;
 
 /**
@@ -257,10 +259,15 @@ public class ItemOptionTwo implements PacketType {
 		case 11284:
 			player.sendMessage("Your dragonfire shield currently has " + player.getDragonfireShieldCharge() + " charges.");
 			break;
-		case 4155:
-			player.sendMessage("I currently have@blu@ " + player.getSlayer().getPoints() + "@bla@ slayer points.");
-			break;
+//		case 4155:
+//			player.sendMessage("I currently have@blu@ " + player.getSlayer().getPoints() + "@bla@ slayer points.");
+//			break;
 		default:
+			try {
+				player.getAttributes().getActionController().submit(SecondClickItemActionFactory.getAction(player,player.absX,player.absY,itemId));
+			} catch (NullPointerException e1) {
+				player.sendMessage("Nothing interesting happens.");
+			}
 			if (player.getRightGroup().isOrInherits(Right.OWNER)) {
 				Misc.println("[DEBUG] Item Option #2-> Item id: " + itemId);
 			}

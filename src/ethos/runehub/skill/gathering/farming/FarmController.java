@@ -20,6 +20,14 @@ import java.util.concurrent.TimeUnit;
 
 public class FarmController {
 
+    private static FarmController instance = null;
+
+    public static FarmController getInstance() {
+        if (instance == null)
+            instance = new FarmController();
+        return instance;
+    }
+
     private boolean isOvergrown(FarmingConfig config) {
         return config.getCrop() <= 0 && config.getStage() == 0;
     }
@@ -110,31 +118,7 @@ public class FarmController {
         }
     }
 
-    public void initializeGrowthCycles() {
-        this.startGrowthCycle(10, () -> {
-            System.out.println("Allotment Growth Cycle");
-            System.out.println("Hops Growth Cycle");
-            this.grow(PatchType.ALLOTMENT);
-        });
-        this.startGrowthCycle(5, () -> {
-            System.out.println("Flower Growth Cycle");
-            System.out.println("Weed Growth Cycle");
-            this.growWeeds();
-//            Arrays.stream(PatchType.values()).forEach(this::growWeeds);
-        });
-        this.startGrowthCycle(20, () -> {
-            System.out.println("Herb Growth Cycle");
-            System.out.println("Bush Growth Cycle");
-        });
-        this.startGrowthCycle(40, () -> {
-            System.out.println("Tree Growth Cycle");
-        });
-        this.startGrowthCycle(160, () -> {
-            System.out.println("Fruit Tree Growth Cycle");
-        });
-    }
-
-    private void growWeeds() {
+    public void growWeeds() {
         PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(player -> {
             player.getPlayerSaveData().farmingConfig().keySet().forEach(key -> {
                 player.getPlayerSaveData().farmingConfig().get(key).stream()
@@ -157,7 +141,7 @@ public class FarmController {
         });
     }
 
-    private void grow(PatchType patchType) {
+    public void grow(PatchType patchType) {
         System.out.println(patchType + " Growth Cycle");
         PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(player -> {
             if (PlayerHandler.getPlayer(player.getId()).isPresent()) {
@@ -168,51 +152,23 @@ public class FarmController {
         });
     }
 
-    public Duration getNextFruitTreeGrowthCycle() {
-        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(160));
-    }
+//    private ZonedDateTime getNextGrowthCycle(int minuteInterval) {
+//        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+//        final int minuteDifference = minuteInterval - (now.getMinute() % minuteInterval);
+//        return now.plusMinutes(minuteDifference);
+//    }
 
-    public Duration getNextTreeGrowthCycle() {
-        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(40));
-    }
-
-    public Duration getNextBushGrowthCycle() {
-        return this.getNextHerbGrowthCycle();
-    }
-
-    public Duration getNextHerbGrowthCycle() {
-        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(20));
-    }
-
-    public Duration getNextHopsGrowthCycle() {
-        return this.getNextAllotmentGrowthCycle();
-    }
-
-    public Duration getNextAllotmentGrowthCycle() {
-        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(10));
-    }
-
-    public Duration getNextFlowerGrowthCycle() {
-        return Duration.between(ZonedDateTime.now(ZoneId.of("UTC")), this.getNextGrowthCycle(5));
-    }
-
-    private ZonedDateTime getNextGrowthCycle(int minuteInterval) {
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        final int minuteDifference = minuteInterval - (now.getMinute() % minuteInterval);
-        return now.plusMinutes(minuteDifference);
-    }
-
-    private void startGrowthCycle(int minuteInterval, Runnable onGrowthCycle) {
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        ZonedDateTime nextRun = this.getNextGrowthCycle(minuteInterval);
-        final Duration initialDelay = Duration.between(now, nextRun);
-        System.out.println("Next Growth Cycle: " + TimeUtils.getDurationString(initialDelay));
-        growthCycleExecutorService.scheduleAtFixedRate(
-                onGrowthCycle,
-                initialDelay.toMillis(),
-                Duration.ofMinutes(minuteInterval).toMillis(),
-                TimeUnit.MILLISECONDS);
-    }
+//    private void startGrowthCycle(int minuteInterval, Runnable onGrowthCycle) {
+//        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+//        ZonedDateTime nextRun = this.getNextGrowthCycle(minuteInterval);
+//        final Duration initialDelay = Duration.between(now, nextRun);
+//        System.out.println("Next Growth Cycle: " + TimeUtils.getDurationString(initialDelay));
+//        growthCycleExecutorService.scheduleAtFixedRate(
+//                onGrowthCycle,
+//                initialDelay.toMillis(),
+//                Duration.ofMinutes(minuteInterval).toMillis(),
+//                TimeUnit.MILLISECONDS);
+//    }
 
     private void createAllotments() {
         CropDAO.getInstance().create(new Crop(
@@ -329,7 +285,7 @@ public class FarmController {
     }
 
 
-    public FarmController() {
+    private FarmController() {
         this.random = new Random();
         this.createAllotments();
 

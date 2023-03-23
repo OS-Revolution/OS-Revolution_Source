@@ -77,19 +77,25 @@ public class ExchangeMerchant extends Merchant {
     public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
         final int unitPrice = this.getPriceMerchantWillBuyFor(itemId);
         if (player.getAttributes().getExchangeSlots() > ExchangeAccountDatabase.getInstance().read(player.getContext().getId()).getTotalActiveOffers()) {
-            if (player.getItems().playerHasItem(itemId, amount)) {
-                player.getItems().deleteItem2(itemId, amount);
-                if (!ItemIdContextLoader.getInstance().read(itemId).isNoted())
-                    this.listOffer(player, itemId, amount, unitPrice);
-                else
-                    this.listOffer(player, itemId - 1, amount, unitPrice);
-                player.sendMessage("You list your #" + amount + " @" + itemId + " in exchange for #"
-                        + unitPrice + " @" + this.getCurrencyId() + " ea.");
+            if (!this.getBuyBackIds().contains(itemId) && ItemIdContextLoader.getInstance().read(itemId).isTradable()
+                    && ((ItemIdContextLoader.getInstance().read(itemId).isNoteable() || ItemIdContextLoader.getInstance().read(itemId).isNoted()))
+                    || ItemIdContextLoader.getInstance().read(itemId).isStackable()) {
+                if (player.getItems().playerHasItem(itemId, amount)) {
+                    player.getItems().deleteItem2(itemId, amount);
+                    if (!ItemIdContextLoader.getInstance().read(itemId).isNoted())
+                        this.listOffer(player, itemId, amount, unitPrice);
+                    else
+                        this.listOffer(player, itemId - 1, amount, unitPrice);
+                    player.sendMessage("You list your #" + amount + " @" + itemId + " in exchange for #"
+                            + unitPrice + " @" + this.getCurrencyId() + " ea.");
 
-                player.getItems().resetItems(3823);
-                return true;
+                    player.getItems().resetItems(3823);
+                    return true;
+                } else {
+                    player.sendMessage("You can't sell what you don't have.");
+                }
             } else {
-                player.sendMessage("You can't sell what you don't have.");
+                player.sendMessage("The shop will not buy this");
             }
         } else {
             player.sendMessage("You've reached your maximum offer limit of #" + player.getAttributes().getExchangeSlots());
@@ -109,6 +115,8 @@ public class ExchangeMerchant extends Merchant {
                 player.getItems().deleteItem(this.getCurrencyId(), unitPrice * amountSold);
                 player.getItems().addItem(ItemIdContextLoader.getInstance().read(itemId).isStackable() ? itemId : itemId + 1, amountSold);
                 player.getItems().resetItems(3823);
+                this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() - amountSold);
+                PlayerHandler.getPlayers().forEach(this::updateShop);
                 player.sendMessage("You bought #" + amountSold + " @" + itemId + " for #" + (unitPrice * amountSold) + " @" + this.getCurrencyId());
                 return true;
             } else {

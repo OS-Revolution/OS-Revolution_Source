@@ -20,6 +20,7 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.skills.TabletCreation;
 import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.skill.combat.prayer.action.SacrificeRemainsOnAltarAction;
 import ethos.runehub.world.WorldSettingsController;
 
 /**
@@ -484,10 +485,12 @@ public class BankX2 implements PacketType {
 			}
 		}
 		if (c.boneOnAltar) {
-			if (c.getPrayer().getAltarBone().isPresent()) {
-				c.getPrayer().alter(Xamount);
-				return;
-			}
+			c.getSkillController().getPrayer().setRemainsUsedOnAltar(Xamount);
+//			c.getSkillController().getPrayer().train(new SacrificeRemainsOnAltarAction(c,c.getSkillController().getPrayer().getRemainsUsedOnAltar(), c.Xamount));
+//			if (c.getPrayer().getAltarBone().isPresent()) {
+//				c.getPrayer().alter(Xamount);
+//				return;
+//			}
 		}
 		if (c.settingLootValue) {
 			LootValue.configureValue(c, "setvalue", Xamount);

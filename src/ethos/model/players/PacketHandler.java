@@ -60,7 +60,7 @@ public class PacketHandler {
 		packetId[70] = co;
 		packetId[228] = co;
 		packetId[57] = new ItemOnNpc();
-//		NpcClickPacket cn = new NpcClickPacket();//TODO Change to reset npc clicks
+//		AttackMobPacket cn = new AttackMobPacket();//TODO Change to reset npc clicks
 		ClickNPC cn = new ClickNPC();
 		packetId[72] = cn;
 		packetId[72] = cn;

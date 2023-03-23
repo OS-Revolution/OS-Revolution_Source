@@ -13,9 +13,11 @@ public class FirstClickNPCActionFactory {
             case 7727:
             case 5567:
             case 506:
-                return new FirstClickOpenShopAction(player, nodeX, nodeY, nodeId, npcIndex);
+                return new ClickOpenShopAction(player, nodeX, nodeY, nodeId, npcIndex);
             case 637:
             case 1328:
+            case 401:
+            case 1329:
                 return new FirstClickDialogueAction(player,nodeX,nodeY,nodeId,npcIndex);
         }
         return null;

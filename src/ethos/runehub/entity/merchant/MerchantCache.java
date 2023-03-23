@@ -1,12 +1,9 @@
 package ethos.runehub.entity.merchant;
 
-import ethos.runehub.entity.merchant.impl.DeathMerchant;
-import ethos.runehub.entity.merchant.impl.GeneralMerchant;
-import ethos.runehub.entity.merchant.impl.MinnowMerchant;
+import ethos.runehub.entity.merchant.impl.*;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeCollectionMerchant;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeMerchant;
 import org.runehub.api.io.load.LazyLoader;
-import ethos.runehub.entity.merchant.impl.CommodityMerchant;
 
 public class MerchantCache extends LazyLoader<Integer,Merchant> {
 
@@ -33,6 +30,13 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
                 return new DeathMerchant();
             case 506:
                 return new GeneralMerchant();
+            case 401:
+            case 402:
+            case 403:
+            case 404:
+            case 405:
+            case 6797:
+                return new SlayerPointMerchant();
             default: return null;
         }
     }

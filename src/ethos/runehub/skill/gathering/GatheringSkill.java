@@ -14,7 +14,7 @@ public abstract class GatheringSkill extends Skill {
 
     private static final int GATHER_ODDS = 100;
     private static final int DEPLETION_ODDS = 100;
-    private static final int EVENT_ODDS = Short.MAX_VALUE;
+    public static final int EVENT_ODDS = 256;
 
     public int getGatherOdds() {
         return GATHER_ODDS;

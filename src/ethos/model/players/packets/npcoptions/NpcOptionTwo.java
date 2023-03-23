@@ -20,6 +20,8 @@ import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.thieving.Thieving.Pickpocket;
 import ethos.runehub.entity.CommodityTrader;
 import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.entity.player.action.FirstClickNPCActionFactory;
+import ethos.runehub.entity.player.action.SecondClickNPCActionFactory;
 
 /*
  * @author Matt
@@ -188,20 +190,20 @@ public class NpcOptionTwo {
 			player.getDH().sendDialogues(70, 2180);
 			break;
 
-		case 401:
-		case 402:
-		case 405:
-		case 7663:
-			player.getDH().sendDialogues(3304, npcType);
-			break;
-		case 6797: // Nieve
-			if (player.playerLevel[18] < 90) {
-				player.getDH().sendNpcChat1("You must have a slayer level of atleast 90 weakling.", 6797, "Nieve");
-				return;
-			} else {
-				player.getDH().sendDialogues(3304, player.npcType);
-			}
-			break;
+//		case 401:
+//		case 402:
+//		case 405:
+//		case 7663:
+//			player.getDH().sendDialogues(3304, npcType);
+//			break;
+//		case 6797: // Nieve
+//			if (player.playerLevel[18] < 90) {
+//				player.getDH().sendNpcChat1("You must have a slayer level of atleast 90 weakling.", 6797, "Nieve");
+//				return;
+//			} else {
+//				player.getDH().sendDialogues(3304, player.npcType);
+//			}
+//			break;
 		case 5919: // Grace
 			player.getShops().openShop(18);
 			break;
@@ -234,34 +236,34 @@ public class NpcOptionTwo {
 		case 3257:
 			player.getShops().openShop(16);
 			break;
-		case 3078:
-			player.getThieving().steal(Pickpocket.MAN, NPCHandler.npcs[player.rememberNpcIndex]);
-			break;
-		case 3550:
-			player.getThieving().steal(Pickpocket.MENAPHITE_THUG, NPCHandler.npcs[player.rememberNpcIndex]);
-			break;
-		case 6094:
-			player.getThieving().steal(Pickpocket.GNOME, NPCHandler.npcs[player.rememberNpcIndex]);
-			break;
-		case 3086:
-		case 3087:
-		case 3088:
-		case 3089:
-		case 3090:
-		case 3091:
-		case 3258:
-		case 3672:
-		case 6947:
-		case 6948:
-		case 6949:
-		case 6950:
-		case 6951:
-		case 6952:
-			player.getThieving().steal(Pickpocket.FARMER, NPCHandler.npcs[player.rememberNpcIndex]);
-			break;
-		case 3106:
-			player.getThieving().steal(Pickpocket.HERO, NPCHandler.npcs[player.rememberNpcIndex]);
-			break;
+//		case 3078:
+//			player.getThieving().steal(Pickpocket.MAN, NPCHandler.npcs[player.rememberNpcIndex]);
+//			break;
+//		case 3550:
+//			player.getThieving().steal(Pickpocket.MENAPHITE_THUG, NPCHandler.npcs[player.rememberNpcIndex]);
+//			break;
+//		case 6094:
+//			player.getThieving().steal(Pickpocket.GNOME, NPCHandler.npcs[player.rememberNpcIndex]);
+//			break;
+//		case 3086:
+//		case 3087:
+//		case 3088:
+//		case 3089:
+//		case 3090:
+//		case 3091:
+//		case 3258:
+//		case 3672:
+//		case 6947:
+//		case 6948:
+//		case 6949:
+//		case 6950:
+//		case 6951:
+//		case 6952:
+//			player.getThieving().steal(Pickpocket.FARMER, NPCHandler.npcs[player.rememberNpcIndex]);
+//			break;
+//		case 3106:
+//			player.getThieving().steal(Pickpocket.HERO, NPCHandler.npcs[player.rememberNpcIndex]);
+//			break;
 		case 637:
 			player.getShops().openShop(6);
 			break;
@@ -413,7 +415,13 @@ public class NpcOptionTwo {
 		case 528:
 			player.getShops().openShop(9);
 			break;
-
+			default:
+				try {
+					player.getAttributes().getActionController().submit(SecondClickNPCActionFactory.getAction(player,player.absX,player.absY,npcType,player.rememberNpcIndex));
+				} catch (NullPointerException e1) {
+					player.sendMessage("Nothing interesting happens.");
+				}
+				break;
 		}
 	}
 

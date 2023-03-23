@@ -1,7 +1,10 @@
 package ethos.model.items;
 
+import ethos.runehub.combat.CombatUtils;
+import ethos.runehub.combat.style.WeaponType;
 import ethos.runehub.entity.item.equipment.Equipment;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
+import ethos.runehub.entity.item.equipment.WeaponCache;
 import org.apache.commons.lang3.RandomUtils;
 
 import ethos.Config;
@@ -960,6 +963,12 @@ public class ItemAssistant {
             c.getPA().sendFrame246(2424, 200, Weapon);
             c.getPA().sendFrame126(WeaponName, 2426);
         }
+
+//        if (Weapon != -1) {
+//            CombatUtils.sendWeaponInterface(c, WeaponType.values()[WeaponCache.getInstance().read(Weapon).getWeaponType()]);
+//        } else {
+//            CombatUtils.sendWeaponInterface(c,WeaponType.UNARMED);
+//        }
     }
 
     /**

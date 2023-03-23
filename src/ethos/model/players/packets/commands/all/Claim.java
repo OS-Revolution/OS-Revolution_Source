@@ -37,6 +37,8 @@ public class Claim extends Command {
 //                                        player.getItems().addItem(loot.getItemId(), loot.getAmount())
 //                                );
                             }
+                        } else if(donate.product_id == 1459 && WorldSettingsController.getInstance().getWorldSettings().getWeekendEventId() == 4) {
+                            player.getItems().addItem(donate.product_id, (int) (donate.product_amount * 1.5));
                         } else if (donate.product_id == 1) {
                             WorldSettingsController.getInstance().addBonusXp(player, donate.product_amount);
                         } else if (donate.product_id == 2) {
@@ -57,7 +59,8 @@ public class Claim extends Command {
                             player.getItems().addItem(donate.product_id, donate.product_amount);
                         }
                     }
-                    PlayerHandler.executeGlobalMessage("[@red@DONATE@bla@] Thank you @red@ " + Misc.capitalize(player.playerName) + " @bla@for donating!");
+                    player.sendMessage("^OsR Your donation is greatly appreciated!");
+//                    PlayerHandler.executeGlobalMessage("[@red@DONATE@bla@] Thank you @red@ " + Misc.capitalize(player.playerName) + " @bla@for donating!");
                 } catch (Exception e) {
                     player.sendMessage("Api Services are currently offline. Please check back shortly");
                     e.printStackTrace();

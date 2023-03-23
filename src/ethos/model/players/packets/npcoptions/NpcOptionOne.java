@@ -569,35 +569,35 @@ case 4625:
 		case 7663:
 			player.getDH().sendDialogues(3299, npcType);
 			break;
-		case 402:// slayer
-			if(player.combatLevel<20){
-				player.getDH().sendNpcChat2("Do not waste my time peasent.","You need a Combat level of 20.",402,"Mazchna");
-				return;
-			}
-			player.getDH().sendDialogues(3300, npcType);
-			break;
-		case 401:
-			player.getDH().sendDialogues(3300, npcType);
-			break;
-		case 405:
-			if(player.combatLevel<100){
-				player.getDH().sendNpcChat2("Do not waste my time peasent.","You need a Combat level of at least 100.",402,"Duradel");
-				return;
-			}
-			if (player.playerLevel[18] < 50) {
-				player.getDH().sendNpcChat1("You must have a slayer level of at least 50 weakling.", 490, "Duradel");
-				return;
-			}
-			player.getDH().sendDialogues(3300, npcType);
-			break;
-		case 6797: // Nieve
-			if (player.playerLevel[18] < 90) {
-				player.getDH().sendNpcChat1("You must have a slayer level of at least 90 weakling.", 490, "Nieve");
-				return;
-			} else {
-				player.getDH().sendDialogues(3300, npcType);
-			}
-			break;
+//		case 402:// slayer
+//			if(player.combatLevel<20){
+//				player.getDH().sendNpcChat2("Do not waste my time peasent.","You need a Combat level of 20.",402,"Mazchna");
+//				return;
+//			}
+//			player.getDH().sendDialogues(3300, npcType);
+//			break;
+//		case 401:
+//			player.getDH().sendDialogues(3300, npcType);
+//			break;
+//		case 405:
+//			if(player.combatLevel<100){
+//				player.getDH().sendNpcChat2("Do not waste my time peasent.","You need a Combat level of at least 100.",402,"Duradel");
+//				return;
+//			}
+//			if (player.playerLevel[18] < 50) {
+//				player.getDH().sendNpcChat1("You must have a slayer level of at least 50 weakling.", 490, "Duradel");
+//				return;
+//			}
+//			player.getDH().sendDialogues(3300, npcType);
+//			break;
+//		case 6797: // Nieve
+//			if (player.playerLevel[18] < 90) {
+//				player.getDH().sendNpcChat1("You must have a slayer level of at least 90 weakling.", 490, "Nieve");
+//				return;
+//			} else {
+//				player.getDH().sendDialogues(3300, npcType);
+//			}
+//			break;
 		case 315:
 			player.getDH().sendDialogues(550, npcType);
 			break;

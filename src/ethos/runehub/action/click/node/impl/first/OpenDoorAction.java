@@ -40,6 +40,13 @@ public class OpenDoorAction extends ClickNodeAction {
             } else {
                 DoorController.getInstance().openDoorForPlayer(this.getActor(), this.getNodeId(), this.getNodeX(), this.getNodeY());
             }
+        }else if(this.getNodeId() == 2100) {
+            DoorController.getInstance().openDoorForPlayer(this.getActor(), this.getNodeId(), this.getNodeX(), this.getNodeY());
+//            if (this.getActor().absY == 3554)
+//                this.getActor().getPA().walkTo(0, 1);
+//            else
+//                this.getActor().getPA().walkTo(0, -1);
+//            DoorController.getInstance().closeDoorForPlayer(this.getActor(), this.getNodeId(), this.getNodeX(), this.getNodeY());
         } else {
             DoorController.getInstance().openDoorForEveryone(this.getActor(), this.getNodeId(), this.getNodeX(), this.getNodeY());
         }

@@ -56,6 +56,8 @@ public class RSString {
         }
 
         public RSStringBuilder insertItem(int itemId) {
+            if (itemId == -1)
+                return this.wrapInColor(RED,"Nothing");
             return this.wrapInColor(RED,ItemIdContextLoader.getInstance().read(itemId).getName());
         }
 

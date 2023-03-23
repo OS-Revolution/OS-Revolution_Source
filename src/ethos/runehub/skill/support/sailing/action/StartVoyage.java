@@ -38,6 +38,11 @@ public class StartVoyage extends SupportSkillAction {
     }
 
     @Override
+    protected void onEvent() {
+
+    }
+
+    @Override
     protected void validateLevelRequirements() {
 //        Preconditions.checkArgument(this.getActor().getContext().getPlayerSaveData().getShip() > 0, "You do not own a ship.");
 //        Preconditions.checkArgument(this.getActor().getContext().getPlayerSaveData().isCrewAvailable(), "You need a crew.");
@@ -85,7 +90,7 @@ public class StartVoyage extends SupportSkillAction {
 //    }
 
     public StartVoyage(Player actor, Voyage voyage) {
-        super(actor, actor.getSkillController().getSailing().getId(), 1);
+        super(actor, actor.getSkillController().getSailing().getId(), 1,null);
         this.voyage = voyage;
     }
 

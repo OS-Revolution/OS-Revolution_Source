@@ -177,11 +177,11 @@ public class ItemOptionOne implements PacketType {
 //            c.getPotions().handlePotion(itemId, itemSlot);
 
         }
-        Optional<Bone> bone = Prayer.isOperableBone(itemId);
-        if (bone.isPresent()) {
-            c.getPrayer().bury(bone.get());
-            return;
-        }
+//        Optional<Bone> bone = Prayer.isOperableBone(itemId);
+//        if (bone.isPresent()) {
+//            c.getPrayer().bury(bone.get());
+//            return;
+//        }
 //        TeleportTablets.operate(c, itemId);
         Packs.openPack(c, itemId);
         if (LootingBag.isLootingBag(c, itemId)) {
@@ -428,14 +428,14 @@ public class ItemOptionOne implements PacketType {
 			c.getItems().addItem(1624, 1 + Misc.random(9));
 			c.sendMessage("You open the casket and find some treasure inside.");
 		}*/
-        if (itemId == 4155) {
-            if (!c.getSlayer().getTask().isPresent()) {
-                c.sendMessage("You do not have a task, please talk with a slayer master!");
-                return;
-            }
-            c.sendMessage("I currently have " + c.getSlayer().getTaskAmount() + " " + c.getSlayer().getTask().get().getPrimaryName() + "'s to kill.");
-            c.getPA().closeAllWindows();
-        }
+//        if (itemId == 4155) {
+//            if (!c.getSlayer().getTask().isPresent()) {
+//                c.sendMessage("You do not have a task, please talk with a slayer master!");
+//                return;
+//            }
+//            c.sendMessage("I currently have " + c.getSlayer().getTaskAmount() + " " + c.getSlayer().getTask().get().getPrimaryName() + "'s to kill.");
+//            c.getPA().closeAllWindows();
+//        }
         if (itemId == 2839) {
             if (c.getSlayer().isHelmetCreatable() == true) {
                 c.sendMessage("You have already learned this recipe. You have no more use for this scroll.");

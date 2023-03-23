@@ -17,7 +17,9 @@ import ethos.runehub.skill.gathering.hunter.Trap;
 import ethos.runehub.ui.ActionDispatcher;
 import ethos.runehub.ui.GameUI;
 import ethos.runehub.ui.impl.tab.TabUI;
+import ethos.runehub.world.WorldSettingsController;
 import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
+import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.net.Connection;
 import org.runehub.api.util.math.geometry.Point;
 
@@ -39,6 +41,11 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.pvECombatController = new PvECombatController(owner);
         this.deployedTrapList = new ArrayList<>(5);
         this.actionDispatcher.registerButton(actionEvent -> this.getOwner().getPA().closeAllWindows(),250002);
+        this.stepCounter = new AdjustableInteger(0);
+    }
+
+    public AdjustableInteger getStepCounter() {
+        return stepCounter;
     }
 
     public List<Trap> getDeployedTrapList() {
@@ -273,7 +280,10 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         if (rift != null && RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> riftFloor.getBoundingBox().contains(new Point(this.getOwner().getX(),this.getOwner().getY())))) {
             mf += 0.05f * rift.getDifficulty().ordinal();
         }
-        return mf;
+        if (WorldSettingsController.getInstance().getWorldSettings().getWeekendEventId() == 2) {
+            mf *= 1.5;
+        }
+        return Math.min(mf,0.99f);
     }
 
     public int getExchangeSlots() {
@@ -357,4 +367,6 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     private int skillStationId;
 
     private boolean enteringSkillStationTicket;
+
+    private final AdjustableInteger stepCounter;
 }

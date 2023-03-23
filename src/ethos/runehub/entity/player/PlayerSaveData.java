@@ -500,7 +500,85 @@ public class PlayerSaveData {
         return reclaimableItems;
     }
 
+    public boolean isBurnLogs() {
+        return burnLogs;
+    }
 
+    public int getDailyWoodcuttingTeleports() {
+        return dailyWoodcuttingTeleports;
+    }
+
+    public void setBurnLogs(boolean burnLogs) {
+        this.burnLogs = burnLogs;
+    }
+
+    public void setDailyWoodcuttingTeleports(int dailyWoodcuttingTeleports) {
+        this.dailyWoodcuttingTeleports = dailyWoodcuttingTeleports;
+    }
+
+    public int getDailyEliteWoodcuttingRingTeleports() {
+        return dailyEliteWoodcuttingRingTeleports;
+    }
+
+    public void setDailyEliteWoodcuttingRingTeleports(int dailyEliteWoodcuttingRingTeleports) {
+        this.dailyEliteWoodcuttingRingTeleports = dailyEliteWoodcuttingRingTeleports;
+    }
+
+    public long getAdvancedGoldAccumulatorAccumulated() {
+        return advancedGoldAccumulatorAccumulated;
+    }
+
+    public int getGoldAccumulatorAccumulated() {
+        return goldAccumulatorAccumulated;
+    }
+
+    public void setAdvancedGoldAccumulatorAccumulated(long advancedGoldAccumulatorAccumulated) {
+        this.advancedGoldAccumulatorAccumulated = advancedGoldAccumulatorAccumulated;
+    }
+
+    public void setGoldAccumulatorAccumulated(int goldAccumulatorAccumulated) {
+        this.goldAccumulatorAccumulated = goldAccumulatorAccumulated;
+    }
+
+    public boolean isAdvancedGoldAccumulatorOwned() {
+        return advancedGoldAccumulatorOwned;
+    }
+
+    public void setAdvancedGoldAccumulatorOwned(boolean advancedGoldAccumulatorOwned) {
+        this.advancedGoldAccumulatorOwned = advancedGoldAccumulatorOwned;
+    }
+
+    public boolean isAdvancedGoldAccumulatorActive() {
+        return advancedGoldAccumulatorActive;
+    }
+
+    public boolean isGoldAccumulatorActive() {
+        return goldAccumulatorActive;
+    }
+
+    public void setAdvancedGoldAccumulatorActive(boolean advancedGoldAccumulatorActive) {
+        this.advancedGoldAccumulatorActive = advancedGoldAccumulatorActive;
+    }
+
+    public void setGoldAccumulatorActive(boolean goldAccumulatorActive) {
+        this.goldAccumulatorActive = goldAccumulatorActive;
+    }
+
+    public boolean isMasterGoldAccumulatorActive() {
+        return masterGoldAccumulatorActive;
+    }
+
+    public long getMasterGoldAccumulatorAccumulated() {
+        return masterGoldAccumulatorAccumulated;
+    }
+
+    public void setMasterGoldAccumulatorAccumulated(long masterGoldAccumulatorAccumulated) {
+        this.masterGoldAccumulatorAccumulated = masterGoldAccumulatorAccumulated;
+    }
+
+    public void setMasterGoldAccumulatorActive(boolean masterGoldAccumulatorActive) {
+        this.masterGoldAccumulatorActive = masterGoldAccumulatorActive;
+    }
 
     @Override
     public String toString() {
@@ -629,4 +707,18 @@ public class PlayerSaveData {
     private int lecternHotspot;
 
     private List<GameItem> reclaimableItems;
+
+
+    /**
+     * skill rings
+     */
+    private boolean burnLogs;
+    private int dailyWoodcuttingTeleports,dailyEliteWoodcuttingRingTeleports;
+
+    /**
+     * items
+     */
+    private int goldAccumulatorAccumulated;
+    private long advancedGoldAccumulatorAccumulated,masterGoldAccumulatorAccumulated;
+    private boolean advancedGoldAccumulatorOwned, goldAccumulatorActive,advancedGoldAccumulatorActive, masterGoldAccumulatorActive;
 }

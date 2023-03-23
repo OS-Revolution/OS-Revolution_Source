@@ -12,6 +12,8 @@ import ethos.runehub.action.click.DefaultHomeTeleportAction;
 import ethos.runehub.action.click.InstantHomeTeleportAction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
+import ethos.runehub.skill.combat.magic.action.CastModernTeleportSkillAction;
+import ethos.runehub.skill.combat.magic.spell.SpellCache;
 import ethos.runehub.ui.impl.PlayPassUI;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -60,6 +62,8 @@ import ethos.net.discord.DiscordMessager;
 import ethos.util.Misc;
 import org.runehub.api.util.APILogger;
 import org.runehub.api.util.SkillDictionary;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 /**
  * Clicking most buttons
@@ -241,7 +245,9 @@ public class ClickingButtons implements PacketType {
         QuickPrayers.clickButton(c, actionButtonId);
         LunarSpells.lunarButton(c, actionButtonId);
         switch (actionButtonId) {
-
+            case 4140:
+                c.getSkillController().getMagic().train(new CastModernTeleportSkillAction(c,new Rectangle(new Point(3211,3423),new Point(3214,3425)), SpellCache.getInstance().read(0)));
+                break;
             case 31066:
                 c.getPA().closeAllWindows();
                 break;
@@ -257,7 +263,7 @@ public class ClickingButtons implements PacketType {
                 c.flushOutStream();
                 break;
 
-            case 4140:
+//            case 4140:
 //                if (c.isInHouse) {
 //                    c.sendMessage("Please use the house settings to leave your house");
 //                    return;
@@ -270,7 +276,7 @@ public class ClickingButtons implements PacketType {
 //                }
 //                c.getPA().showInterface(51000);
 //                c.getTeleport().selection(c, 0);
-                break;
+//                break;
             case 4143: //lumbridge
 //                if (c.teleTimer > 0) {
 //                    return;

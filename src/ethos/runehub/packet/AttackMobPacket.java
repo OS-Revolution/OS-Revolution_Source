@@ -12,6 +12,14 @@ public class AttackMobPacket implements PacketType {
     @Override
     public void processPacket(Player player, int packetType, int packetSize) {
         int npcClickIndex =  player.getInStream().readUnsignedWordA();
+        player.npcIndex = 0;
+        player.npcClickIndex = 0;
+        player.playerIndex = 0;
+        player.clickNpcType = 0;
+        player.getPA().resetFollow();
+        player.getPA().resetFollow();
+        player.followId2 = player.npcIndex;
+        player.getPA().followNpc();
         player.getAttributes().getPvECombatController().target(NPCHandler.npcs[npcClickIndex]);
     }
 }

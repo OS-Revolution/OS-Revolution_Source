@@ -5,10 +5,12 @@ import ethos.model.players.PlayerHandler;
 import ethos.runehub.event.dnd.SkillOfTheHourFixedScheduleEvent;
 import ethos.runehub.skill.artisan.cooking.Cooking;
 import ethos.runehub.skill.artisan.crafting.Crafting;
+import ethos.runehub.skill.artisan.fletching.Fletching;
 import ethos.runehub.skill.artisan.herblore.Herblore;
 import ethos.runehub.skill.artisan.runecraft.Runecraft;
 import ethos.runehub.skill.artisan.smithing.Smithing;
 import ethos.runehub.skill.combat.magic.Magic;
+import ethos.runehub.skill.combat.prayer.Prayer;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.farming.Farming;
 import ethos.runehub.skill.gathering.farming.foraging.Foraging;
@@ -18,7 +20,9 @@ import ethos.runehub.skill.gathering.woodcutting.Woodcutting;
 import ethos.runehub.skill.node.impl.RenewableNode;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.support.SupportSkill;
+import ethos.runehub.skill.support.firemaking.Firemaking;
 import ethos.runehub.skill.support.sailing.Sailing;
+import ethos.runehub.skill.support.slayer.Slayer;
 import ethos.runehub.skill.support.thieving.Thieving;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.util.Misc;
@@ -81,7 +85,9 @@ public class SkillController {
                 player.getPA().sendBonusXp(skill, player.getContext().getPlayerSaveData().getBonusXp().get(skill).value());
             }
         }
-
+        if (WorldSettingsController.getInstance().getWorldSettings().getWeekendEventId() == 1) {
+            amount *= 2.0;
+        }
         if (WorldSettingsController.getInstance().getWorldSettings().getBonusXpTimer().value() > 0) {
             amount *= 2.0;
         }
@@ -160,6 +166,10 @@ public class SkillController {
                 return cooking;
             case 8:
                 return woodcutting;
+            case 9:
+                return fletching;
+            case 11:
+                return firemaking;
             case 12:
                 return crafting;
             case 13:
@@ -247,6 +257,22 @@ public class SkillController {
         return crafting;
     }
 
+    public Slayer getSlayer() {
+        return slayer;
+    }
+
+    public Prayer getPrayer() {
+        return prayer;
+    }
+
+    public Firemaking getFiremaking() {
+        return firemaking;
+    }
+
+    public Fletching getFletching() {
+        return fletching;
+    }
+
     public SkillController(Player player) {
         this.player = player;
         this.woodcutting = new Woodcutting(player);
@@ -262,6 +288,10 @@ public class SkillController {
         this.farming = new Farming(player);
         this.magic = new Magic(player);
         this.crafting = new Crafting(player);
+        this.slayer = new Slayer(player);
+        this.prayer = new Prayer(player);
+        this.firemaking = new Firemaking(player);
+        this.fletching = new Fletching(player);
     }
 
     private final Player player;
@@ -278,5 +308,9 @@ public class SkillController {
     private final Farming farming;
     private final Magic magic;
     private final Crafting crafting;
+    private final Slayer slayer;
+    private final Prayer prayer;
+    private final Firemaking firemaking;
+    private final Fletching fletching;
 
 }

@@ -148,7 +148,7 @@ public class StealFromStallAction extends SupportSkillAction {
     }
 
     public StealFromStallAction(Player actor, int stallId, int stallX, int stallY, int stallZ) {
-        super(actor, SkillDictionary.Skill.THIEVING.getId(), 4);
+        super(actor, SkillDictionary.Skill.THIEVING.getId(), 4,null);
         this.targetedNodeContext = new ThievingStallNodeContext(stallId, stallX, stallY, stallZ);
     }
 

@@ -241,6 +241,7 @@ public class Walking implements PacketType {
 			packetSize -= 14;
 		}
 		c.newWalkCmdSteps = (packetSize - 5) / 2;
+
 		if (++c.newWalkCmdSteps > c.walkingQueueSize) {
 			c.newWalkCmdSteps = 0;
 			return;
@@ -257,6 +258,7 @@ public class Walking implements PacketType {
 			c.getNewWalkCmdX()[i1] += firstStepX;
 			c.getNewWalkCmdY()[i1] += firstStepY;
 		}
+
 	}
 
 }

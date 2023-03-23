@@ -2,8 +2,11 @@ package ethos.runehub.event.shop.impl;
 
 import ethos.Server;
 import ethos.clip.Region;
+import ethos.model.npcs.NPC;
+import ethos.model.npcs.NPCHandler;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.entity.merchant.impl.CommodityMerchant;
 import ethos.runehub.entity.merchant.impl.RotatingStockMerchant;
 import ethos.runehub.event.shop.TravellingMerchantEvent;
 import ethos.world.objects.GlobalObject;
@@ -14,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TravellingCommodityMerchantEvent extends TravellingMerchantEvent {
+
 
     @Override
     protected void onSpawn() {
@@ -28,8 +32,8 @@ public class TravellingCommodityMerchantEvent extends TravellingMerchantEvent {
                         10
                 )
         );
-        PlayerHandler.executeGlobalMessage("^Market $Trader $Stan has a special offer of $" + decimalFormat.format(100 * (1.0 - attachment.getSale(attachment.getSaleItemId())
-        )) + " % off @" + attachment.getSaleItemId() + " !");
+        PlayerHandler.executeGlobalMessage("^Market $Trader $Stan has a special offer of $" + decimalFormat.format(100 * (1.0 - sale
+        )) + " % off @" + saleId + " !");
     }
 
     @Override
@@ -81,13 +85,17 @@ public class TravellingCommodityMerchantEvent extends TravellingMerchantEvent {
         PlayerHandler.getPlayers().stream().filter(player -> player.myShopId == attachment.getMerchantId())
                 .forEach(player -> player.getPA().closeAllWindows());
         if (this.getCurrentPoint().getYCoordinate() == 0)
-            PlayerHandler.executeGlobalMessage("^Market $Trader $Stan has a special offer of $" + decimalFormat.format(100 * (1.0 - attachment.getSale(attachment.getSaleItemId())
-            )) + " % off @" + attachment.getSaleItemId() + " !");
+            PlayerHandler.executeGlobalMessage("^Market $Trader $Stan has a special offer of $" + decimalFormat.format(100 * (1.0 - sale
+            )) + " % off @" + saleId + " !");
     }
 
     public TravellingCommodityMerchantEvent() {
         super(MerchantCache.getInstance().read(1328), 18000, new LinkedList<>(List.of(new Location(3099, 3251), new Location(3099, 1,3251))));
+        this.saleId = ((CommodityMerchant) attachment).getItemOnSaleId();
+        this.sale = ((CommodityMerchant) attachment).getSale();
     }
 
+    private final int saleId;
+    private final double sale;
     private final DecimalFormat decimalFormat = new DecimalFormat("##");
 }

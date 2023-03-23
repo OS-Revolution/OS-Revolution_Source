@@ -5,7 +5,6 @@ import ethos.runehub.entity.mob.AnimationDefinition;
 import org.runehub.api.model.entity.user.character.CharacterEntity;
 import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
 import org.runehub.api.model.world.region.location.Location;
-import org.runehub.api.util.math.geometry.Point;
 
 public class HostileMobAttribute extends CharacterEntityAttribute {
 
@@ -31,6 +30,10 @@ public class HostileMobAttribute extends CharacterEntityAttribute {
 
     public int getHitpoints() {
         return hitpoints;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public HostileMobAttribute(CharacterEntity owner) {

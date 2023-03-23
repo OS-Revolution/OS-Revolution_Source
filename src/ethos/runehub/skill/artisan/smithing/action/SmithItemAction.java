@@ -20,7 +20,7 @@ public class SmithItemAction extends SkillAction {
 
     @Override
     protected void onActionStart() {
-
+        this.getActor().startAnimation(tool.getAnimationId());
 //        this.getActor().startAnimation(tool.getAnimationId());
 
     }

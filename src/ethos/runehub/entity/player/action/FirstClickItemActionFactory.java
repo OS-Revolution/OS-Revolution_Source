@@ -2,7 +2,10 @@ package ethos.runehub.entity.player.action;
 
 import ethos.model.players.Player;
 import ethos.runehub.entity.player.action.impl.ClickItemAction;
+import ethos.runehub.entity.player.action.impl.item.FirstClickEnchantedGemAction;
+import ethos.runehub.entity.player.action.impl.item.FirstClickGoldAccumulatorAction;
 import ethos.runehub.entity.player.action.impl.node.FirstClickPortableSkillingStation;
+import ethos.runehub.skill.combat.prayer.action.BuryRemainsAction;
 
 import java.util.logging.Logger;
 
@@ -17,6 +20,38 @@ public class FirstClickItemActionFactory {
             case 8532:
             case 8534:
                 return new FirstClickPortableSkillingStation(player, nodeX, nodeY, nodeId);
+            case 4155:
+                return new FirstClickEnchantedGemAction(player,nodeX,nodeY,nodeId);
+            case 8411:
+            case 8412:
+            case 8413:
+                return new FirstClickGoldAccumulatorAction(player,nodeX,nodeY,nodeId);
+            case 526:
+            case 528:
+            case 530:
+            case 532:
+            case 534:
+            case 536:
+            case 2859:
+            case 3123:
+            case 3125:
+            case 3179:
+            case 3180:
+            case 3183:
+            case 4812:
+            case 4830:
+            case 4832:
+            case 4834:
+            case 6729:
+            case 6812:
+            case 10891:
+            case 11943:
+                return new ClickItemAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getSkillController().getPrayer().train(new BuryRemainsAction(player,nodeId));
+                    }
+                };
         }
         return null;
     }

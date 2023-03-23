@@ -1,5 +1,6 @@
 package ethos.model.players.combat;
 
+import ethos.runehub.entity.item.equipment.ProjectileCache;
 import org.apache.commons.lang3.RandomUtils;
 
 import ethos.Server;
@@ -23,6 +24,7 @@ import ethos.model.players.combat.range.Bow;
 import ethos.model.players.combat.range.RangeData;
 import ethos.model.players.combat.range.RangeExtras;
 import ethos.model.players.combat.range.RangeMaxHit;
+import org.runehub.api.io.load.impl.ItemIdContextLoader;
 
 public class CombatAssistant {
 
@@ -248,6 +250,9 @@ public class CombatAssistant {
 	}
 
 	public int getRangeProjectileGFX() {
+		try {
+			return ProjectileCache.getInstance().read(c.lastArrowUsed).getProjectileGfx();
+		} catch (NullPointerException e) {}
 		return RangeData.getRangeProjectileGFX(c);
 	}
 

@@ -12,6 +12,7 @@ import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.skills.runecrafting.Pouches;
 import ethos.model.players.skills.runecrafting.Pouches.Pouch;
+import ethos.runehub.skill.support.slayer.SlayerAssignmentDAO;
 
 /**
  * Wear Item
@@ -68,12 +69,7 @@ public class WearItem implements PacketType {
 			return;
 		}
 		if (wearId == 4155) {
-			if (!c.getSlayer().getTask().isPresent()) {
-				c.sendMessage("You do not have a task!");
-				return;
-			}
-			c.sendMessage("I currently have @blu@" + c.getSlayer().getTaskAmount() + " " + c.getSlayer().getTask().get().getPrimaryName() + "@bla@ to kill.");
-			c.getPA().closeAllWindows();
+			c.getSkillController().getSlayer().checkSlayerTask();
 			return;
 		}
 		switch (wearId) {

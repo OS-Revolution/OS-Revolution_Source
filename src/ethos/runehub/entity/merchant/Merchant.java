@@ -116,11 +116,8 @@ public class Merchant {
         if (this.getMerchandiseSlot(itemId) == null) {
             MerchandiseSlot merchandiseSlot = new MerchandiseSlot(itemId, amount, false, 0.0D, false);
             this.getMerchandise().add(merchandiseSlot);
-            RunehubConstants.GENERAL_STORE_ITEMS.add(merchandiseSlot);
         } else {
             this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() + amount);
-            Optional<MerchandiseSlot> merchandise = RunehubConstants.GENERAL_STORE_ITEMS.stream().filter(merchandiseSlot -> merchandiseSlot.getItemId() == itemId).findAny();
-            merchandise.ifPresent(merchandiseSlot -> merchandiseSlot.setAmount(merchandiseSlot.getAmount() + amount));
         }
     }
 
@@ -155,7 +152,7 @@ public class Merchant {
     }
 
     public String getPriceForItemBeingSoldToShop(int itemId) {
-        if ((buyBackIds.contains(-1) || buyBackIds.contains(itemId)) && itemId != currencyId)
+        if ((buyBackIds.contains(-1) || buyBackIds.contains(itemId)) && itemId != currencyId && ItemIdContextLoader.getInstance().read(itemId).isTradable())
             return "The shop will pay #" + this.getPriceMerchantWillBuyFor(itemId) + " @"
                     + currencyId + " per @" + itemId;
         return "The shop will not buy this";

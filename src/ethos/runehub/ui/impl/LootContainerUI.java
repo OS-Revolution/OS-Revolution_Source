@@ -14,9 +14,11 @@ import org.runehub.api.model.entity.item.GameItem;
 import org.runehub.api.model.entity.item.loot.Loot;
 import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.entity.item.loot.LootTableContainer;
+import org.runehub.api.model.math.impl.IntegerRange;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class LootContainerUI extends GameUI {
@@ -125,12 +127,17 @@ public class LootContainerUI extends GameUI {
     private List<Loot> getLootPool() {
         final List<Loot> items = new ArrayList<>();
         final List<Loot> allItem = this.getAllLoot();
-        if (!getRolledLoot().isEmpty()) {
+        final List<Loot> rolledLoot = this.getRolledLoot();
+        if (!rolledLoot.isEmpty()) {
             for (int i = 0; i < 66; i++) {
                 if (i == 55) {
-                    items.add(getRolledLoot().get(0));
+                    items.add(rolledLoot.get(0));
+                } else if (!allItem.isEmpty()){
+                    items.add(allItem.get(new IntegerRange(0,allItem.size() - 1).getRandomValue()));
                 } else {
-                    items.add(allItem.get(Skill.SKILL_RANDOM.nextInt(allItem.size())));
+                    this.getPlayer().sendMessage("Something went wrong. Please try again.");
+                    Logger.getGlobal().severe("Failed to open Shiny Chest item pool was empty.");
+                    break;
                 }
             }
         } else {

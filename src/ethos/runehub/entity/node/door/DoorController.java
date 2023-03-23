@@ -42,15 +42,30 @@ public class DoorController {
                 face,
                 0
         ));
+        switch (propId) {
+            case 2100:
+            case 1535:
+                Server.getGlobalObjects().add(new GlobalObject(
+                        propId + 1,
+                        propX + OPEN_COORD_OFFSETS[face][0],
+                        propY + OPEN_COORD_OFFSETS[face][1],
+                        propZ,
+                        this.getClosedDoorFace(Face.values()[face]).ordinal(),
+                        0
+                ));
+                break;
+            default:
+                Server.getGlobalObjects().add(new GlobalObject(
+                        propId - 1,
+                        propX + OPEN_COORD_OFFSETS[face][0],
+                        propY + OPEN_COORD_OFFSETS[face][1],
+                        propZ,
+                        this.getClosedDoorFace(Face.values()[face]).ordinal(),
+                        0
+                ));
+                break;
+        }
 
-        Server.getGlobalObjects().add(new GlobalObject(
-                propId - 1,
-                propX + OPEN_COORD_OFFSETS[face][0],
-                propY + OPEN_COORD_OFFSETS[face][1],
-                propZ,
-                this.getClosedDoorFace(Face.values()[face]).ordinal(),
-                0
-        ));
     }
 
     private void rotateDoorOpenForPlayer(Player player, int propId, int propX, int propY, int propZ) {
@@ -64,13 +79,28 @@ public class DoorController {
                 0
         );
 
-        player.getPA().checkObjectSpawn(
-                propId - 1,
-                propX + OPEN_COORD_OFFSETS[face][0],
-                propY + OPEN_COORD_OFFSETS[face][1],
-                this.getClosedDoorFace(Face.values()[face]).ordinal(),
-                0
-        );
+        switch (propId) {
+            case 2100:
+            case 1535:
+                player.getPA().checkObjectSpawn(
+                        propId + 1,
+                        propX + OPEN_COORD_OFFSETS[face][0],
+                        propY + OPEN_COORD_OFFSETS[face][1],
+                        this.getClosedDoorFace(Face.values()[face]).ordinal(),
+                        0
+                );
+                break;
+            default:
+                player.getPA().checkObjectSpawn(
+                        propId - 1,
+                        propX + OPEN_COORD_OFFSETS[face][0],
+                        propY + OPEN_COORD_OFFSETS[face][1],
+                        this.getClosedDoorFace(Face.values()[face]).ordinal(),
+                        0
+                );
+                break;
+        }
+
     }
 
     private void rotateDoorClosedForPlayer(Player player,int propId, int propX, int propY, int propZ) {
@@ -84,13 +114,26 @@ public class DoorController {
                 0
         );
 
-        player.getPA().checkObjectSpawn(
-                propId + 1,
-                propX + CLOSED_COORD_OFFSETS[face][0],
-                propY + CLOSED_COORD_OFFSETS[face][1],
-                this.getOpenDoorFace(Face.values()[face]).ordinal(),
-                0
-        );
+        switch (propId) {
+            case 2100:
+                player.getPA().checkObjectSpawn(
+                        propId - 1,
+                        propX + OPEN_COORD_OFFSETS[face][0],
+                        propY + OPEN_COORD_OFFSETS[face][1],
+                        this.getOpenDoorFace(Face.values()[face]).ordinal(),
+                        0
+                );
+                break;
+            default:
+                player.getPA().checkObjectSpawn(
+                        propId + 1,
+                        propX + OPEN_COORD_OFFSETS[face][0],
+                        propY + OPEN_COORD_OFFSETS[face][1],
+                        this.getOpenDoorFace(Face.values()[face]).ordinal(),
+                        0
+                );
+                break;
+        }
     }
 
     private void rotateDoorClosed(int propId, int propX, int propY, int propZ) {
@@ -104,6 +147,29 @@ public class DoorController {
                 face,
                 0
         ));
+
+        switch (propId) {
+            case 2100:
+                Server.getGlobalObjects().add(new GlobalObject(
+                        propId - 1,
+                        propX + CLOSED_COORD_OFFSETS[face][0],
+                        propY + CLOSED_COORD_OFFSETS[face][1],
+                        propZ,
+                        this.getOpenDoorFace(Face.values()[face]).ordinal(),
+                        0
+                ));
+                break;
+            default:
+                Server.getGlobalObjects().add(new GlobalObject(
+                        propId + 1,
+                        propX + CLOSED_COORD_OFFSETS[face][0],
+                        propY + CLOSED_COORD_OFFSETS[face][1],
+                        propZ,
+                        this.getOpenDoorFace(Face.values()[face]).ordinal(),
+                        0
+                ));
+                break;
+        }
 
         Server.getGlobalObjects().add(new GlobalObject(
                 propId + 1,
@@ -145,7 +211,7 @@ public class DoorController {
             case NORTH:
                 return Face.SOUTHWEST;
             case NORTHEAST:
-                break;
+                return Face.WEST;
             case EAST:
                 return Face.SOUTHEAST;
             case SOUTHEAST:

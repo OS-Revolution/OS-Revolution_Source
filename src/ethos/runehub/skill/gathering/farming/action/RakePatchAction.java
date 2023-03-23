@@ -15,7 +15,7 @@ public class RakePatchAction extends GatheringSkillAction {
 
     @Override
     protected void updateAnimation() {
-        this.getActor().startAnimation(2273);
+//        this.getActor().startAnimation(2273);
     }
 
     @Override
@@ -52,8 +52,10 @@ public class RakePatchAction extends GatheringSkillAction {
 
     @Override
     public void onTick() {
+        if (config.getStage() < 2) {
+            this.getActor().startAnimation(2273);
+        }
         if (config.getStage() < 3) {
-            this.updateAnimation();
             this.onGather();
         } else {
             this.getActor().startAnimation(65535);

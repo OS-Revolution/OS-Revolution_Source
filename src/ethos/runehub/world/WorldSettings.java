@@ -40,6 +40,7 @@ public class WorldSettings {
     private GameItem[][] activeSeasonLoot;
 
     private int currentEventId;
+    private int weekendEventId;
 
     public WorldSettings() {
         this.bonusXpTimer = new AdjustableLong(0L);
@@ -226,5 +227,13 @@ public class WorldSettings {
 
     public void setCurrentEventId(int currentEventId) {
         this.currentEventId = currentEventId;
+    }
+
+    public int getWeekendEventId() {
+        return weekendEventId;
+    }
+
+    public void setWeekendEventId(int weekendEventId) {
+        this.weekendEventId = weekendEventId;
     }
 }

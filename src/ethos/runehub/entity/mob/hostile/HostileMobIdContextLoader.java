@@ -24,19 +24,23 @@ public class HostileMobIdContextLoader extends LazyLoader<Integer, HostileMobCon
     }
 
     @Override
+    public HostileMobContext read(Integer key) {
+        HostileMobContext value = this.getMap().get(key);
+        if (value == null) {
+            value = this.load(key);
+        }
+        if (value != null) {
+            this.getMap().put(key, value);
+        }
+        return value;
+    }
+
+    @Override
     public HostileMobContext load(Integer key) {
         if (key != -1) {
             HostileMobContext context = HostileMobContextDAO.getInstance().read(key);
             if (context == null) {
-                try {
-                    context = new MobContextJsonSerializer().deserialize(
-                            Objects.requireNonNull(OSRSBoxClient.getItems(new GETRequest.GETRequestBuilder(OSRSBoxClient.MOB_ENDPOINT)
-                                    .setSearchTerm(String.valueOf(key))
-                                    .build())).toString()
-                    ).getContexts().get(0);
-                } catch (IOException e) {
-                    Logger.getGlobal().severe("No Item Found: " + key);
-                }
+                Logger.getGlobal().severe("No Value Found: " + key);
             }
             return context;
         }

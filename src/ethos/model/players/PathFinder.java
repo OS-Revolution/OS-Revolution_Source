@@ -193,6 +193,7 @@ public class PathFinder {
 		}
 		c.resetWalkingQueue();
 		int size = tail--;
+
 		int pathX = c.getMapRegionX() * 8 + tileQueueX.get(tail);
 		int pathY = c.getMapRegionY() * 8 + tileQueueY.get(tail);
 		c.addToWalkingQueue(localize(pathX, c.getMapRegionX()),

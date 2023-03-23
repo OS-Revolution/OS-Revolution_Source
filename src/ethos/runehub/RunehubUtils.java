@@ -1,15 +1,92 @@
 package ethos.runehub;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.util.Misc;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.runehub.api.io.file.Extension;
+import org.runehub.api.io.file.FileRequest;
+import org.runehub.api.io.file.impl.APIFileSystem;
 import org.runehub.api.util.SkillDictionary;
 
+import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class RunehubUtils {
 
     public static String getBooleanAsYesOrNo(boolean value) {
         return value ? "Yes" : "No";
+    }
+
+    public static String getBooleanAsOnOrOff(boolean value) {
+        return value ? "On" : "Off";
+    }
+
+    public static int getMobRespawn(JsonObject mob) {
+
+        try {
+            Document document = Jsoup.connect(mob.get("wiki_url").getAsString()).get();
+            Element tr = document.select("td[data-attr-param=respawn]").get(0);
+            return Integer.parseInt(tr.text().split(" ")[0]);
+        } catch (IOException | IndexOutOfBoundsException e) {
+            Logger.getGlobal().severe("Failed to load respawn time");
+        }
+        return 5;
+    }
+
+    public static int getMobRespawn(int id) {
+        final JsonObject mob = getMob(id);
+
+        try {
+            Document document = Jsoup.connect(mob.get("wiki_url").getAsString()).get();
+            Element tr = document.select("td[data-attr-param=respawn]").get(0);
+           return Integer.parseInt(tr.text().split(" ")[0]);
+        } catch (IOException | IndexOutOfBoundsException e) {
+            Logger.getGlobal().severe("Failed to load respawn time for: " + id);
+        }
+        return 5;
+    }
+
+    public static JsonObject getMob(int id) {
+        final JsonObject allMobs = getMonsters();
+        final String idAsString = String.valueOf(id);
+        if (allMobs.entrySet().stream().anyMatch(stringJsonElementEntry -> stringJsonElementEntry.getKey().equalsIgnoreCase(idAsString))) {
+            return allMobs.get(idAsString).getAsJsonObject();
+        }
+        return null;
+    }
+
+    public static JsonObject getMonsters() {
+        final FileRequest allMonstersFileRequest =  APIFileSystem.getInstance()
+                .buildFileRequest()
+                .inDirectory(APIFileSystem.APP_DIRECTORY)
+                .inDirectory(APIFileSystem.COMMON_RESOURCE_DIRECTORY)
+                .inDirectory(APIFileSystem.COMMON_DB_RESOURCE)
+                .withFileName("monsters-complete")
+                .withExtension(Extension.JSON)
+                .build();
+        try (BufferedReader reader = new BufferedReader(new FileReader(allMonstersFileRequest.getFile()))) {
+            final JsonParser parser = new JsonParser();
+            String json = readAll(reader);
+            return parser.parse(json).getAsJsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String readAll(Reader rd) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int cp;
+        while ((cp = rd.read()) != -1) {
+            sb.append((char) cp);
+        }
+        return sb.toString();
     }
 
     public static boolean beginsWithVowel(String text) {

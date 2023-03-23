@@ -1,5 +1,8 @@
 package ethos.model.players.packets;
 
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
+import ethos.runehub.entity.player.action.SecondClickItemActionFactory;
+import ethos.runehub.skill.support.slayer.SlayerAssignmentDAO;
 import org.apache.commons.lang3.text.WordUtils;
 
 import ethos.Config;
@@ -36,12 +39,22 @@ public class OperateItem implements PacketType {
 		}
 
 			ItemDefinition def = ItemDefinition.forId(itemId);
-			Optional<DegradableItem> d = DegradableItem.forId(itemId);
-			if (d.isPresent()) {
-				Degrade.checkPercentage(c, itemId);
-				return;
-			}
+//			Optional<DegradableItem> d = DegradableItem.forId(itemId);
+//			if (d.isPresent()) {
+//				Degrade.checkPercentage(c, itemId);
+//				return;
+//			}
 			switch (itemId) {
+				case 8122:
+				case 8123:
+				case 8124:
+				case 8125:
+					try {
+						c.getAttributes().getActionController().submit(SecondClickItemActionFactory.getAction(c,c.absX,c.absY,itemId));
+					} catch (NullPointerException e1) {
+						c.sendMessage("Nothing interesting happens.");
+					}
+					break;
 			case 9948:
 			case 9949:
 				if (WheatPortalEvent.xLocation > 0 && WheatPortalEvent.yLocation > 0) {
@@ -318,12 +331,11 @@ public class OperateItem implements PacketType {
 				case 21890:
 					switch (slot) {
 						case 1:
-							if (!c.getSlayer().getTask().isPresent()) {
-								c.sendMessage("You do not have a task!");
-								return;
+							if (c.getSlayerSave().getAssignmentId() != -1) {
+								c.sendMessage("You must slayer $" + c.getSlayerSave().getAssignedAmount() + " more " + SlayerAssignmentDAO.getInstance().read(c.getSlayerSave().getAssignmentId()).getCategory());
+							} else {
+								c.sendMessage("You do not have a task.");
 							}
-							c.sendMessage("I currently have @blu@" + c.getSlayer().getTaskAmount() + " " + c.getSlayer().getTask().get().getPrimaryName() + "@bla@ to kill.");
-							c.getPA().closeAllWindows();
 							break;
 						case 2:
 							if (Server.getMultiplayerSessionListener().inAnySession(c)) {

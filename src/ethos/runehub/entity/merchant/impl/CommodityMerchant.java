@@ -107,6 +107,14 @@ public class CommodityMerchant extends RotatingStockMerchant {
         return itemId;
     }
 
+    public double getSale() {
+        return sale;
+    }
+
+    public int getItemOnSaleId() {
+        return saleItemId;
+    }
+
     public CommodityMerchant() {
         super(1459, 1328, "Jewel Shop", 4225145936390343693L, COMMODITIES, 1.0f, MAX_STOCK);
     }

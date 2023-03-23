@@ -5,12 +5,18 @@ import ethos.model.players.Player;
 import ethos.runehub.skill.artisan.ArtisanSkillItemReaction;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
-import ethos.runehub.skill.artisan.crafting.action.CraftLeatherAction;
 import ethos.runehub.skill.artisan.crafting.action.CutGemAction;
 import ethos.runehub.skill.artisan.crafting.CraftingItemReaction;
+import ethos.runehub.skill.artisan.fletching.ui.FletchLogsSkillMenuUI;
+import ethos.runehub.skill.artisan.fletching.ui.FletchProjectileSkillMenuUI;
+import ethos.runehub.skill.artisan.fletching.ui.MountCrossbowSkillMenuUI;
+import ethos.runehub.skill.artisan.fletching.ui.StringBowSkillMenuUI;
 import ethos.runehub.skill.artisan.herblore.HerbloreItemReaction;
 import ethos.runehub.skill.artisan.herblore.action.CrushItemAction;
 import ethos.runehub.skill.artisan.herblore.action.MixUnfinishedPotionAction;
+import ethos.runehub.skill.combat.prayer.action.SacrificeRemainsOnAltarAction;
+import ethos.runehub.skill.support.firemaking.action.KindlingOnTinderboxAction;
+import ethos.runehub.skill.support.firemaking.action.TinderboxOnKindlingAction;
 import ethos.runehub.ui.impl.crafting.LeatherCraftingUI;
 
 public class ItemReactionProcessor {
@@ -66,6 +72,28 @@ public class ItemReactionProcessor {
                 player.sendUI(new LeatherCraftingUI(player, 6289));
             } else if (artisanSkillItemReaction.getActionId() == 13) { //yak-hide
                 player.sendUI(new LeatherCraftingUI(player, 10820));
+            } else if (artisanSkillItemReaction.getActionId() == 14) { //bones on altar
+                player.getSkillController().getPrayer().train(new SacrificeRemainsOnAltarAction(player,interaction.getUsedId(),context));
+            }else if (artisanSkillItemReaction.getActionId() == 15) { //lighting fire
+                player.getSkillController().getFiremaking().train(new TinderboxOnKindlingAction(player,context,artisanSkillItemReaction));
+            }else if (artisanSkillItemReaction.getActionId() == 16) { //lighting fire
+                player.getSkillController().getFiremaking().train(new KindlingOnTinderboxAction(player,context,artisanSkillItemReaction));
+            }else if (artisanSkillItemReaction.getActionId() == 17 && context.getUsedId() == 946) { //fletching logs
+                player.sendUI(new FletchLogsSkillMenuUI(player, context.getUsedWithId()));
+            }else if (artisanSkillItemReaction.getActionId() == 17 && context.getUsedWithId() == 946) { //fletching logs
+                player.sendUI(new FletchLogsSkillMenuUI(player, context.getUsedId()));
+            }else if (artisanSkillItemReaction.getActionId() == 18) { //stringing bows
+                player.sendUI(new StringBowSkillMenuUI(player, context.getUsedWithId()));
+            }else if (artisanSkillItemReaction.getActionId() == 19) { //stringing bows
+                player.sendUI(new StringBowSkillMenuUI(player, context.getUsedId()));
+            }else if (artisanSkillItemReaction.getActionId() == 20) { //stringing bows
+                player.sendUI(new MountCrossbowSkillMenuUI(player, context.getUsedWithId()));
+            } else if (artisanSkillItemReaction.getActionId() == 21) { //stringing bows
+                player.sendUI(new FletchProjectileSkillMenuUI(player, context.getUsedId()));
+            } else if (artisanSkillItemReaction.getActionId() == 22) { //making bolt tips
+                player.sendUI(new FletchProjectileSkillMenuUI(player, context.getUsedWithId()));
+            } else if (artisanSkillItemReaction.getActionId() == 23) { //making bolt tips
+                player.sendUI(new FletchProjectileSkillMenuUI(player, context.getUsedId()));
             }
         } else {
             System.out.println(reaction.getClass());

@@ -16,6 +16,46 @@ public class Thieving extends SupportSkill {
     }
 
     @Override
+    public double getPowerBonus() {
+        double modifier = Arrays.stream(this.getPlayer().playerEquipment).mapToDouble(equippedItem ->{
+            switch (equippedItem) {
+                case 10075:
+                    return 0.05;
+                case 9777:
+                case 9778:
+                case 13280:
+                case 13329:
+                case 13331:
+                case 13333:
+                case 13335:
+                case 13337:
+                case 13342:
+                case 20760:
+                case 21185:
+                case 21285:
+                    return 0.1;
+                case 13123:
+                    return 0.08;
+                case 773:
+                    return 1.0;
+            }
+            return 0D;
+        }).sum();
+        return modifier + super.getPowerBonus();
+    }
+
+    @Override
+    public double getEfficiencyBonus() {
+        double modifier = Arrays.stream(this.getPlayer().playerEquipment).mapToDouble(equippedItem ->{
+            switch (equippedItem) {
+
+            }
+            return 0D;
+        }).sum();
+        return modifier + super.getPowerBonus();
+    }
+
+    @Override
     public int getId() {
         return SkillDictionary.Skill.THIEVING.getId();
     }

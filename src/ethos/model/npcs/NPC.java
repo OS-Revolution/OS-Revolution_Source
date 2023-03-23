@@ -15,6 +15,7 @@ import ethos.model.players.combat.Hitmark;
 import ethos.runehub.LootTableContainerUtils;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.content.rift.impl.NephalemRift;
+import ethos.runehub.entity.item.ItemController;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
 import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.util.Location3D;
@@ -35,6 +36,7 @@ import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
 import org.runehub.api.model.world.Face;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class NPC extends Entity implements NonPlayableCharacter {
@@ -598,6 +600,9 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     @Override
     public void appendHitUpdate(Stream str) {
+        if (npcType == 412) {
+
+        }
         if (getHealth().getAmount() <= 0) {
             isDead = true;
         }
@@ -745,6 +750,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
         projectileDelay = delay;
     }
 
+
     @Override
     public void appendDamage(int damage, Hitmark hitmark) {
         if (damage < 0) {
@@ -764,6 +770,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
             hitDiff2 = damage;
             hitmark2 = hitmark;
         }
+
         updateRequired = true;
     }
 
@@ -827,10 +834,11 @@ public class NPC extends Entity implements NonPlayableCharacter {
                     LootTableLoader.getInstance().read(lootTable.getId()).roll(player.getAttributes().getMagicFind()).forEach(loot -> {
                         final Tier tier = Tier.getTier(loot.getRarity());
                         if (tier.getId() == 5 || tier.getId() == 6 || tier.getId() == 7) { //very rare
-                            player.sendMessage("@or@" + tier.getName() + " drop " + loot.getAmount() + "x " + ItemIdContextLoader.getInstance().read((int) loot.getId()).getName() + ".");
-                            PlayerHandler.executeGlobalMessage("^Loot $" + player.getAttributes().getName() + " received $" + tier.getName() + " drop $" + loot.getAmount() + "x @" + loot.getId() + "!");
+                            player.sendMessage("@or@" + tier.getName().replaceAll(" ","_") + " drop " + loot.getAmount() + "x " + ItemIdContextLoader.getInstance().read((int) loot.getId()).getName() + ".");
+                            PlayerHandler.executeGlobalMessage("^Loot $" + player.getAttributes().getName().replaceAll(" ","_") + " received $" + tier.getName().replaceAll(" ","_") + " drop $" + loot.getAmount() + "x @" + loot.getId() + " !");
                         }
-                        Server.itemHandler.createGroundItem(player, (int) loot.getId(), dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(), (int) loot.getAmount());
+                        ItemController.getInstance().onDropReceivedEffect(player,loot,dropLocation.getX(), dropLocation.getY(), dropLocation.getZ());
+//                        Server.itemHandler.createGroundItem(player, (int) loot.getId(), dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(), (int) loot.getAmount());
                     });
                 });
             });

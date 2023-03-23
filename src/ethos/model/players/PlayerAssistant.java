@@ -7,8 +7,12 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.content.instance.BossArenaInstanceController;
+import ethos.runehub.entity.item.equipment.EquipmentSlot;
+import ethos.runehub.entity.mob.hostile.HostileMobContext;
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.runehub.entity.node.Node;
 import ethos.runehub.world.WorldSettingsController;
 import org.apache.commons.lang3.ArrayUtils;
@@ -80,6 +84,7 @@ import ethos.world.Clan;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.util.SkillDictionary;
 import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 public class PlayerAssistant {
 
@@ -2841,6 +2846,217 @@ public class PlayerAssistant {
         }
     }
 
+    public boolean withinRange(NPC entity) {
+        final HostileMobContext ctx = HostileMobIdContextLoader.getInstance().read(entity.npcType);
+
+        if (ctx != null) {
+            final int playerRange = c.getEquipmentInSlot(EquipmentSlot.MAIN_HAND).isPresent() ?
+                    c.getEquipmentInSlot(EquipmentSlot.MAIN_HAND).get().getRange()
+                    : 0;
+            final int entitySize = ctx.getSize() - 1;
+            final Rectangle validArea = new Rectangle(
+                    new Point((entity.absX - entitySize) - playerRange,(entity.absY - entitySize) - playerRange),
+                    new Point((entity.absX + entitySize) + playerRange,(entity.absY + entitySize) + playerRange)
+            );
+            System.out.println("Size: " + entitySize);
+            System.out.println("Range: " + playerRange);
+            return validArea.contains(new Point(c.absX,c.absY));
+        }
+        return false;
+    }
+
+    public void follow() {
+        if (NPCHandler.npcs[c.followId2] == null || NPCHandler.npcs[c.followId2].isDead) {
+            c.followId2 = 0;
+            return;
+        }
+        if (c.morphed) {
+            return;
+        }
+        if (c.freezeTimer > 0) {
+            return;
+        }
+        if (c.isDead || c.playerLevel[3] <= 0)
+            return;
+
+        NPC npc = NPCHandler.npcs[c.followId2];
+        int otherX = NPCHandler.npcs[c.followId2].getX();
+        int otherY = NPCHandler.npcs[c.followId2].getY();
+
+        double distanceToNpc = npc.getDistance(c.absX, c.absY);
+
+        if (!c.goodDistance(otherX, otherY, c.getX(), c.getY(), 25)) {
+            c.followId2 = 0;
+            return;
+        }
+
+        c.faceUpdate(c.followId2);
+        if (distanceToNpc <= 1) {
+            if (!npc.insideOf(c.absX, c.absY)) {
+                if (npc.getSize() == 0) {
+                    stopDiagonal(otherX, otherY);
+                }
+                return;
+            }
+        }
+
+        boolean projectile = c.usingOtherRangeWeapons || c.usingBow || c.usingMagic || c.autocasting
+                || c.getCombat().usingCrystalBow();
+        if (!projectile
+                || projectile && (PathChecker.isProjectilePathClear(c.absX, c.absY, c.heightLevel, otherX, otherY)
+                || PathChecker.isProjectilePathClear(otherX, otherY, c.heightLevel, c.absX, c.absY))) {
+
+            if (Misc.distance(c.getX(), c.getY(), otherX, otherY) == 1.0) {
+                return;
+            }
+
+        }
+
+        final int x = c.absX;
+        final int y = c.absY;
+        final int z = c.heightLevel;
+        // XXX Add water npcs here
+        final boolean inWater = npc.npcType == 2042 || npc.npcType == 2043 || npc.npcType == 2044 || npc.npcType == 1739
+                || npc.npcType == 1740 || npc.npcType == 1741 || npc.npcType == 1742;
+
+        if (!inWater) {
+            double lowDist = 99999;
+            int lowX = 0;
+            int lowY = 0;
+            int x3 = otherX;
+            int y3 = otherY - 1;
+            final int loop = npc.getSize();
+
+            for (int k = 0; k < 4; k++) {
+                for (int i = 0; i < loop - (k == 0 ? 1 : 0); i++) {
+                    if (k == 0) {
+                        x3++;
+                    } else if (k == 1) {
+                        if (i == 0) {
+                            x3++;
+                        }
+                        y3++;
+                    } else if (k == 2) {
+                        if (i == 0) {
+                            y3++;
+                        }
+                        x3--;
+                    } else if (k == 3) {
+                        if (i == 0) {
+                            x3--;
+                        }
+                        y3--;
+                    }
+
+                    if (Misc.distance(x3, y3, x, y) < lowDist) {
+                        if (!projectile && PathChecker.isMeleePathClear(x3, y3, z, otherX, otherY)
+                                || projectile && PathChecker.isProjectilePathClear(x3, y3, z, otherX, otherY)) {
+
+                            if (PathFinder.getPathFinder().accessable(c, x3, y3)) {
+                                lowDist = Misc.distance(x3, y3, x, y);
+                                lowX = x3;
+                                lowY = y3;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (lowX != 0 && lowY != 0) {
+                PathFinder.getPathFinder().findRoute(c, lowX, lowY, true, 18, 18);
+            } else {
+                PathFinder.getPathFinder().findRoute(c, npc.absX, npc.absY, true, 18, 18);
+            }
+
+        } else {
+            if (otherX == c.absX && otherY == c.absY) {
+                int r = Misc.random(3);
+                switch (r) {
+                    case 0:
+                        playerWalk(0, -1);
+                        break;
+                    case 1:
+                        playerWalk(0, 1);
+                        break;
+                    case 2:
+                        playerWalk(1, 0);
+                        break;
+                    case 3:
+                        playerWalk(-1, 0);
+                        break;
+                }
+            } else if (c.isRunning2 && !withinRange(npc)) {
+                if (otherY > c.getY() && otherX == c.getX()) {
+                    // walkTo(0, getMove(c.getY(), otherY - 1) + getMove(c.getY(),
+                    // otherY - 1));
+                    playerWalk(otherX, otherY - 1);
+                } else if (otherY < c.getY() && otherX == c.getX()) {
+                    // walkTo(0, getMove(c.getY(), otherY + 1) + getMove(c.getY(),
+                    // otherY + 1));
+                    playerWalk(otherX, otherY + 1);
+                } else if (otherX > c.getX() && otherY == c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX - 1) + getMove(c.getX(),
+                    // otherX - 1), 0);
+                    playerWalk(otherX - 1, otherY);
+                } else if (otherX < c.getX() && otherY == c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(),
+                    // otherX + 1), 0);
+                    playerWalk(otherX + 1, otherY);
+                } else if (otherX < c.getX() && otherY < c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(),
+                    // otherX + 1), getMove(c.getY(), otherY + 1) +
+                    // getMove(c.getY(), otherY + 1));
+                    playerWalk(otherX + 1, otherY + 1);
+                } else if (otherX > c.getX() && otherY > c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX - 1) + getMove(c.getX(),
+                    // otherX - 1), getMove(c.getY(), otherY - 1) +
+                    // getMove(c.getY(), otherY - 1));
+                    playerWalk(otherX - 1, otherY - 1);
+                } else if (otherX < c.getX() && otherY > c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(),
+                    // otherX + 1), getMove(c.getY(), otherY - 1) +
+                    // getMove(c.getY(), otherY - 1));
+                    playerWalk(otherX + 1, otherY - 1);
+                } else if (otherX > c.getX() && otherY < c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(),
+                    // otherX + 1), getMove(c.getY(), otherY - 1) +
+                    // getMove(c.getY(), otherY - 1));
+                    playerWalk(otherX + 1, otherY - 1);
+                }
+            } else {
+                if (otherY > c.getY() && otherX == c.getX()) {
+                    // walkTo(0, getMove(c.getY(), otherY - 1));n
+                    playerWalk(otherX, otherY - 1);
+                } else if (otherY < c.getY() && otherX == c.getX()) {
+                    // walkTo(0, getMove(c.getY(), otherY + 1));
+                    playerWalk(otherX, otherY + 1);
+                } else if (otherX > c.getX() && otherY == c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX - 1), 0);
+                    playerWalk(otherX - 1, otherY);
+                } else if (otherX < c.getX() && otherY == c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1), 0);
+                    playerWalk(otherX + 1, otherY);
+                } else if (otherX < c.getX() && otherY < c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1), getMove(c.getY(),
+                    // otherY + 1));
+                    playerWalk(otherX + 1, otherY + 1);
+                } else if (otherX > c.getX() && otherY > c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX - 1), getMove(c.getY(),
+                    // otherY - 1));
+                    playerWalk(otherX - 1, otherY - 1);
+                } else if (otherX < c.getX() && otherY > c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX + 1), getMove(c.getY(),
+                    // otherY - 1));
+                    playerWalk(otherX + 1, otherY - 1);
+                } else if (otherX > c.getX() && otherY < c.getY()) {
+                    // walkTo(getMove(c.getX(), otherX - 1), getMove(c.getY(),
+                    // otherY + 1));
+                    playerWalk(otherX - 1, otherY + 1);
+                }
+            }
+        }
+    }
+
     public void followNpc() {
         if (NPCHandler.npcs[c.followId2] == null || NPCHandler.npcs[c.followId2].isDead) {
             c.followId2 = 0;
@@ -2881,7 +3097,7 @@ public class PlayerAssistant {
             }
         }
 
-        boolean projectile = c.usingOtherRangeWeapons || c.usingBow || c.usingMagic || c.autocasting
+        boolean projectile =Arrays.stream(RunehubConstants.CBOW).anyMatch(value -> c.playerEquipment[c.playerWeapon] == value) || c.usingOtherRangeWeapons || c.usingBow || c.usingMagic || c.autocasting
                 || c.getCombat().usingCrystalBow();
         if (!projectile
                 || projectile && (PathChecker.isProjectilePathClear(c.absX, c.absY, c.heightLevel, otherX, otherY)
@@ -3234,7 +3450,6 @@ public class PlayerAssistant {
         c.getNewWalkCmdX()[0] = c.getNewWalkCmdY()[0] = 0;
         int l = c.getY() + j;
         l -= c.mapRegionY * 8;
-
         for (int n = 0; n < c.newWalkCmdSteps; n++) {
             c.getNewWalkCmdX()[n] += k;
             c.getNewWalkCmdY()[n] += l;

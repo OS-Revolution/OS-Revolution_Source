@@ -27,24 +27,16 @@ import ethos.model.players.Player;
 import ethos.model.players.PlayerAssistant;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.combat.Degrade;
-import ethos.model.players.mode.ModeType;
 import ethos.model.players.packets.objectoptions.impl.DarkAltar;
 import ethos.model.players.packets.objectoptions.impl.WellOfGoodWillObject;
-import ethos.model.players.skills.Cooking;
 import ethos.model.players.skills.Skill;
 import ethos.model.players.skills.Smelting;
-import ethos.model.players.skills.crafting.BattlestaveMaking;
 import ethos.model.players.skills.crafting.BraceletMaking;
 import ethos.model.players.skills.crafting.GlassBlowing;
-import ethos.model.players.skills.crafting.JewelryMaking;
-import ethos.model.players.skills.crafting.LeatherMaking;
 import ethos.model.players.skills.crafting.SpinMaterial;
 import ethos.model.players.skills.firemake.Firemaking;
-import ethos.model.players.skills.herblore.Crushable;
 import ethos.model.players.skills.herblore.PoisonedWeapon;
 import ethos.model.players.skills.herblore.UnfCreator;
-import ethos.model.players.skills.prayer.Bone;
-import ethos.model.players.skills.prayer.Prayer;
 import ethos.runehub.entity.item.*;
 import ethos.runehub.skill.gathering.farming.Farming;
 import ethos.runehub.skill.gathering.farming.action.ApplyCompostAction;
@@ -366,16 +358,24 @@ public class UseItem {
 //			Cooking.cookThisFood(c, itemId, objectID);
                 break;
 
-            case 409:
-                Optional<Bone> bone = Prayer.isOperableBone(itemId);
-                if (bone.isPresent()) {
-                    c.getPrayer().setAltarBone(bone);
-                    c.getOutStream().createFrame(27);
-                    c.settingUnnoteAmount = false;
-                    c.boneOnAltar = true;
-                    return;
-                }
-                break;
+//            case 409:
+//            case 31624:
+//                if (RemainsCache.getInstance().containsKey(itemId) ||
+//                        RemainsDAO.getInstance().getAllEntries().stream().anyMatch(remains -> remains.getItemId() == itemId)) {
+//                    c.getSkillController().getPrayer().setRemainsUsedOnAltar(itemId);
+//                    c.getOutStream().createFrame(27);
+//                    c.settingUnnoteAmount = false;
+//                    c.boneOnAltar = true;
+//                }
+////                Optional<Bone> bone = Prayer.isOperableBone(itemId);
+////                if (bone.isPresent()) {
+////                    c.getPrayer().setAltarBone(bone);
+////                    c.getOutStream().createFrame(27);
+////                    c.settingUnnoteAmount = false;
+////                    c.boneOnAltar = true;
+////                    return;
+////                }
+//                break;
             /*
              * case 2728: case 12269: c.getCooking().itemOnObject(itemId); break;
              */
@@ -413,10 +413,10 @@ public class UseItem {
             ItemContext context = ItemIdContextLoader.getInstance().read(targetId);
             if (((context != null && context.isNoteable()) || ItemDefinition.forId(targetId).isNoteable())
                     && (context != null && !context.isNoted())) {
-                if (c.getItems().playerHasItem(targetId + 1) || c.getItems().freeSlots() > 0) {
+                if (c.getItems().playerHasItem(context.getLinkedIdNoted()) || c.getItems().freeSlots() > 0) {
                     c.getItems().deleteItem2(3103, 1);
                     c.getItems().deleteItem(targetId, targetSlot, 1);
-                    c.getItems().addItem(targetId + 1, 1);
+                    c.getItems().addItem(context.getLinkedIdNoted(), 1);
                 } else {
                     c.sendMessage("You do not have enough inventory space.");
                 }
@@ -560,9 +560,9 @@ public class UseItem {
 			c.getRunePouch().addItemToRunePouch(itemUsed, c.getItems().getItemAmount(itemUsed));
 			break;*/
 
-            case 590:
-                Firemaking.lightFire(c, itemUsed, "tinderbox");
-                break;
+//            case 590:
+//                Firemaking.lightFire(c, itemUsed, "tinderbox");
+//                break;
 
             case 12773:
             case 12774:
@@ -704,9 +704,9 @@ public class UseItem {
                 PlayerHandler.executeGlobalMessage("[@red@Wild@bla@] @red@" + Misc.capitalize(c.playerName) + " @bla@has just created a @red@Deadly Key!");
                 break;
 
-            case 590:
-                Firemaking.lightFire(c, useWith, "tinderbox");
-                break;
+//            case 590:
+//                Firemaking.lightFire(c, useWith, "tinderbox");
+//                break;
 
             case 12792:
                 RecolourGraceful.ITEM_TO_RECOLOUR = useWith;
@@ -1093,30 +1093,30 @@ public class UseItem {
             c.getItems().addItem(13321, 1);
         }
         //End
-        if (itemUsed == 53 || useWith == 53) {
-            int arrow = itemUsed == 53 ? useWith : itemUsed;
-            c.getFletching().fletchArrow(arrow);
-        }
-        if (itemUsed == 19584 || useWith == 19584) {
-            int javelin = itemUsed == 19584 ? useWith : itemUsed;
-            c.getFletching().fletchJavelin(javelin);
-        }
-        if (itemUsed == 52 && useWith == 314 || itemUsed == 314 && useWith == 52) {
-            c.getFletching().fletchHeadlessArrows();
-        }
-        if (itemUsed == 1777 || useWith == 1777) {
-            int unstrung = itemUsed == 1777 ? useWith : itemUsed;
-            c.getFletching().fletchUnstrung(unstrung);
-        }
-        if (itemUsed == 9438 || useWith == 9438) {
-            int unstrung = itemUsed == 9438 ? useWith : itemUsed;
-            c.getFletching().fletchUnstrungCross(unstrung);
-        }
-        if (itemUsed == 314 || useWith == 314) {
-            int item = itemUsed == 314 ? useWith : itemUsed;
-            c.getFletching().fletchUnfinishedBolt(item);
-            c.getFletching().fletchDart(item);
-        }
+//        if (itemUsed == 53 || useWith == 53) {
+//            int arrow = itemUsed == 53 ? useWith : itemUsed;
+//            c.getFletching().fletchArrow(arrow);
+//        }
+//        if (itemUsed == 19584 || useWith == 19584) {
+//            int javelin = itemUsed == 19584 ? useWith : itemUsed;
+//            c.getFletching().fletchJavelin(javelin);
+//        }
+//        if (itemUsed == 52 && useWith == 314 || itemUsed == 314 && useWith == 52) {
+//            c.getFletching().fletchHeadlessArrows();
+//        }
+//        if (itemUsed == 1777 || useWith == 1777) {
+//            int unstrung = itemUsed == 1777 ? useWith : itemUsed;
+//            c.getFletching().fletchUnstrung(unstrung);
+//        }
+//        if (itemUsed == 9438 || useWith == 9438) {
+//            int unstrung = itemUsed == 9438 ? useWith : itemUsed;
+//            c.getFletching().fletchUnstrungCross(unstrung);
+//        }
+//        if (itemUsed == 314 || useWith == 314) {
+//            int item = itemUsed == 314 ? useWith : itemUsed;
+//            c.getFletching().fletchUnfinishedBolt(item);
+//            c.getFletching().fletchDart(item);
+//        }
 //        if (itemUsed == 1733 || useWith == 1733) {
 //            LeatherMaking.craftLeatherDialogue(c, itemUsed, useWith);
 //        }
@@ -1130,9 +1130,9 @@ public class UseItem {
 ////            c.getFletching().fletchGem(useWith, itemUsed);
 ////            c.getCrafting().cut(useWith, itemUsed);
 //        }
-        if (useWith == 946 || itemUsed == 946) {
-            c.getFletching().combine(useWith, itemUsed);
-        }
+//        if (useWith == 946 || itemUsed == 946) {
+//            c.getFletching().combine(useWith, itemUsed);
+//        }
         if (itemUsed == 12526 && useWith == 6585 || itemUsed == 6585 && useWith == 12526) {
             c.getDH().sendDialogues(580, -1);
         }

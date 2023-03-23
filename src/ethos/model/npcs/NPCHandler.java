@@ -65,9 +65,16 @@ import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.skills.hunter.Hunter;
 import ethos.model.players.skills.hunter.impling.PuroPuro;
 import ethos.model.players.skills.necromancy.Necromancy;
+import ethos.runehub.RunehubUtils;
 import ethos.runehub.content.rift.RiftFloorDAO;
 import ethos.runehub.entity.combat.impl.RatKingCombatMechanics;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
+import ethos.runehub.entity.mob.MobSpawn;
+import ethos.runehub.entity.mob.MobSpawnCache;
+import ethos.runehub.entity.mob.MobSpawnDAO;
+import ethos.runehub.entity.mob.hostile.HostileMobContext;
+import ethos.runehub.entity.mob.hostile.HostileMobContextDAO;
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.gathering.hunter.HunterTest;
 import ethos.runehub.skill.gathering.hunter.Trap;
@@ -161,6 +168,7 @@ public class NPCHandler {
         loadNPCList("./Data/CFG/npc_config.cfg");
         loadAutoSpawn("./Data/CFG/spawn_config.cfg");
         loadNPCSizes("./Data/cfg/npc_sizes.txt");
+        loadMobSpawns();
         startGame();
     }
 
@@ -825,7 +833,9 @@ public class NPCHandler {
 //            return isFightCaveNpc(i);
 //        }
 //        System.out.println(npcs[i].npcType + " is aggressive: " + npcs[i].aggressive);
-        return npcs[i].aggressive;
+        if (HostileMobIdContextLoader.getInstance().containsKey(npcs[i].npcType))
+            return HostileMobIdContextLoader.getInstance().read(npcs[i].npcType).isAggressive();
+        return false;
     }
 
     public static boolean isDagannothMother(int i) {
@@ -1291,110 +1301,119 @@ public class NPCHandler {
      * @return the time were setting
      */
     public int getRespawnTime(int i) {
-        switch (npcs[i].npcType) {
-            case 6600:
-            case 6601:
-            case 6602:
-            case 320:
-            case 1049:
-            case 6617:
-            case 3118:
-            case 3120:
-            case 6768:
-            case 5862:
-            case 5054:
-            case 2402:
-            case 2401:
-            case 2400:
-            case 2399:
-            case 5916:
-            case 7604:
-            case 7605:
-            case 7606:
-            case 7585:
-            case 5129:
-            case 4922:
-            case 7563:
-            case 7573:
-            case 7544:
-            case 7566:
-            case 7559:
-            case 7553:
-            case 7554:
-            case 7555:
-            case 7560:
-            case 7527:
-            case 7528:
-            case 7529:
-            case 6295:
-                return -1;
+        int npcId = npcs[i].npcType;
+        return HostileMobIdContextLoader.getInstance().read(npcId).getRespawnTicks();
+//        Optional<MobSpawn> spawn = MobSpawnCache.getInstance().readAll().stream().filter(mobSpawn -> mobSpawn.getMobId() == npcs[i].npcType)
+//                .filter(mobSpawn -> mobSpawn.getRegionId() == RunehubUtils.getRegionId(npcs[i].absX,npcs[i].absY))
+//                .findAny();
+//       if (spawn.isPresent()) {
+//           return spawn.get().getRespawn();
+//       }
 
-            case 963:
-            case 965:
-                return 10;
-
-            case 6618:
-            case 6619:
-            case 319:
-            case 5890:
-                return 30;
-
-            case 1046:
-            case 465:
-                return 60;
-
-            case 6609:
-            case 2265:
-            case 2266:
-            case 2267:
-                return 70;
-
-            case 6611:
-            case 6612:
-            case 492:
-                return 90;
-
-            case 2558:
-            case 2559:
-            case 2560:
-            case 2561:
-            case 2562:
-            case 2563:
-            case 2564:
-            case 2205:
-            case 2206:
-            case 2207:
-            case 2208:
-            case 2215:
-            case 2216:
-            case 2217:
-            case 2218:
-            case 3129:
-            case 3130:
-            case 3131:
-            case 3132:
-            case 3162:
-            case 3163:
-            case 3164:
-            case 3165:
-            case 1641:
-            case 1642:
-                return 100;
-            case 1643:
-                return 180;
-
-            case 1654:
-                return 250;
-
-            case 3777:
-            case 3778:
-            case 3779:
-            case 3780:
-            case 7302:
-                return 500;
-            default:
-                return 25;
-        }
+//        switch (npcs[i].npcType) {
+//            case 6600:
+//            case 6601:
+//            case 6602:
+//            case 320:
+//            case 1049:
+//            case 6617:
+//            case 3118:
+//            case 3120:
+//            case 6768:
+//            case 5862:
+//            case 5054:
+//            case 2402:
+//            case 2401:
+//            case 2400:
+//            case 2399:
+//            case 5916:
+//            case 7604:
+//            case 7605:
+//            case 7606:
+//            case 7585:
+//            case 5129:
+//            case 4922:
+//            case 7563:
+//            case 7573:
+//            case 7544:
+//            case 7566:
+//            case 7559:
+//            case 7553:
+//            case 7554:
+//            case 7555:
+//            case 7560:
+//            case 7527:
+//            case 7528:
+//            case 7529:
+//            case 6295:
+//                return -1;
+//
+//            case 963:
+//            case 965:
+//                return 10;
+//
+//            case 6618:
+//            case 6619:
+//            case 319:
+//            case 5890:
+//                return 30;
+//
+//            case 1046:
+//            case 465:
+//                return 60;
+//
+//            case 6609:
+//            case 2265:
+//            case 2266:
+//            case 2267:
+//                return 70;
+//
+//            case 6611:
+//            case 6612:
+//            case 492:
+//                return 90;
+//
+//            case 2558:
+//            case 2559:
+//            case 2560:
+//            case 2561:
+//            case 2562:
+//            case 2563:
+//            case 2564:
+//            case 2205:
+//            case 2206:
+//            case 2207:
+//            case 2208:
+//            case 2215:
+//            case 2216:
+//            case 2217:
+//            case 2218:
+//            case 3129:
+//            case 3130:
+//            case 3131:
+//            case 3132:
+//            case 3162:
+//            case 3163:
+//            case 3164:
+//            case 3165:
+//            case 1641:
+//            case 1642:
+//                return 100;
+//            case 1643:
+//                return 180;
+//
+//            case 1654:
+//                return 250;
+//
+//            case 3777:
+//            case 3778:
+//            case 3779:
+//            case 3780:
+//            case 7302:
+//                return 500;
+//            default:
+//                return 25;
+//        }
     }
 
     /**
@@ -1695,6 +1714,7 @@ public class NPCHandler {
                 if (isAggressive(i, false) && !npc.underAttack && npc.killerId <= 0 && !npc.isDead
                         && !switchesAttackers(i) && npc.inMulti() && !Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS)
                         && !Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
+
                     Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
                     int closestDistance = Integer.MAX_VALUE;
                     God god = GodwarsNPCs.NPCS.get(npc.npcType);
@@ -1743,6 +1763,14 @@ public class NPCHandler {
                                 npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
                             }
                         }
+                    }
+                } else if (isAggressive(i,false) && !npcs[i].isDead && !npcs[i].underAttack) {
+
+                    Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
+                    if (closestPlayer != null && closestPlayer.underAttackBy == 0 || npc.inMulti()) {
+                        npc.killerId = closestPlayer.getIndex();
+                        closestPlayer.underAttackBy = npc.getIndex();
+                        closestPlayer.underAttackBy2 = npc.getIndex();
                     }
                 }
 
@@ -2057,7 +2085,7 @@ public class NPCHandler {
                                 npcs[i].npcType = 965;
                                 npcs[i].requestTransform(965);
                                 npcs[i].getHealth().reset();
-                            } else {
+                            } else if (npcs[i].isDead){
                                 npcs[i].animNumber = getDeadEmote(i); // dead emote
                                 npcs[i].animUpdateRequired = true;
                             }
@@ -2086,7 +2114,8 @@ public class NPCHandler {
                             Player target = PlayerHandler.players[npcs[i].killedBy];
 
                             if (target != null) {
-                                target.getSlayer().killTaskMonster(npcs[i]);
+//                                target.getSlayer().killTaskMonster(npcs[i]);
+                                target.getSkillController().getSlayer().onAssignedMobDeath(npcs[i].npcType, npcs[i].absX, npcs[i].absY, npcs[i].heightLevel);
                                 target.getAttributes().getPlayPassController().addPlayPassXPFromMonsterHP(npcs[i].getHealth().getMaximum());
                                 /*
                                  * if (target.getSlayer().isSuperiorNpc()) {
@@ -6011,8 +6040,26 @@ public class NPCHandler {
         return npcs[i].maxHit == 0 ? 1 : npcs[i].maxHit;
     }
 
+    private void loadMobSpawns() {
+        System.out.println("Loading Mob Spawns....");
+        MobSpawnDAO.getInstance().getAllEntries().forEach(mobSpawn -> {
+            MobSpawnCache.getInstance().create(mobSpawn.getSpawnId(), mobSpawn);
+            HostileMobContext context = HostileMobIdContextLoader.getInstance().read(mobSpawn.getMobId());
+            int walkingType = mobSpawn.isRoam() ? (1 + mobSpawn.getFace()) : mobSpawn.getFace();
+            if (context != null) {
+                System.out.println("Loading mob spawn for: " + context.getName());
+                newNPC(mobSpawn.getMobId(), mobSpawn.getX(), mobSpawn.getY(), mobSpawn.getZ(), walkingType, context.getHitpoints(), context.getMaxHit(), context.getAttackLevel() + context.getAttackBonus(), context.getDefenceLevel());
+            } else {
+                newNPC(mobSpawn.getMobId(), mobSpawn.getX(), mobSpawn.getY(), mobSpawn.getZ(), walkingType, 1, 1, 1, 1);
+            }
+        });
+    }
+
     @SuppressWarnings("resource")
     public boolean loadAutoSpawn(String FileName) {
+//        HostileMobContextDAO.getInstance().getAllEntries().forEach(ctx -> {
+//            newNPC(ctx.getId(),);
+//        });
         String line = "";
         String token = "";
         String token2 = "";
@@ -6047,11 +6094,19 @@ public class NPCHandler {
                 token2_2 = token2_2.replaceAll("\t\t", "\t");
                 token3 = token2_2.split("\t");
                 if (token.equals("spawn")) {
-                    newNPC(Integer.parseInt(token3[0]), Integer.parseInt(token3[1]), Integer.parseInt(token3[2]),
-                            Integer.parseInt(token3[3]), Integer.parseInt(token3[4]),
-                            getNpcListHP(Integer.parseInt(token3[0])), Integer.parseInt(token3[5]),
-                            Integer.parseInt(token3[6]), Integer.parseInt(token3[7]));
-
+                    int mobId = Integer.parseInt(token3[0]);
+                    HostileMobContext ctx = HostileMobContextDAO.getInstance().read(mobId);
+                    if (ctx != null) {
+                        newNPC(Integer.parseInt(token3[0]), Integer.parseInt(token3[1]), Integer.parseInt(token3[2]),
+                                Integer.parseInt(token3[3]), Integer.parseInt(token3[4]),
+                                ctx.getHitpoints(), ctx.getMaxHit(),
+                                Integer.parseInt(token3[6]), ctx.getDefenceLevel());
+                    } else {
+                        newNPC(Integer.parseInt(token3[0]), Integer.parseInt(token3[1]), Integer.parseInt(token3[2]),
+                                Integer.parseInt(token3[3]), Integer.parseInt(token3[4]),
+                                getNpcListHP(mobId), Integer.parseInt(token3[5]),
+                                Integer.parseInt(token3[6]), Integer.parseInt(token3[7]));
+                    }
                 }
             } else {
                 if (line.equals("[ENDOFSPAWNLIST]")) {
@@ -6156,40 +6211,44 @@ public class NPCHandler {
     }
 
     public boolean loadNPCList(String fileName) {
-        String line = "";
-        String token = "";
-        String token2 = "";
-        String token2_2 = "";
-        String[] token3 = new String[10];
-        File file = new File("./" + fileName);
-        if (!file.exists()) {
-            throw new RuntimeException("ERROR: NPC Configuration file does not exist.");
-        }
-        try (BufferedReader characterfile = new BufferedReader(new FileReader("./" + fileName))) {
-            while ((line = characterfile.readLine()) != null && !line.equals("[ENDOFNPCLIST]")) {
-                line = line.trim();
-                int spot = line.indexOf("=");
-                if (spot > -1) {
-                    token = line.substring(0, spot);
-                    token = token.trim();
-                    token2 = line.substring(spot + 1);
-                    token2 = token2.trim();
-                    token2_2 = token2.replaceAll("\t\t", "\t");
-                    token2_2 = token2_2.replaceAll("\t\t", "\t");
-                    token2_2 = token2_2.replaceAll("\t\t", "\t");
-                    token2_2 = token2_2.replaceAll("\t\t", "\t");
-                    token2_2 = token2_2.replaceAll("\t\t", "\t");
-                    token3 = token2_2.split("\t");
-                    if (token.equals("npc")) {
-                        newNPCList(Integer.parseInt(token3[0]), token3[1], Integer.parseInt(token3[2]),
-                                Integer.parseInt(token3[3]));
-                    }
-                }
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return false;
-        }
+        HostileMobContextDAO.getInstance().getAllEntries().forEach(hostileMobContext -> {
+            newNPCList(hostileMobContext.getId(), hostileMobContext.getName(), hostileMobContext.getCombatLevel(), hostileMobContext.getHitpoints());
+        });
+//        String line = "";
+//        String token = "";
+//        String token2 = "";
+//        String token2_2 = "";
+//        String[] token3 = new String[10];
+//        File file = new File("./" + fileName);
+//        if (!file.exists()) {
+//            throw new RuntimeException("ERROR: NPC Configuration file does not exist.");
+//        }
+//        try (BufferedReader characterfile = new BufferedReader(new FileReader("./" + fileName))) {
+//            while ((line = characterfile.readLine()) != null && !line.equals("[ENDOFNPCLIST]")) {
+//                line = line.trim();
+//                int spot = line.indexOf("=");
+//                if (spot > -1) {
+//                    token = line.substring(0, spot);
+//                    token = token.trim();
+//                    token2 = line.substring(spot + 1);
+//                    token2 = token2.trim();
+//                    token2_2 = token2.replaceAll("\t\t", "\t");
+//                    token2_2 = token2_2.replaceAll("\t\t", "\t");
+//                    token2_2 = token2_2.replaceAll("\t\t", "\t");
+//                    token2_2 = token2_2.replaceAll("\t\t", "\t");
+//                    token2_2 = token2_2.replaceAll("\t\t", "\t");
+//                    token3 = token2_2.split("\t");
+//                    if (token.equals("npc")) {
+//                        int npcId = Integer.parseInt(token3[0]);
+//                        newNPCList(, token3[1], Integer.parseInt(token3[2]),
+//                                Integer.parseInt(token3[3]));
+//                    }
+//                }
+//            }
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//            return false;
+//        }
         return true;
     }
 

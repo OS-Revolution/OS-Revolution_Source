@@ -110,16 +110,21 @@ import ethos.model.shops.ShopAssistant;
 import ethos.net.Packet;
 import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
+import ethos.runehub.TimeUtils;
 import ethos.runehub.content.instance.BossArenaInstanceController;
 import ethos.runehub.content.rift.RiftFloorDAO;
 import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
 import ethos.runehub.entity.item.equipment.EquipmentSlot;
+import ethos.runehub.entity.mob.MobController;
+import ethos.runehub.entity.mob.hostile.HostileMob;
 import ethos.runehub.entity.player.*;
 import ethos.runehub.entity.player.action.impl.EquipmentSlotUpdateAction;
 import ethos.runehub.entity.player.action.impl.EquipmentUpdateAction;
 import ethos.runehub.entity.player.action.impl.ItemRenderUpdateAction;
 import ethos.runehub.entity.player.action.impl.PlayerAppearanceUpdateAction;
+import ethos.runehub.event.FixedScheduledEventController;
+import ethos.runehub.markup.RSString;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
@@ -140,6 +145,7 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.menaphos.model.entity.impl.npc.impl.mob.Mob;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.entity.user.character.mob.MobCharacterEntity;
 import org.runehub.api.model.entity.user.character.player.PlayerCharacterEntity;
 import org.runehub.api.model.math.AdjustableNumber;
 import org.runehub.api.model.math.impl.AdjustableDouble;
@@ -152,6 +158,8 @@ import org.runehub.api.util.StringUtils;
 import org.runehub.api.util.math.geometry.Point;
 
 import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
@@ -1327,7 +1335,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         // }
         this.attributes = new PlayerCharacterAttribute(this);
         this.context = PlayerCharacterContextDataAccessObject.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
-
+        this.slayerSave = PlayerSlayerSaveDAO.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
     }
 
     public Player getClient(String name) {
@@ -1700,6 +1708,8 @@ public class Player extends Entity implements PlayerCharacterEntity {
         if (this.getContext().getPlayerSaveData().isDailyAvailable()) {
             this.getSkillController().getSailing().generateDailyVoyages();
             getItems().addItemUnderAnyCircumstance(85, attributes.isMember() ? 2 : 1);
+            this.getContext().getPlayerSaveData().setDailyWoodcuttingTeleports(5);
+            this.getContext().getPlayerSaveData().setDailyEliteWoodcuttingRingTeleports(20);
             if (this.getContext().getPlayerSaveData().getVoyageRerolls() < Sailing.BASE_MAX_DAILY_VOYAGES) {
                 this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
             }
@@ -1743,6 +1753,21 @@ public class Player extends Entity implements PlayerCharacterEntity {
 //
 //    }
 
+    private String getActivePromoName() {
+        return WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId() == 0 ?
+                "Inactive" :
+                "<ref=" + WorldSettingsController.getInstance().getPromotionalEvents().get(WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId()).getName()
+                        + ",url=" + WorldSettingsController.getInstance().getPromotionalEvents().get(WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId()).getUrl() + ">";
+    }
+
+//    private String getActiveWeekendBonusName() {
+//        return WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId() == 0 ?
+//                "Inactive" :
+//                "<ref=" + WorldSettingsController.getInstance().getWeekendBonusName()
+//                        + ",url=" + WorldSettingsController.getInstance().getPromotionalEvents().get(WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId()).getUrl() + ">";
+//    }
+
+
     public void initialize() {
         try {
             if (this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
@@ -1768,23 +1793,32 @@ public class Player extends Entity implements PlayerCharacterEntity {
              * Welcome messages
              */
             sendMessage("Welcome to " + Config.SERVER_NAME + ".");
+            System.out.println("First farm tick is in " + TimeUtils.getDurationString(TimeUtils.getDurationBetween(System.currentTimeMillis(), FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[10]).toInstant().toEpochMilli()).toMillis()));
             this.initializeDailyContent();
             this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() -> {
-                if (!this.disconnected) {
-                    int regionX = this.absX >> 3;
-                    int regionY = this.absY >> 3;
-                    int regionId = ((regionX / 8) << 8) + (regionY / 8);
-                    if (context.getPlayerSaveData().farmingConfig().containsKey(regionId)) {
-                        final int varbit = context.getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
-                        this.getPA().sendConfig(529, varbit);
-                    }
-                } else {
-                    attributes.getFarmTickExecutorService().shutdownNow();
-                }
-            }, WorldSettingsController.getInstance().getFarmController().getNextFlowerGrowthCycle().toMillis(), Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
+                        System.out.println("Doing Farm Tick");
+                        if (!this.disconnected) {
+                            int regionX = this.absX >> 3;
+                            int regionY = this.absY >> 3;
+                            int regionId = ((regionX / 8) << 8) + (regionY / 8);
+                            if (context.getPlayerSaveData().farmingConfig().containsKey(regionId)) {
+                                final int varbit = context.getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+                                this.getPA().sendConfig(529, varbit);
+                            }
+                        } else {
+                            attributes.getFarmTickExecutorService().shutdownNow();
+                        }
+                    },
+                    TimeUtils.getDurationBetween(System.currentTimeMillis(), FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[10]).toInstant().toEpochMilli()).toMillis(),
+                    Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
             WorldSettingsController.getInstance().initializeTimers(this);
             sendMessage("^Membership You have $" + MembershipController.getInstance().getDaysOfMembershipRemainingAsString(context) + " days of membership remaining.");
 //            Membership.checkDate(this);
+            sendMessage("[" + "@pur@Promo@bla@] The current promo event is " + this.getActivePromoName());
+            if (ZonedDateTime.now(ZoneId.of("UTC")).getDayOfWeek().getValue() >= 5 && ZonedDateTime.now(ZoneId.of("UTC")).getDayOfWeek().getValue() <= 7) {
+                sendMessage("[" + "@pur@Promo@bla@] The current weekend bonus event is $" + WorldSettingsController.getInstance().getWeekendBonusName());
+            }
+            sendMessage(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[0].toString());
             if (getSlayer().superiorSpawned) {
                 getSlayer().superiorSpawned = false;
             }
@@ -2005,7 +2039,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
 //                }
 //                Server.clanManager.joinOnLogin(this);
 //            }
-            getDL().LoggedIn();
+//            getDL().LoggedIn();
 //            if (tutorial.isActive()) {
 //                tutorial.refresh();
 //            }
@@ -2057,12 +2091,12 @@ public class Player extends Entity implements PlayerCharacterEntity {
             this.getContext().getPlayerSaveData().getBonusXp().keySet().forEach(skill -> this.getPA().sendBonusXp(skill,
                     this.getContext().getPlayerSaveData().getBonusXp().get(skill).value()));
 
-//            this.addIdleGatheringGains();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Player login - Check for error");
         }
     }
+
 
     private void getWalkingAnimationOverride() {
         this.playerStandIndex = 1501;
@@ -2340,6 +2374,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
     public void save() {
         PlayerCharacterContextDataAccessObject.getInstance().update(context);
+        PlayerSlayerSaveDAO.getInstance().update(slayerSave);
 
 //        PlayerFarmingSaveDAO.getInstance().delete(PlayerFarmingSaveLoader.getInstance().read(context.getPlayerSaveData().getPlayerId()));
 //        PlayerFarmingSaveDAO.getInstance().create(PlayerFarmingSaveLoader.getInstance().read(context.getPlayerSaveData().getPlayerId()));
@@ -2481,6 +2516,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     }
 
     private void depleteEnergy() {
+        skillController.addXP(SkillDictionary.Skill.AGILITY.getId(), 1);
         runningDistanceTravelled = 0;
         runEnergy -= this.getEnergyDepletedPerTick();
         playerAssistant.sendFrame126(this.getRunEnergyPercentString(), 149);
@@ -3569,7 +3605,6 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public DamageQueueEvent getDamageQueue() {
         return damageQueue;
     }
-
     public final int[] BOWS = {19481, 19478, 12788, 9185, 11785, 21012, 839, 845, 847, 851, 855, 859, 841, 843, 849,
             853, 857, 12424, 861, 4212, 4214, 4215, 12765, 12766, 12767, 12768, 11235, 4216, 4217, 4218, 4219, 4220,
             4221, 4222, 4223, 4734, 6724, 20997};
@@ -4352,17 +4387,17 @@ public class Player extends Entity implements PlayerCharacterEntity {
                 && heightLevel == BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getFloodId()) {
             return true;
         }
-            if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
-                    || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
-                    || Boundary.isIn(this, Boundary.NECRO) || Boundary.isIn(this, Boundary.ROCK_CRAB)
-                    || Boundary.isIn(this, Boundary.CERBERUS_BOSSROOMS) || Boundary.isIn(this, Boundary.INFERNO)
-                    || Boundary.isIn(this, Boundary.SKOTIZO_BOSSROOM) || Boundary.isIn(this, Boundary.LIZARDMAN_CANYON)
-                    || Boundary.isIn(this, Boundary.BANDIT_CAMP_BOUNDARY) || Boundary.isIn(this, Boundary.COMBAT_DUMMY)
-                    || Boundary.isIn(this, Boundary.TEKTON) || Boundary.isIn(this, Boundary.SKELETAL_MYSTICS)
-                    || Boundary.isIn(this, Boundary.RAIDS) || Boundary.isIn(this, Boundary.OLM)
-                    || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.CATACOMBS)) {
-                return true;
-            }
+        if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
+                || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
+                || Boundary.isIn(this, Boundary.NECRO) || Boundary.isIn(this, Boundary.ROCK_CRAB)
+                || Boundary.isIn(this, Boundary.CERBERUS_BOSSROOMS) || Boundary.isIn(this, Boundary.INFERNO)
+                || Boundary.isIn(this, Boundary.SKOTIZO_BOSSROOM) || Boundary.isIn(this, Boundary.LIZARDMAN_CANYON)
+                || Boundary.isIn(this, Boundary.BANDIT_CAMP_BOUNDARY) || Boundary.isIn(this, Boundary.COMBAT_DUMMY)
+                || Boundary.isIn(this, Boundary.TEKTON) || Boundary.isIn(this, Boundary.SKELETAL_MYSTICS)
+                || Boundary.isIn(this, Boundary.RAIDS) || Boundary.isIn(this, Boundary.OLM)
+                || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.CATACOMBS)) {
+            return true;
+        }
         if (inRevs()) {
             return true;
         }
@@ -4510,14 +4545,12 @@ public class Player extends Entity implements PlayerCharacterEntity {
     }
 
     void addToWalkingQueue(int x, int y) {
-        // if (VirtualWorld.I(heightLevel, absX, absY, x, y, 0)) {
         int next = (wQueueWritePtr + 1) % walkingQueueSize;
         if (next == wQueueWritePtr)
             return;
         walkingQueueX[wQueueWritePtr] = x;
         walkingQueueY[wQueueWritePtr] = y;
         wQueueWritePtr = next;
-        // }
     }
 
     public boolean goodDistance(int objectX, int objectY, int playerX, int playerY, int distance) {
@@ -4653,6 +4686,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             }
 
         }
+
     }
 
     private void postTeleportProcessing() {
@@ -4897,7 +4931,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             }
 
             if (playerEquipment[playerChest] > 1) {
-            
+
                 playerProps.writeWord(0x200 + playerEquipment[playerChest]);
             } else {
                 playerProps.writeWord(0x100 + playerAppearance[2]);
@@ -5460,19 +5494,19 @@ public class Player extends Entity implements PlayerCharacterEntity {
 //        stream.writeBytes(playerProps.buffer, playerProps.currentOffset, 0);
 //    }
 
-//    public Optional<ethos.runehub.entity.item.equipment.Equipment> getEquipmentInSlot(EquipmentSlot slot) {
-//        if (slot.ordinal() < EquipmentSlot.values().length && this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()] > 0) {
-//            return Optional.ofNullable(EquipmentCache.getInstance().read(this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()]));
-//        }
-//        return Optional.empty();
-//    }
+    public Optional<ethos.runehub.entity.item.equipment.Equipment> getEquipmentInSlot(EquipmentSlot slot) {
+        if (slot.getSlotId() < EquipmentSlot.values().length && playerEquipment[slot.getSlotId()] > 0) {
+            return Optional.ofNullable(EquipmentCache.getInstance().read(playerEquipment[slot.getSlotId()]));
+        }
+        return Optional.empty();
+    }
 //
-//    public int getEquipmentIdInSlot(EquipmentSlot slot) {
-//        if (slot.ordinal() < EquipmentSlot.values().length) {
-//            return this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()] > 0 ? this.getContext().getPlayerSaveData().getEquipment()[slot.ordinal()] : -1;
+    public int getEquipmentIdInSlot(EquipmentSlot slot) {
+//        if (slot.getSlotId() < EquipmentSlot.values().length) {
+            return playerEquipment[slot.getSlotId()] > 0 ? playerEquipment[slot.getSlotId()] : -1;
 //        }
 //        return -1;
-//    }
+    }
 //
 //    public void unequip(EquipmentSlot slot) {
 //        EquipmentSlot targetSlot = slot == EquipmentSlot.TWO_HAND ? EquipmentSlot.MAIN_HAND : slot;
@@ -5654,7 +5688,6 @@ public class Player extends Entity implements PlayerCharacterEntity {
                 }
 
             }
-
             isRunning = isNewWalkCmdIsRunning() || isRunning2;
         }
     }
@@ -6290,6 +6323,11 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
     private final PlayerCharacterAttribute attributes;
     private final PlayerCharacterContext context;
+    private final PlayerSlayerSave slayerSave;
+
+    public PlayerSlayerSave getSlayerSave() {
+        return slayerSave;
+    }
 
 
     public int getArcLightCharge() {

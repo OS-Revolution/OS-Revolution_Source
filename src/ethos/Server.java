@@ -24,13 +24,23 @@ import ethos.model.players.PlayerHandler;
 import ethos.model.players.PlayerSave;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.packets.Commands;
+import ethos.model.players.packets.commands.admin.Debugslayer;
 import ethos.net.PipelineFactory;
 import ethos.punishments.PunishmentCycleEvent;
 import ethos.punishments.Punishments;
 import ethos.runehub.RunehubConstants;
+import ethos.runehub.RunehubUtils;
 import ethos.runehub.TimeUtils;
+import ethos.runehub.combat.style.WeaponType;
+import ethos.runehub.entity.combat.CombatController;
+import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
+import ethos.runehub.entity.item.equipment.*;
+import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
+import ethos.runehub.event.FixedScheduledEventController;
+import ethos.runehub.skill.artisan.crafting.jewellery.Jewellery;
+import ethos.runehub.skill.artisan.crafting.jewellery.JewelleryDAO;
 import ethos.runehub.skill.combat.magic.spell.RuneIdentifier;
 import ethos.runehub.skill.combat.magic.spell.Spell;
 import ethos.runehub.skill.combat.magic.spell.SpellDAO;
@@ -38,6 +48,7 @@ import ethos.runehub.skill.gathering.fishing.FishingPlatformController;
 import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.io.*;
+import ethos.runehub.skill.support.slayer.*;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.server.data.ServerData;
 import ethos.util.date.GameCalendar;
@@ -56,12 +67,20 @@ import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.entity.item.loot.LootTableContainer;
 import org.runehub.api.model.entity.item.loot.LootTableContainerDefinition;
 import org.runehub.api.model.entity.item.loot.LootTableDefinition;
+import org.runehub.api.model.world.region.RegionContext;
+import org.runehub.api.model.world.region.RegionContextDataAccessObject;
+import org.runehub.api.model.world.region.RegionDataAccessObject;
 import org.runehub.api.util.APILogger;
+import org.runehub.api.util.IDManager;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.IrregularPolygon;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -190,19 +209,80 @@ public class Server {
 
     }
 
-    private static void initializeLoaders() {
-
-        SpellDAO.getInstance().create(new Spell(
-                1155,
-                -1,
+    private static void initSpells() {
+        SpellDAO.getInstance().create(new Spell( ///varrock teleport
+                0,
+                4140,
                 false,
-                3,
-                719,
-                114,
-                18,
-                7,
-                new int[][]{{RuneIdentifier.WATER.ordinal(), 1}, {RuneIdentifier.COSMIC.ordinal(), 1}}
+                4,
+                714,
+                308,
+                35,
+                25,
+                new int[][]{{RuneIdentifier.FIRE.ordinal(), 1}, {RuneIdentifier.AIR.ordinal(), 3}, {RuneIdentifier.LAW.ordinal(), 1}}
         ));
+    }
+
+    private static void initEquipmment() {
+        WeaponDAO.getInstance().create(
+                new Weapon(
+                        9174,
+                        WeaponType.CROSSBOW.ordinal(),
+                        CombatController.MELEE
+                )
+        );
+        RangedWeaponDAO.getInstance().create(
+                new RangedWeapon(
+                        9174, new int[]{877}
+                )
+        );
+        ProjectileDAO.getInstance().create(new Projectile(
+                877,
+                -1,
+                27,
+                -1
+        ));
+    }
+
+    private static void initializeLoaders() {
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(0, "Broader Fletching", 300, "Learn to fletch broad arrows, broad bolts, and amethyst broad bolts. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(1, "Malevolent Masquerade", 400, "Learn to assemble a Slayer helmet, which requires level 55 Crafting. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(2, "Ring Bling", 300, "Learn to craft a Slayer ring, which requires level 75 Crafting. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(3, "Seeing Red", 50, "Konar, Duradel, and Nieve will be able to assign you red dragons as your task. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(4, "I hope you mith me", 80, "Konar, Duradel, and Nieve will be able to assign you mithril dragons as your task. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(5, "Watch the birdie ", 80, "Konar, Duradel, Nieve, Chaeldar, and Krystilia will be able to assign you Aviansie as your task. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(6, "Hot stuff", 100, "Duradel, Nieve, and Chaeldar will be able to assign TzHaar as your task. You may also be offered a chance to slay TzTok-Jad.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(7, "Reptile got ripped", 75, "Konar, Duradel, Nieve, and Chaeldar will be able to assign Lizardmen as your task.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(8, "Like a boss", 200, "Konar, Duradel, Krystilia, and Nieve will be able to assign boss monsters as your task, excluding the Corporeal Beast.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(9, "Bigger and Badder", 150, "Certain slayer monsters will have the chance of spawning a superior version whilst on a slayer task.", false));
+
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(10, "King black bonnet", 1000, "Learn how to combine a KBD head with your slayer helm to colour it black.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(11, "Kalphite khat", 1000, "Learn how to combine a Kalphite Queen head with your slayer helm to colour it green.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(12, "Unholy helmet", 1000, "Learn how to combine an Abyssal Demon head with your slayer helm to colour it red.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(13, "Dark Mantle", 1000, "Learn how to combine a Dark Claw with your slayer helm to colour it purple.", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(14, "Undead Head", 1000, "Learn how to combine Vorkath's head with your slayer helm to colour it turquoise.", false));
+        initSpells();
+        initEquipmment();
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(15, "Duly noted", 200, "Mithril dragons drop mithril bars in banknote form while killed on assignment.", false));
+//        long regionId = IDManager.getUUID();
+//        RegionDataAccessObject.getInstance().create(
+//                new org.runehub.api.model.world.region.Region(
+//                        regionId,
+//                        new IrregularPolygon(
+//                                new Point(3224,3287),
+//                                new Point(3224,3302),
+//                                new Point(3238,3302),
+//                                new Point(3238,3287),
+//                                new Point(3224,3287)
+//                        )
+//                )
+//        );
+//        RegionContextDataAccessObject.getInstance().create(
+//                new RegionContext(
+//                        regionId,"Lumbridge Northeast Chicken Farm"
+//                )
+//        );
+
         TierDAO.getInstance().getAllEntries().forEach(tier -> {
             TierLoader.getInstance().create(tier.getId(), tier);
         });
@@ -282,6 +362,146 @@ public class Server {
         ItemInteractionDAO.getInstance().getAllEntries().forEach(node -> {
             ItemInteractionLoader.getInstance().create(node.getUuid(), node);
         });
+
+//        Debugslayer.generateTuraelAssignments();
+//        populateSuperiorSlayerMonsters();
+        SuperiorSlayerMonsterDAO.getInstance().getAllEntries().forEach(superiorSlayerMonster -> SuperiorSlayerMonsterCache.getInstance().create(superiorSlayerMonster.getMobId(), superiorSlayerMonster));
+        HostileMobIdContextLoader.getInstance().readAll().stream()
+                .filter(Objects::nonNull)
+                .filter(hostileMobContext -> hostileMobContext.getCategory().stream().anyMatch(s -> s.contains("bosses")))
+                .forEach(hostileMobContext -> System.out.println("Name: " + hostileMobContext.getName() + " ID: " + hostileMobContext.getId() + " Cat.: " + hostileMobContext.getCategory()));
+    }
+
+    private static void populateSuperiorSlayerMonsters() {
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7388,
+                        "crawling hands",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7389,
+                        "cave crawlers",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7390,
+                        "banshees",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7391,
+                        "banshees",
+                        new int[]{7272}
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7392,
+                        "rockslugs",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7393,
+                        "cockatrice",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7394,
+                        "pyrefiends",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7395,
+                        "basilisks",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7396,
+                        "infernal mages",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7397,
+                        "bloodvelds",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7398,
+                        "bloodvelds",
+                        new int[]{7276}
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7399,
+                        "jellies",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7400,
+                        "jellies",
+                        new int[]{7277}
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7401,
+                        "cave horrors",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7402,
+                        "aberrant spectres",
+                        new int[0]
+                )
+        );
+        SuperiorSlayerMonsterDAO.getInstance().create(
+                new SuperiorSlayerMonster(
+                        7403,
+                        "aberrant spectres",
+                        new int[]{7279}
+                )
+        );
+    }
+
+    private static void populateRegionDB() {
+        long strongholdSlayerCaveID = IDManager.getUUID();
+        RegionDataAccessObject.getInstance().create(
+                new org.runehub.api.model.world.region.Region(
+                        strongholdSlayerCaveID,
+                        new IrregularPolygon(new Point(2381, 9764),
+                                new Point(2381, 9837),
+                                new Point(2497, 9837),
+                                new Point(2497, 9764),
+                                new Point(2381, 9764))
+                )
+        );
+        RegionContextDataAccessObject.getInstance().create(new RegionContext(
+                strongholdSlayerCaveID, "Stronghold Slayer Cave"
+        ));
     }
 
     private static final Runnable SERVER_TASKS = () -> {
@@ -322,6 +542,8 @@ public class Server {
         APILogger.initialize();
         APISettingsController.getInstance().getApiSettings().setItemDatabaseLocation(RunehubConstants.OS_DEFINTIONS_DB);
         APISettingsController.getInstance().getApiSettings().setLootDatabase(RunehubConstants.LOOT_DB);
+        APISettingsController.getInstance().getApiSettings().setRegionDatabaseLocation(RunehubConstants.REGION_DB);
+        APISettingsController.getInstance().getApiSettings().setRegionContextDatabaseLocation(RunehubConstants.REGION_DB);
 
 //		ShipDAO.getInstance().create(new Ship(2,"Blazing Lantern",15,15,15,15));
 //		ShipDAO.getInstance().create(new Ship(3,"Pin's Ship",7,7,7,7));
@@ -379,10 +601,7 @@ public class Server {
             long elapsed = endTime - startTime;
 
             initializeLoaders();
-
-            if (System.currentTimeMillis() >= TimeUtils.getDaysAsMS(1) + WorldSettingsController.getInstance().getWorldSettings().getLastDailyResetTimestamp()) {
-                WorldSettingsController.getInstance().resetDailies();
-            }
+            Arrays.stream(FixedScheduledEventController.getInstance().getFixedScheduleEvents()).forEach(event -> FixedScheduledEventController.getInstance().startEvent(event));
 
             System.out.println(Config.SERVER_NAME + " has successfully started up in " + elapsed + " milliseconds.");
             GAME_THREAD.scheduleAtFixedRate(SERVER_TASKS, 0, 600, TimeUnit.MILLISECONDS);

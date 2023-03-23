@@ -68,7 +68,7 @@ public abstract class VoyageMenuAction extends SupportSkillAction {
     }
 
     public VoyageMenuAction(Player actor, int shipSlot, int voyageSlot) {
-        super(actor, actor.getSkillController().getSailing().getId(), 1);
+        super(actor, actor.getSkillController().getSailing().getId(), 1,null);
         this.shipSlot = shipSlot;
         this.voyageSlot = voyageSlot;
     }

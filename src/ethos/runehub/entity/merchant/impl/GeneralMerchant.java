@@ -45,6 +45,19 @@ public class GeneralMerchant extends Merchant {
         this.getMerchandise().addAll(RunehubConstants.GENERAL_STORE_ITEMS);
     }
 
+    @Override
+    protected void updateStock(int itemId, int amount) {
+        if (this.getMerchandiseSlot(itemId) == null) {
+            MerchandiseSlot merchandiseSlot = new MerchandiseSlot(itemId, amount, false, 0.0D, false);
+            this.getMerchandise().add(merchandiseSlot);
+            RunehubConstants.GENERAL_STORE_ITEMS.add(merchandiseSlot);
+        } else {
+            this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() + amount);
+            Optional<MerchandiseSlot> merchandise = RunehubConstants.GENERAL_STORE_ITEMS.stream().filter(merchandiseSlot -> merchandiseSlot.getItemId() == itemId).findAny();
+            merchandise.ifPresent(merchandiseSlot -> merchandiseSlot.setAmount(merchandiseSlot.getAmount() + amount));
+        }
+    }
+
 //    public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
 //        final int price = this.getPriceMerchantWillBuyFor(itemId) * amount;
 //        if (player.getItems().playerHasItem(itemId, amount)) {

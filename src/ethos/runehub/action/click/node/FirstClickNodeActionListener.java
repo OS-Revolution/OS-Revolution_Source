@@ -72,10 +72,18 @@ public class FirstClickNodeActionListener {
             case 16902:
             case 4964:
             case 23972:
+            case 1560:
+            case 1558:
+            case 2108:
+            case 2111:
+            case 2100:
+            case 1535:
                 return new OpenDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 11774:
             case 11772:
             case 4963:
+//            case 1560:
+            case 1559:
                 return new CloseDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 10:
             case 11:

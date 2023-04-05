@@ -1,6 +1,8 @@
 package ethos.model.players.packets.commands.admin;
 
 import ethos.Server;
+import ethos.event.impl.PoisonEvent;
+import ethos.model.entity.HealthStatus;
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
 import ethos.runehub.RunehubConstants;
@@ -15,18 +17,27 @@ import ethos.runehub.entity.mob.AnimationDefinitionCache;
 import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.runehub.event.FixedScheduledEventController;
 import ethos.runehub.skill.artisan.construction.Hotspot;
+import ethos.runehub.skill.gathering.farming.FarmingConfig;
+import ethos.runehub.skill.gathering.farming.crop.Allotment;
+import ethos.runehub.skill.gathering.farming.crop.CropCache;
+import ethos.runehub.skill.gathering.farming.crop.Flower;
+import ethos.runehub.skill.gathering.farming.crop.Herb;
+import ethos.runehub.skill.gathering.farming.patch.PatchType;
 import ethos.runehub.skill.support.sailing.SailingUtils;
 import ethos.runehub.skill.support.sailing.voyage.Voyage;
 import ethos.runehub.skill.support.sailing.voyage.VoyageContext;
 import ethos.runehub.skill.support.sailing.voyage.VoyageDAO;
 import ethos.runehub.ui.impl.InstanceTimerUI;
+import ethos.runehub.ui.impl.JourneyUI;
 import ethos.runehub.ui.impl.LootContainerUI;
 import ethos.runehub.ui.impl.SelectionParentUI;
 import ethos.runehub.ui.impl.construction.BuildNodeUI;
 import ethos.runehub.ui.impl.smithing.SmithingUI;
 import ethos.runehub.ui.impl.tab.player.InstanceTab;
+import ethos.runehub.world.RegionCache;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.world.wushanko.island.IslandLoader;
+import ethos.util.Misc;
 import org.runehub.api.io.data.impl.LootTableDAO;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.io.load.impl.LootTableContainerDefinitionLoader;
@@ -45,6 +56,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Force the player to perform a given emote.
@@ -65,6 +77,14 @@ public class E extends Command {
 //        Flower flower = Flower.LIMPWURT;
 //        Herb herb = Herb.TOADFLAX;
 //
+//        allotmentNorthConfig = new FarmingConfig(
+//                2,
+//                0,
+//                false,
+//                false,
+//                nAllotment.ordinal(),
+//
+//        );
 //        allotmentNorthConfig = new FarmingConfig(
 //                nAllotment.getStartIndex(),
 //                2,
@@ -169,8 +189,49 @@ public class E extends Command {
     @Override
     public void execute(Player c, String input) {
         String[] args = input.split(" ");
-        c.getSkillController().getFletching().sendItemSelectionFrame(1511);
-        System.out.println(TimeUtils.getZDTString(FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[3])));
+//        Point point = RegionCache.getInstance().read(-4977701290314478696L).getBoundingShape().getAllPoints().get(
+//                Misc.random(RegionCache.getInstance().read(-4977701290314478696L).getBoundingShape().getAllPoints().size())
+//        );
+////        c.getPA().movePlayer(point.getX(),point.getY());
+//        System.out.println(RegionCache.getInstance().read(-4977701290314478696L).getBoundingShape().contains(
+//                new Point(c.absX,c.absY)
+//        ));
+//        FarmingConfig config = c.getContext().getPlayerSaveData().farmingConfig().get(RunehubUtils.getRegionId(c.absX,c.absY)).get(3);
+//        config.setDiseased(!config.diseased());
+//        config.setWatered(!config.watered());
+//        System.out.println("Patch: " + config.getPatch());
+//        System.out.println("Diseased: " + config.diseased());
+//        System.out.println("Watered: " + config.watered());
+//        System.out.println("Sending bits: " + config.varbit());
+//        c.getPA().sendConfig(529,config.varbit());
+//        int water = Integer.parseInt(args[0]);
+//        int disease = Integer.parseInt(args[1]);
+//        int child = Integer.parseInt(args[2]);
+//        int stage = Integer.parseInt(args[3]);
+//        int patch = Integer.parseInt(args[4]);
+//                FarmingConfig config = new FarmingConfig(
+//                stage,
+//                patch,
+//                water == 1,
+//                disease == 1,
+//                PatchType.HERB.ordinal(),
+//                5291,
+//                0
+//        );
+////        System.out.println("Child: " + Herb.values()[(config.isWatered() << 6 | config.isDiseased() << 7)]);
+//        System.out.println(child + config.getStage() + ((config.isWatered() << 6 | config.isDiseased()) << 7));
+//        int val = (child + config.getStage() + (config.isWatered() << 6 | config.isDiseased() << 7) << config.getPatch());
+//        System.out.println("Val: " + val);
+////        System.out.println("Child: " + Herb.children[val]);
+//        System.out.println("Varbit: " + config.varbit());
+//        System.out.println("Stage: " + config.getStage());
+//        System.out.println("Water: " + config.isWatered());
+//        System.out.println("Disease: " + (config.isWatered() << 6 | config.isDiseased() << 7));
+//        System.out.println("Patch: " + config.getPatch());
+//        c.getPA().sendConfig(529,val);
+//        Server.getEventHandler().submit(new PoisonEvent(c,3, Optional.empty()));
+//        c.getSkillController().getFletching().sendItemSelectionFrame(1511);
+//        System.out.println(TimeUtils.getZDTString(FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[3])));
 //        LootTable lootTable = LootTableLoader.getInstance().read(-2682234896335024906L);
 //        List<LootTableEntry> newEntries = new ArrayList<>();
 //        List<LootTableEntry> removedEntries = new ArrayList<>();

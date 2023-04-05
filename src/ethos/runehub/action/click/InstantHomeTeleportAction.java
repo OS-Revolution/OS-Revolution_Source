@@ -29,6 +29,8 @@ public class InstantHomeTeleportAction extends HomeTeleportAction {
             this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().decrement();
             this.getActor().sendMessage("#" + this.getActor().getContext().getPlayerSaveData().getInstantTeleportCharges().value() + " instant teleport charges remaining.");
         }
+        this.getActor().getAttributes().getAchievementController().completeAchievement(-5365918924791133965L);
+//        this.getActor().getAttributes().getJourneyController().checkJourney(4640797210886423903L,1);
     }
 
     @Override

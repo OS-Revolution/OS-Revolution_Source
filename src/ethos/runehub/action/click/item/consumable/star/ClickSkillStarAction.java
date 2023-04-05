@@ -2,6 +2,7 @@ package ethos.runehub.action.click.item.consumable.star;
 
 import ethos.model.players.Player;
 import ethos.runehub.action.click.item.ClickConsumableItemAction;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.ui.GameUI;
 import ethos.util.Misc;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
@@ -48,6 +49,8 @@ public class ClickSkillStarAction extends ClickConsumableItemAction {
             }
             return new AdjustableInteger((int) totalBonusXp);
         });
+        this.getActor().getAttributes().getJourneyController().checkJourney(this.getItemId(),this.getItemAmount(), JourneyStepType.CONSUME_ITEM);
+//        this.getActor().getAttributes().getJourneyController().checkJourney(2222024974161497586L,1);
         this.getActor().getPA().sendBonusXp(this.getSkill().getId(), this.getActor().getContext().getPlayerSaveData().getBonusXp().get(this.getSkill().getId()).value());
     }
 

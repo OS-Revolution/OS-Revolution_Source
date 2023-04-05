@@ -2,6 +2,7 @@ package ethos.model.items;
 
 import ethos.runehub.combat.CombatUtils;
 import ethos.runehub.combat.style.WeaponType;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.entity.item.equipment.Equipment;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
 import ethos.runehub.entity.item.equipment.WeaponCache;
@@ -1405,10 +1406,12 @@ public class ItemAssistant {
                 }
             }
 
+
             int wearAmount = c.playerItemsN[slot];
             if (wearAmount < 1) {
                 return false;
             }
+            c.getAttributes().getJourneyController().checkJourney(wearID,wearAmount, JourneyStepType.EQUIP_ID);
             if (slot >= 0 && wearID >= 0) {
                 int toEquip = c.playerItems[slot];
                 int toEquipN = c.playerItemsN[slot];

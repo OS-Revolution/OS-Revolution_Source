@@ -17,6 +17,7 @@ public class MapRegionChange implements PacketType {
         }
         if (c.getContext().getPlayerSaveData().farmingConfig().containsKey(regionId)) {
             final int varbit = c.getContext().getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
+//            System.out.println("Varbit sent: " + varbit);
             c.getPA().sendConfig(529, varbit);
 
         }

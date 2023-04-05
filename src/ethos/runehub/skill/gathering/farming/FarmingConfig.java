@@ -1,12 +1,19 @@
 package ethos.runehub.skill.gathering.farming;
 
 import ethos.runehub.skill.gathering.farming.crop.CropCache;
+import ethos.runehub.skill.gathering.farming.patch.PatchType;
 
 public class FarmingConfig {
 
     public int varbit() {
         if (crop != 0)
             return (CropCache.getInstance().read(crop).getChildIndex() + stage + (isWatered() << 6 | isDiseased() << 7) << patch);
+        return (stage + (isWatered() << 6 | isDiseased() << 7) << patch);
+    }
+
+    public int varbit(int crop) {
+        if (crop != 0)
+            return (crop + stage + (isWatered() << 6 | isDiseased() << 7) << patch);
         return (stage + (isWatered() << 6 | isDiseased() << 7) << patch);
     }
 

@@ -2,6 +2,7 @@ package ethos.runehub.action.click.node.impl.first;
 
 import com.google.common.base.Preconditions;
 import ethos.model.players.Player;
+import ethos.runehub.content.journey.JourneyStepType;
 import org.runehub.api.util.SkillDictionary;
 
 public class FirstClickAbyssalWoodcuttingAction extends FirstClickAbyssalNodeAction {
@@ -18,6 +19,7 @@ public class FirstClickAbyssalWoodcuttingAction extends FirstClickAbyssalNodeAct
 
     @Override
     public void move() {
+        this.getActor().getAttributes().getJourneyController().checkJourney(getNodeId(),1, JourneyStepType.NODE_INTERACTION);
         if(this.getNodeId() == 26189) {
             this.getActor().getPA().movePlayer(3027,4831);
         } else if(this.getNodeId() == 26253) {

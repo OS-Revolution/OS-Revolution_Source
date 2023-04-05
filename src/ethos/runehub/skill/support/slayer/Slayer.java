@@ -51,10 +51,17 @@ public class Slayer extends SupportSkill {
             this.getPlayer().getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(this.getPlayer())
                     .addNpcChat(masterId, "Kill " + taskAmount + " " + SlayerAssignmentDAO.getInstance().read(task.getAssignmentId()).getCategory() + ".")
                     .build());
+            this.updateAchievements(masterId);
         } else {
             this.getPlayer().getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(this.getPlayer())
                     .addNpcChat(masterId, "Please finish, or cancel your current Slayer task first.")
                     .build());
+        }
+    }
+
+    private void updateAchievements(int master) {
+        if (master == 401) {
+            this.getPlayer().getAttributes().getAchievementController().completeAchievement(-8981869897408690521L);
         }
     }
 

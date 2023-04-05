@@ -1,8 +1,12 @@
 package ethos.runehub.skill.gathering.woodcutting.action;
 
+import ethos.Server;
+import ethos.model.items.GroundItem;
+import ethos.model.npcs.drops.DropManager;
 import ethos.model.players.Player;
 import ethos.model.players.skills.firemake.Firemaking;
 import ethos.model.players.skills.firemake.LogData;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
@@ -21,8 +25,10 @@ import java.util.stream.Collectors;
 
 public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
 
+
     @Override
     protected void onDeplete() {
+        this.getActor().getAttributes().getJourneyController().checkJourney(targetedNodeContext.getNodeId(), 1, JourneyStepType.DEPLETION);
         this.onRespawn();
     }
 
@@ -33,10 +39,12 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
 
     @Override
     protected void onGather() {
+        gathered++;
         if (this.isEventTick()) {
             this.onEvent();
         }
-        if(this.isException()) {
+
+        if (this.isException()) {
             this.onException();
         } else {
             if (this.getActor().getSkillController().getWoodcutting().wearingSkillRing()) {
@@ -64,10 +72,13 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
     protected void addItems() {
         LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()).roll(this.getActor().getAttributes().getMagicFind()).forEach(loot -> {
             int itemId = Math.toIntExact(loot.getId());
+            this.getActor().getAttributes().getJourneyController().checkJourney(itemId, Math.toIntExact(loot.getAmount()), JourneyStepType.COLLECTION);
+            this.getActor().getAttributes().getJourneyController().checkJourney(itemId, gathered, JourneyStepType.CHALLENGE);
+
             if (WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId() == 3) {
                 if (Skill.SKILL_RANDOM.nextInt(200) <= 10) {
-                    int amount =  this.getActor().getAttributes().isMember() ? Misc.random(20) + 1 : Misc.random(10) + 1;
-                    this.getActor().getItems().addOrDropItem(2384,amount);
+                    int amount = this.getActor().getAttributes().isMember() ? Misc.random(20) + 1 : Misc.random(10) + 1;
+                    this.getActor().getItems().addOrDropItem(2384, amount);
                     this.getActor().sendMessage("You have earned $" + amount + " @" + 2384);
                 }
             }
@@ -90,7 +101,11 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
         final Loot loot = LootTableLoader.getInstance().read(4937229515252058548L).roll(1).stream().collect(Collectors.toList()).get(0);
         final int itemId = Math.toIntExact(loot.getId());
         final int amount = Math.toIntExact(loot.getId());
-        this.getActor().getItems().createGroundItem(itemId, this.getTargetedNodeContext().getX(), this.getTargetedNodeContext().getY(), amount);
+        this.getActor().sendMessage("@red@A bird nest falls from the tree");
+
+        Server.itemHandler.createGroundItem(this.getActor(),itemId, this.getActor().getX(), this.getActor().getY(),this.getActor().heightLevel, amount);
+        this.getActor().getAttributes().getJourneyController().checkJourney(itemId, amount, JourneyStepType.COLLECTION);
+        this.getActor().getAttributes().getJourneyController().checkJourney(targetedNodeContext.getNodeId(), amount, JourneyStepType.SKILL_EVENT_FROM_ID);
     }
 
     @Override
@@ -103,6 +118,8 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
     }
 
     public ActiveWoodcuttingSkillAction(Player player, int skillId, int nodeId, int nodeX, int nodeY, int nodeZ) {
-        super(player, skillId, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4 );
+        super(player, skillId, new WoodcuttingNodeContext(nodeId, nodeX, nodeY, nodeZ), 4);
     }
+
+    private int gathered = 0;
 }

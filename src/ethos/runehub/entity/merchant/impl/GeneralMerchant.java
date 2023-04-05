@@ -2,6 +2,7 @@ package ethos.runehub.entity.merchant.impl;
 
 import ethos.model.players.Player;
 import ethos.runehub.RunehubConstants;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.entity.merchant.MerchandiseSlot;
 import ethos.runehub.entity.merchant.Merchant;
 import ethos.runehub.skill.Skill;
@@ -31,6 +32,16 @@ public class GeneralMerchant extends Merchant {
         int sellPrice = Math.toIntExact(Math.round(Math.ceil(((40 - 3 * Math.min(stock, 10)) / 100.0D) * baseValue)));
         return sellPrice;
 
+    }
+
+
+    @Override
+    public boolean buyItemFromPlayer(int itemId, int amount, int slot, Player player) {
+        if (super.buyItemFromPlayer(itemId,amount,slot,player)) {
+            player.getAttributes().getAchievementController().completeAchievement(4511131110804308021L);
+            return true;
+        }
+        return false;
     }
 
     protected void initializeStock() {
@@ -79,33 +90,14 @@ public class GeneralMerchant extends Merchant {
 //        return false;
 //    }
 
-//    @Override
-//    public boolean sellItemToPlayer(int itemId, int amount, int slot, Player player) {
-//        final int price = this.getPriceMerchantWillSellFor(itemId) * amount;
-//        if (amount <= this.getMerchandise().get(slot).getAmount()) {
-//            if (player.getItems().playerHasItem(getCurrencyId(), price) || (itemId == 1459 && player.getItems().playerHasItem(995, price))) {
-//                if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(itemId).isStackable() ? 0 : amount)) {
-//                    if (itemId == 1459) {
-//                        player.getItems().deleteItem(995, price);
-//                        player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + 995);
-//                    } else {
-//                        player.getItems().deleteItem(getCurrencyId(), price);
-//                        player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + getCurrencyId());
-//                    }
-//                    player.getItems().addItem(itemId, amount);
-//                    player.getItems().resetItems(3823);
-//                    this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() - amount);
-//                    this.updateShop(player);
-//                    return true;
-//                } else {
-//                    player.sendMessage("You do not have enough inventory space.");
-//                }
-//            } else {
-//                player.sendMessage("Come back when you're a little bit...richer!");
-//            }
-//        }
-//        return false;
-//    }
+    @Override
+    public boolean sellItemToPlayer(int itemId, int amount, int slot, Player player) {
+        if (super.sellItemToPlayer(itemId,amount,slot,player)) {
+            player.getAttributes().getJourneyController().checkJourney(506,1, JourneyStepType.BUY_ANY_FROM_SHOP);
+            return true;
+        }
+        return false;
+    }
 
     public GeneralMerchant() {
         super(995, 506, "General Store", 988149699123037161L, List.of(-1));

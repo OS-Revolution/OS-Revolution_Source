@@ -37,9 +37,14 @@ import ethos.model.players.skills.crafting.SpinMaterial;
 import ethos.model.players.skills.firemake.Firemaking;
 import ethos.model.players.skills.herblore.PoisonedWeapon;
 import ethos.model.players.skills.herblore.UnfCreator;
+import ethos.runehub.RunehubConstants;
+import ethos.runehub.dialog.DialogOption;
+import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.*;
 import ethos.runehub.skill.gathering.farming.Farming;
+import ethos.runehub.skill.gathering.farming.action.AdvanceGrowthStageAction;
 import ethos.runehub.skill.gathering.farming.action.ApplyCompostAction;
+import ethos.runehub.skill.gathering.farming.action.ApplyPlantCureAction;
 import ethos.runehub.skill.gathering.farming.action.PlantSeedAction;
 import ethos.util.Misc;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
@@ -168,9 +173,51 @@ public class UseItem {
             case 8152:
             case 8151:
             case 8153:
+            case 8175: //hops
+            case 8176:
+            case 8173:
+            case 8174:
+            case 7577: //bush
+            case 7578:
+            case 7580:
+            case 7579:
+            case 8391: // tree
+            case 8390:
+            case 8389:
+            case 8388:
+            case 19147:
+            case 7962: //fruit tree
+            case 7965:
+            case 7963:
+            case 7964:
+            case 26579:
+            case 8150:
+            case 8551:
+            case 8550:
+            case 7847:
                 if (itemId == Farming.COMPOST || itemId == Farming.SUPERCOMPOST || itemId == Farming.ULTRACOMPOST || itemId == Farming.BOTTOMLESS_COMPOST)
                     c.getSkillController().getFarming().train(new ApplyCompostAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
-                else
+                else if (itemId == 6036)
+                    c.getSkillController().getFarming().train(new ApplyPlantCureAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
+                else if (itemId == 1459) {
+                    c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
+                            .addOptions(new DialogOption("Pay " + RunehubConstants.ADVANCE_PATCH_GROWTH_COST + " Jewels to advance growth stage") {
+                                @Override
+                                public void onAction() {
+                                    c.getSkillController().getFarming().train(new AdvanceGrowthStageAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
+                                    c.getAttributes().getActiveDialogSequence().next();
+                                    c.getPA().closeAllWindows();
+                                }
+                            },new DialogOption("Nevermind") {
+                                @Override
+                                public void onAction() {
+                                    c.getAttributes().getActiveDialogSequence().next();
+                                    c.getPA().closeAllWindows();
+                                }
+                            })
+                            .build());
+
+                }else
                     c.getSkillController().getFarming().train(new PlantSeedAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
 
                 break;

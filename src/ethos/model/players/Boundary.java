@@ -284,7 +284,7 @@ public class Boundary {
 	
 	public static final Boundary WILDERNESS = new Boundary(2941, 3525, 3392, 3968);
 	public static final Boundary WILDERNESS_UNDERGROUND = new Boundary(2941, 9918, 3392, 10366);
-	public static final Boundary[] WILDERNESS_PARAMETERS = { WILDERNESS, WILDERNESS_UNDERGROUND, WILDERNESS_GOD_WARS_BOUNDARY };
+	public static final Boundary[] WILDERNESS_PARAMETERS = { WILDERNESS, WILDERNESS_GOD_WARS_BOUNDARY };
 
 	
 	//public static final Boundary WILDERNESS = new Boundary(2941, 3525, 3392, 3968); // (2941, 3525, 3392, 3968);

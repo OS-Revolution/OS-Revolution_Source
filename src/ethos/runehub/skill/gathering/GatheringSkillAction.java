@@ -104,7 +104,7 @@ public abstract class GatheringSkillAction extends SkillAction {
     protected void addItems() {
         Logger.getGlobal().fine("Adding Items");
         LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()).roll(this.getActor().getAttributes().getMagicFind()).forEach(loot -> {
-            this.getActor().getItems().addItem(Math.toIntExact(loot.getId()), Math.toIntExact(loot.getAmount()));
+            this.addItems(Math.toIntExact(loot.getId()), Math.toIntExact(loot.getAmount()));
         });
     }
 
@@ -133,6 +133,7 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     protected boolean isEventTick() {
         final int ROLL = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEventOdds();
+        System.out.println("Roll: " + ROLL);
         return (Skill.SKILL_RANDOM.nextInt(ROLL) + 1) == ROLL;
     }
 

@@ -1,7 +1,10 @@
 package ethos.runehub.action.click.node;
 
 import ethos.model.players.Player;
+import ethos.runehub.RunehubConstants;
 import ethos.runehub.action.click.node.impl.first.*;
+import ethos.runehub.skill.Skill;
+import org.runehub.api.util.math.geometry.Point;
 
 import java.util.logging.Logger;
 
@@ -10,15 +13,27 @@ public class FirstClickNodeActionListener {
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
         Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY + " " + nodeZ);
         switch (nodeId) {
+            case 15658:
+                if (player.getItems().playerHasItem(275)) {
+                    player.getItems().deleteItem2(275,1);
+                    return new FirstClickPortalAction(player, nodeId, nodeX, nodeY, nodeZ, 3213, 9937, 0);
+                }
+                else
+                    return null;
+            case 32535:
+//                final Point point = RunehubConstants.HOME_TELEPORT_AREA.getAllPoints().get(Skill.SKILL_RANDOM.nextInt(RunehubConstants.HOME_TELEPORT_AREA.getAllPoints().size()));
+                return new FirstClickPortalAction(player, nodeId, nodeX, nodeY, nodeZ, 3174, 9900, 0);
+            case 733:
+                return new FirstClickWebAction(player, nodeId, nodeX, nodeY);
             case 2282:
-                return new FirstClickFurnace(player,nodeId,nodeX,nodeY);
+                return new FirstClickFurnace(player, nodeId, nodeX, nodeY);
             case 14897:
             case 14898:
             case 14899:
             case 14900:
             case 14901:
             case 14902:
-                return new FirstClickRunecraftingAltarAction(player,nodeId,nodeX,nodeY,nodeZ);
+                return new FirstClickRunecraftingAltarAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 7484:
             case 7453:
             case 7454:
@@ -43,7 +58,7 @@ public class FirstClickNodeActionListener {
             case 7492:
             case 7489:
             case 7471:
-                return new FirstClickRockAction(player,nodeId,nodeX,nodeY,nodeZ);
+                return new FirstClickRockAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 29183:
             case 29191:
             case 29207:
@@ -78,6 +93,7 @@ public class FirstClickNodeActionListener {
             case 2111:
             case 2100:
             case 1535:
+            case 8695:
                 return new OpenDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 11774:
             case 11772:
@@ -145,7 +161,7 @@ public class FirstClickNodeActionListener {
             case 14847:
                 return new FirstClickAbyssalPortalAction(player, nodeId, nodeX, nodeY);
             case 4126:
-                return new ClickShinyChestAction(player,nodeId,nodeX,nodeY,nodeZ);
+                return new ClickShinyChestAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 2213:
             case 24101:
             case 3045:
@@ -166,7 +182,11 @@ public class FirstClickNodeActionListener {
             case 3194:
             case 10661:
             case 6945:
-                return new OpenBankAction(player,nodeId,nodeX,nodeY);
+                return new OpenBankAction(player, nodeId, nodeX, nodeY);
+            case 8550:
+            case 8551:
+            case 7847:
+            case 8150:
             case 8554:
             case 8552:
             case 8556:
@@ -179,7 +199,26 @@ public class FirstClickNodeActionListener {
             case 8152:
             case 8151:
             case 8153:
-                return new FirstClickFarmingPatchAction(player,nodeId,nodeX,nodeY);
+            case 8175:
+            case 8176:
+            case 8173:
+            case 8174:
+            case 7577:
+            case 7578:
+            case 7580:
+            case 7579:
+            case 8391:
+            case 8390:
+            case 8389:
+            case 8388:
+            case 19147:
+            case 7962:
+            case 7965:
+            case 7963:
+            case 7964:
+            case 26579:
+
+                return new FirstClickFarmingPatchAction(player, nodeId, nodeX, nodeY);
             case 19206:
             case 19207:
             case 17100:
@@ -188,13 +227,13 @@ public class FirstClickNodeActionListener {
             case 23654:
             case 23727:
             case 23728:
-                return new FirstClickRiftDoorAction(player,nodeId,nodeX,nodeY,nodeZ);
+                return new FirstClickRiftDoorAction(player, nodeId, nodeX, nodeY, nodeZ);
             case 13636:
-                return new FirstClickRiftPortal(player,nodeId,nodeX,nodeY);
+                return new FirstClickRiftPortal(player, nodeId, nodeX, nodeY);
             case 13615:
-                return new FirstClickOpenRiftPortal(player,nodeId,nodeX,nodeY);
+                return new FirstClickOpenRiftPortal(player, nodeId, nodeX, nodeY);
             default:
-                Logger.getGlobal().fine("First Click Action[Id:" + nodeId + ", X:" +nodeX +", Y:" + nodeY + ", Z:" + nodeZ + "]");
+                Logger.getGlobal().fine("First Click Action[Id:" + nodeId + ", X:" + nodeX + ", Y:" + nodeY + ", Z:" + nodeZ + "]");
                 throw new NullPointerException("Nothing interesting happens.");
         }
     }

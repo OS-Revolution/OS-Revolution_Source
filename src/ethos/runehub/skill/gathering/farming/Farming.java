@@ -1,14 +1,18 @@
 package ethos.runehub.skill.gathering.farming;
 
 import ethos.model.players.Player;
+import ethos.runehub.RunehubUtils;
 import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
+import ethos.runehub.skill.node.context.impl.GatheringNodeContext;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.util.SkillDictionary;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,23 +61,48 @@ public class Farming extends GatheringSkill {
             case 8554:
             case 8552:
             case 8556:
+            case 8550://n falador allotment
                 return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 0).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
             case 8555:
             case 8553:
             case 8557:
+            case 8551: //s falador allotment
                 return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 8).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
             case 7849:
             case 7848:
             case 7850:
+            case 7847:
                 return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 16).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
             case 8152:
             case 8151:
             case 8153:
+            case 8150:
                 return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
                         .filter(config -> config.getPatch() == 24).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
+            case 8175: //hops
+            case 8176:
+            case 8173:
+            case 8174:
+            case 7577: //bush
+            case 7578:
+            case 7580:
+            case 7579:
+            case 8391: // tree
+            case 8390:
+            case 8389:
+            case 8388:
+            case 19147:
+            case 7962: //fruit tree
+            case 7965:
+            case 7963:
+            case 7964:
+            case 26579:
+
+                return Optional.of(this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream()
+                        .filter(config -> config.getPatch() == 32).findAny().orElseThrow(() -> new IllegalArgumentException("No Such Farm")));
         }
         return Optional.empty();
     }
@@ -99,6 +128,35 @@ public class Farming extends GatheringSkill {
         return this.getCompostYieldBonus(config.getCompost());
     }
 
+    public int getHarvestedAmount(GatheringNodeContext<?> context, FarmingConfig config) {
+        final int regionId = RunehubUtils.getRegionId(context.getX(), context.getY());
+        return this.getPlayer().getContext().getPlayerSaveData().getHarvestMap().computeIfAbsent(regionId, key -> {
+                    final HashMap<Integer, AdjustableInteger> patchMap = new HashMap<>();
+                    patchMap.put(config.getType(), new AdjustableInteger(0));
+                    return patchMap;
+                })
+                .computeIfAbsent(config.getType(), key -> new AdjustableInteger(0)).value();
+    }
+
+    public void updateHarvestCounts(GatheringNodeContext<?> context, FarmingConfig config) {
+        final int regionId = RunehubUtils.getRegionId(context.getX(), context.getY());
+        this.getPlayer().getContext().getPlayerSaveData().getHarvestMap().computeIfAbsent(regionId, key -> {
+                    final HashMap<Integer, AdjustableInteger> patchMap = new HashMap<>();
+                    patchMap.put(config.getType(), new AdjustableInteger(0));
+                    return patchMap;
+                }).computeIfAbsent(config.getType(), key -> new AdjustableInteger(0)).increment();
+    }
+
+    public void resetHarvestCounts(GatheringNodeContext<?> context, FarmingConfig config) {
+        final int regionId = RunehubUtils.getRegionId(context.getX(), context.getY());
+        this.getPlayer().getContext().getPlayerSaveData().getHarvestMap().computeIfAbsent(regionId, key -> {
+                    final HashMap<Integer, AdjustableInteger> patchMap = new HashMap<>();
+                    patchMap.put(config.getType(), new AdjustableInteger(0));
+                    return patchMap;
+                })
+                .computeIfAbsent(config.getType(), key -> new AdjustableInteger(0)).setValue(0);
+    }
+
     public void updateAllConfigs() {
         final AdjustableInteger varbit = new AdjustableInteger(0);
         this.getPlayer().getContext().getPlayerSaveData().farmingConfig().keySet().forEach(key -> this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(key).forEach(config -> {
@@ -111,7 +169,8 @@ public class Farming extends GatheringSkill {
     public void updateFarm(int regionId) {
         if (this.getPlayer().getContext().getPlayerSaveData().farmingConfig().containsKey(regionId)) {
             final int varbit = this.getPlayer().getContext().getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
-            this.getPlayer().getPA().sendConfig(529,varbit);
+            System.out.println("Varbit: " + varbit);
+            this.getPlayer().getPA().sendConfig(529, varbit);
         }
     }
 

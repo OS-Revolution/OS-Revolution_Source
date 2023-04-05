@@ -67,6 +67,7 @@ import ethos.model.players.skills.hunter.impling.PuroPuro;
 import ethos.model.players.skills.necromancy.Necromancy;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.content.rift.RiftFloorDAO;
+import ethos.runehub.entity.combat.impl.BryophytaCombatMechanics;
 import ethos.runehub.entity.combat.impl.RatKingCombatMechanics;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
 import ethos.runehub.entity.mob.MobSpawn;
@@ -985,6 +986,14 @@ public class NPCHandler {
                     } else {
                         return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
                     }
+                case 8195:
+                    if (npcs[i].attackType == CombatType.MAGE) {
+                        return 7173;
+                    } else if (npcs[i].attackType == CombatType.RANGE) {
+                        return 7550;
+                    } else {
+                        return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
+                    }
                 default:
                     return AnimationDefinitionCache.getInstance().read(npcs[i].npcType).getAttackAnimation();
             }
@@ -1111,6 +1120,8 @@ public class NPCHandler {
      */
     public int getNpcDelay(int i) {
         switch (npcs[i].npcType) {
+            case 8195:
+                return 6;
             case 4708:
                 return 1;
             case 499:
@@ -1716,9 +1727,15 @@ public class NPCHandler {
                         && !Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
 
                     Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
-                    int closestDistance = Integer.MAX_VALUE;
-                    God god = GodwarsNPCs.NPCS.get(npc.npcType);
-
+                    if (closestPlayer != null) {
+                        int closestDistance = Integer.MAX_VALUE;
+                        God god = GodwarsNPCs.NPCS.get(npc.npcType);
+                        if (closestPlayer.underAttackBy == 0 && closestPlayer.underAttackBy2 == 0) {
+                            npc.killerId = closestPlayer.getIndex();
+                            closestPlayer.underAttackBy = npc.getIndex();
+                            closestPlayer.underAttackBy2 = npc.getIndex();
+                        }
+                    }
 //                    for (Player player : PlayerHandler.players) {
 //                        if (player == null) {
 //                            continue;
@@ -1743,11 +1760,7 @@ public class NPCHandler {
 //                            closestPlayer = player;
 //                        }
 //                    }
-                    if (closestPlayer != null) {
-                        npc.killerId = closestPlayer.getIndex();
-                        closestPlayer.underAttackBy = npc.getIndex();
-                        closestPlayer.underAttackBy2 = npc.getIndex();
-                    }
+
 
                 } else if (isAggressive(i, false) && !npcs[i].underAttack && !npcs[i].isDead
                         && (switchesAttackers(i) || Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS))) {
@@ -1767,10 +1780,12 @@ public class NPCHandler {
                 } else if (isAggressive(i,false) && !npcs[i].isDead && !npcs[i].underAttack) {
 
                     Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
-                    if (closestPlayer != null && closestPlayer.underAttackBy == 0 || npc.inMulti()) {
-                        npc.killerId = closestPlayer.getIndex();
-                        closestPlayer.underAttackBy = npc.getIndex();
-                        closestPlayer.underAttackBy2 = npc.getIndex();
+                    if (closestPlayer != null) {
+                        if ((closestPlayer.underAttackBy == 0 && closestPlayer.underAttackBy2 == 0) || npc.inMulti()) {
+                            npc.killerId = closestPlayer.getIndex();
+                            closestPlayer.underAttackBy = npc.getIndex();
+                            closestPlayer.underAttackBy2 = npc.getIndex();
+                        }
                     }
                 }
 
@@ -4982,6 +4997,9 @@ public class NPCHandler {
             case 5126:
                 RatKingCombatMechanics.getInstance().onAttack(player, npcs[i]);
                 break;
+            case 8195:
+                BryophytaCombatMechanics.getInstance().onAttack(player, npcs[i]);
+                break;
             /**
              * Glod
              */
@@ -5310,6 +5328,8 @@ public class NPCHandler {
      **/
     public int distanceRequired(int i) {
         switch (npcs[i].npcType) {
+            case 8195:
+                return 1;
             case 5126:
                 return npcs[i].attackType == CombatType.RANGE ? 15 : 1;
             case Skotizo.SKOTIZO_ID:

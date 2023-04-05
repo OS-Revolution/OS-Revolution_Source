@@ -40,8 +40,11 @@ public class PickpocketAction extends SupportSkillAction {
             if (this.isEventTick()) {
                 this.onEvent();
             } else {
-                        this.getLootRoll().forEach(loot -> this.getActor().getItems().addItem((int) loot.getId(), (int) loot.getAmount()));
+                this.getLootRoll().forEach(loot -> this.getActor().getItems().addItem((int) loot.getId(), (int) loot.getAmount()));
                 this.getActor().getSkillController().addXP(this.getSkillId(), pickpocket.getInteractionExperience());
+                if (pickpocket.getId() == 3086) {
+                    this.getActor().getAttributes().getAchievementController().completeAchievement(7411212671349704401L);
+                }
             }
 
             if (!pickpocket.isRepeatable()) {

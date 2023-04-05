@@ -3,11 +3,11 @@ package ethos.runehub.action.click.node.impl.first;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.action.click.node.ClickNodeAction;
+import ethos.runehub.entity.item.ItemInteractionContext;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
-import ethos.runehub.skill.gathering.farming.action.ClearPatchAction;
-import ethos.runehub.skill.gathering.farming.action.HarvestAllotmentPatchAction;
-import ethos.runehub.skill.gathering.farming.action.RakePatchAction;
+import ethos.runehub.skill.gathering.farming.action.*;
 import ethos.runehub.skill.gathering.farming.crop.CropDAO;
+import ethos.runehub.skill.gathering.farming.patch.PatchType;
 
 import java.util.Optional;
 
@@ -33,8 +33,13 @@ public class FirstClickFarmingPatchAction extends ClickNodeAction {
             } else if (config.diseased() && config.watered()) {
                 System.out.println("Clearing patch");
                 this.getActor().getSkillController().getFarming().train(new ClearPatchAction(this.getActor(), config, this.getNodeId(), this.getNodeX(), this.getNodeY()));
-            } else if (config.getCrop() != 0 && config.getStage() + 1 >= CropDAO.getInstance().read(config.getCrop()).getGrowthCycles()) {
+            } else if (config.getCrop() != 0 && config.getStage() + 1 >= CropDAO.getInstance().read(config.getCrop()).getGrowthCycles() && config.getType() == PatchType.ALLOTMENT.ordinal()) {
                 this.getActor().getSkillController().getFarming().train(new HarvestAllotmentPatchAction(this.getActor(), config, this.getNodeId(), this.getNodeX(), this.getNodeY()));
+            } else if (config.getCrop() != 0 && config.getStage() + 1 >= CropDAO.getInstance().read(config.getCrop()).getGrowthCycles() && config.getType() == PatchType.HERB.ordinal()) {
+                this.getActor().getSkillController().getFarming().train(new HarvestHerbPatchAction(this.getActor(), config, this.getNodeId(), this.getNodeX(), this.getNodeY()));
+            } else if (config.getCrop() != 0 && config.diseased()) {
+                System.out.println("Curing patch");
+                this.getActor().getSkillController().getFarming().train(new ApplyPlantCureAction(this.getActor(), new ItemInteractionContext(this.getNodeX(), this.getNodeY(), 0, 6036, this.getNodeId(), 1, 1)));
             } else {
                 System.out.println("Other");
             }

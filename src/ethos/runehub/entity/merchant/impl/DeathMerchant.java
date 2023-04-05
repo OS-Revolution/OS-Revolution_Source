@@ -1,6 +1,7 @@
 package ethos.runehub.entity.merchant.impl;
 
 import ethos.model.players.Player;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.entity.merchant.MerchandiseSlot;
 import ethos.runehub.entity.merchant.Merchant;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeAccount;
@@ -19,6 +20,7 @@ public class DeathMerchant extends Merchant {
     public void openShop(Player player) {
         this.initializeMerchandiseForPlayer(player);
         super.openShop(player);
+        player.getAttributes().getJourneyController().checkJourney(5567,1, JourneyStepType.OPEN_SHOP);
     }
 
     @Override

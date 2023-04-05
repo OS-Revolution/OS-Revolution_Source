@@ -125,6 +125,7 @@ import ethos.runehub.entity.player.action.impl.ItemRenderUpdateAction;
 import ethos.runehub.entity.player.action.impl.PlayerAppearanceUpdateAction;
 import ethos.runehub.event.FixedScheduledEventController;
 import ethos.runehub.markup.RSString;
+import ethos.runehub.skill.gathering.farming.FarmTick;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
@@ -1795,20 +1796,8 @@ public class Player extends Entity implements PlayerCharacterEntity {
             sendMessage("Welcome to " + Config.SERVER_NAME + ".");
             System.out.println("First farm tick is in " + TimeUtils.getDurationString(TimeUtils.getDurationBetween(System.currentTimeMillis(), FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[10]).toInstant().toEpochMilli()).toMillis()));
             this.initializeDailyContent();
-            this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() -> {
-                        System.out.println("Doing Farm Tick");
-                        if (!this.disconnected) {
-                            int regionX = this.absX >> 3;
-                            int regionY = this.absY >> 3;
-                            int regionId = ((regionX / 8) << 8) + (regionY / 8);
-                            if (context.getPlayerSaveData().farmingConfig().containsKey(regionId)) {
-                                final int varbit = context.getPlayerSaveData().farmingConfig().get(regionId).stream().mapToInt(FarmingConfig::varbit).sum();
-                                this.getPA().sendConfig(529, varbit);
-                            }
-                        } else {
-                            attributes.getFarmTickExecutorService().shutdownNow();
-                        }
-                    },
+            this.getAttributes().getFarmTickExecutorService().scheduleAtFixedRate(() ->
+                            new FarmTick(this),
                     TimeUtils.getDurationBetween(System.currentTimeMillis(), FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[10]).toInstant().toEpochMilli()).toMillis(),
                     Duration.ofMinutes(5).toMillis(), TimeUnit.MILLISECONDS);
             WorldSettingsController.getInstance().initializeTimers(this);
@@ -2707,6 +2696,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             }
             getPA().showOption(3, 0, "Attack", 1);
             if (Config.BOUNTY_HUNTER_ACTIVE && !inClanWars()) {
+                System.out.println("BH2");
                 getPA().walkableInterface(28000);
                 getPA().sendFrame171(1, 28070);
                 getPA().sendFrame171(0, 196);
@@ -2719,6 +2709,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             getPA().sendFrame126("@yel@3-126", 199);
             wildLevel = 126;
         } else if (Boundary.isIn(this, Boundary.SCORPIA_LAIR)) {
+
             getPA().sendFrame126("@yel@Level: 54", 199);
             // getPA().walkableInterface(197);
             wildLevel = 54;
@@ -2727,6 +2718,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         } else if (inEdgeville()) {
             if (Config.BOUNTY_HUNTER_ACTIVE) {
                 if (bountyHunter.hasTarget()) {
+                    System.out.println("In BH");
                     getPA().walkableInterface(28000);
                     getPA().sendFrame171(0, 28070);
                     getPA().sendFrame171(1, 196);
@@ -3605,6 +3597,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public DamageQueueEvent getDamageQueue() {
         return damageQueue;
     }
+
     public final int[] BOWS = {19481, 19478, 12788, 9185, 11785, 21012, 839, 845, 847, 851, 855, 859, 841, 843, 849,
             853, 857, 12424, 861, 4212, 4214, 4215, 12765, 12766, 12767, 12768, 11235, 4216, 4217, 4218, 4219, 4220,
             4221, 4222, 4223, 4734, 6724, 20997};
@@ -4302,15 +4295,15 @@ public class Player extends Entity implements PlayerCharacterEntity {
     }
 
     public boolean inWild() {
-        if (inFunPk())
+        if (inFunPk()) {
             return true;
-        if (inClanWars())
+        } else if (inClanWars()) {
             return true;
-        if (Boundary.isIn(this, Boundary.EDGEVILLE_PERIMETER) && !Boundary.isIn(this, Boundary.EDGE_BANK) && getHeight() == 8) {
+        } else if (Boundary.isIn(this, Boundary.EDGEVILLE_PERIMETER) && !Boundary.isIn(this, Boundary.EDGE_BANK) && getHeight() == 8) {
+            return true;
+        }else if (Boundary.isIn(this, Boundary.SAFEPK)) {
             return true;
         }
-        if (Boundary.isIn(this, Boundary.SAFEPK))
-            return true;
         return Boundary.isIn(this, Boundary.WILDERNESS_PARAMETERS);
     }
 
@@ -5500,10 +5493,11 @@ public class Player extends Entity implements PlayerCharacterEntity {
         }
         return Optional.empty();
     }
-//
+
+    //
     public int getEquipmentIdInSlot(EquipmentSlot slot) {
 //        if (slot.getSlotId() < EquipmentSlot.values().length) {
-            return playerEquipment[slot.getSlotId()] > 0 ? playerEquipment[slot.getSlotId()] : -1;
+        return playerEquipment[slot.getSlotId()] > 0 ? playerEquipment[slot.getSlotId()] : -1;
 //        }
 //        return -1;
     }

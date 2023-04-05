@@ -434,6 +434,10 @@ public class HostileMobContext extends EntityContext {
         return respawnTicks;
     }
 
+    public void setRespawnTicks(int respawnTicks) {
+        this.respawnTicks = respawnTicks;
+    }
+
     @Override
     public String toString() {
         return name;
@@ -516,7 +520,7 @@ public class HostileMobContext extends EntityContext {
     @StoredValue(type = SqlDataType.INTEGER)
     private final int rangedBonus;
     @StoredValue(type = SqlDataType.INTEGER)
-    private final int respawnTicks;
+    private int respawnTicks;
     @StoredValue(type = SqlDataType.INTEGER)
     private final int attackSpeedTicks;
 }

@@ -12,6 +12,7 @@ import ethos.model.npcs.pets.PetHandler;
 import ethos.model.players.Boundary;
 import ethos.model.players.Player;
 import ethos.model.players.skills.agility.AgilityHandler;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.entity.player.action.SecondClickNPCActionFactory;
 import ethos.runehub.entity.player.action.ThirdClickNPCActionFactory;
 
@@ -45,6 +46,8 @@ public class NpcOptionThree {
 		switch (npcType) {
 			case 637: //aubury rune essence mine teleport
 				player.getPA().startTeleport(2911, 4832, 0, "modern", false);
+//				player.getAttributes().getJourneyController().checkJourney(-4963837951524320731L,1);
+				player.getAttributes().getJourneyController().checkJourney(npcType,1, JourneyStepType.NPC_TELEPORT_ACTION);
 				break;
 		case 1428:
 			player.getPrestige().openShop();

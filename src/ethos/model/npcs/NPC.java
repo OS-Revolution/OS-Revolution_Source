@@ -647,11 +647,11 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public int appendDamage(Player player, int damage, Hitmark h) {
         appendDamage(damage, h);
         addDamageTaken(player, damage);
-        try {
-            startAnimation(AnimationDefinitionCache.getInstance().read(npcType).getBlockAnimation());
-        } catch (Exception e) {
-            Logger.getGlobal().warning("No animation definition for npc: " + npcType);
-        }
+//        try {
+////            startAnimation(AnimationDefinitionCache.getInstance().read(npcType).getBlockAnimation());
+//        } catch (Exception e) {
+//            Logger.getGlobal().warning("No animation definition for npc: " + npcType);
+//        }
         return damage;
     }
 
@@ -837,7 +837,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
                             player.sendMessage("@or@" + tier.getName().replaceAll(" ","_") + " drop " + loot.getAmount() + "x " + ItemIdContextLoader.getInstance().read((int) loot.getId()).getName() + ".");
                             PlayerHandler.executeGlobalMessage("^Loot $" + player.getAttributes().getName().replaceAll(" ","_") + " received $" + tier.getName().replaceAll(" ","_") + " drop $" + loot.getAmount() + "x @" + loot.getId() + " !");
                         }
-                        ItemController.getInstance().onDropReceivedEffect(player,loot,dropLocation.getX(), dropLocation.getY(), dropLocation.getZ());
+                        ItemController.getInstance().onDropReceivedEffect(player,loot,dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(),npcType);
 //                        Server.itemHandler.createGroundItem(player, (int) loot.getId(), dropLocation.getX(), dropLocation.getY(), dropLocation.getZ(), (int) loot.getAmount());
                     });
                 });

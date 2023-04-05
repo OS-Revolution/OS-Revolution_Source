@@ -93,6 +93,9 @@ public abstract class FishingAction extends GatheringSkillAction {
     protected void addItems() {
         this.getActor().getItems().deleteItem(node.getBaitId(), 1);
         this.getActor().getItems().addItem(caughtFish.getItemId(), 1);
+        if (caughtFish.getItemId() == 321) {
+            this.getActor().getAttributes().getAchievementController().completeAchievement(5566337423378434124L);
+        }
     }
 
     @Override

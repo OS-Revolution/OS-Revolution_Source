@@ -26,13 +26,13 @@ public abstract class PromotionalChestEvent extends FixedScheduleEvent {
         if (WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId() != 0) {
             WorldSettingsController.getInstance().getWorldSettings().setCurrentEventId(0);
             WorldSettingsController.getInstance().saveSettings();
-            this.resetShinyChestToDefault();
+            resetShinyChestToDefault();
         } else {
             this.onExecute();
         }
     }
 
-    private void resetShinyChestToDefault() {
+    public static void resetShinyChestToDefault() {
         LootTableContainer oldContainer = LootTableContainerDAO.getInstance().read(8806239177860205239L);
         List<LootTableContainerEntry> tables = oldContainer.getLootTables();
 

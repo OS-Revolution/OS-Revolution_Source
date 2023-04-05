@@ -66,7 +66,7 @@ public class PotionFactory extends LazyLoader<Integer,Potion> {
             case 175:
             case 177:
             case 179:
-                return new Potion(key,2466,175,177,179,42);
+                return new Potion(key,2446,175,177,179,42);
             case 2448:
             case 181:
             case 183:

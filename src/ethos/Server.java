@@ -32,13 +32,23 @@ import ethos.runehub.RunehubConstants;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.combat.style.WeaponType;
+import ethos.runehub.content.achievement.Achievement;
+import ethos.runehub.content.achievement.AchievementCache;
+import ethos.runehub.content.achievement.AchievementDAO;
+import ethos.runehub.content.journey.*;
 import ethos.runehub.entity.combat.CombatController;
 import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
 import ethos.runehub.entity.item.equipment.*;
+import ethos.runehub.entity.mob.AnimationDefinition;
+import ethos.runehub.entity.mob.AnimationDefinitionDAO;
+import ethos.runehub.entity.mob.hostile.HostileMobContext;
+import ethos.runehub.entity.mob.hostile.HostileMobContextDAO;
 import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.runehub.event.FixedScheduledEventController;
+import ethos.runehub.event.chest.PrismaniaPromotionalChestEvent;
+import ethos.runehub.event.chest.PromotionalChestEvent;
 import ethos.runehub.skill.artisan.crafting.jewellery.Jewellery;
 import ethos.runehub.skill.artisan.crafting.jewellery.JewelleryDAO;
 import ethos.runehub.skill.combat.magic.spell.RuneIdentifier;
@@ -49,6 +59,8 @@ import ethos.runehub.skill.gathering.tool.GatheringToolDAO;
 import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.io.*;
 import ethos.runehub.skill.support.slayer.*;
+import ethos.runehub.world.RegionCache;
+import ethos.runehub.world.RegionLoader;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.server.data.ServerData;
 import ethos.util.date.GameCalendar;
@@ -87,6 +99,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * The main class needed to start the server.
@@ -244,6 +257,655 @@ public class Server {
         ));
     }
 
+    private static void initRegions() {
+//        final long draynorId = -4977701290314478696L;
+//        org.runehub.api.model.world.region.Region draynor = new org.runehub.api.model.world.region.Region(draynorId,
+//                new IrregularPolygon(
+//                        new Point(2980, 3105),
+//                        new Point(2980, 3186),
+//                        new Point(2915, 3186),
+//                        new Point(2915, 3224),
+//                        new Point(2880, 3224),
+//                        new Point(2880, 3314),
+//                        new Point(3263, 3314),
+//                        new Point(3263, 3136),
+//                        new Point(3008, 3136),
+//                        new Point(3008, 3105),
+//                        new Point(2980, 3105)
+//
+//                ));
+//        RegionContext draynorCtx = new RegionContext(draynorId, "Draynor");
+//
+//        RegionDataAccessObject.getInstance().create(draynor);
+//        RegionContextDataAccessObject.getInstance().create(draynorCtx);
+
+        final long draynorSewersId = IDManager.getUUID();
+                org.runehub.api.model.world.region.Region draynorSewers = new org.runehub.api.model.world.region.Region(draynorSewersId,
+                new IrregularPolygon(
+                        new Point(3154, 9856),
+                        new Point(3154, 9920),
+                        new Point(3294, 9920),
+                        new Point(3294, 9856),
+                        new Point(3154, 9856)
+
+                ));
+
+                RegionContext draynorSewersCtx = new RegionContext(draynorSewersId, "Draynor Sewers");
+
+        RegionDataAccessObject.getInstance().create(draynorSewers);
+        RegionContextDataAccessObject.getInstance().create(draynorSewersCtx);
+    }
+
+    private static void loadRegions() {
+        RegionDataAccessObject.getInstance().getAllEntries().forEach(region -> RegionCache.getInstance().create(region.getId(), region));
+    }
+
+    private static void initAchievements() {
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[] {},
+//                        -4977701290314478696L,
+//                        "Harvest a Potato"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Get a Slayer task from Turael east of the market"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Learn about Farming from Martin the Master Farmer"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Enter the Abyssal Rift near the Wizards Tower"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Cast the @red@Home Teleport @blu@spell"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Fletch an @red@Oak shortbow @blu@"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Open the @red@Shiny chest @blu@ located in Draynor bank"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Talk to @red@Trader Stan @blu@ in Draynor market"
+//                )
+//        );
+
+        AchievementDAO.getInstance().create(
+                new Achievement(
+                        IDManager.getUUID(),
+                        0,
+                        new int[]{},
+                        -4977701290314478696L,
+                        "Mine some clay from the Rimmington mine"
+                )
+        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Sell an item to the Draynor General Store"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Catch some anchovies by the Draynor dock"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Grow and harvest @red@Marrentill @blu@ at the farm north of Draynor"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Cut down an Oak tree"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Smith a @red@Bronze kiteshied @blu@ west of Draynor market"
+//                )
+//        );
+
+//        AchievementDAO.getInstance().create(
+//                new Achievement(
+//                        IDManager.getUUID(),
+//                        0,
+//                        new int[]{},
+//                        -4977701290314478696L,
+//                        "Pickpocket a farmer"
+//                )
+//        );
+    }
+
+    private static void learningTheRopesJourney() {
+        JourneyStep step1 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Claim your starter package from the Draynor Representative",
+                new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
+                1,
+                1,
+                new int[] {3308},
+                JourneyStepType.DIALOG.ordinal()
+        );
+
+        JourneyStep step2 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Purchase an item from the General store",
+                new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
+                1,
+                1,
+                new int[] {506},
+                JourneyStepType.BUY_ANY_FROM_SHOP.ordinal()
+        );
+
+        JourneyStep step3 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Talk to Aubury east of the Draynor market",
+                new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
+                1,
+                1,
+                new int[]{637},
+                JourneyStepType.DIALOG.ordinal()
+        );
+
+        JourneyStep step4 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Talk to Martin the master farmer east of the Draynor market",
+                new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
+                1,
+                1,
+                new int[] {5832},
+                JourneyStepType.DIALOG.ordinal()
+        );
+
+        JourneyStep step5 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Talk to Death in the Draynor bank",
+                new GameItem[]{new GameItem(1464, 1), new GameItem(85, 1), new GameItem(1464, 4)},
+                1,
+                1,
+                new int[] {5567},
+                JourneyStepType.OPEN_SHOP.ordinal()
+        );
+
+        JourneyStep step6 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Rake up 5 weeds from the farm northwest of Draynor",
+                new GameItem[]{new GameItem(6037, 5), new GameItem(85, 1), new GameItem(995, 200)},
+                5,
+                1,
+                new int[]{6055},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step7 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Purchase 5 buckets of compost from Martin the master farmer",
+                new GameItem[]{new GameItem(6033, 10), new GameItem(85, 1), new GameItem(995, 200)},
+                5,
+                5,
+                new int[]{6033},
+                JourneyStepType.BUY_ID_FROM_SHOP.ordinal()
+        );
+
+        JourneyStep step8 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Have Aubury teleport you to the Rune essence mine",
+                new GameItem[]{new GameItem(1437, 50), new GameItem(85, 1), new GameItem(1438, 1)},
+                1,
+                1,
+                new int[] {637},
+                JourneyStepType.NPC_TELEPORT_ACTION.ordinal()
+        );
+
+        JourneyStep step9 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cast the Home teleport spell",
+                new GameItem[]{new GameItem(2396, 5), new GameItem(85, 1), new GameItem(2396, 5)},
+                1,
+                1,
+                new int[]{4171,117048,84237,75010,50056},
+                JourneyStepType.CAST_SPELL.ordinal()
+        );
+
+        JourneyStep step10 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Claim bonus XP in any skill using a star",
+                new GameItem[]{new GameItem(6825, 1), new GameItem(85, 1), new GameItem(1459, 10)},
+                1,
+                1,
+                new int[] {6822,6823,6824,6825,22009, 22010, 22011, 22012, 22013, 22014, 22015, 22016, 22017, 22018, 22019, 22020, 22021, 22022, 22023, 22024, 22025, 22026, 22027, 22028, 22029, 22030, 22031, 22032, 22033, 22034, 22035, 22036, 22037, 22038, 22039, 22040, 22041, 22042, 22043, 22044, 22045, 22046, 22047, 22048, 22049, 22050, 22051, 22052, 22053, 22054, 22055, 22056, 22057, 22058, 22059, 22060, 22061, 22062, 22063, 22064, 22065, 22066, 22067, 22068, 22069, 22070, 22071, 22072, 22073, 22074, 22075, 22076, 22077, 22078, 22079, 22080, 22081, 22082, 22083, 22084, 22085, 22086, 22087, 22088, 22089, 22090, 22091, 22092,22191,22227,22228,22229,22230,21873,21874,21875},
+                JourneyStepType.CONSUME_ITEM.ordinal()
+        );
+
+        Journey journey = new Journey(
+                1,
+                new Long[]{
+                        step1.getId(),
+                        step2.getId(),
+                        step3.getId(),
+                        step4.getId(),
+                        step5.getId(),
+                        step6.getId(),
+                        step7.getId(),
+                        step8.getId(),
+                        step9.getId(),
+                        step10.getId()
+                },
+                new Integer[0],
+                "Learning the Ropes"
+        );
+
+        JourneyStepDAO.getInstance().create(step1);
+        JourneyStepDAO.getInstance().create(step2);
+        JourneyStepDAO.getInstance().create(step3);
+        JourneyStepDAO.getInstance().create(step4);
+        JourneyStepDAO.getInstance().create(step5);
+        JourneyStepDAO.getInstance().create(step6);
+        JourneyStepDAO.getInstance().create(step7);
+        JourneyStepDAO.getInstance().create(step8);
+        JourneyStepDAO.getInstance().create(step9);
+        JourneyStepDAO.getInstance().create(step10);
+        JourneyDAO.getInstance().create(journey);
+    }
+
+    private static void apprenticeLumberjackJourney() {
+        JourneyStep step1 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Equip an iron axe",
+                new GameItem[]{new GameItem(1353, 1), new GameItem(22041, 1), new GameItem(7797, 1)},
+                1,
+                1,
+                new int[] {1349},
+                JourneyStepType.EQUIP_ID.ordinal()
+        );
+
+        JourneyStep step2 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 30 Logs",
+                new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(7797, 1)},
+                30,
+                1,
+                new int[] {1511},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step3 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut down 25 Dead trees",
+                new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(995, 250)},
+                25,
+                1,
+                new int[] {1282,1289},
+                JourneyStepType.DEPLETION.ordinal()
+        );
+
+        JourneyStep step4 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Get a bird's nest while woodcutting",
+                new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(995, 250)},
+                1,
+                1,
+                new int[] {5075,5073,5074,5072,5071,5070},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step5 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Get 15 Oak logs from a single Oak tree",
+                new GameItem[]{new GameItem(1361, 1), new GameItem(85, 1), new GameItem(10933, 1)},
+                1,
+                15,
+                new int[]{1521},
+                JourneyStepType.CHALLENGE.ordinal()
+        );
+
+        JourneyStep step6 = new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut down 15 Evergreen trees",
+                new GameItem[]{new GameItem(7797, 1), new GameItem(85, 1), new GameItem(995, 250)},
+                15,
+                1,
+                new int[]{2091,2092},
+                JourneyStepType.DEPLETION.ordinal()
+        );
+
+        JourneyStep step7= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut down 5 Abyssal Tendrils in the Rift near the Wizards tower",
+                new GameItem[]{new GameItem(995, 1000), new GameItem(85, 1), new GameItem(995, 250)},
+                5,
+                1,
+                new int[] {26191,26251},
+                JourneyStepType.NODE_INTERACTION.ordinal()
+        );
+
+        JourneyStep step8= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 100 Logs",
+                new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
+                100,
+                1,
+                new int[]{1511},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step9= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 50 Oak Logs",
+                new GameItem[]{new GameItem(995, 5000), new GameItem(85, 1), new GameItem(22041, 1)},
+                50,
+                1,
+                new int[]{1521},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step10= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 50 Willow Logs",
+                new GameItem[]{new GameItem(1355, 1), new GameItem(85, 2), new GameItem(10941, 1)},
+                50,
+                1,
+                new int[]{1519},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step11= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Get a birds nest while chopping a Willow tree",
+                new GameItem[]{new GameItem(7797, 1), new GameItem(85, 1), new GameItem(995, 250)},
+                1,
+                1,
+                new int[]{1750},
+                JourneyStepType.SKILL_EVENT_FROM_ID.ordinal()
+        );
+
+        JourneyStep step12= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Get 15 logs from one Willow tree",
+                new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(995, 250)},
+                1,
+                15,
+                new int[]{1519},
+                JourneyStepType.CHALLENGE.ordinal()
+        );
+
+        JourneyStep step13= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut down 15 Willow trees",
+                new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(995, 250)},
+                15,
+                1,
+                new int[]{1750},
+                JourneyStepType.DEPLETION.ordinal()
+        );
+
+        JourneyStep step14= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Get 5 Birds nests while woodcutting",
+                new GameItem[]{new GameItem(995, 1000), new GameItem(85, 1), new GameItem(22042, 1)},
+                5,
+                1,
+                new int[] {5075,5073,5074,5072,5071,5070},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step15= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 35 Maple logs",
+                new GameItem[]{new GameItem(1357, 1), new GameItem(85, 1), new GameItem(10940, 1)},
+                35,
+                1,
+                new int[]{1517},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step16= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 500 logs",
+                new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
+                500,
+                1,
+                new int[] {1511},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step17= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 500 Oak logs",
+                new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
+                500,
+                1,
+                new int[]{1521},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step18= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 500 Willow",
+                new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
+                500,
+                1,
+                new int[]{1519},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step19= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Get 10 Birds nests while woodcutting",
+                new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
+                10,
+                1,
+                new int[]{5075,5073,5074,5072,5071,5070},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        JourneyStep step20= new JourneyStep(
+                IDManager.getUUID(),
+                new int[0],
+                0,
+                "Cut 1000 logs",
+                new GameItem[]{new GameItem(1359, 1), new GameItem(85, 1), new GameItem(10939, 1)},
+                1000,
+                1,
+                new int[]{1511},
+                JourneyStepType.COLLECTION.ordinal()
+        );
+
+        Journey journey = new Journey(
+                2,
+                new Long[]{
+                        step1.getId(),
+                        step2.getId(),
+                        step3.getId(),
+                        step4.getId(),
+                        step5.getId(),
+                        step6.getId(),
+                        step7.getId(),
+                        step8.getId(),
+                        step9.getId(),
+                        step10.getId(),
+                        step11.getId(),
+                        step12.getId(),
+                        step13.getId(),
+                        step14.getId(),
+                        step15.getId(),
+                        step16.getId(),
+                        step17.getId(),
+                        step18.getId(),
+                        step19.getId(),
+                        step20.getId(),
+                },
+                new Integer[1],
+                "Apprentice Lumberjack"
+        );
+
+        JourneyStepDAO.getInstance().create(step1);
+        JourneyStepDAO.getInstance().create(step2);
+        JourneyStepDAO.getInstance().create(step3);
+        JourneyStepDAO.getInstance().create(step4);
+        JourneyStepDAO.getInstance().create(step5);
+        JourneyStepDAO.getInstance().create(step6);
+        JourneyStepDAO.getInstance().create(step7);
+        JourneyStepDAO.getInstance().create(step8);
+        JourneyStepDAO.getInstance().create(step9);
+        JourneyStepDAO.getInstance().create(step10);
+        JourneyStepDAO.getInstance().create(step11);
+        JourneyStepDAO.getInstance().create(step12);
+        JourneyStepDAO.getInstance().create(step13);
+        JourneyStepDAO.getInstance().create(step14);
+        JourneyStepDAO.getInstance().create(step15);
+        JourneyStepDAO.getInstance().create(step16);
+        JourneyStepDAO.getInstance().create(step17);
+        JourneyStepDAO.getInstance().create(step18);
+        JourneyStepDAO.getInstance().create(step19);
+        JourneyStepDAO.getInstance().create(step20);
+        JourneyDAO.getInstance().create(journey);
+    }
+
+
+    private static void loadJourneys() {
+        JourneyStepDAO.getInstance().getAllEntries().forEach(region -> JourneyStepCache.getInstance().create(region.getId(), region));
+        JourneyDAO.getInstance().getAllEntries().forEach(region -> JourneyCache.getInstance().create(region.getId(), region));
+    }
+
+    private static void loadAchievements() {
+        AchievementDAO.getInstance().getAllEntries().forEach(region -> AchievementCache.getInstance().create(region.getId(), region));
+    }
+
     private static void initializeLoaders() {
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(0, "Broader Fletching", 300, "Learn to fletch broad arrows, broad bolts, and amethyst broad bolts. ", false));
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(1, "Malevolent Masquerade", 400, "Learn to assemble a Slayer helmet, which requires level 55 Crafting. ", false));
@@ -264,24 +926,18 @@ public class Server {
         initSpells();
         initEquipmment();
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(15, "Duly noted", 200, "Mithril dragons drop mithril bars in banknote form while killed on assignment.", false));
-//        long regionId = IDManager.getUUID();
-//        RegionDataAccessObject.getInstance().create(
-//                new org.runehub.api.model.world.region.Region(
-//                        regionId,
-//                        new IrregularPolygon(
-//                                new Point(3224,3287),
-//                                new Point(3224,3302),
-//                                new Point(3238,3302),
-//                                new Point(3238,3287),
-//                                new Point(3224,3287)
-//                        )
-//                )
-//        );
-//        RegionContextDataAccessObject.getInstance().create(
-//                new RegionContext(
-//                        regionId,"Lumbridge Northeast Chicken Farm"
-//                )
-//        );
+        AnimationDefinitionDAO.getInstance().create(new AnimationDefinition(8195, new int[] {4649,4652,4651,4653}));
+//        learningTheRopesJourney();
+//        apprenticeLumberjackJourney();
+        loadJourneys();
+
+
+//        initRegions();
+        loadRegions();
+
+
+//        initAchievements();
+        loadAchievements();
 
         TierDAO.getInstance().getAllEntries().forEach(tier -> {
             TierLoader.getInstance().create(tier.getId(), tier);
@@ -365,11 +1021,19 @@ public class Server {
 
 //        Debugslayer.generateTuraelAssignments();
 //        populateSuperiorSlayerMonsters();
+//        PromotionalChestEvent.resetShinyChestToDefault();
         SuperiorSlayerMonsterDAO.getInstance().getAllEntries().forEach(superiorSlayerMonster -> SuperiorSlayerMonsterCache.getInstance().create(superiorSlayerMonster.getMobId(), superiorSlayerMonster));
         HostileMobIdContextLoader.getInstance().readAll().stream()
                 .filter(Objects::nonNull)
                 .filter(hostileMobContext -> hostileMobContext.getCategory().stream().anyMatch(s -> s.contains("bosses")))
                 .forEach(hostileMobContext -> System.out.println("Name: " + hostileMobContext.getName() + " ID: " + hostileMobContext.getId() + " Cat.: " + hostileMobContext.getCategory()));
+//        List<HostileMobContext> mobs = HostileMobContextDAO.getInstance().getAllEntries().stream()
+//                .filter(hostileMobContext -> hostileMobContext.getRespawnTicks() == 5)
+//                .collect(Collectors.toList());
+//
+//        mobs.forEach(hostileMobContext -> hostileMobContext.setRespawnTicks(50));
+//
+//        mobs.forEach(hostileMobContext -> HostileMobContextDAO.getInstance().update(hostileMobContext));
     }
 
     private static void populateSuperiorSlayerMonsters() {
@@ -544,7 +1208,11 @@ public class Server {
         APISettingsController.getInstance().getApiSettings().setLootDatabase(RunehubConstants.LOOT_DB);
         APISettingsController.getInstance().getApiSettings().setRegionDatabaseLocation(RunehubConstants.REGION_DB);
         APISettingsController.getInstance().getApiSettings().setRegionContextDatabaseLocation(RunehubConstants.REGION_DB);
-
+        LootTableContainerLoader.getInstance().read(6014538874343540882L).getLootTables().forEach(lootTableContainerEntry -> {
+            LootTableLoader.getInstance().read(lootTableContainerEntry.getId()).getLootTableEntries().forEach(lootTableEntry -> {
+                System.out.println(lootTableEntry.getId());
+            });
+        });
 //		ShipDAO.getInstance().create(new Ship(2,"Blazing Lantern",15,15,15,15));
 //		ShipDAO.getInstance().create(new Ship(3,"Pin's Ship",7,7,7,7));
 //		ShipDAO.getInstance().create(new Ship(4,"Dinghy",1,0,0,0));

@@ -19,7 +19,7 @@ public class PlantSeedAction extends GatheringSkillAction {
 
     @Override
     protected void updateAnimation() {
-        this.getActor().startAnimation(2291);
+//        this.getActor().startAnimation(2291);
     }
 
     @Override
@@ -37,6 +37,7 @@ public class PlantSeedAction extends GatheringSkillAction {
 
     @Override
     protected void onGather() {
+        this.getActor().startAnimation(2291);
         this.getActor().getItems().deleteItem2(interactionContext.getUsedId(), CropCache.getInstance().read(interactionContext.getUsedId()).getSeedAmount());
         config.setCrop(interactionContext.getUsedId());
         config.setStage(0);
@@ -60,6 +61,7 @@ public class PlantSeedAction extends GatheringSkillAction {
     @Override
     public void onTick() {
         if (cycle <= CropCache.getInstance().read(interactionContext.getUsedId()).getSeedAmount()) {
+            this.getActor().startAnimation(2291);
             this.updateAnimation();
             cycle++;
         } else {

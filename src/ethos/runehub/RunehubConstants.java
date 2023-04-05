@@ -45,4 +45,6 @@ public class RunehubConstants {
     public static final int UNBLOCK_TASK_COST = 5000;
 
     public static final int[] CBOW = {9174,9185,11785,21012};
+
+    public static final int ADVANCE_PATCH_GROWTH_COST = 10;
 }

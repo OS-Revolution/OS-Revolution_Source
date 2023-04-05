@@ -15,6 +15,7 @@ import ethos.util.PreconditionUtils;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class ClickPotionConsumableAction extends ClickConsumableItemAction {
 
@@ -59,14 +60,19 @@ public class ClickPotionConsumableAction extends ClickConsumableItemAction {
     }
 
     private void consumeDose() {
+        Logger.getGlobal().fine("Potion ID: " + this.getItemId());
         this.getActor().getItems().deleteItem(this.getItemId(), this.getItemSlot(), 1);
         if (this.getItemId() == potion.getFourDoseId()) {
+            Logger.getGlobal().fine("4 Dose Potion ID: " + this.getItemId());
             this.getActor().getItems().addItem(potion.getThreeDoseId(), 1);
         } else if (this.getItemId() == potion.getThreeDoseId()) {
+            Logger.getGlobal().fine("3 Dose Potion ID: " + this.getItemId());
             this.getActor().getItems().addItem(potion.getTwoDoseId(), 1);
         } else if (this.getItemId() == potion.getTwoDoseId()) {
+            Logger.getGlobal().fine("2 Dose Potion ID: " + this.getItemId());
             this.getActor().getItems().addItem(potion.getOneDoseId(), 1);
         } else if (this.getItemId() == potion.getOneDoseId()) {
+            Logger.getGlobal().fine("1 Dose Potion ID: " + this.getItemId());
             this.getActor().getItems().addItem(229, 1);
         }
         this.getActor().getItems().resetItems(3214);

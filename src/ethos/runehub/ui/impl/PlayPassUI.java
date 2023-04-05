@@ -48,6 +48,9 @@ public class PlayPassUI extends GameUI {
         this.writeLine(passLevelLabel);
         this.writeLine(seasonLabel);
         this.writeLine(nextSeasonLabel);
+        this.writeLine(stepDescription);
+        this.writeLine(titleLabel);
+        this.writeLine(headerLabel);
 
     }
 
@@ -201,6 +204,9 @@ public class PlayPassUI extends GameUI {
 
     public PlayPassUI(Player player) {
         super(55100, player);
+        this.stepDescription = new TextComponent(56224,"Level up your Play Pass passively by training skills, fighting enemies, completing tasks, and playing minigames. With each levelup you will be able to claim a reward. Members may be able to claim additional rewards. Members will also receives a +20% Play Pass XP Boost.");
+        this.titleLabel = new TextComponent(55102,"OS-Revolution Play-Pass");
+        this.headerLabel = new TextComponent(56222, "Welcome to the OS-Revolution Play-Pass");
         this.seasonLabel = new TextComponent(56223);
         this.passLevelLabel = new TextComponent(56225);
         this.selectedPassLevelLabel = new TextComponent(56202);
@@ -245,5 +251,5 @@ public class PlayPassUI extends GameUI {
     private final int playPassLevelRewardsFrame, selectedRewardFrame;
     private final ProgressBarComponent[] progressBarComponents;
     private final TextComponent[] levelProgressLabel;
-    private final TextComponent seasonLabel, passLevelLabel, selectedPassLevelLabel, selectedPassLevelProgressLabel, pageLabel, claimButtonLabel, nextSeasonLabel;
+    private final TextComponent titleLabel,headerLabel,stepDescription,seasonLabel, passLevelLabel, selectedPassLevelLabel, selectedPassLevelProgressLabel, pageLabel, claimButtonLabel, nextSeasonLabel;
 }

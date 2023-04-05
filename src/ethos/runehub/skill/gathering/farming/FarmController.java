@@ -64,9 +64,13 @@ public class FarmController {
         return 0;
     }
 
+    /**
+     * disabled herb patches getting diseased to prevent graphical bug
+     * @param config
+     */
     private void rollForDisease(FarmingConfig config) {
         if (config.getStage() > 0 && config.getStage() < (CropCache.getInstance().read(config.getCrop()).getGrowthCycles() - 1)) {
-            if (isSuccessful(config)) {
+            if (isSuccessful(config) && config.getType() != PatchType.HERB.ordinal()) {
                 config.setDiseased(true);
             }
         }

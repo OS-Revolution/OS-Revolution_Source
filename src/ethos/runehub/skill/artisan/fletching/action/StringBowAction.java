@@ -28,6 +28,7 @@ public class StringBowAction extends SkillAction {
             this.deleteMaterials();
             this.getActor().getSkillController().addXP(this.getSkillId(),fletchable.getBaseXp());
             this.getActor().getItems().addItem(fletchable.getProductId(),fletchable.getAmountProduced());
+            this.updateAchievements();
             amount--;
         } else {
             this.stop();
@@ -69,6 +70,12 @@ public class StringBowAction extends SkillAction {
     @Override
     protected void addItems(int id, int amount) {
 
+    }
+
+    private void updateAchievements() {
+        if (fletchable.getProductId() == 843) {
+            this.getActor().getAttributes().getAchievementController().completeAchievement(6109194337526825863L);
+        }
     }
 
     private void deleteMaterials() {

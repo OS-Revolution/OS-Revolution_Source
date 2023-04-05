@@ -36,6 +36,7 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
         this.getActor().getItems().addItem(CropDAO.getInstance().read(config.getCrop()).getCropId(), 1);
         this.getActor().sendMessage("You harvest a @" + CropDAO.getInstance().read(config.getCrop()).getCropId());
         this.getActor().getPA().addSkillXP(CropDAO.getInstance().read(config.getCrop()).getHarvestXp(), this.getSkillId(), true);
+        this.updateAchievementDiaries();
     }
 
     @Override
@@ -56,12 +57,14 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
         if (cycle < this.getMinHarvest()) {
             this.updateAnimation();
             this.onGather();
+            this.getActor().getSkillController().getFarming().updateHarvestCounts(this.getTargetedNodeContext(),config);
             cycle++;
         } else if (cycle >= this.getMinHarvest()
                 && cycle < this.getMaxHarvest()
                 && isSuccessful(this.getMin(), this.getMax())) {
             this.updateAnimation();
             this.onGather();
+            this.getActor().getSkillController().getFarming().updateHarvestCounts(this.getTargetedNodeContext(),config);
             cycle++;
         } else {
             config.setCrop(0);
@@ -71,6 +74,7 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
             config.setCompost(0);
             this.getActor().getSkillController().getFarming().updateFarm(RunehubUtils.getRegionId(targetedNodeContext.getX(), targetedNodeContext.getY()));
             this.getActor().startAnimation(65535);
+            this.getActor().getSkillController().getFarming().resetHarvestCounts(this.getTargetedNodeContext(),config);
             this.stop();
         }
     }
@@ -89,6 +93,12 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
     @Override
     protected void validateWorldRequirements() {
         Preconditions.checkArgument(config.getCrop() > 0, "The patch is empty.");
+    }
+
+    private void updateAchievementDiaries() {
+        if (config.getCrop() == 5318) {
+            this.getActor().getAttributes().getAchievementController().completeAchievement(1483892139077748908L);
+        }
     }
 
     private int getMinHarvest() {
@@ -115,6 +125,7 @@ public class HarvestAllotmentPatchAction extends GatheringSkillAction {
             }
         }, 3);
         this.config = config;
+        this.cycle = this.getActor().getSkillController().getFarming().getHarvestedAmount(this.getTargetedNodeContext(),config);
     }
 
     private int cycle;

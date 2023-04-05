@@ -87,6 +87,9 @@ public class SmithItemAction extends SkillAction {
         } else {
             this.getActor().getItems().addItem(item.getItemId(), item.getAmountProduced());
         }
+        if (item.getItemId() == 1189) {
+            this.getActor().getAttributes().getAchievementController().completeAchievement(-9158659835708620785L);
+        }
         this.getActor().getSkillController().addXP(this.getSkillId(), item.getXp() * item.getMaterials()[0].getAmount());
         actionsDone++;
     }

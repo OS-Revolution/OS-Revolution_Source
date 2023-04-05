@@ -88,7 +88,7 @@ public class ObjectOptionOne {
         c.boneOnAltar = false;
         Tree tree = Tree.forObject(objectType);
         RaidObjects.clickObject1(c, objectType, obX, obY);
-        if (tree != null) {
+        if (tree != null || objectType == 1289 || objectType == 1282 || objectType == 2092 || objectType == 2091) {
             c.getSkillController().getWoodcutting().train(new ActiveWoodcuttingSkillAction(
                     c,
                     Skill.WOODCUTTING.getId(),
@@ -2626,27 +2626,27 @@ public class ObjectOptionOne {
                     c.getPA().walkTo(0, -1);
                 break;
 
-            case 733:
-                GlobalObject objectOne = null;
-                int chance = c.getRechargeItems().hasAnyItem(13108, 13109, 13110, 13111) ? 0 : 4;
-                c.startAnimation(451);
-                c.sendMessage("You fail to cut through it.");
-                if (Misc.random(chance) == 0) {
-                    c.sendMessage("You slash the web apart.");
-                    if (c.objectX == 3092 && c.objectY == 3957) {
-                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 2, 0, 50, 733);
-                    } else if (c.objectX == 3095 && c.objectY == 3957) {
-                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 0, 0, 50, 733);
-                    } else if (c.objectX == 3158 && c.objectY == 3951) {
-                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 1, 10, 50, 733);
-                    } else if (c.objectX == 3105 && c.objectY == 3958 || c.objectX == 3106 && c.objectY == 3958) {
-                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 3, 10, 50, 733);
-                    }
-                    if (objectOne != null) {
-                        Server.getGlobalObjects().add(objectOne);
-                    }
-                }
-                break;
+//            case 733:
+//                GlobalObject objectOne = null;
+//                int chance = c.getRechargeItems().hasAnyItem(13108, 13109, 13110, 13111) ? 0 : 4;
+//                c.startAnimation(451);
+//                c.sendMessage("You fail to cut through it.");
+//                if (Misc.random(chance) == 0) {
+//                    c.sendMessage("You slash the web apart.");
+//                    if (c.objectX == 3092 && c.objectY == 3957) {
+//                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 2, 0, 50, 733);
+//                    } else if (c.objectX == 3095 && c.objectY == 3957) {
+//                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 0, 0, 50, 733);
+//                    } else if (c.objectX == 3158 && c.objectY == 3951) {
+//                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 1, 10, 50, 733);
+//                    } else if (c.objectX == 3105 && c.objectY == 3958 || c.objectX == 3106 && c.objectY == 3958) {
+//                        objectOne = new GlobalObject(734, obX, obY, c.heightLevel, 3, 10, 50, 733);
+//                    }
+//                    if (objectOne != null) {
+//                        Server.getGlobalObjects().add(objectOne);
+//                    }
+//                }
+//                break;
 
             case 7407:
                 GlobalObject gate;

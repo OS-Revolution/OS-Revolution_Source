@@ -336,12 +336,43 @@ public class PlayerSaveData {
         claimedPassLevel[index] = value;
     }
 
+    public List<Long> getClaimedJourneyStep() {
+        if(claimedJourneyStep == null)
+            claimedJourneyStep = new ArrayList<>();
+        return claimedJourneyStep;
+    }
+
+    public List<Integer> getCompetedJourney() {
+        if (competedJourney == null)
+            competedJourney = new ArrayList<>();
+        return competedJourney;
+    }
+
     public Map<Integer,List<FarmingConfig>> farmingConfig() {
         if (farmingConfigMap == null || farmingConfigMap.isEmpty()) {
             farmingConfigMap = new HashMap<>();
             farmingConfigMap.put(14391,configForFarm(14391));
             farmingConfigMap.put(10548,configForFarm(10548));
             farmingConfigMap.put(11062,configForFarm(11062));
+            farmingConfigMap.put(12851,configForFarm(12851));
+            farmingConfigMap.put(12083,configForFarm(12083));
+            farmingConfigMap.put(10551,configForFarm(10551));
+            farmingConfigMap.put(10288,configForFarm(10288));
+            farmingConfigMap.put(11060,configForFarm(11060));
+            farmingConfigMap.put(12596,configForFarm(12596));
+            farmingConfigMap.put(11570,configForFarm(11570));
+            farmingConfigMap.put(10290,configForFarm(10290));
+            farmingConfigMap.put(10300,configForFarm(10300));
+            farmingConfigMap.put(12594,configForFarm(12594));
+            farmingConfigMap.put(12854,configForFarm(12854));
+            farmingConfigMap.put(12084,configForFarm(12084));
+            farmingConfigMap.put(11573,configForFarm(11573));
+            farmingConfigMap.put(9525,configForFarm(9525));
+            farmingConfigMap.put(9782,configForFarm(9782));
+            farmingConfigMap.put(11317,configForFarm(11317));
+            farmingConfigMap.put(9777,configForFarm(9777));
+            farmingConfigMap.put(11058,configForFarm(11058));
+            farmingConfigMap.put(9265,configForFarm(9265));
         }
         return farmingConfigMap;
     }
@@ -352,10 +383,37 @@ public class PlayerSaveData {
             case 14391: //canafis
             case 10548: //ardougne
             case 11062: //catherby
+            case 12083:
                 configs.add(new FarmingConfig(0, 0, false, false, PatchType.ALLOTMENT.ordinal(), 0, 0));
                 configs.add(new FarmingConfig(0, 8, false, false, PatchType.ALLOTMENT.ordinal(), 0, 0));
                 configs.add(new FarmingConfig(0, 16, false, false, PatchType.FLOWER.ordinal(), 0, 0));
                 configs.add(new FarmingConfig(0, 24, false, false, PatchType.HERB.ordinal(), 0, 0));
+                break;
+            case 12851:
+            case 10551:
+            case 10288:
+            case 11060:
+                configs.add(new FarmingConfig(0, 32, false, false, PatchType.HOPS.ordinal(), 0, 0));
+                break;
+            case 12596:
+            case 11570:
+            case 10290:
+            case 10300:
+                configs.add(new FarmingConfig(0, 32, false, false, PatchType.BUSH.ordinal(), 0, 0));
+                break;
+            case 12594:
+            case 12854:
+            case 12084:
+            case 11573:
+            case 9525:
+                configs.add(new FarmingConfig(0, 32, false, false, PatchType.TREE.ordinal(), 0, 0));
+                break;
+            case 9782:
+            case 11317:
+            case 9777:
+            case 11058:
+            case 9265:
+                configs.add(new FarmingConfig(0, 32, false, false, PatchType.FRUIT_TREE.ordinal(), 0, 0));
                 break;
         }
         return configs;
@@ -500,6 +558,12 @@ public class PlayerSaveData {
         return reclaimableItems;
     }
 
+    public List<Long> getCompletedAchievements() {
+        if (completedAchievements == null)
+            completedAchievements = new ArrayList<>();
+        return completedAchievements;
+    }
+
     public boolean isBurnLogs() {
         return burnLogs;
     }
@@ -580,6 +644,36 @@ public class PlayerSaveData {
         this.masterGoldAccumulatorActive = masterGoldAccumulatorActive;
     }
 
+    public Map<Integer, Map<Integer, AdjustableInteger>> getHarvestMap() {
+        if (harvestMap == null)
+            harvestMap = new HashMap<>();
+        return harvestMap;
+    }
+
+    public int getJourneyId() {
+        return journeyId;
+    }
+
+    public void setJourneyId(int journeyId) {
+        this.journeyId = journeyId;
+    }
+
+    public int getJourneyStep() {
+        return journeyStep;
+    }
+
+    public void setJourneyStep(int journeyStep) {
+        this.journeyStep = journeyStep;
+    }
+
+    public int getCurrentJourneyStepProgress() {
+        return currentJourneyStepProgress;
+    }
+
+    public void setCurrentJourneyStepProgress(int currentJourneyStepProgress) {
+        this.currentJourneyStepProgress = currentJourneyStepProgress;
+    }
+
     @Override
     public String toString() {
         return new PlayerSaveDataSerializer().serialize(this);
@@ -618,6 +712,10 @@ public class PlayerSaveData {
         this.equippedAmount = new int[10];
         this.job = new long[2][5];
         this.reclaimableItems = new ArrayList<>();
+        this.harvestMap = new HashMap<>();
+        this.completedAchievements = new ArrayList<>();
+        this.competedJourney = new ArrayList<>();
+        this.claimedJourneyStep = new ArrayList<>();
 //        farmingConfigMap.put(
 //                10548,List.of(
 //                        new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
@@ -677,6 +775,7 @@ public class PlayerSaveData {
     private int bottomlessCompostBucketCharges;
     private int bottomlessCompostBucketType;
     private boolean permanentCompost;
+    private Map<Integer,Map<Integer,AdjustableInteger>> harvestMap;
 
     /**
      * membership
@@ -721,4 +820,21 @@ public class PlayerSaveData {
     private int goldAccumulatorAccumulated;
     private long advancedGoldAccumulatorAccumulated,masterGoldAccumulatorAccumulated;
     private boolean advancedGoldAccumulatorOwned, goldAccumulatorActive,advancedGoldAccumulatorActive, masterGoldAccumulatorActive;
+
+
+    /**
+     * achievements
+     */
+
+    private List<Long> completedAchievements;
+
+    /**
+     * Journeys
+     */
+
+    private int journeyId;
+    private int journeyStep;
+    private int currentJourneyStepProgress;
+    private List<Long> claimedJourneyStep;
+    private List<Integer> competedJourney;
 }

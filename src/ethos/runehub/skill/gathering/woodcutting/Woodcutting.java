@@ -63,6 +63,10 @@ public class Woodcutting extends GatheringSkill {
                     return 0.05;
                 case 8125:
                     return 0.07;
+                case 10132:
+                case 9807:
+                case 9808:
+                    return 0.1;
             }
             return 0D;
         }).sum();

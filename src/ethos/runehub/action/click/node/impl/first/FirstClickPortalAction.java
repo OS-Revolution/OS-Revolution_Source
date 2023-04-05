@@ -18,6 +18,7 @@ public class FirstClickPortalAction extends ClickNodeAction {
     @Override
     protected void onTick() {
         this.getActor().getPA().movePlayer(teleportX,teleportY,teleportZ);
+        this.stop();
     }
 
     @Override

@@ -2,6 +2,7 @@ package ethos.runehub.action.click.item.consumable.star;
 
 import ethos.model.players.Player;
 import ethos.runehub.action.click.item.ClickConsumableItemAction;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.ui.GameUI;
 import ethos.runehub.ui.impl.SelectASkillUI;
 import org.runehub.api.model.math.impl.AdjustableInteger;
@@ -42,7 +43,8 @@ public class ClickPrismaticStarAction extends ClickConsumableItemAction {
         this.getActor().getContext().getPlayerSaveData().getBonusXp().computeIfPresent(skillId, (key, val) -> new AdjustableInteger(val.add(getBonusXp())));
         this.getActor().getPA().sendBonusXp(skillId, this.getActor().getContext().getPlayerSaveData().getBonusXp().get(skillId).value());
         this.getActor().getAttributes().getActiveUI().close();
-
+        this.getActor().getAttributes().getJourneyController().checkJourney(this.getItemId(),this.getItemAmount(), JourneyStepType.CONSUME_ITEM);
+//        this.getActor().getAttributes().getJourneyController().checkJourney(2222024974161497586L,1);
     }
 
     private int getBonusXp() {

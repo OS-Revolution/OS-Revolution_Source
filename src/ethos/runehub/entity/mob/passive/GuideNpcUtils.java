@@ -1,6 +1,7 @@
 package ethos.runehub.entity.mob.passive;
 
 import ethos.model.players.Player;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.dialog.Dialog;
 import ethos.runehub.dialog.DialogSequence;
 
@@ -83,6 +84,8 @@ public class GuideNpcUtils {
                         public void onSend() {
                             player.getItems().addItem(6198, 1);
                             player.getContext().getPlayerSaveData().setExchangeSlots(3);
+                            player.getAttributes().getJourneyController().checkJourney(NPC_ID,1, JourneyStepType.DIALOG);
+//                            player.getAttributes().getJourneyController().checkJourney(664178277521772050L,1);
                         }
                     }).addItemStatement(6198, "You receive your Initiative Package")
 //                                .addDialogueAction(new Dialog() {

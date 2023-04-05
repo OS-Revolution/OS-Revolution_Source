@@ -3,6 +3,8 @@ package ethos.runehub.entity.player.action.impl;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubConstants;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.journey.JourneyStepType;
+import ethos.runehub.dialog.Dialog;
 import ethos.runehub.dialog.DialogOption;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.skill.support.slayer.Slayer;
@@ -20,11 +22,24 @@ public class FirstClickDialogueAction extends ClickNPCAction {
             case 637:
                 player.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(player)
                         .addNpcChat("Aubury", npcId, "Oh, sorry I'm a little busy right now", "A rift has opened up at the Wizard's Tower", "I must get there and study it.")
+                                .addDialogueAction(new Dialog() {
+                                    @Override
+                                    public void onSend() {
+//                                        player.getAttributes().getJourneyController().checkJourney(-7837366150055375731L,1);
+                                        player.getAttributes().getJourneyController().checkJourney(npcId,1, JourneyStepType.DIALOG);
+                                    }
+                                })
                         .build());
                 break;
             case 1328:
                 player.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(player)
                         .addNpcChat("Trader Stan", npcId, "Hello, and welcome to my travelling shop!", "I trade exotic wares from my travels for Jewels.", "If you don't find something you like come back next time.", "I've always got something new!")
+                                .addDialogueAction(new Dialog() {
+                                    @Override
+                                    public void onSend() {
+                                        player.getAttributes().getAchievementController().completeAchievement(-730417261381203336L);
+                                    }
+                                })
                         .build());
                 break;
             case 401:

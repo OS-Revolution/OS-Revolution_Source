@@ -3,6 +3,7 @@ package ethos.runehub.skill.gathering.farming.action;
 import com.google.common.base.Preconditions;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
@@ -32,6 +33,8 @@ public class RakePatchAction extends GatheringSkillAction {
     protected void onGather() {
         this.addItems(6055, 1);
         this.getActor().getPA().addSkillXP(4, this.getSkillId(), true);
+//        this.getActor().getAttributes().getJourneyController().checkJourney(5310519480822153480L,1);
+        this.getActor().getAttributes().getJourneyController().checkJourney(6055,1, JourneyStepType.COLLECTION);
         cycle++;
         config.incrementCycle();
         this.getActor().getSkillController().getFarming().updateFarm(RunehubUtils.getRegionId(this.getTargetedNodeContext().getX(), this.getTargetedNodeContext().getY()));

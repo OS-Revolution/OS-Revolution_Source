@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import ethos.runehub.action.click.DefaultHomeTeleportAction;
 import ethos.runehub.action.click.InstantHomeTeleportAction;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
 import ethos.runehub.skill.combat.magic.action.CastModernTeleportSkillAction;
@@ -1156,33 +1157,33 @@ public class ClickingButtons implements PacketType {
             case 185158: // Store
                 c.getPA().sendFrame126("https://os-revolution.com/forum/index.php?/shop/", 12000);
                 break;
-            case 185150:
-                for (int i = 8144; i < 8195; i++) {
-                    c.getPA().sendFrame126("", i);
-                }
-                int[] frames1 = {8149, 8150, 8151, 8152, 8153, 8154, 8155, 8156, 8157, 8158, 8159, 8160, 8161, 8162, 8163,
-                        8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172, 8173, 8174, 8175};
-                c.getPA().sendFrame126("@dre@Kill Tracker for @blu@" + c.playerName + "", 8144);
-                c.getPA().sendFrame126("", 8145);
-                c.getPA().sendFrame126("@blu@Total kills@bla@ - " + c.getNpcDeathTracker().getTotal() + "", 8147);
-                c.getPA().sendFrame126("", 8148);
-                int index1 = 0;
-                for (Entry<String, Integer> entry : c.getNpcDeathTracker().getTracker().entrySet()) {
-                    if (entry == null) {
-                        continue;
-                    }
-                    if (index1 > frames1.length - 1) {
-                        break;
-                    }
-                    if (entry.getValue() > 0) {
-                        c.getPA().sendFrame126(
-                                "@blu@" + WordUtils.capitalize(entry.getKey().toLowerCase()) + ": @red@" + entry.getValue(),
-                                frames1[index1]);
-                        index1++;
-                    }
-                    c.getPA().showInterface(8134);
-                }
-                break;
+//            case 185150:
+//                for (int i = 8144; i < 8195; i++) {
+//                    c.getPA().sendFrame126("", i);
+//                }
+//                int[] frames1 = {8149, 8150, 8151, 8152, 8153, 8154, 8155, 8156, 8157, 8158, 8159, 8160, 8161, 8162, 8163,
+//                        8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172, 8173, 8174, 8175};
+//                c.getPA().sendFrame126("@dre@Kill Tracker for @blu@" + c.playerName + "", 8144);
+//                c.getPA().sendFrame126("", 8145);
+//                c.getPA().sendFrame126("@blu@Total kills@bla@ - " + c.getNpcDeathTracker().getTotal() + "", 8147);
+//                c.getPA().sendFrame126("", 8148);
+//                int index1 = 0;
+//                for (Entry<String, Integer> entry : c.getNpcDeathTracker().getTracker().entrySet()) {
+//                    if (entry == null) {
+//                        continue;
+//                    }
+//                    if (index1 > frames1.length - 1) {
+//                        break;
+//                    }
+//                    if (entry.getValue() > 0) {
+//                        c.getPA().sendFrame126(
+//                                "@blu@" + WordUtils.capitalize(entry.getKey().toLowerCase()) + ": @red@" + entry.getValue(),
+//                                frames1[index1]);
+//                        index1++;
+//                    }
+//                    c.getPA().showInterface(8134);
+//                }
+//                break;
             case 185142:
                 List<Player> staff = PlayerHandler.nonNullStream().filter(Objects::nonNull).filter(p -> p.getRightGroup().isOrInherits(Right.HELPER)).collect(Collectors.toList());
                 c.sendMessage("@red@You can also type ::help to report something.");
@@ -2305,10 +2306,13 @@ public class ClickingButtons implements PacketType {
                     return;
                 }
 //			c.getPA().spellTeleport(3092, 3249, 0, false);
-                if (c.getContext().getPlayerSaveData().getInstantTeleportCharges().value() == 0)
+                if (c.getContext().getPlayerSaveData().getInstantTeleportCharges().value() == 0) {
                     Server.getEventHandler().submit(new DefaultHomeTeleportAction(c));
-                else
+                    c.getAttributes().getJourneyController().checkJourney(actionButtonId,1, JourneyStepType.CAST_SPELL);
+                }else {
                     Server.getEventHandler().submit(new InstantHomeTeleportAction(c));
+                    c.getAttributes().getJourneyController().checkJourney(actionButtonId,1, JourneyStepType.CAST_SPELL);
+                }
                 break;
             case 50056:
 //			if (c.homeTeleport >= 1 && c.homeTeleport <= 10) {
@@ -2316,6 +2320,7 @@ public class ClickingButtons implements PacketType {
 //			}
 //			c.getPA().spellTeleport(Config.START_LOCATION_X, Config.START_LOCATION_Y, 0, true);
                 Server.getEventHandler().submit(new DefaultHomeTeleportAction(c));
+                c.getAttributes().getJourneyController().checkJourney(actionButtonId,1, JourneyStepType.CAST_SPELL);
                 break;
 
             // case 4171: case 50056: case 117048: if (c.homeTeleDelay <= 0) { c.homeTele =

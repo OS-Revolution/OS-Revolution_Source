@@ -2,6 +2,7 @@ package ethos.runehub.entity.player.action;
 
 import ethos.model.players.Player;
 import ethos.runehub.entity.player.action.impl.*;
+import ethos.runehub.entity.player.action.impl.npc.FirstClickMartinAction;
 
 import java.util.logging.Logger;
 
@@ -19,6 +20,9 @@ public class FirstClickNPCActionFactory {
             case 401:
             case 1329:
                 return new FirstClickDialogueAction(player,nodeX,nodeY,nodeId,npcIndex);
+            case 5832:
+                return new FirstClickMartinAction(player,nodeX,nodeY,nodeId,npcIndex);
+
         }
         return null;
     }

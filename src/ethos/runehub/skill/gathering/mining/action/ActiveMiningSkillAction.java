@@ -61,6 +61,9 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
     protected void addItems(int id, int amount) {
         this.getActor().sendMessage("You manage to mine some @" + id);
         super.addItems(id, amount);
+        if (id == 434) {
+            this.getActor().getAttributes().getAchievementController().completeAchievement(-6598849538144907698L);
+        }
     }
 
     @Override

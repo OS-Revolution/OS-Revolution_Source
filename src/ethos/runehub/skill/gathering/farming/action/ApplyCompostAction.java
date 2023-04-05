@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.entity.item.ItemInteractionContext;
+import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
 import ethos.runehub.skill.gathering.farming.Farming;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
@@ -14,18 +15,15 @@ import ethos.runehub.skill.node.impl.gatherable.GatheringNode;
 import ethos.util.PreconditionUtils;
 import org.runehub.api.util.SkillDictionary;
 
-public class ApplyCompostAction extends GatheringSkillAction {
+public class ApplyCompostAction extends SkillAction {
 
 
     @Override
-    protected void updateAnimation() {
-        this.getActor().startAnimation(2283);
-    }
+    protected void updateAnimation() {}
 
     @Override
-    protected void onEvent() {
+    protected void addItems(int id, int amount) {}
 
-    }
 
     @Override
     protected void validateItemRequirements() {
@@ -36,27 +34,23 @@ public class ApplyCompostAction extends GatheringSkillAction {
         }
     }
 
+//    @Override
+//    protected void onGather() {
+//        this.getActor().getItems().deleteItem2(interactionContext.getUsedId(), CropCache.getInstance().read(interactionContext.getUsedId()).getSeedAmount());
+//        config.setCrop(interactionContext.getUsedId());
+//        config.setStage(0);
+//        this.getActor().getSkillController().getFarming().updateFarm(RunehubUtils.getRegionId(interactionContext.getX(),interactionContext.getY()));
+//        this.getActor().getPA().addSkillXP(CropCache.getInstance().read(interactionContext.getUsedId()).getPlantXp(),SkillDictionary.Skill.FARMING.getId(), true);
+//    }
+
+
     @Override
-    protected void onGather() {
-        this.getActor().getItems().deleteItem2(interactionContext.getUsedId(), CropCache.getInstance().read(interactionContext.getUsedId()).getSeedAmount());
-        config.setCrop(interactionContext.getUsedId());
-        config.setStage(0);
-        this.getActor().getSkillController().getFarming().updateFarm(RunehubUtils.getRegionId(interactionContext.getX(),interactionContext.getY()));
-        this.getActor().getPA().addSkillXP(CropCache.getInstance().read(interactionContext.getUsedId()).getPlantXp(),SkillDictionary.Skill.FARMING.getId(), true);
+    protected void onActionStart() {
+        this.getActor().startAnimation(2283);
     }
 
     @Override
-    protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
-        return new GatheringTool(
-                interactionContext.getUsedId(),
-                1,
-                SkillDictionary.Skill.FARMING.getId(),
-                1.0,
-                0,
-                0f,
-                2283
-        );
-    }
+    protected void onActionStop() {}
 
     @Override
     public void onTick() {
@@ -80,8 +74,15 @@ public class ApplyCompostAction extends GatheringSkillAction {
             this.getActor().getContext().getPlayerSaveData().setBottomlessCompostBucketCharges(this.getActor().getContext().getPlayerSaveData().getBottomlessCompostBucketCharges() - 1);
             config.setCompost(this.getActor().getContext().getPlayerSaveData().getBottomlessCompostBucketType());
         }
-
         this.stop();
+    }
+
+    @Override
+    protected void onUpdate() {}
+
+    @Override
+    protected void validateInventory() {
+        Preconditions.checkArgument(this.getActor().getItems().playerHasItem(interactionContext.getUsedId()));
     }
 
     @Override
@@ -97,21 +98,15 @@ public class ApplyCompostAction extends GatheringSkillAction {
 
     @Override
     protected void validateWorldRequirements() {
-            Preconditions.checkArgument((config.getCrop() == 0 && config.getStage() == 3),"You must clear this patch before you can plant these.");
+//            Preconditions.checkArgument((config.getCrop() == 0 && config.getStage() == 3),"You must clear this patch before you can treat it with compost.");
     }
 
     public ApplyCompostAction(Player player, ItemInteractionContext interactionContext) {
-        super(player, SkillDictionary.Skill.FARMING.getId(), new GatheringNodeContext<>(interactionContext.getUsedWithId(), interactionContext.getX(), interactionContext.getY(), 0) {
-            @Override
-            public GatheringNode getNode() {
-                return new GatheringNode(interactionContext.getUsedWithId(), 1, 4, -1L, 1000, SkillDictionary.Skill.FARMING.getId(), 1000);
-            }
-        }, 6);
+        super(player,SkillDictionary.Skill.FARMING.getId(),6);
         this.interactionContext = interactionContext;
         this.config = player.getSkillController().getFarming().getConfig(interactionContext.getUsedWithId(), RunehubUtils.getRegionId(interactionContext.getX(), interactionContext.getY())).orElse(null);
     }
 
-    private int cycle;
     private final ItemInteractionContext interactionContext;
     private final FarmingConfig config;
 }

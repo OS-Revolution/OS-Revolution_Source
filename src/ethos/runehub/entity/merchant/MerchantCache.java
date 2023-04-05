@@ -37,6 +37,8 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
             case 405:
             case 6797:
                 return new SlayerPointMerchant();
+            case 5832:
+                return new MasterFarmerMerchant();
             default: return null;
         }
     }

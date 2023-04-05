@@ -636,6 +636,14 @@ public class ClickObject implements PacketType {
                     case 26149:
                         c.objectDistance = 2;
                         break;
+                    //farming patches
+                    case 7847:
+                        c.objectXOffset = 1;
+                        c.objectYOffset = 1;
+                        break;
+                    case 8150:
+                        c.objectDistance = 2;
+                        break;
                     default:
                         c.objectDistance = 1;
                         c.objectXOffset = 0;

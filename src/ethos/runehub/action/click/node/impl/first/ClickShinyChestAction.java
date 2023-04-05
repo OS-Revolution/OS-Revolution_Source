@@ -80,6 +80,7 @@ public class ClickShinyChestAction extends ClickNodeAction {
                             })
                     .build());
         }
+        this.getActor().getAttributes().getAchievementController().completeAchievement(459819806242196529L);
         this.stop();
     }
 

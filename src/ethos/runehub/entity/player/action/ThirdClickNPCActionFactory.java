@@ -19,6 +19,7 @@ public class ThirdClickNPCActionFactory {
             case 404:
             case 405:
             case 6797:
+            case 5832:
                 return new ClickOpenShopAction(player,nodeX,nodeY,nodeId,npcIndex);
             case 6988:
 

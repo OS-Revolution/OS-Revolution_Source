@@ -3,6 +3,8 @@ package ethos.runehub.entity.player;
 import ethos.model.npcs.NPC;
 import ethos.model.players.Player;
 import ethos.runehub.content.PlayPassController;
+import ethos.runehub.content.achievement.AchievementController;
+import ethos.runehub.content.journey.JourneyController;
 import ethos.runehub.content.rift.RiftFloorDAO;
 import ethos.runehub.content.rift.party.Party;
 import ethos.runehub.content.rift.Rift;
@@ -42,6 +44,16 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.deployedTrapList = new ArrayList<>(5);
         this.actionDispatcher.registerButton(actionEvent -> this.getOwner().getPA().closeAllWindows(),250002);
         this.stepCounter = new AdjustableInteger(0);
+        this.achievementController = new AchievementController(owner);
+        this.journeyController = new JourneyController(owner);
+    }
+
+    public JourneyController getJourneyController() {
+        return journeyController;
+    }
+
+    public AchievementController getAchievementController() {
+        return achievementController;
     }
 
     public AdjustableInteger getStepCounter() {
@@ -369,4 +381,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     private boolean enteringSkillStationTicket;
 
     private final AdjustableInteger stepCounter;
+
+    private final AchievementController achievementController;
+    private final JourneyController journeyController;
 }

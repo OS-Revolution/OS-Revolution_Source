@@ -19,10 +19,10 @@ public class FirstClickOpenRiftPortal extends ClickNodeAction {
 
     @Override
     protected void onTick() {
-        if (this.getActor().getAttributes().getRift() == null || this.getActor().getAttributes().getRift().getFloors().isEmpty()) {
-            this.getActor().getAttributes().getRift().start(this.getActor());
-        } else if(this.getActor().getAttributes().getRift() != null && !this.getActor().getAttributes().getRift().getFloors().isEmpty()) {
-            this.getActor().getAttributes().getRift().reenterRift(this.getActor());
+        if (this.getActor().getAttributes().getJobController() == null || this.getActor().getAttributes().getRiftInstance().getFloors().isEmpty()) {
+            this.getActor().getAttributes().getRiftInstance().start(this.getActor());
+        } else if(this.getActor().getAttributes().getRiftInstance() != null && !this.getActor().getAttributes().getRiftInstance().getFloors().isEmpty()) {
+            this.getActor().getAttributes().getRiftInstance().reenterRift(this.getActor());
         }
         this.stop();
     }

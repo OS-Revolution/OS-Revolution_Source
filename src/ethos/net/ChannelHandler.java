@@ -50,7 +50,8 @@ public class ChannelHandler extends SimpleChannelHandler {
 			Player client = session.getClient();
 			if (client != null) {
 				client.disconnected = true;
-				PlayerSave.saveGame(client);
+				System.out.println("Saved");
+//				PlayerSave.saveGame(client);
 			}
 			session = null;
 		}

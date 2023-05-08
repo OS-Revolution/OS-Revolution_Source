@@ -22,15 +22,12 @@ public class TravellingCommodityMerchantEvent extends TravellingMerchantEvent {
     public void execute() {
         NPC npc = NPCHandler.getNpc(merchant.getMerchantId());
         ((RotatingStockMerchant) merchant).rotateStock();
-
+        this.saleId = ((CommodityMerchant) MerchantCache.getInstance().read(1328)).getItemOnSaleId();
+        this.sale = ((CommodityMerchant) MerchantCache.getInstance().read(1328)).getSale();
         if (npc == null) {
             this.spawn();
-            this.saleId = ((CommodityMerchant) MerchantCache.getInstance().read(1328)).getItemOnSaleId();
-            this.sale = ((CommodityMerchant) MerchantCache.getInstance().read(1328)).getSale();
         } else {
             this.relocate();
-            this.saleId = -1;
-            this.sale = 0;
         }
     }
 
@@ -47,6 +44,7 @@ public class TravellingCommodityMerchantEvent extends TravellingMerchantEvent {
                         10
                 )
         );
+        System.out.println("Spawning with sale: " + saleId);
         PlayerHandler.executeGlobalMessage("^Market $Trader $Stan has a special offer of $" + decimalFormat.format(100 * (1.0 - sale
         )) + " % off @" + saleId + " !");
     }

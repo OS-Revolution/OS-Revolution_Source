@@ -2,6 +2,7 @@ package ethos.runehub.entity.player.action;
 
 import ethos.model.players.Player;
 import ethos.runehub.content.instance.BossArenaInstanceController;
+import ethos.runehub.entity.merchant.MerchantCache;
 import ethos.runehub.entity.player.action.impl.node.*;
 
 import java.util.logging.Logger;
@@ -11,6 +12,13 @@ public class SecondClickNodeActionFactory {
     public static ClickNodeAction getAction(Player player, int nodeX, int nodeY, int nodeId) {
         Logger.getGlobal().fine("Second Click Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
+            case 7528:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        MerchantCache.getInstance().read(nodeId).openShop(player);
+                    }
+                };
             case 6799:
             case 878:
             case 13542:

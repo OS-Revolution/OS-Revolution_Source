@@ -88,7 +88,7 @@ public class ObjectOptionOne {
         c.boneOnAltar = false;
         Tree tree = Tree.forObject(objectType);
         RaidObjects.clickObject1(c, objectType, obX, obY);
-        if (tree != null || objectType == 1289 || objectType == 1282 || objectType == 2092 || objectType == 2091) {
+        if (tree != null || objectType == 1289 || objectType == 1282 || objectType == 2092 || objectType == 2091 || objectType == 1363) {
             c.getSkillController().getWoodcutting().train(new ActiveWoodcuttingSkillAction(
                     c,
                     Skill.WOODCUTTING.getId(),

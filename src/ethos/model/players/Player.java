@@ -112,6 +112,8 @@ import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.content.instance.BossArenaInstanceController;
+import ethos.runehub.content.instance.impl.rift.RiftInstanceController;
+import ethos.runehub.content.instance.impl.tomb.TombInstanceController;
 import ethos.runehub.content.rift.RiftFloorDAO;
 import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
@@ -128,6 +130,7 @@ import ethos.runehub.markup.RSString;
 import ethos.runehub.skill.gathering.farming.FarmTick;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.support.sailing.Sailing;
+import ethos.runehub.skill.support.sailing.SailingSaveData;
 import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
 import ethos.runehub.ui.impl.tab.TabUI;
 import ethos.runehub.world.MembershipController;
@@ -1337,6 +1340,8 @@ public class Player extends Entity implements PlayerCharacterEntity {
         this.attributes = new PlayerCharacterAttribute(this);
         this.context = PlayerCharacterContextDataAccessObject.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
         this.slayerSave = PlayerSlayerSaveDAO.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
+        this.sailingSaveData = PlayerSailingSaveDAO.getInstance().read(StringUtils.longFromUUID(StringUtils.stringToUUID(name)));
+        this.skillController = new SkillController(this);
     }
 
     public Player getClient(String name) {
@@ -1581,6 +1586,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         absX = absY = -1;
         mapRegionX = mapRegionY = -1;
         currentX = currentY = 0;
+        PlayerSailingSaveDAO.getInstance().update(sailingSaveData);
         resetWalkingQueue();
     }
 
@@ -2247,16 +2253,17 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
 //        if (this.getSkilling().getSkill() != null)
 //            this.storeIdleGatheringData(this.getSkilling().getSkill().getId());
-        if (this.getAttributes().getRift() != null) {
-            final Point myPoint = new Point(absX, absY);
-            if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(floor -> floor.getBoundingBox().contains(myPoint))) {
-                this.getAttributes().getRift().leave(this);
-            }
-        }
+//        if (this.getAttributes().getRiftInstance() != null) {
+//            final Point myPoint = new Point(absX, absY);
+//            if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(floor -> floor.getBoundingBox().contains(myPoint))) {
+//                this.getAttributes().getRift().leave(this);
+//            }
+//        }
         attributes.getFarmTickExecutorService().shutdownNow();
 //        this.getContext().getPlayerSaveData().setItems(getAllItems().toArray(GameItem[]::new));
         if (attributes.getInstanceId() != -1) {
             BossArenaInstanceController.getInstance().closeInstanceForPlayer(this);
+            TombInstanceController.getInstance().closeInstanceForPlayer(this);
         }
         this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
         this.save();
@@ -4301,7 +4308,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             return true;
         } else if (Boundary.isIn(this, Boundary.EDGEVILLE_PERIMETER) && !Boundary.isIn(this, Boundary.EDGE_BANK) && getHeight() == 8) {
             return true;
-        }else if (Boundary.isIn(this, Boundary.SAFEPK)) {
+        } else if (Boundary.isIn(this, Boundary.SAFEPK)) {
             return true;
         }
         return Boundary.isIn(this, Boundary.WILDERNESS_PARAMETERS);
@@ -4375,11 +4382,15 @@ public class Player extends Entity implements PlayerCharacterEntity {
         if (attributes.isInRift()) {
             return true;
         }
-        if (attributes.getInstanceId() != -1 &&
-                BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getArea().contains(new Point(absX, absY))
-                && heightLevel == BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getFloodId()) {
+        if (attributes.getActiveInstance() != null &&
+                attributes.getActiveInstance().getArea().contains(new Point(absX, absY))) {
             return true;
         }
+//        if (attributes.getInstanceId() != -1 &&
+//                BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getArea().contains(new Point(absX, absY))
+//                && heightLevel == BossArenaInstanceController.getInstance().getInstance(attributes.getInstanceId()).getFloodId()) {
+//            return true;
+//        }
         if (Boundary.isIn(this, Zulrah.BOUNDARY) || Boundary.isIn(this, Boundary.CORPOREAL_BEAST_LAIR)
                 || Boundary.isIn(this, Boundary.KRAKEN_CAVE) || Boundary.isIn(this, Boundary.SCORPIA_LAIR)
                 || Boundary.isIn(this, Boundary.NECRO) || Boundary.isIn(this, Boundary.ROCK_CRAB)
@@ -6318,6 +6329,11 @@ public class Player extends Entity implements PlayerCharacterEntity {
     private final PlayerCharacterAttribute attributes;
     private final PlayerCharacterContext context;
     private final PlayerSlayerSave slayerSave;
+    private final SailingSaveData sailingSaveData;
+
+    public SailingSaveData getSailingSaveData() {
+        return sailingSaveData;
+    }
 
     public PlayerSlayerSave getSlayerSave() {
         return slayerSave;
@@ -6601,7 +6617,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         return PlayerFarmingSaveDAO.getInstance().read(this.getId());
     }
 
-    private final SkillController skillController = new SkillController(this);
+    private final SkillController skillController;// = new SkillController(this);
 
     public long getId() {
         return StringUtils.longFromUUID(StringUtils.stringToUUID(playerName));

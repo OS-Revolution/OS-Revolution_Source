@@ -5,24 +5,44 @@ import ethos.runehub.entity.merchant.MerchandiseSlot;
 import ethos.runehub.skill.Skill;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.model.entity.item.loot.LootTableEntry;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommodityMerchant extends RotatingStockMerchant {
 
-    private static final List<Integer> COMMODITIES = List.of(7472, 2365);
+    private static final List<Integer> COMMODITIES = LootTableLoader.getInstance().read(4225145936390343693L).getLootTableEntries()
+            .stream()
+            .filter(lootTableEntry -> lootTableEntry.getChance() == 1.0)
+            .map(LootTableEntry::getId)
+            .collect(Collectors.toList());
     private static final int MAX_STOCK = (int) (COMMODITIES.size() + (LootTableLoader.getInstance().read(4225145936390343693L).getLootTableEntries().size() * 0.2f));
 
     @Override
     public int getPriceMerchantWillSellFor(int itemId) {
         int baseValue = ItemIdContextLoader.getInstance().read(itemId).getValue();
         switch (itemId) {
-            case 6825:
+            case 6824:
+                baseValue = 200;
+                break;
+            case 6823:
+                baseValue = 150;
+                break;
+            case 6822:
                 baseValue = 100;
+                break;
+            case 85:
+            case 1464:
+                baseValue = 50;
                 break;
             case 19730:
             case 7411:
+            case 6825:
                 baseValue = 500;
+                break;
+            case 7478:
+                baseValue = 2500;
                 break;
             case 13190:
                 baseValue = 5000;
@@ -75,25 +95,27 @@ public class CommodityMerchant extends RotatingStockMerchant {
     public boolean sellItemToPlayer(int itemId, int amount, int slot, Player player) {
         final int price = this.getPriceMerchantWillSellFor(itemId) * amount;
 //        if (amount <= this.getMerchandise().get(slot).getAmount()) {
-            if (player.getItems().playerHasItem(getCurrencyId(), price) || (itemId == 1459 && player.getItems().playerHasItem(995, price))) {
-                if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(itemId).isStackable() ? 0 : amount)) {
-                    if (itemId == 1459) {
-                        player.getItems().deleteItem(995, price);
-                        player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + 995);
-                    } else {
-                        player.getItems().deleteItem(getCurrencyId(), price);
-                        player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + getCurrencyId());
-                    }
-                    player.getItems().addItem(itemId, amount);
-                    player.getItems().resetItems(3823);
-                    this.updateShop(player);
-                    return true;
+        if (player.getItems().playerHasItem(getCurrencyId(), price) || (itemId == 1459 && player.getItems().playerHasItem(995, price))) {
+            if (player.getItems().freeSlots() > (ItemIdContextLoader.getInstance().read(itemId).isStackable() ? 0 : amount)) {
+                if (itemId == 1459) {
+                    player.getItems().deleteItem(995, price);
+                    player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + 995);
                 } else {
-                    player.sendMessage("You do not have enough inventory space.");
+                    player.getItems().deleteItem(getCurrencyId(), price);
+                    player.sendMessage("You bought #" + amount + " @" + itemId + " for #" + price + " @" + getCurrencyId());
                 }
+                player.getItems().addItem(itemId, amount);
+                player.getItems().resetItems(3823);
+                this.getMerchandiseSlot(itemId).setAmount(this.getMerchandiseSlot(itemId).getAmount() - amount);
+                this.updateShop(player);
+                this.updateShop(player);
+                return true;
             } else {
-                player.sendMessage("Come back when you're a little bit...richer!");
+                player.sendMessage("You do not have enough inventory space.");
             }
+        } else {
+            player.sendMessage("Come back when you're a little bit...richer!");
+        }
 //        }
         return false;
     }
@@ -116,7 +138,7 @@ public class CommodityMerchant extends RotatingStockMerchant {
     }
 
     public CommodityMerchant() {
-        super(1459, 1328, "Jewel Shop", 4225145936390343693L, COMMODITIES, 1.0f, MAX_STOCK);
+        super(1459, 1328, "Jewel Shop", 4225145936390343693L, List.of(), 1.0f, MAX_STOCK);
     }
 
     private double sale;

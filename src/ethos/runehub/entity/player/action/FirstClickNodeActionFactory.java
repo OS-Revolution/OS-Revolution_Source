@@ -1,11 +1,22 @@
 package ethos.runehub.entity.player.action;
 
+import ethos.clip.Region;
 import ethos.model.players.Player;
+import ethos.runehub.RunehubUtils;
 import ethos.runehub.content.instance.BossArenaInstanceController;
+import ethos.runehub.content.instance.impl.tomb.TombInstanceController;
+import ethos.runehub.entity.item.ItemInteractionContext;
+import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.entity.node.Node;
 import ethos.runehub.entity.player.action.impl.node.*;
+import ethos.runehub.skill.artisan.actions.ManualMilkCowAction;
 import ethos.runehub.skill.node.impl.support.SupportNode;
 import ethos.runehub.skill.support.firemaking.action.LightBurnerAction;
 import ethos.runehub.ui.impl.BossInstanceUI;
+import ethos.runehub.ui.impl.TombRaiderUI;
+import ethos.runehub.ui.impl.cooking.BrewingUI;
+import ethos.runehub.ui.impl.cooking.CookingUI;
+import org.runehub.api.model.world.Face;
 import org.runehub.api.util.SkillDictionary;
 
 import java.util.logging.Logger;
@@ -15,11 +26,83 @@ public class FirstClickNodeActionFactory {
     public static ClickNodeAction getAction(Player player, int nodeX, int nodeY, int nodeId) {
         Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
+            case 13619:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getPA().movePlayer(3232, 9293 + 1, TombInstanceController.getInstance().getInstance(player.getAttributes().getInstanceId()).getFloodId());
+                    }
+                };
+            case 13638:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.sendUI(new TombRaiderUI(player,nodeX,nodeY));
+                    }
+                };
+            case 6555:
+            case 6553:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getPA().closeAllWindows();
+                        player.getOutStream().createFrame(29);
+                    }
+                };
+            case 6512:
+            case 6513:
+            case 6514:
+            case 6515:
+            case 6517:
+            case 6516:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                      TombInstanceController.getInstance().searchSarcophagus(
+                              player.getAttributes().getInstanceId(),
+                              nodeId,
+                              nodeX,
+                              nodeY
+                      );
+                    }
+                };
+            case 7528:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.sendUI(new BrewingUI(player));
+                    }
+                };
+            case 11695:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getPA().sendFrame164(15336);
+                    }
+                };
+            case 114:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.sendUI(new CookingUI(player,new ItemInteractionContext(nodeX,nodeY,player.heightLevel,-1,nodeId,1,1)));
+                    }
+                };
+            case 15931:
+                return new ClickLogDropOffBox(player, nodeX, nodeY, nodeId);
+            case 2611:
+                return new ClickCateringTable(player, nodeX, nodeY, nodeId);
             case 13212:
                 return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
                     @Override
                     public void perform() {
                         player.getSkillController().getFiremaking().train(new LightBurnerAction(player,nodeId,nodeX,nodeY,player.heightLevel));
+                    }
+                };
+            case 8689:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getSkillController().getFarming().train(new ManualMilkCowAction(player));
                     }
                 };
             case 11806:

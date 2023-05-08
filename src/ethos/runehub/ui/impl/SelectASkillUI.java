@@ -1,6 +1,9 @@
 package ethos.runehub.ui.impl;
 
 import ethos.model.players.Player;
+import ethos.runehub.RunehubUtils;
+import ethos.runehub.dialog.DialogOption;
+import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.ui.GameUI;
 import ethos.util.Misc;
 import org.runehub.api.util.SkillDictionary;
@@ -9,7 +12,37 @@ public class SelectASkillUI extends GameUI {
 
     @Override
     protected void onOpen() {
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.ATTACK), 10252);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.STRENGTH), 10253);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.RANGED), 10254);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.MAGIC), 10255);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.DEFENCE), 11000);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.HITPOINTS), 11001);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.PRAYER), 11002);
 
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.AGILITY), 11003);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.HERBLORE), 11004);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.THIEVING), 11005);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.CRAFTING), 11006);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.RUNECRAFTING), 11007);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.SLAYER), 47002);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.FARMING), 54090);
+
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.MINING), 11008);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.SMITHING), 11009);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.FISHING), 11010);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.COOKING), 11011);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.FIREMAKING), 11012);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.WOODCUTTING), 11013);
+        this.registerButton(actionEvent -> selectSkill(SkillDictionary.Skill.FLETCHING), 11014);
+
+        this.registerButton(actionEvent -> {
+            if(this.getPlayer().getAttributes().getSkillSelected() > -1) {
+                this.onEvent();
+            } else {
+                this.getPlayer().sendMessage("You must select a skill first.");
+            }
+        }, 11015);
     }
 
     @Override
@@ -21,18 +54,7 @@ public class SelectASkillUI extends GameUI {
     protected void onAction(int buttonId) {
         final SkillDictionary.Skill skill = this.getSkill(buttonId);
 
-        if (skill != null) {
-            this.getPlayer().getAttributes().setSkillSelected(skill.getId());
-            this.getPlayer().sendMessage("You've selected $" + this.adaptSkillName(skill));
-        } else if(buttonId == 11015) {
-            if(this.getPlayer().getAttributes().getSkillSelected() > -1) {
-                this.onEvent();
-            } else {
-                this.getPlayer().sendMessage("You must select a skill first.");
-            }
-        } else {
-            this.close();
-        }
+
     }
 
     @Override
@@ -40,8 +62,17 @@ public class SelectASkillUI extends GameUI {
         this.setState(State.COMPLETED);
     }
 
+    private void selectSkill(SkillDictionary.Skill skill) {
+        if (skill != null) {
+            this.getPlayer().getAttributes().setSkillSelected(skill.getId());
+            this.getPlayer().sendMessage("You've selected $" + this.adaptSkillName(skill));
+        } else {
+            this.close();
+        }
+    }
+
     private String adaptSkillName(SkillDictionary.Skill skill) {
-        return skill == SkillDictionary.Skill.FARMING ? Misc.capitalize("foraging") : Misc.capitalize(skill.name().toLowerCase());
+        return RunehubUtils.getSkillName(skill.getId());
     }
 
     private SkillDictionary.Skill getSkill(int buttonId) {

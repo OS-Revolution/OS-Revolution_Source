@@ -6,6 +6,8 @@ import ethos.runehub.ui.component.impl.TextComponent;
 import ethos.runehub.ui.event.action.ActionEvent;
 import ethos.runehub.ui.event.action.ActionListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class GameUI {
@@ -36,6 +38,7 @@ public abstract class GameUI {
         player.getAttributes().setActiveUI(null);
         this.setShowing(false);
         this.setState(State.CANCELLED);
+        this.buttonIds.forEach(integer -> this.getPlayer().getAttributes().getActionDispatcher().remove(integer));
     }
 
     public void action(int buttonId) {
@@ -56,10 +59,12 @@ public abstract class GameUI {
     }
 
     protected void registerButton(ActionListener actionListener, int id) {
+        this.buttonIds.add(id);
         this.getPlayer().getAttributes().getActionDispatcher().registerButton(actionListener, id);
     }
 
     protected void registerButton(Button button) {
+        this.buttonIds.add(button.getLineId());
         this.getPlayer().getAttributes().getActionDispatcher().registerButton(button);
     }
 
@@ -106,12 +111,14 @@ public abstract class GameUI {
     public GameUI(int id, Player player) {
         this.id = id;
         this.player = player;
+        this.buttonIds = new ArrayList<>();
     }
 
     private boolean showing, walkable, closable = true;
     private final Player player;
     private final int id;
     private State state;
+    private final List<Integer> buttonIds;
 
     public enum State {
         ACTIVE, COMPLETED, CANCELLED;

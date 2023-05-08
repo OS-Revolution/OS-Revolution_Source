@@ -3,6 +3,7 @@ package ethos.runehub.content.journey;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.PointController;
 import ethos.runehub.content.achievement.AchievementCache;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.world.RegionCache;
@@ -10,9 +11,42 @@ import ethos.runehub.world.WorldSettingsController;
 import org.runehub.api.util.math.geometry.Point;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class JourneyController {
+
+    public void unlockPath(JourneyPath path) {
+        if (!player.getContext().getPlayerSaveData().getUnlockedPath().contains(path.getId())) {
+            if (player.getAttributes().getPointController().subtractPoints(PointController.PointType.JOURNEY,1)) {
+                player.getContext().getPlayerSaveData().getUnlockedPath().add(path.getId());
+                player.sendMessage("You unlock the " + path.getName() + " journey path!");
+            } else {
+                player.sendMessage("You do not have enough journey points to unlock this.");
+            }
+        } else {
+            player.sendMessage("You've already unlocked this path.");
+        }
+    }
+
+    public void startJourney(Journey journey) {
+        if (isJourneyOnAvailablePath(journey)) {
+            if (player.getContext().getPlayerSaveData().getCompetedJourney().contains(player.getContext().getPlayerSaveData().getJourneyId())) {
+                if (hasJourneyPrerequisites(journey)) {
+                    player.getContext().getPlayerSaveData().setJourneyId(journey.getId());
+                    player.getContext().getPlayerSaveData().setJourneyStep(0);
+                    player.getContext().getPlayerSaveData().setCurrentJourneyStepProgress(0);
+                    player.sendMessage("^Journey You've started the " + journey.getName() + " journey.");
+                } else {
+                    player.sendMessage("You do not have the pre-requisites to start this.");
+                }
+            } else {
+                player.sendMessage("You must complete your current journey before starting a new one.");
+            }
+        } else {
+            player.sendMessage("You do not have this path unlocked.");
+        }
+    }
 
     public void checkJourney(long id, int amount) {
         if (player.getContext().getPlayerSaveData().getJourneyId() > 0) {
@@ -97,6 +131,15 @@ public class JourneyController {
         return (int) (((double)(player.getContext().getPlayerSaveData().getJourneyStep() + progressOnCurrentStep) / (double) journey.getSteps().length) * 100.0D);
     }
 
+    private boolean hasJourneyPrerequisites(Journey journey) {
+        return player.getContext().getPlayerSaveData().getCompetedJourney().containsAll(List.of(journey.getRequiredJourney()));
+    }
+
+    private boolean isJourneyOnAvailablePath(Journey journey) {
+        return player.getContext().getPlayerSaveData().getUnlockedPath().stream()
+                .anyMatch(pathId -> Arrays.stream(JourneyPathCache.getInstance().read(pathId).getJourney()).anyMatch(value -> value == journey.getId()));
+    }
+
     private boolean isSameTarget(int id, JourneyStep step) {
         return Arrays.stream(step.getTargetId()).anyMatch(value -> value == id);
     }
@@ -118,6 +161,7 @@ public class JourneyController {
     private void completeStep(JourneyStep step) {
         final int currentProgress = player.getContext().getPlayerSaveData().getCurrentJourneyStepProgress();
         player.getContext().getPlayerSaveData().setCurrentJourneyStepProgress(currentProgress + step.getProgressIncrement());
+        System.out.println("Progress updated from: " + currentProgress + " to " + (currentProgress + step.getProgressIncrement()));
         if (player.getContext().getPlayerSaveData().getCurrentJourneyStepProgress() >= step.getRequiredProgress()) {
             player.sendMessage("^Journey @mag@You completed a Journey step. Open the Journey log to claim your reward.");
             if (isJourneyComplete(step,JourneyCache.getInstance().read(player.getContext().getPlayerSaveData().getJourneyId()))) {

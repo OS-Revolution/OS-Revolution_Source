@@ -3,7 +3,11 @@ package ethos.runehub.entity.player;
 import ethos.model.npcs.NPC;
 import ethos.model.players.Player;
 import ethos.runehub.content.PlayPassController;
+import ethos.runehub.content.PointController;
 import ethos.runehub.content.achievement.AchievementController;
+import ethos.runehub.content.instance.Instance;
+import ethos.runehub.content.instance.impl.rift.RiftInstance;
+import ethos.runehub.content.job.JobController;
 import ethos.runehub.content.journey.JourneyController;
 import ethos.runehub.content.rift.RiftFloorDAO;
 import ethos.runehub.content.rift.party.Party;
@@ -46,6 +50,16 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.stepCounter = new AdjustableInteger(0);
         this.achievementController = new AchievementController(owner);
         this.journeyController = new JourneyController(owner);
+        this.pointController = new PointController(owner);
+        this.jobController = new JobController(owner);
+    }
+
+    public JobController getJobController() {
+        return jobController;
+    }
+
+    public PointController getPointController() {
+        return pointController;
     }
 
     public JourneyController getJourneyController() {
@@ -342,6 +356,30 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.enteringSkillStationTicket = enteringSkillStationTicket;
     }
 
+    public RiftInstance getRiftInstance() {
+        return riftInstance;
+    }
+
+    public void setRiftInstance(RiftInstance riftInstance) {
+        this.riftInstance = riftInstance;
+    }
+
+    public Instance getActiveInstance() {
+        return activeInstance;
+    }
+
+    public void setActiveInstance(Instance activeInstance) {
+        this.activeInstance = activeInstance;
+    }
+
+    public String getTombRaiderPassword() {
+        return tombRaiderPassword;
+    }
+
+    public void setTombRaiderPassword(String tombRaiderPassword) {
+        this.tombRaiderPassword = tombRaiderPassword;
+    }
+
     @Override
     public Player getOwner() {
         return (Player) super.getOwner();
@@ -363,10 +401,12 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     private final ScheduledExecutorService farmTickExecutorService = Executors.newScheduledThreadPool(1);
 
     private final Map<Integer, ArrayList<Node>> instanceNodes;
+    private Instance activeInstance;
 
     private Rift rift;
     private int startingFloor;
     private Party party;
+    private RiftInstance riftInstance;
 
     private Connection runehubConnnection;
 
@@ -384,4 +424,8 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
 
     private final AchievementController achievementController;
     private final JourneyController journeyController;
+    private final PointController pointController;
+    private final JobController jobController;
+
+    private String tombRaiderPassword;
 }

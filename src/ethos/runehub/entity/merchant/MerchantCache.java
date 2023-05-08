@@ -18,6 +18,8 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
     @Override
     protected Merchant load(Integer shopId) {
         switch (shopId) {
+            case 1039:
+                return new JewelMerchant();
             case 2148:
                 return new ExchangeMerchant();
             case 2149:
@@ -39,6 +41,8 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
                 return new SlayerPointMerchant();
             case 5832:
                 return new MasterFarmerMerchant();
+            case 7528:
+                return new FermentingVatMerchant();
             default: return null;
         }
     }

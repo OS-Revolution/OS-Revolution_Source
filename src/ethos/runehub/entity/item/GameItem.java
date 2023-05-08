@@ -2,6 +2,19 @@ package ethos.runehub.entity.item;
 
 public class GameItem {
 
+    public static GameItem decodeGameItem(long encoded) {
+        int id = (int) (encoded >>> 32);
+        int amount = (int) (encoded & 0xFFFFFFFFL);
+        return new GameItem(id, amount);
+    }
+
+    public long encodeGameItem() {
+        long encoded = this.getId();
+        encoded <<= 32;
+        encoded |= (this.getAmount() & 0xFFFFFFFFL);
+        return encoded;
+    }
+
     public int getId() {
         return id;
     }

@@ -4,6 +4,7 @@ import ethos.Server;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
+import ethos.runehub.world.WorldController;
 
 public class MapRegionFinish implements PacketType {
 

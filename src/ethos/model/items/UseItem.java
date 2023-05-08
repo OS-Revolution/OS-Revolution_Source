@@ -1,5 +1,6 @@
 package ethos.model.items;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -140,26 +141,27 @@ public class UseItem {
             }
         }
 
-            ItemInteractionLoader.getInstance().readAll()
-                    .stream()
-                    .filter(itemInteraction -> itemInteraction.getUsedId() == itemId)
-                    .filter(itemInteraction -> itemInteraction.getUsedOnId() == objectID)
-                    .filter(itemInteraction -> itemInteraction.getInteractionTypeId() == ItemInteraction.OBJECT_INTERACTION)
-                    .findAny().ifPresent(itemInteraction -> {
-                        try {
-                            Logger.getGlobal().fine("Processing Object Item Interaction: " + itemInteraction.getUuid()
-                                    + "\nReaction ID: " + itemInteraction.getReactionUuid());
-                            c.getAttributes().getItemReactionProcessor().process(
-                                    new ItemInteractionContext(objectX, objectY, c.heightLevel, itemId, objectID, c.getItems().getItemAmount(itemId), 1),
-                                    itemInteraction,
-                                    ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
-                                            itemInteraction.getReactionUuid()),
-                                    c
-                            );
-                        } catch (NullPointerException e) {
-                            c.sendMessage("Nothing interesting happens.");
-                        }
-                    });
+        ItemInteractionLoader.getInstance().readAll()
+                .stream()
+                .filter(itemInteraction -> itemInteraction.getUsedId() == itemId)
+                .filter(itemInteraction -> itemInteraction.getUsedOnId() == objectID)
+                .filter(itemInteraction -> itemInteraction.getInteractionTypeId() == ItemInteraction.OBJECT_INTERACTION)
+                .findAny().ifPresent(itemInteraction -> {
+                    try {
+                        Logger.getGlobal().fine("Processing Object Item Interaction: " + itemInteraction.getUuid()
+                                + "\nReaction ID: " + itemInteraction.getReactionUuid());
+                        c.getAttributes().getItemReactionProcessor().process(
+                                new ItemInteractionContext(objectX, objectY, c.heightLevel, itemId, objectID, c.getItems().getItemAmount(itemId), 1),
+                                itemInteraction,
+                                ItemReactionFactory.getItemReaction(itemInteraction.getReactionKey(),
+                                        itemInteraction.getReactionUuid()),
+                                c
+                        );
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        c.sendMessage("Nothing interesting happens.");
+                    }
+                });
         switch (objectID) {
             case 7849:
             case 8554:
@@ -208,7 +210,7 @@ public class UseItem {
                                     c.getAttributes().getActiveDialogSequence().next();
                                     c.getPA().closeAllWindows();
                                 }
-                            },new DialogOption("Nevermind") {
+                            }, new DialogOption("Nevermind") {
                                 @Override
                                 public void onAction() {
                                     c.getAttributes().getActiveDialogSequence().next();
@@ -217,7 +219,7 @@ public class UseItem {
                             })
                             .build());
 
-                }else
+                } else
                     c.getSkillController().getFarming().train(new PlantSeedAction(c, new ItemInteractionContext(objectX, objectY, 0, itemId, objectID, c.getItems().getItemAmount(itemId), 1)));
 
                 break;
@@ -446,6 +448,27 @@ public class UseItem {
         GameItem gameItemUsedWith = new GameItem(useWith, c.playerItemsN[itemUsedSlot], usedWithSlot);
         c.getPA().resetVariables();
         List<ItemCombinations> itemCombinations = ItemCombinations.getCombinations(new GameItem(itemUsed), new GameItem(useWith));
+        if (itemUsed == 1887) {
+            List<Integer> ingredients = List.of(1944, 1933, 1927);
+            if (useWith == 1944 || useWith == 1933 || useWith == 1927) {
+                if (ingredients.stream().allMatch(itemId -> c.getItems().playerHasItem(itemId))) {
+                    ingredients.forEach(itemId -> c.getItems().deleteItem2(itemId,1));
+                    c.getItems().deleteItem2(1887,1);
+                    c.getItems().addItem(1889,1);
+                } else {
+                    c.sendMessage("You need an egg, a pot of flour, and a bucket of milk to make a cake.");
+                }
+            }
+        } else if (useWith == 1887) {
+            List<Integer> ingredients = List.of(1944, 1933, 1927);
+            if (ingredients.stream().allMatch(itemId -> c.getItems().playerHasItem(itemId))) {
+                ingredients.forEach(itemId -> c.getItems().deleteItem2(itemId,1));
+                c.getItems().deleteItem2(1887,1);
+                c.getItems().addItem(1889,1);
+            } else {
+                c.sendMessage("You need an egg, a pot of flour, and a bucket of milk to make a cake.");
+            }
+        }
         if (useWith == 3103 || itemUsed == 3103) {
             int targetId = -1;
             int targetSlot = -1;
@@ -470,6 +493,7 @@ public class UseItem {
             } else {
                 c.sendMessage("This item can not be noted.");
             }
+
         } else {
             ItemInteractionLoader.getInstance().readAll()
                     .stream()

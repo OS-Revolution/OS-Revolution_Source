@@ -22,7 +22,7 @@ public class InstanceTimerUI extends GameUI {
     }
 
     public InstanceTimerUI(Player player) {
-        super(47700, player);
+        super(53000, player);//47700?
         this.setWalkable(true);
     }
 }

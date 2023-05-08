@@ -2540,9 +2540,14 @@ public class PlayerAssistant {
             c.getBankPin().open(2);
             return;
         }
-        if (c.getAttributes().getInstanceId() != -1 && BossArenaInstanceController.getInstance().getInstance(c.getAttributes().getInstanceId())
-                .getArea().contains(new Point(c.absX,c.absY))) {
-            c.sendMessage("You must use the book to exit.");
+//        if (c.getAttributes().getInstanceId() != -1 && BossArenaInstanceController.getInstance().getInstance(c.getAttributes().getInstanceId())
+//                .getArea().contains(new Point(c.absX,c.absY))) {
+//            c.sendMessage("You must use the book to exit.");
+//            return;
+//        }
+
+        if (c.getAttributes().getActiveInstance() != null && c.getAttributes().getActiveInstance().getArea().contains(new Point(c.absX,c.absY))) {
+            c.sendMessage("You may not teleport out of an instance.");
             return;
         }
         if (Server.getMultiplayerSessionListener().inAnySession(c)) {

@@ -37,6 +37,7 @@ public class CastModernTeleportSkillAction extends SkillAction {
         this.getActor().getPA().movePlayer(selectedTeleportPoint.getX(),selectedTeleportPoint.getY(),0);
         this.getActor().getSkillController().addXP(this.getSkillId(),spell.getCastXP());
         this.deleteRunes(this.getRuneItemIdsToRemove(this.getRuneIdentifiersToRemove()));
+        this.stop();
     }
 
     @Override

@@ -14,6 +14,7 @@ import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
 import ethos.runehub.LootTableContainerUtils;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.instance.impl.rift.NephalemRiftInstance;
 import ethos.runehub.content.rift.impl.NephalemRift;
 import ethos.runehub.entity.item.ItemController;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
@@ -828,7 +829,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
     public void dropLootFor(Player player) {
         final Location3D dropLocation = new Location3D(this.getX(), this.getY(), player.getHeight());
         Logger.getGlobal().info("Dropping Loot @: X:" + this.getX() + " Y: " + this.getY() + " Height: " + player.getHeight());
-        if (player.getAttributes().getRift() == null || player.getAttributes().getRift() instanceof NephalemRift) {
+        if (player.getAttributes().getRiftInstance() == null || player.getAttributes().getRiftInstance() instanceof NephalemRiftInstance) {
             LootTableContainerUtils.getLootTableContainer(npcType, ContainerType.NPC).ifPresent(lootTableContainer -> {
                 lootTableContainer.roll(player.getAttributes().getMagicFind()).forEach(lootTable -> {
                     LootTableLoader.getInstance().read(lootTable.getId()).roll(player.getAttributes().getMagicFind()).forEach(loot -> {

@@ -1,6 +1,5 @@
 package ethos.runehub.ui;
 
-import ethos.model.players.Player;
 import ethos.runehub.ui.component.button.Button;
 import ethos.runehub.ui.event.action.ActionListener;
 
@@ -15,6 +14,11 @@ public class ActionDispatcher {
         button.addActionListener(actionListener);
         actionMap.put(id, button);
     }
+
+    public void remove(int id) {
+        actionMap.remove(id);
+    }
+
 
     public void registerButton(Button button) {
         actionMap.put(button.getLineId(), button);

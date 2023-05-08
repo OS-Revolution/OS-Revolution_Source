@@ -67,7 +67,7 @@ public class BossArenaInstanceController {
     }
 
     public void closeInstanceForPlayer(Player player) {
-        if (player.getAttributes().getInstanceId() != -1) {
+        if (player.getAttributes().getInstanceId() != -1 && getInstance(player.getAttributes().getInstanceId()) != null) {
             if (getInstance(player.getAttributes().getInstanceId()).getArea().contains(new Point(player.absX, player.absY))) {
                 player.getPA().movePlayer(Config.RESPAWN_X, Config.RESPAWN_Y, 0);
             }

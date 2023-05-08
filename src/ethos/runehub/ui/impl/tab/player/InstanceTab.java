@@ -19,7 +19,6 @@ public class InstanceTab extends TabUI {
 
     @Override
     protected void onOpen() {
-        System.out.println("Opening");
         this.writeLine(titleLabel);
         this.writeLine(headerLabel);
         this.writeLine(subheaderLabel);

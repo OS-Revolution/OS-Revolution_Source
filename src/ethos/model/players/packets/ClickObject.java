@@ -621,6 +621,8 @@ public class ClickObject implements PacketType {
                     case 1307: // maple
                     case 1309: // yew
                     case 1306: // yew
+                    case 1363:
+                    case 2091:
                         c.objectDistance = 3;
                         break;
                     case 26250:

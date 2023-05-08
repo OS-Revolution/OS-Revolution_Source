@@ -3,6 +3,7 @@ package ethos.runehub.skill.artisan.cooking;
 import ethos.runehub.entity.item.ItemInteraction;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.entity.item.ItemInteractionLoader;
+import ethos.runehub.skill.artisan.cooking.food.Cookable;
 import org.runehub.api.util.IDManager;
 import org.runehub.api.util.SkillDictionary;
 
@@ -37,6 +38,35 @@ public class CookingTest {
 
 
 
+    }
+
+    private static void createMeats() {
+        Cookable rawBeef = new Cookable(2132,2142,2146,30,1,128,512,4,false);
+        Cookable rawBear = new Cookable(2136,2142,2146,30,1,128,512,4,false);
+        Cookable rawRat = new Cookable(2134,2142,2146,30,1,128,512,4,false);
+        Cookable rawYak = new Cookable(10816,2142,2146,30,1,128,512,4,false);
+        Cookable rawShrimps = new Cookable(317,315,323,30,1,128,512,4,false);
+        Cookable rawChicken = new Cookable(2138,2140,2144,30,1,128,512,4,false);
+        Cookable rawAnchovies = new Cookable(321,319,323,30,1,128,512,4,false);
+        Cookable rawSardines = new Cookable(327,325,369,40,1,118,492,4,false);
+        Cookable rawHerring = new Cookable(345,347,357,50,5,108,472,4,false);
+        Cookable rawMackerel = new Cookable(353,355,357,60,10,98,452,4,false);
+        Cookable rawTrout = new Cookable(335,333,343,70,15,88,432,4,false);
+        Cookable rawCod = new Cookable(341,339,343,75,18,88,422,4,false);
+        Cookable rawPike = new Cookable(349,351,343,80,20,78,412,4,false);
+        Cookable rawSalmon = new Cookable(331,329,343,90,25,68,392,4,false);
+        Cookable rawTuna = new Cookable(359,361,367,100,30,58,372,4,false);
+        Cookable rawLobster = new Cookable(377,379,381,120,40,38,332,4,false);
+        Cookable rawBass = new Cookable(363,365,367,130,43,33,312,4,false);
+        Cookable rawSwordfish = new Cookable(371,373,375,140,45,18,292,4,false);
+        Cookable rawMonkfish = new Cookable(7944,7946,7948,150,62,11,275,4,false);
+        Cookable rawShark = new Cookable(383,385,387,210,80,1,202,4,false);
+        Cookable rawSeaTurtle = new Cookable(395,397,399,211,82,1,202,4,false);
+        Cookable rawAnglerfish = new Cookable(13439,13441,13443,230,84,1,200,4,false);
+        Cookable rawDarkcrab = new Cookable(11934,11936,11938,215,90,10,222,4,false);
+        Cookable rawManta = new Cookable(389,391,393,216,91,1,202,4,false);
+        Cookable bread = new Cookable(2307,2309,2311,40,1,118,492,4,false);
+        Cookable redBerryPie = new Cookable(2321,2325,2329,78,10,98,452,4,false);
     }
 
     private static void createDataForCookingOnFire(int usedId, int usedWithId,

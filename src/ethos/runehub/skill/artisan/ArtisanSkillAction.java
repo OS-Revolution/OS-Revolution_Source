@@ -19,32 +19,45 @@ public abstract class ArtisanSkillAction extends SkillAction {
     @Override
     protected void onActionStop() {
         this.getActor().getAttributes().setIntegerInput(0);
+        this.getActor().getAttributes().setSkillStationId(-1);
     }
 
     @Override
     protected void onActionStart() {
+        this.getActor().startAnimation(animationId);
     }
 
     @Override
     protected void onTick() {
         Logger.getGlobal().fine("Starting Artisan Sequence");
-        if (this.getIterations() != 0) {
-            if (iterations <= this.getIterations()) {
-                this.getActor().startAnimation(animationId);
+        if (this.getIterations() == 0 || iterations< this.getIterations()) {
+            this.getActor().startAnimation(animationId);
+            if (this.isSuccessful(reaction.getLow(), reaction.getHigh())) {
+                this.onSuccess();
+            } else {
+                this.onFailure();
             }
-            if (iterations <= this.getIterations()) {
-                iterations++;
-//            if (super.getElapsedTicks() >= refreshTick * 2 && super.getElapsedTicks() % (refreshTick) == 0) {
-                if (this.isSuccessful(reaction.getLow(), reaction.getHigh())) {
-                    this.onSuccess();
-                } else {
-                    this.onFailure();
-                }
-//            }
-            } else if (iterations >= this.getIterations() && this.getIterations() > 0) {
-                this.stop();
-            }
+            iterations++;
+        } else {
+            this.stop();
         }
+//        if (this.getIterations() != 0) {
+//            if (iterations <= this.getIterations()) {
+//                this.getActor().startAnimation(animationId);
+//            }
+//            if (iterations <= this.getIterations()) {
+//                iterations++;
+////            if (super.getElapsedTicks() >= refreshTick * 2 && super.getElapsedTicks() % (refreshTick) == 0) {
+//                if (this.isSuccessful(reaction.getLow(), reaction.getHigh())) {
+//                    this.onSuccess();
+//                } else {
+//                    this.onFailure();
+//                }
+////            }
+//            } else if (iterations >= this.getIterations() && this.getIterations() > 0) {
+//                this.stop();
+//            }
+//        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import ethos.runehub.action.click.DefaultHomeTeleportAction;
 import ethos.runehub.action.click.InstantHomeTeleportAction;
 import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.skill.artisan.cooking.CookingItemReaction;
+import ethos.runehub.skill.artisan.cooking.action.ChurnDairyAction;
 import ethos.runehub.skill.artisan.cooking.action.CookOnNodeAction;
 import ethos.runehub.skill.combat.magic.action.CastModernTeleportSkillAction;
 import ethos.runehub.skill.combat.magic.spell.SpellCache;
@@ -249,6 +250,9 @@ public class ClickingButtons implements PacketType {
             case 4140:
                 c.getSkillController().getMagic().train(new CastModernTeleportSkillAction(c,new Rectangle(new Point(3211,3423),new Point(3214,3425)), SpellCache.getInstance().read(0)));
                 break;
+            case 4143:
+                c.getSkillController().getMagic().train(new CastModernTeleportSkillAction(c,new Rectangle(new Point(3222, 3218),new Point(3222, 3218)), SpellCache.getInstance().read(1)));
+                break;
             case 31066:
                 c.getPA().closeAllWindows();
                 break;
@@ -278,15 +282,15 @@ public class ClickingButtons implements PacketType {
 //                c.getPA().showInterface(51000);
 //                c.getTeleport().selection(c, 0);
 //                break;
-            case 4143: //lumbridge
-//                if (c.teleTimer > 0) {
-//                    return;
-//                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-//                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
-//                    return;
-//                }
-//                c.getPA().spellTeleport(3222, 3218, 0, false);
-                break;
+//            case 4143: //lumbridge
+////                if (c.teleTimer > 0) {
+////                    return;
+////                } else if (c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
+////                    c.sendMessage("You can't teleport above " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
+////                    return;
+////                }
+////                c.getPA().spellTeleport(3222, 3218, 0, false);
+//                break;
             case 29031: // trollheim
 //                if (c.teleTimer > 0) {
 //                    return;
@@ -714,6 +718,15 @@ public class ClickingButtons implements PacketType {
                     // }
                     c.getPA().alchemy(c.droppedItem, "high");
                 }
+                break;
+            case 59239:
+                c.getSkillController().getCooking().train(new ChurnDairyAction(c,10,6697));
+                break;
+            case 59238:
+                c.getSkillController().getCooking().train(new ChurnDairyAction(c,10,2130));
+                break;
+            case 59240:
+                c.getSkillController().getCooking().train(new ChurnDairyAction(c,10,1985));
                 break;
             case 55096:// This is the button id
                 c.getPA().removeAllWindows();// Choosing No will remove all the

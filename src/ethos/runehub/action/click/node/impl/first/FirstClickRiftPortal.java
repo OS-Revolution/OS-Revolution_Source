@@ -3,9 +3,9 @@ package ethos.runehub.action.click.node.impl.first;
 import ethos.Server;
 import ethos.model.players.Player;
 import ethos.runehub.action.click.node.ClickNodeAction;
+import ethos.runehub.content.instance.impl.rift.RiftInstanceController;
 import ethos.runehub.content.rift.Rift;
 import ethos.runehub.content.rift.RiftDifficulty;
-import ethos.runehub.content.rift.impl.NephalemRift;
 import ethos.runehub.dialog.DialogOption;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.node.Node;
@@ -79,10 +79,11 @@ public class FirstClickRiftPortal extends ClickNodeAction {
                             if (riftType == 0) {
                                 Node node = new Node(13615,3087,3250,0,0,10);
                                 getActor().getPA().checkObjectSpawn(node);
-                                Rift rift = new NephalemRift(getActor(),difficulty);
+//                                Rift rift = new NephalemRift(getActor(),difficulty);
                                 getActor().getAttributes().addInstanceNode(12338,node);
-                                getActor().getAttributes().setRift(rift);
-                                Server.getEventHandler().submit(rift);
+                                RiftInstanceController.getInstance().createNephalemRiftInstanceForPlayer(getActor(),difficulty);
+//                                getActor().getAttributes().setRift(rift);
+//                                Server.getEventHandler().submit(rift);
                             } else if(riftType == 1) {
                                 getActor().getPA().checkObjectSpawn(13617,3087,3250,0,10);
                                 Rift rift = new Rift(getActor(),difficulty);

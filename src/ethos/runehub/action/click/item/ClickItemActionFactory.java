@@ -9,6 +9,7 @@ import ethos.runehub.action.click.item.consumable.booster.EfficiencyBooster;
 import ethos.runehub.action.click.item.consumable.star.ClickPrismaticStarAction;
 import ethos.runehub.action.click.item.consumable.TeleportChargeScroll;
 import ethos.runehub.action.click.item.consumable.potion.ClickPotionConsumableAction;
+import ethos.runehub.action.click.item.consumable.star.ClickSkillLampAction;
 import ethos.runehub.action.click.item.consumable.star.ClickSkillStarAction;
 import ethos.runehub.action.click.item.consumable.tablet.BreakTeleportTabletAction;
 import ethos.runehub.entity.item.impl.PortableBankChest;
@@ -25,6 +26,10 @@ public class ClickItemActionFactory {
         ClickItemAction action = null;
         if (RunehubConstants.STAR_IDS.contains(itemId)) {
             action = new ClickSkillStarAction(player,itemId,slot);
+        }
+
+        if (RunehubConstants.LAMP_IDS.contains(itemId)) {
+            action = new ClickSkillLampAction(player,itemId,slot);
         }
         switch (itemId) {
             case 2428:

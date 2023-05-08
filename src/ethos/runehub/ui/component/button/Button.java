@@ -23,6 +23,10 @@ public class Button extends UIComponent {
         actionListeners.add(actionListener);
     }
 
+    public void removeActionListener(ActionListener actionListener) {
+        actionListeners.remove(actionListener);
+    }
+
     public Button(int lineId) {
         super(lineId);
         this.actionListeners = new ArrayList<>();

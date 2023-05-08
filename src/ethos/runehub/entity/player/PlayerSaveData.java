@@ -183,6 +183,8 @@ public class PlayerSaveData {
     }
 
     public AdjustableInteger getTeleportCharges() {
+        if (teleportCharges == null)
+            teleportCharges = new AdjustableInteger(0);
         return teleportCharges;
     }
 
@@ -654,6 +656,7 @@ public class PlayerSaveData {
         return journeyId;
     }
 
+
     public void setJourneyId(int journeyId) {
         this.journeyId = journeyId;
     }
@@ -672,6 +675,103 @@ public class PlayerSaveData {
 
     public void setCurrentJourneyStepProgress(int currentJourneyStepProgress) {
         this.currentJourneyStepProgress = currentJourneyStepProgress;
+    }
+
+    public List<Integer> getCompletedPath() {
+        if (completedPath == null)
+            completedPath = new ArrayList<>();
+        return completedPath;
+    }
+
+    public List<Integer> getUnlockedPath() {
+        if (unlockedPath == null)
+            unlockedPath = new ArrayList<>();
+        return unlockedPath;
+    }
+
+    public List<GameItem> getIdleBrewingStation() {
+        if (idleBrewingStation == null)
+            idleBrewingStation = new ArrayList<>();
+        return idleBrewingStation;
+    }
+
+    public int[] getPoints() {
+        if (points == null)
+            points = new int[10];
+        return points;
+    }
+
+    public int[] getIdleBrewingStationUpgrade() {
+        if (idleBrewingStationUpgrade == null)
+            idleBrewingStationUpgrade = new int[5];
+        return idleBrewingStationUpgrade;
+    }
+
+    public int[][] getJobTypeCompleted() {
+        if (jobTypeCompleted == null)
+            jobTypeCompleted = new int[SkillDictionary.Skill.values().length][4];
+        return jobTypeCompleted;
+    }
+
+    public void addCompletedJobType(int skillId, int difficulty) {
+
+        jobTypeCompleted[skillId][difficulty] = jobTypeCompleted[skillId][difficulty] + 1;
+    }
+
+    public int getJobsAbandoned() {
+        return jobsAbandoned;
+    }
+
+    public int getJobsCompleted() {
+        return jobsCompleted;
+    }
+
+    public int getJobStreak() {
+        return jobStreak;
+    }
+
+    public long getActiveJob() {
+        return activeJob;
+    }
+
+    public void setActiveJob(long activeJob) {
+        this.activeJob = activeJob;
+    }
+
+    public float getJobScore() {
+        return jobScore;
+    }
+
+    public void setJobsAbandoned(int jobsAbandoned) {
+        this.jobsAbandoned = jobsAbandoned;
+    }
+
+    public void setJobsCompleted(int jobsCompleted) {
+        this.jobsCompleted = jobsCompleted;
+    }
+
+    public void setJobScore(float jobScore) {
+        this.jobScore = jobScore;
+    }
+
+    public void setJobStreak(int jobStreak) {
+        this.jobStreak = jobStreak;
+    }
+
+    public int getIdleBrewId() {
+        return idleBrewId;
+    }
+
+    public void setIdleBrewId(int idleBrewId) {
+        this.idleBrewId = idleBrewId;
+    }
+
+    public int getIdleBrewedXp() {
+        return idleBrewedXp;
+    }
+
+    public void setIdleBrewedXp(int idleBrewedXp) {
+        this.idleBrewedXp = idleBrewedXp;
     }
 
     @Override
@@ -716,13 +816,13 @@ public class PlayerSaveData {
         this.completedAchievements = new ArrayList<>();
         this.competedJourney = new ArrayList<>();
         this.claimedJourneyStep = new ArrayList<>();
-//        farmingConfigMap.put(
-//                10548,List.of(
-//                        new FarmingConfig(0,0,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
-//                        new FarmingConfig(0,8,false,false, PatchType.ALLOTMENT.ordinal(),0,0),
-//                        new FarmingConfig(0,16,false,false, PatchType.FLOWER.ordinal(),0,0),
-//                        new FarmingConfig(0,24,false,false, PatchType.HERB.ordinal(),0,0)
-//                ));
+        this.completedPath = new ArrayList<>();
+        this.unlockedPath = new ArrayList<>();
+        this.journeyId = 1;
+        this.points = new int[10];
+        this.jobTypeCompleted = new int[SkillDictionary.Skill.values().length][4];
+        this.idleBrewingStation = new ArrayList<>();
+        this.idleBrewingStationUpgrade = new int[5];
         Arrays.stream(SkillDictionary.Skill.values()).forEach(skill -> bonusXp.put(skill.getId(), new AdjustableInteger(0)));
         Arrays.stream(SkillDictionary.Skill.values()).forEach(skill -> bonusXpTimers.put(skill.getId(), 0L));
     }
@@ -836,5 +936,31 @@ public class PlayerSaveData {
     private int journeyStep;
     private int currentJourneyStepProgress;
     private List<Long> claimedJourneyStep;
-    private List<Integer> competedJourney;
+    private List<Integer> competedJourney,completedPath,unlockedPath;
+
+
+    /**
+     * points
+     */
+
+    private int[] points;
+
+
+    /**
+     * jobs
+     */
+    private long activeJob;
+    private int jobsCompleted;
+    private int jobsAbandoned;
+    private int jobStreak;
+    private float jobScore;
+    private int[][] jobTypeCompleted;
+
+    /**
+     * idle stations
+     */
+    private List<GameItem> idleBrewingStation;
+    private int idleBrewId;
+    private int[] idleBrewingStationUpgrade;
+    private int idleBrewedXp;
 }

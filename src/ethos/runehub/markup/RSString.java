@@ -37,7 +37,7 @@ public class RSString {
             sb.append("[<col=")
                     .append(PURPLE)
                     .append(">")
-                    .append(text)
+                    .append(text.replaceAll("_"," "))
                     .append("</col>]");
             return this;
         }

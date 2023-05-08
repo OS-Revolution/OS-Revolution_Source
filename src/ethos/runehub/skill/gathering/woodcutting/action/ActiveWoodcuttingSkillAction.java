@@ -49,12 +49,14 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
         } else {
             if (this.getActor().getSkillController().getWoodcutting().wearingSkillRing()) {
                 if (Skill.SKILL_RANDOM.nextInt(100) <= 25) {
-                    this.getActor().sendMessage("Your ring shines brightly and burns the log instantly.");
                     final AdjustableInteger logId = new AdjustableInteger(0);
                     LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()).roll(this.getActor().getAttributes().getMagicFind()).forEach(loot -> {
                         logId.setValue(Math.toIntExact(loot.getId()));
                     });
-                    this.getActor().getSkillController().addXP(SkillDictionary.Skill.FIREMAKING.getId(), (int) Objects.requireNonNull(LogData.getLogData(this.getActor(), logId.value())).getExperience());
+                    if (logId.value() > 0) {
+                        this.getActor().sendMessage("Your ring shines brightly and burns the log instantly.");
+                        this.getActor().getSkillController().addXP(SkillDictionary.Skill.FIREMAKING.getId(), (int) Objects.requireNonNull(LogData.getLogData(this.getActor(), logId.value())).getExperience());
+                    }
                 } else {
                     this.addItems();
                 }
@@ -72,25 +74,27 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
     protected void addItems() {
         LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()).roll(this.getActor().getAttributes().getMagicFind()).forEach(loot -> {
             int itemId = Math.toIntExact(loot.getId());
-            this.getActor().getAttributes().getJourneyController().checkJourney(itemId, Math.toIntExact(loot.getAmount()), JourneyStepType.COLLECTION);
-            this.getActor().getAttributes().getJourneyController().checkJourney(itemId, gathered, JourneyStepType.CHALLENGE);
 
-            if (WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId() == 3) {
-                if (Skill.SKILL_RANDOM.nextInt(200) <= 10) {
-                    int amount = this.getActor().getAttributes().isMember() ? Misc.random(20) + 1 : Misc.random(10) + 1;
-                    this.getActor().getItems().addOrDropItem(2384, amount);
-                    this.getActor().sendMessage("You have earned $" + amount + " @" + 2384);
+                this.getActor().getAttributes().getJourneyController().checkJourney(itemId, Math.toIntExact(loot.getAmount()), JourneyStepType.COLLECTION);
+                this.getActor().getAttributes().getJourneyController().checkJourney(itemId, gathered, JourneyStepType.CHALLENGE);
+            if (itemId > 0) {
+                if (WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId() == 3) {
+                    if (Skill.SKILL_RANDOM.nextInt(200) <= 10) {
+                        int amount = this.getActor().getAttributes().isMember() ? Misc.random(20) + 1 : Misc.random(10) + 1;
+                        this.getActor().getItems().addOrDropItem(2384, amount);
+                        this.getActor().sendMessage("You have earned $" + amount + " @" + 2384);
+                    }
                 }
-            }
-            if (this.getActor().getSkillController().getWoodcutting().wearingEliteSkillRing()) {
-                if (Skill.SKILL_RANDOM.nextInt(100) <= 10 && ItemIdContextLoader.getInstance().read(itemId).isNoteable()) {
-                    this.getActor().getItems().addItem(itemId + 1, (int) loot.getAmount());
-                    this.getActor().sendMessage("Your ring notes the logs for you.");
+                if (this.getActor().getSkillController().getWoodcutting().wearingEliteSkillRing()) {
+                    if (Skill.SKILL_RANDOM.nextInt(100) <= 10 && ItemIdContextLoader.getInstance().read(itemId).isNoteable()) {
+                        this.getActor().getItems().addItem(itemId + 1, (int) loot.getAmount());
+                        this.getActor().sendMessage("Your ring notes the logs for you.");
+                    } else {
+                        this.getActor().getItems().addItem(Math.toIntExact(loot.getId()), Math.toIntExact(loot.getAmount()));
+                    }
                 } else {
                     this.getActor().getItems().addItem(Math.toIntExact(loot.getId()), Math.toIntExact(loot.getAmount()));
                 }
-            } else {
-                this.getActor().getItems().addItem(Math.toIntExact(loot.getId()), Math.toIntExact(loot.getAmount()));
             }
         });
     }
@@ -103,7 +107,7 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
         final int amount = Math.toIntExact(loot.getId());
         this.getActor().sendMessage("@red@A bird nest falls from the tree");
 
-        Server.itemHandler.createGroundItem(this.getActor(),itemId, this.getActor().getX(), this.getActor().getY(),this.getActor().heightLevel, amount);
+        Server.itemHandler.createGroundItem(this.getActor(),itemId, this.getActor().getX(), this.getActor().getY(),this.getActor().heightLevel, 1);
         this.getActor().getAttributes().getJourneyController().checkJourney(itemId, amount, JourneyStepType.COLLECTION);
         this.getActor().getAttributes().getJourneyController().checkJourney(targetedNodeContext.getNodeId(), amount, JourneyStepType.SKILL_EVENT_FROM_ID);
     }

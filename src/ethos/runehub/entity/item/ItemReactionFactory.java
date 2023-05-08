@@ -14,7 +14,7 @@ public class ItemReactionFactory {
     public static ItemReaction getItemReaction(int reactionKey, long reactionUuid) {
         switch (reactionKey) {
             case 7:
-                return CookingItemReactionLoader.getInstance().read(reactionUuid);
+                return ArtisanSkillItemReactionDAO.getInstance().read(reactionUuid);
             case 12:
                 return CraftingItemReactionLoader.getInstance().read(reactionUuid);
             case 13:

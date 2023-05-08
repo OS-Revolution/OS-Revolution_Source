@@ -42,9 +42,11 @@ public class CookOnNodeAction extends ArtisanSkillAction {
         super.onSuccess();
         if (Misc.random(100) <= 5 && this.getActor().getAttributes().getSkillStationId() == 13542) {
             this.getActor().getItems().addItemToBank(this.getReaction().getProductItemId(),1);
-            this.getActor().sendMessage("You make two portions of food thanks to the range! The extra was sent to your bank.");
+            this.getActor().sendMessage("@or@You make two portions of food thanks to the range! The extra was sent to your bank.");
         }
     }
+
+
 
     public CookOnNodeAction(Player player, CookingItemReaction reaction, ItemInteractionContext context) {
         super(player, 7, 4, reaction, context);

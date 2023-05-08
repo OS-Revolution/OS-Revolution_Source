@@ -5,6 +5,7 @@ import ethos.model.content.tradingpost.Listing;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerSave;
+import ethos.runehub.content.instance.impl.tomb.TombInstanceController;
 import ethos.runehub.loot.RewardCodeController;
 import ethos.util.Misc;
 import ethos.world.Clan;
@@ -20,6 +21,7 @@ public class ReceiveString implements PacketType {
         int id = Integer.parseInt(text.substring(0, index));
         String string = text.substring(index + 1);
         Logger.getGlobal().fine("ID: " + id + " | String: " + string);
+        System.out.println("ID: " + id + " | String: " + string);
         switch (id) {
             case 0:
                 if (player.clan != null) {
@@ -110,6 +112,14 @@ public class ReceiveString implements PacketType {
                 if (string.length() == 0)
                     return;
                 RewardCodeController.getInstance().redeem(player,string);
+                break;
+            case 11:
+                if (string.length() == 0)
+                    return;
+                TombInstanceController.getInstance().enterTombPassword(
+                        player.getAttributes().getInstanceId(),
+                        string
+                );
                 break;
             default:
                 System.out.println("Received string: identifier=" + id + ", string=" + string);

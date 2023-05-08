@@ -1,20 +1,106 @@
 package ethos.runehub.content.job;
 
 import ethos.model.players.Player;
+import ethos.runehub.skill.support.sailing.Ship;
 
 public class Job {
 
-    public static final int JOB_SLOT_1 = 0;
-    public static final int JOB_SLOT_2 = 1;
-    public static final int JOB_SKILL_ID = 0;
-    public static final int JOB_SCORE = 1;
-    public static final int TOTAL_JOBS = 2;
-    public static final int COMPLETED_JOBS = 3;
-    public static final int JOB_START_DATE = 4;
+    public static Job fromBitArray(long bits) {
+        int skillId = (int) (bits & 0x1F);
+        int basePay = (int) ((bits >> 5) & 0xFFFFF);
+        int difficulty = (int) ((bits >> 25) & 0xF);
+        int collected = (int) ((bits >> 29) & 0x3FF);
+        int quota = (int) ((bits >> 39) & 0x3FF);
+        int targetId = (int) ((bits >> 49) & 0x7FFFF);
 
-
-    public void assignPlayer(Player player) {
-
+        return new Job(targetId, quota, collected, difficulty, basePay, skillId);
     }
 
+    public long toBitArray() {
+        long bits = 0;
+        bits |= (long) skillId;
+        bits |= (long) basePay << 5;
+        bits |= (long) difficulty << 25;
+        bits |= (long) collected << 29;
+        bits |= (long) quota << 39;
+        bits |= (long) targetId << 49;
+
+        return bits;
+    }
+
+
+
+    public int getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(int targetId) {
+        this.targetId = targetId;
+    }
+
+    public int getQuota() {
+        return quota;
+    }
+
+    public void setQuota(int quota) {
+        this.quota = quota;
+    }
+
+    public int getCollected() {
+        return collected;
+    }
+
+    public void setCollected(int collected) {
+        this.collected = collected;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public int getBasePay() {
+        return basePay;
+    }
+
+    public void setBasePay(int basePay) {
+        this.basePay = basePay;
+    }
+
+    public int getSkillId() {
+        return skillId;
+    }
+
+    public void setSkillId(int skillId) {
+        this.skillId = skillId;
+    }
+
+    @Override
+    public String toString() {
+        return "Target: " + targetId
+                + "\nQuota: " + quota
+                + "\nCollected: " + collected
+                + "\nDifficulty: " + difficulty
+                + "\nBase Pay: " + basePay
+                + "\nSkill: " + skillId;
+    }
+
+    public Job(int targetId, int quota, int collected, int difficulty, int basePay, int skillId) {
+        this.targetId = targetId;
+        this.quota = quota;
+        this.collected = collected;
+        this.difficulty = difficulty;
+        this.basePay = basePay;
+        this.skillId = skillId;
+    }
+
+    private int targetId;
+    private int quota;
+    private int collected;
+    private int difficulty;
+    private int basePay;
+    private int skillId;
 }

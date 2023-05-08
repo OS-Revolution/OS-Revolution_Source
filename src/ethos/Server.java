@@ -35,6 +35,9 @@ import ethos.runehub.combat.style.WeaponType;
 import ethos.runehub.content.achievement.Achievement;
 import ethos.runehub.content.achievement.AchievementCache;
 import ethos.runehub.content.achievement.AchievementDAO;
+import ethos.runehub.content.charter.*;
+import ethos.runehub.content.job.Job;
+import ethos.runehub.content.job.JobUtils;
 import ethos.runehub.content.journey.*;
 import ethos.runehub.entity.combat.CombatController;
 import ethos.runehub.entity.item.GameItem;
@@ -49,6 +52,8 @@ import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.runehub.event.FixedScheduledEventController;
 import ethos.runehub.event.chest.PrismaniaPromotionalChestEvent;
 import ethos.runehub.event.chest.PromotionalChestEvent;
+import ethos.runehub.skill.artisan.cooking.food.Brew;
+import ethos.runehub.skill.artisan.cooking.food.BrewDAO;
 import ethos.runehub.skill.artisan.crafting.jewellery.Jewellery;
 import ethos.runehub.skill.artisan.crafting.jewellery.JewelleryDAO;
 import ethos.runehub.skill.combat.magic.spell.RuneIdentifier;
@@ -234,6 +239,18 @@ public class Server {
                 25,
                 new int[][]{{RuneIdentifier.FIRE.ordinal(), 1}, {RuneIdentifier.AIR.ordinal(), 3}, {RuneIdentifier.LAW.ordinal(), 1}}
         ));
+        SpellDAO.getInstance().create(new Spell( ///lumbridge teleport
+                1,
+                4143,
+                false,
+                4,
+                714,
+                308,
+                41,
+                31,
+                new int[][]{{RuneIdentifier.EARTH.ordinal(), 1}, {RuneIdentifier.AIR.ordinal(), 3}, {RuneIdentifier.LAW.ordinal(), 1}}
+        ));
+
     }
 
     private static void initEquipmment() {
@@ -280,7 +297,7 @@ public class Server {
 //        RegionContextDataAccessObject.getInstance().create(draynorCtx);
 
         final long draynorSewersId = IDManager.getUUID();
-                org.runehub.api.model.world.region.Region draynorSewers = new org.runehub.api.model.world.region.Region(draynorSewersId,
+        org.runehub.api.model.world.region.Region draynorSewers = new org.runehub.api.model.world.region.Region(draynorSewersId,
                 new IrregularPolygon(
                         new Point(3154, 9856),
                         new Point(3154, 9920),
@@ -290,7 +307,7 @@ public class Server {
 
                 ));
 
-                RegionContext draynorSewersCtx = new RegionContext(draynorSewersId, "Draynor Sewers");
+        RegionContext draynorSewersCtx = new RegionContext(draynorSewersId, "Draynor Sewers");
 
         RegionDataAccessObject.getInstance().create(draynorSewers);
         RegionContextDataAccessObject.getInstance().create(draynorSewersCtx);
@@ -461,7 +478,7 @@ public class Server {
                 new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
                 1,
                 1,
-                new int[] {3308},
+                new int[]{3308},
                 JourneyStepType.DIALOG.ordinal()
         );
 
@@ -473,7 +490,7 @@ public class Server {
                 new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
                 1,
                 1,
-                new int[] {506},
+                new int[]{506},
                 JourneyStepType.BUY_ANY_FROM_SHOP.ordinal()
         );
 
@@ -497,7 +514,7 @@ public class Server {
                 new GameItem[]{new GameItem(995, 500), new GameItem(85, 1), new GameItem(330, 5)},
                 1,
                 1,
-                new int[] {5832},
+                new int[]{5832},
                 JourneyStepType.DIALOG.ordinal()
         );
 
@@ -509,7 +526,7 @@ public class Server {
                 new GameItem[]{new GameItem(1464, 1), new GameItem(85, 1), new GameItem(1464, 4)},
                 1,
                 1,
-                new int[] {5567},
+                new int[]{5567},
                 JourneyStepType.OPEN_SHOP.ordinal()
         );
 
@@ -545,7 +562,7 @@ public class Server {
                 new GameItem[]{new GameItem(1437, 50), new GameItem(85, 1), new GameItem(1438, 1)},
                 1,
                 1,
-                new int[] {637},
+                new int[]{637},
                 JourneyStepType.NPC_TELEPORT_ACTION.ordinal()
         );
 
@@ -557,7 +574,7 @@ public class Server {
                 new GameItem[]{new GameItem(2396, 5), new GameItem(85, 1), new GameItem(2396, 5)},
                 1,
                 1,
-                new int[]{4171,117048,84237,75010,50056},
+                new int[]{4171, 117048, 84237, 75010, 50056},
                 JourneyStepType.CAST_SPELL.ordinal()
         );
 
@@ -569,7 +586,7 @@ public class Server {
                 new GameItem[]{new GameItem(6825, 1), new GameItem(85, 1), new GameItem(1459, 10)},
                 1,
                 1,
-                new int[] {6822,6823,6824,6825,22009, 22010, 22011, 22012, 22013, 22014, 22015, 22016, 22017, 22018, 22019, 22020, 22021, 22022, 22023, 22024, 22025, 22026, 22027, 22028, 22029, 22030, 22031, 22032, 22033, 22034, 22035, 22036, 22037, 22038, 22039, 22040, 22041, 22042, 22043, 22044, 22045, 22046, 22047, 22048, 22049, 22050, 22051, 22052, 22053, 22054, 22055, 22056, 22057, 22058, 22059, 22060, 22061, 22062, 22063, 22064, 22065, 22066, 22067, 22068, 22069, 22070, 22071, 22072, 22073, 22074, 22075, 22076, 22077, 22078, 22079, 22080, 22081, 22082, 22083, 22084, 22085, 22086, 22087, 22088, 22089, 22090, 22091, 22092,22191,22227,22228,22229,22230,21873,21874,21875},
+                new int[]{6822, 6823, 6824, 6825, 22009, 22010, 22011, 22012, 22013, 22014, 22015, 22016, 22017, 22018, 22019, 22020, 22021, 22022, 22023, 22024, 22025, 22026, 22027, 22028, 22029, 22030, 22031, 22032, 22033, 22034, 22035, 22036, 22037, 22038, 22039, 22040, 22041, 22042, 22043, 22044, 22045, 22046, 22047, 22048, 22049, 22050, 22051, 22052, 22053, 22054, 22055, 22056, 22057, 22058, 22059, 22060, 22061, 22062, 22063, 22064, 22065, 22066, 22067, 22068, 22069, 22070, 22071, 22072, 22073, 22074, 22075, 22076, 22077, 22078, 22079, 22080, 22081, 22082, 22083, 22084, 22085, 22086, 22087, 22088, 22089, 22090, 22091, 22092, 22191, 22227, 22228, 22229, 22230, 21873, 21874, 21875},
                 JourneyStepType.CONSUME_ITEM.ordinal()
         );
 
@@ -613,7 +630,7 @@ public class Server {
                 new GameItem[]{new GameItem(1353, 1), new GameItem(22041, 1), new GameItem(7797, 1)},
                 1,
                 1,
-                new int[] {1349},
+                new int[]{1349},
                 JourneyStepType.EQUIP_ID.ordinal()
         );
 
@@ -625,7 +642,7 @@ public class Server {
                 new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(7797, 1)},
                 30,
                 1,
-                new int[] {1511},
+                new int[]{1511},
                 JourneyStepType.COLLECTION.ordinal()
         );
 
@@ -637,7 +654,7 @@ public class Server {
                 new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(995, 250)},
                 25,
                 1,
-                new int[] {1282,1289},
+                new int[]{1282, 1289},
                 JourneyStepType.DEPLETION.ordinal()
         );
 
@@ -649,7 +666,7 @@ public class Server {
                 new GameItem[]{new GameItem(22041, 1), new GameItem(85, 1), new GameItem(995, 250)},
                 1,
                 1,
-                new int[] {5075,5073,5074,5072,5071,5070},
+                new int[]{5075, 5073, 5074, 5072, 5071, 5070},
                 JourneyStepType.COLLECTION.ordinal()
         );
 
@@ -673,11 +690,11 @@ public class Server {
                 new GameItem[]{new GameItem(7797, 1), new GameItem(85, 1), new GameItem(995, 250)},
                 15,
                 1,
-                new int[]{2091,2092},
+                new int[]{2091, 2092},
                 JourneyStepType.DEPLETION.ordinal()
         );
 
-        JourneyStep step7= new JourneyStep(
+        JourneyStep step7 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -685,11 +702,11 @@ public class Server {
                 new GameItem[]{new GameItem(995, 1000), new GameItem(85, 1), new GameItem(995, 250)},
                 5,
                 1,
-                new int[] {26191,26251},
+                new int[]{26191, 26251},
                 JourneyStepType.NODE_INTERACTION.ordinal()
         );
 
-        JourneyStep step8= new JourneyStep(
+        JourneyStep step8 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -701,7 +718,7 @@ public class Server {
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step9= new JourneyStep(
+        JourneyStep step9 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -713,7 +730,7 @@ public class Server {
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step10= new JourneyStep(
+        JourneyStep step10 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -725,7 +742,7 @@ public class Server {
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step11= new JourneyStep(
+        JourneyStep step11 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -737,7 +754,7 @@ public class Server {
                 JourneyStepType.SKILL_EVENT_FROM_ID.ordinal()
         );
 
-        JourneyStep step12= new JourneyStep(
+        JourneyStep step12 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -749,7 +766,7 @@ public class Server {
                 JourneyStepType.CHALLENGE.ordinal()
         );
 
-        JourneyStep step13= new JourneyStep(
+        JourneyStep step13 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -761,7 +778,7 @@ public class Server {
                 JourneyStepType.DEPLETION.ordinal()
         );
 
-        JourneyStep step14= new JourneyStep(
+        JourneyStep step14 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -769,11 +786,11 @@ public class Server {
                 new GameItem[]{new GameItem(995, 1000), new GameItem(85, 1), new GameItem(22042, 1)},
                 5,
                 1,
-                new int[] {5075,5073,5074,5072,5071,5070},
+                new int[]{5075, 5073, 5074, 5072, 5071, 5070},
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step15= new JourneyStep(
+        JourneyStep step15 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -785,7 +802,7 @@ public class Server {
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step16= new JourneyStep(
+        JourneyStep step16 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -793,11 +810,11 @@ public class Server {
                 new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
                 500,
                 1,
-                new int[] {1511},
+                new int[]{1511},
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step17= new JourneyStep(
+        JourneyStep step17 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -809,7 +826,7 @@ public class Server {
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step18= new JourneyStep(
+        JourneyStep step18 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -821,7 +838,7 @@ public class Server {
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step19= new JourneyStep(
+        JourneyStep step19 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -829,11 +846,11 @@ public class Server {
                 new GameItem[]{new GameItem(22042, 1), new GameItem(85, 1), new GameItem(995, 1000)},
                 10,
                 1,
-                new int[]{5075,5073,5074,5072,5071,5070},
+                new int[]{5075, 5073, 5074, 5072, 5071, 5070},
                 JourneyStepType.COLLECTION.ordinal()
         );
 
-        JourneyStep step20= new JourneyStep(
+        JourneyStep step20 = new JourneyStep(
                 IDManager.getUUID(),
                 new int[0],
                 0,
@@ -926,9 +943,13 @@ public class Server {
         initSpells();
         initEquipmment();
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(15, "Duly noted", 200, "Mithril dragons drop mithril bars in banknote form while killed on assignment.", false));
-        AnimationDefinitionDAO.getInstance().create(new AnimationDefinition(8195, new int[] {4649,4652,4651,4653}));
+        AnimationDefinitionDAO.getInstance().create(new AnimationDefinition(8195, new int[]{4649, 4652, 4651, 4653}));
 //        learningTheRopesJourney();
 //        apprenticeLumberjackJourney();
+        JourneyPathDAO.getInstance().getAllEntries().forEach(path -> JourneyPathCache.getInstance().create(path.getId(), path));
+        CharterDAO.getInstance().getAllEntries().forEach(charter -> CharterCache.getInstance().create(charter.getId(), charter));
+        DestinationDAO.getInstance().getAllEntries().forEach(destination -> DestinationCache.getInstance().create(destination.getId(), destination));
+//        CharterDAO.getInstance().create(new Charter(IDManager.getUUID(),1103196256114526128L,new ethos.model.items.GameItem[]{new ethos.model.items.GameItem(995,500)},false));
         loadJourneys();
 
 
@@ -942,6 +963,78 @@ public class Server {
         TierDAO.getInstance().getAllEntries().forEach(tier -> {
             TierLoader.getInstance().create(tier.getId(), tier);
         });
+
+//        BrewDAO.getInstance().create(new Brew(
+//                5763, 5765, new GameItem[]{
+//                new GameItem(5992, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(5767, 1)
+//        }, 14, 182, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                1913, 5747, new GameItem[]{new GameItem(5994, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 19, 215, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                1905, 5739, new GameItem[]{new GameItem(5996, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 24, 248, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                1909, 5743, new GameItem[]{new GameItem(255, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 29, 281, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                1907, 5741, new GameItem[]{new GameItem(5998, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 34, 314, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                1911, 5745, new GameItem[]{new GameItem(6000, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 39, 347, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                2955, 5749, new GameItem[]{new GameItem(6004, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 44, 380, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                5751, 5753, new GameItem[]{new GameItem(6043, 1),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 49, 413, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                5755, 5757, new GameItem[]{new GameItem(1975, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 54, 413, false
+//        ));
+//        BrewDAO.getInstance().create(new Brew(
+//                5759, 5761, new GameItem[]{new GameItem(6002, 4),
+//                new GameItem(1919, 1),
+//                new GameItem(1929, 2),
+//                new GameItem(6008, 2),
+//                new GameItem(5767, 1)}, 59, 479, false
+//        ));
+
 //		final Map<String,Integer> requirements = new HashMap<>();
 //		final int itemId = 9703;
 //		ItemEquipmentContextDAO.getInstance().create(new ItemEquipmentContext.ItemEquipmentContextBuilder(itemId)
@@ -1199,8 +1292,12 @@ public class Server {
         }
     };
 
-    public static void main(java.lang.String[] args) {
 
+
+
+
+
+    public static void main(java.lang.String[] args) {
 //		System.out.println(GamblingManMob.getInstance().getBlackjack().getEmptyPlayingPosition());
         APILogger.debug_level = RunehubConstants.DEBUG_LEVEL;
         APILogger.initialize();

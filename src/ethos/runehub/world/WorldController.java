@@ -13,7 +13,7 @@ public class WorldController {
         return instance;
     }
 
-    public Region loadRegion(int regionId) {
+    public Chunk loadRegion(int regionId) {
         return regionLoader.read(regionId);
     }
 
@@ -25,5 +25,5 @@ public class WorldController {
         this.regionLoader = new RegionLoader();
     }
 
-    private final LazyLoader<Integer, Region> regionLoader;
+    private final LazyLoader<Integer, Chunk> regionLoader;
 }

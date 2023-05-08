@@ -1267,6 +1267,7 @@ public class PlayerSave {
 			characterfile.write(Integer.toString(p.specRestore), 0, Integer.toString(p.specRestore).length());
 			characterfile.newLine();
 			characterfile.write("character-posx = ", 0, 17);
+			System.out.println("X: " + p.absX);
 			characterfile.write(Integer.toString(p.absX), 0, Integer.toString(p.absX).length());
 			characterfile.newLine();
 			characterfile.write("character-posy = ", 0, 17);

@@ -22,6 +22,7 @@ import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.support.SupportSkill;
 import ethos.runehub.skill.support.firemaking.Firemaking;
 import ethos.runehub.skill.support.sailing.Sailing;
+import ethos.runehub.skill.support.sailing.Sailing2;
 import ethos.runehub.skill.support.slayer.Slayer;
 import ethos.runehub.skill.support.thieving.Thieving;
 import ethos.runehub.world.WorldSettingsController;
@@ -43,6 +44,40 @@ public class SkillController {
         final int maxXpDifference = 200000000 - currentXP;
         if (baseAmount > 0) {
             final int amount = this.getXPWithModifiers(skillId, baseAmount);
+            final int quotient = maxXpDifference / amount;
+            final int remainder = maxXpDifference % amount;
+            player.getAttributes().getPlayPassController().addPlayPassXPFromSkillXP(baseAmount);
+            if (currentXP < 200000000) {
+                if (quotient >= 1) {
+                    Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + amount);
+                    player.playerXP[skillId] += amount;
+                    player.getPA().sendExperienceDrop(true, amount, skillId);
+                } else {
+                    Logger.getGlobal().fine("Adding Skill XP: " + skillId + " | " + remainder);
+                    player.playerXP[skillId] += remainder;
+                    player.getPA().sendExperienceDrop(true, remainder, skillId);
+                    PlayerHandler.executeGlobalMessage(
+                            "^News $" + Misc.capitalize(player.getAttributes().getName()) + " has reached $200M XP in $" + Misc.capitalize(SkillDictionary.Skill.values()[skillId].name().toLowerCase()) + "!"
+                    );
+
+                }
+            }
+        }
+
+        if (startingLevel < player.getLevelForXP(player.playerXP[skillId])) {
+            this.onLevelup(skillId);
+        }
+
+        player.getPA().setSkillLevel(skillId, player.playerLevel[skillId], player.playerXP[skillId]);
+        player.getPA().refreshSkill(skillId);
+    }
+
+    public void addImmutableXP(int skillId, int baseAmount) {
+        final int currentXP = player.playerXP[skillId];
+        final int startingLevel = player.getLevelForXP(player.playerXP[skillId]);
+        final int maxXpDifference = 200000000 - currentXP;
+        if (baseAmount > 0) {
+            final int amount = baseAmount;
             final int quotient = maxXpDifference / amount;
             final int remainder = maxXpDifference % amount;
             player.getAttributes().getPlayPassController().addPlayPassXPFromSkillXP(baseAmount);
@@ -273,6 +308,10 @@ public class SkillController {
         return fletching;
     }
 
+    public Sailing2 getSailing2() {
+        return sailing2;
+    }
+
     public SkillController(Player player) {
         this.player = player;
         this.woodcutting = new Woodcutting(player);
@@ -292,6 +331,7 @@ public class SkillController {
         this.prayer = new Prayer(player);
         this.firemaking = new Firemaking(player);
         this.fletching = new Fletching(player);
+        this.sailing2 = new Sailing2(player);
     }
 
     private final Player player;
@@ -312,5 +352,6 @@ public class SkillController {
     private final Prayer prayer;
     private final Firemaking firemaking;
     private final Fletching fletching;
+    private final Sailing2 sailing2;
 
 }

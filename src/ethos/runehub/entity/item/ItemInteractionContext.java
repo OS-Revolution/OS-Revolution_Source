@@ -30,6 +30,14 @@ public class ItemInteractionContext {
         return usedWithId;
     }
 
+    public void setUsedId(int usedId) {
+        this.usedId = usedId;
+    }
+
+    public void setUsedWithId(int usedWithId) {
+        this.usedWithId = usedWithId;
+    }
+
     public ItemInteractionContext(int x, int y, int z, int usedId, int usedWithId, int usedAmount, int usedWithAmount) {
         this.x = x;
         this.y = y;
@@ -41,6 +49,6 @@ public class ItemInteractionContext {
     }
 
     private final int x,y,z;
-    private final int usedId,usedWithId;
+    private int usedId,usedWithId;
     private final int usedAmount,usedWithAmount;
 }

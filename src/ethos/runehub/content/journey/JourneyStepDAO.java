@@ -15,6 +15,6 @@ public class JourneyStepDAO extends BetaAbstractDataAcessObject<JourneyStep> {
     }
 
     private JourneyStepDAO() {
-        super(RunehubConstants.PLAYER_DB, JourneyStep.class);
+        super(RunehubConstants.JOURNEY_DB, JourneyStep.class);
     }
 }

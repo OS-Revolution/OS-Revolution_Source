@@ -5,6 +5,7 @@ import ethos.runehub.LootTableContainerUtils;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.markup.MarkupUtils;
 import ethos.runehub.skill.support.sailing.Sailing;
+import ethos.runehub.skill.support.sailing.Ship;
 import ethos.runehub.skill.support.sailing.action.RerollVoyageAction;
 import ethos.runehub.skill.support.sailing.action.StartVoyageAction;
 import ethos.runehub.skill.support.sailing.ship.ShipLoader;
@@ -316,6 +317,7 @@ public class SailingUI extends GameUI {
         }
         return components;
     }
+
 
 
     public SailingUI(Player player, List<Voyage> voyages) {

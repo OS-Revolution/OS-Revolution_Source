@@ -6,6 +6,7 @@ import ethos.Server;
 import ethos.event.Event;
 import ethos.model.players.Player;
 import ethos.runehub.content.instance.BossArenaInstanceController;
+import ethos.runehub.content.instance.impl.rift.RiftInstanceController;
 import ethos.util.PreconditionUtils;
 import org.runehub.api.util.math.geometry.Point;
 
@@ -24,8 +25,14 @@ public abstract class HomeTeleportAction extends Event<Player> {
     protected abstract void onUpdate();
 
     protected void validate() {
-        Preconditions.checkArgument(PreconditionUtils.isFalse((this.getActor().getAttributes().getInstanceId() != -1 && BossArenaInstanceController.getInstance().getInstance(this.getActor().getAttributes().getInstanceId())
-                .getArea().contains(new Point(this.getActor().absX,this.getActor().absY)))),"You must use the book to exit.");
+//        if (this.getActor().getAttributes().getInstanceId() != -1) {
+//            if (BossArenaInstanceController.getInstance().getInstance(this.getActor().getAttributes().getInstanceId()) != null) {
+//                Preconditions.checkArgument(PreconditionUtils.isFalse((this.getActor().getAttributes().getInstanceId() != -1 && BossArenaInstanceController.getInstance().getInstance(this.getActor().getAttributes().getInstanceId())
+//                        .getArea().contains(new Point(this.getActor().absX, this.getActor().absY)))), "You must use the book to exit.");
+//            }
+//        }
+        Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().getAttributes().getActiveInstance() != null &&
+                this.getActor().getAttributes().getActiveInstance().getArea().contains(new Point(this.getActor().absX, this.getActor().absY))),"You can not teleport out of this instance.");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().getAttributes().isActionLocked()), "Please finish what you are doing.");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().isInHouse),"Please use the house settings to leave your house");
         Preconditions.checkArgument(PreconditionUtils.isFalse(this.getActor().teleTimer > 0),"A magic force stops you from teleporting.");
@@ -53,6 +60,7 @@ public abstract class HomeTeleportAction extends Event<Player> {
         try {
             this.validate();
         } catch (Exception e) {
+            e.printStackTrace();
             this.getActor().sendMessage(e.getMessage());
             this.stop();
             return false;

@@ -112,34 +112,27 @@ import ethos.net.Packet.Type;
 import ethos.net.outgoing.UnnecessaryPacketDropper;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.content.instance.BossArenaInstanceController;
-import ethos.runehub.content.instance.impl.rift.RiftInstanceController;
 import ethos.runehub.content.instance.impl.tomb.TombInstanceController;
-import ethos.runehub.content.rift.RiftFloorDAO;
+import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
+import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.equipment.EquipmentCache;
 import ethos.runehub.entity.item.equipment.EquipmentSlot;
-import ethos.runehub.entity.mob.MobController;
-import ethos.runehub.entity.mob.hostile.HostileMob;
 import ethos.runehub.entity.player.*;
-import ethos.runehub.entity.player.action.impl.EquipmentSlotUpdateAction;
-import ethos.runehub.entity.player.action.impl.EquipmentUpdateAction;
-import ethos.runehub.entity.player.action.impl.ItemRenderUpdateAction;
-import ethos.runehub.entity.player.action.impl.PlayerAppearanceUpdateAction;
 import ethos.runehub.event.FixedScheduledEventController;
-import ethos.runehub.markup.RSString;
-import ethos.runehub.skill.gathering.farming.FarmTick;
-import ethos.runehub.skill.gathering.farming.FarmingConfig;
-import ethos.runehub.skill.support.sailing.Sailing;
-import ethos.runehub.skill.support.sailing.SailingSaveData;
-import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
-import ethos.runehub.ui.impl.tab.TabUI;
-import ethos.runehub.world.MembershipController;
-import ethos.runehub.world.WorldSettingsController;
-import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
-import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.markup.MarkupParser;
 import ethos.runehub.skill.SkillController;
+import ethos.runehub.skill.gathering.farming.FarmTick;
+import ethos.runehub.skill.support.sailing.SailingController;
+import ethos.runehub.skill.support.sailing.event.VoyageEvent;
+import ethos.runehub.skill.support.sailing.io.PlayerSailingSaveDAO;
+import ethos.runehub.skill.support.sailing.io.SailingSaveData;
+import ethos.runehub.skill.support.sailing.ship.Ship;
 import ethos.runehub.ui.GameUI;
+import ethos.runehub.ui.impl.tab.TabUI;
+import ethos.runehub.ui.impl.tab.player.PlayerTabUI;
+import ethos.runehub.world.MembershipController;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.util.Misc;
 import ethos.util.SimpleTimer;
 import ethos.util.Stopwatch;
@@ -149,19 +142,18 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.menaphos.model.entity.impl.npc.impl.mob.Mob;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
-import org.runehub.api.model.entity.user.character.mob.MobCharacterEntity;
 import org.runehub.api.model.entity.user.character.player.PlayerCharacterEntity;
 import org.runehub.api.model.math.AdjustableNumber;
 import org.runehub.api.model.math.impl.AdjustableDouble;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.model.world.Face;
 import org.runehub.api.model.world.region.location.Location;
-import org.runehub.api.util.IDManager;
 import org.runehub.api.util.SkillDictionary;
 import org.runehub.api.util.StringUtils;
 import org.runehub.api.util.math.geometry.Point;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -1586,7 +1578,6 @@ public class Player extends Entity implements PlayerCharacterEntity {
         absX = absY = -1;
         mapRegionX = mapRegionY = -1;
         currentX = currentY = 0;
-        PlayerSailingSaveDAO.getInstance().update(sailingSaveData);
         resetWalkingQueue();
     }
 
@@ -1717,9 +1708,9 @@ public class Player extends Entity implements PlayerCharacterEntity {
             getItems().addItemUnderAnyCircumstance(85, attributes.isMember() ? 2 : 1);
             this.getContext().getPlayerSaveData().setDailyWoodcuttingTeleports(5);
             this.getContext().getPlayerSaveData().setDailyEliteWoodcuttingRingTeleports(20);
-            if (this.getContext().getPlayerSaveData().getVoyageRerolls() < Sailing.BASE_MAX_DAILY_VOYAGES) {
-                this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
-            }
+//            if (this.getContext().getPlayerSaveData().getVoyageRerolls() < Sailing.BASE_MAX_DAILY_VOYAGES) {
+//                this.getContext().getPlayerSaveData().setVoyageRerolls(this.getContext().getPlayerSaveData().getVoyageRerolls() + Sailing.BASE_DAILY_REROLLS);
+//            }
             this.sendMessage("^Daily Your voyage list has been reset.");
             this.sendMessage("^Daily You've received your daily keys");
             this.sendMessage("^Daily Your daily tasks have reset.");
@@ -1774,6 +1765,27 @@ public class Player extends Entity implements PlayerCharacterEntity {
 //                        + ",url=" + WorldSettingsController.getInstance().getPromotionalEvents().get(WorldSettingsController.getInstance().getWorldSettings().getCurrentEventId()).getUrl() + ">";
 //    }
 
+    private void initializePlayerShips() {
+        Instant now = Instant.now();
+        long nowMs = now.toEpochMilli();
+        for (int slot = 0; slot < sailingSaveData.getShipSlot().length; slot++) {
+            long shipBits = sailingSaveData.getShipSlot()[slot];
+            if(shipBits != 0) {
+                Ship ship = Ship.fromLong(shipBits);
+                int status = ship.getStatus();
+                if (status == Ship.Status.ON_VOYAGE.ordinal()) {
+                    Instant endTimestamp = Instant.ofEpochMilli(sailingSaveData.getShipSlotTimestamp()[slot] );
+                    if (endTimestamp.isBefore(now)) {
+                        SailingController.getInstance().completeVoyage(slot,context.getId());
+                    } else if (endTimestamp.isAfter(now)) {
+                        long duration = endTimestamp.toEpochMilli() - nowMs;
+                        Server.getEventHandler().submit(new VoyageEvent(this,duration,slot));
+                        this.sendMessage("^Sailing You have ships at sea");
+                    }
+                }
+            }
+        }
+    }
 
     public void initialize() {
         try {
@@ -1783,6 +1795,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
 
             this.getAttributes().setMovementResricted(false);
             this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
+            this.initializePlayerShips();
             loadDiaryTab();
             graceSum();
             Achievements.checkIfFinished(this);
@@ -2265,9 +2278,28 @@ public class Player extends Entity implements PlayerCharacterEntity {
             BossArenaInstanceController.getInstance().closeInstanceForPlayer(this);
             TombInstanceController.getInstance().closeInstanceForPlayer(this);
         }
+//        if (Arrays.stream(sailingSaveData.getActiveVoyages()).anyMatch(value -> ))
+        resetSailingCargo();
         this.getContext().getPlayerSaveData().setLogoutTimestamp(System.currentTimeMillis());
         this.save();
 
+    }
+
+    public void resetSailingCargo() {
+        long[][] sellOffers = this.getSailingSaveData().getSellingCargo();
+
+        for (int j = 0; j < sailingSaveData.getShipSlot().length; j++) {
+            long[] offers = sailingSaveData.getSellingCargo()[j];
+            if(Arrays.stream(offers).anyMatch(value -> value != 0)) {
+                if (Ship.fromLong(sailingSaveData.getShipSlot()[j]).getStatus() == Ship.Status.AVAILABLE.ordinal()) {
+                    for (int i = 0; i < sellOffers.length; i++) {
+                        long val = sellOffers[j][i];
+                        this.getSailingSaveData().setOrAddCargo(val);
+                        this.getSailingSaveData().setSellCargo(i, 0, j);
+                    }
+                }
+            }
+        }
     }
 
     private List<GameItem> getAllItems() {
@@ -2371,7 +2403,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public void save() {
         PlayerCharacterContextDataAccessObject.getInstance().update(context);
         PlayerSlayerSaveDAO.getInstance().update(slayerSave);
-
+        PlayerSailingSaveDAO.getInstance().update(sailingSaveData);
 //        PlayerFarmingSaveDAO.getInstance().delete(PlayerFarmingSaveLoader.getInstance().read(context.getPlayerSaveData().getPlayerId()));
 //        PlayerFarmingSaveDAO.getInstance().create(PlayerFarmingSaveLoader.getInstance().read(context.getPlayerSaveData().getPlayerId()));
     }
@@ -6329,11 +6361,6 @@ public class Player extends Entity implements PlayerCharacterEntity {
     private final PlayerCharacterAttribute attributes;
     private final PlayerCharacterContext context;
     private final PlayerSlayerSave slayerSave;
-    private final SailingSaveData sailingSaveData;
-
-    public SailingSaveData getSailingSaveData() {
-        return sailingSaveData;
-    }
 
     public PlayerSlayerSave getSlayerSave() {
         return slayerSave;
@@ -6622,5 +6649,11 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public long getId() {
         return StringUtils.longFromUUID(StringUtils.stringToUUID(playerName));
     }
+
+    public SailingSaveData getSailingSaveData() {
+        return sailingSaveData;
+    }
+
+    private final SailingSaveData sailingSaveData;
 
 }

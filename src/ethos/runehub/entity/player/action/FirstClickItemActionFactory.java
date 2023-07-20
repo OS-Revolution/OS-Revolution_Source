@@ -1,19 +1,40 @@
 package ethos.runehub.entity.player.action;
 
 import ethos.model.players.Player;
+import ethos.runehub.LootTableContainerUtils;
+import ethos.runehub.content.PointController;
 import ethos.runehub.entity.player.action.impl.ClickItemAction;
 import ethos.runehub.entity.player.action.impl.item.FirstClickEnchantedGemAction;
 import ethos.runehub.entity.player.action.impl.item.FirstClickGoldAccumulatorAction;
 import ethos.runehub.entity.player.action.impl.node.FirstClickPortableSkillingStation;
+import ethos.runehub.loot.LootboxController;
 import ethos.runehub.skill.combat.prayer.action.BuryRemainsAction;
+import org.runehub.api.model.entity.item.loot.ContainerType;
 
 import java.util.logging.Logger;
 
 public class FirstClickItemActionFactory {
 
     public static ClickItemAction getAction(Player player, int nodeX, int nodeY, int nodeId) {
-        Logger.getGlobal().fine("Fourth Click Action - " + nodeId + " " + nodeX + " " + nodeY);
+        Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
+            case 7478:
+                return new ClickItemAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.getItems().delete(nodeId,1);
+                        player.getAttributes().getPointController().addPoints(PointController.PointType.JOURNEY,1);
+                        player.sendMessage("You received #" + 1 + " $" + PointController.PointType.JOURNEY + " $point. You now have #"+ player.getAttributes().getPointController().getPoints(PointController.PointType.JOURNEY) + " $" + PointController.PointType.JOURNEY + " $points.");
+                    }
+                };
+            case 19887:
+                return new ClickItemAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        LootboxController.getInstance().openLootboxWithoutUI(player, LootTableContainerUtils.getLootTableContainer(nodeId, ContainerType.ITEM).orElse(null),4);
+                    }
+                };
+
             case 8554:
             case 8528:
             case 8530:

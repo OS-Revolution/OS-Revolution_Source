@@ -247,9 +247,8 @@ public class NPCDumbPathFinder {
     public static void walkTowards(NPC npc, int waypointx, int waypointy) {
         int x = npc.getX();
         int y = npc.getY();
-
-        if (WorldController.getInstance().isRegionLoaded(RunehubUtils.getRegionId(x, y))) {
-            Chunk chunk = WorldController.getInstance().loadRegion(RunehubUtils.getRegionId(x, y));
+//        if (WorldController.getInstance().isRegionLoaded(RunehubUtils.getRegionId(x, y))) {
+//            Chunk chunk = WorldController.getInstance().loadRegion(RunehubUtils.getRegionId(x, y));
 
             if (waypointx == x && waypointy == y) {
                 return;
@@ -330,7 +329,7 @@ public class NPCDumbPathFinder {
             //npc.moveY = Server.npcHandler.GetMove(npc.getY(), npcLocation[1] + movey);
             npc.getNextNPCMovement();
             npc.updateRequired = true;
-        }
+//        }
     }
 
     @SuppressWarnings("static-access")

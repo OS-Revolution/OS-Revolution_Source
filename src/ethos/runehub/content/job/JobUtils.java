@@ -4,6 +4,9 @@ import ethos.runehub.entity.item.ArtisanSkillItemReactionDAO;
 import ethos.runehub.entity.item.ItemInteractionDAO;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.artisan.ArtisanSkillItemReaction;
+import ethos.runehub.skill.artisan.smithing.Smeltable;
+import ethos.runehub.skill.artisan.smithing.SmithingItem;
+import ethos.runehub.skill.artisan.smithing.SmithingItemDAO;
 import ethos.runehub.skill.node.impl.Node;
 import ethos.runehub.skill.node.impl.gatherable.impl.WoodcuttingNode;
 import ethos.runehub.skill.node.io.WoodcuttingNodeDAO;
@@ -15,12 +18,21 @@ import org.runehub.api.model.entity.item.loot.Loot;
 import org.runehub.api.model.entity.item.loot.LootTable;
 import org.runehub.api.model.entity.item.loot.LootTableEntry;
 import org.runehub.api.model.math.impl.IntegerRange;
+import org.runehub.api.util.SkillDictionary;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class JobUtils {
+
+    public  static String getScorePercent(float score) {
+        double val = score * 100.D;
+        DecimalFormat df = new DecimalFormat("###.##");
+
+        return df.format(val) + "%";
+    }
 
     public static String getJobScoreString(float score) {
         if (score < 0.20) {
@@ -141,7 +153,49 @@ public class JobUtils {
         int quota = 50 + ((15 * difficulty) * (5 * difficulty)) + Misc.random(200);
         int basePay = 5000 + (difficulty * 2500) * difficulty;
         Job job = new Job(targetId, quota, 0, difficulty, basePay, 8);
-        System.out.println(job);
+
+        return job;
+    }
+
+    public static Job generateSmithingJob(int level, float score) {
+        List<Smeltable> smeltableList = Arrays.stream(Smeltable.values())
+                .filter(smeltable -> smeltable.getLevelRequired() <= level)
+                .sorted(Comparator.comparingInt(Smeltable::getLevelRequired))
+                .collect(Collectors.toList());
+        List<SmithingItem> smithingItems =SmithingItemDAO.getInstance().getAllEntries().stream()
+                .filter(item -> item.getLevelRequired() <= level)
+                .sorted(Comparator.comparingInt(SmithingItem::getLevelRequired))
+                .collect(Collectors.toList());
+        int roll = Skill.SKILL_RANDOM.nextInt(2);
+        int targetId = 0;//selectedNode.getProductItemId();
+        int difficulty = getDifficulty(level,score);
+        int quota = 50 + ((15 * difficulty) * (5 * difficulty)) + Misc.random(200);
+        int basePay = 5000 + (difficulty * 2500) * difficulty;
+
+        if (roll == 1) {
+            WeightedCollection<Smeltable> weightedCollection = new WeightedCollection<>();
+
+            for (int i = 0; i < smeltableList.size(); i++) {
+                double weight = 100 - smeltableList.get(i).getLevelRequired();
+                weightedCollection.add(weight, smeltableList.get(i));
+            }
+
+            Smeltable selectedNode = weightedCollection.next(score);
+            targetId = selectedNode.getProductId();
+        } else {
+            WeightedCollection<SmithingItem> weightedCollection = new WeightedCollection<>();
+
+            for (int i = 0; i < smithingItems.size(); i++) {
+                double weight = 100 - smithingItems.get(i).getLevelRequired();
+                weightedCollection.add(weight, smithingItems.get(i));
+            }
+
+            SmithingItem selectedNode = weightedCollection.next(score);
+            targetId = selectedNode.getItemId();
+        }
+
+        Job job = new Job(targetId, quota, 0, difficulty, basePay, SkillDictionary.Skill.SMITHING.getId());
+
         return job;
     }
 

@@ -57,7 +57,7 @@ public class TombRaiderUI extends SelectionParentUI{
         if (this.hasRequirements(jewellery)) {
             optionOneLabel.setText(MarkupUtils.highlightText(MarkupUtils.GREEN, "Start"));
             this.registerButton(actionEvent -> {
-                if (TombInstanceController.getInstance().createTombRaiderPortal(getPlayer(),nodeX,nodeY))
+                if (TombInstanceController.getInstance().createTombRaiderPortal(getPlayer(),nodeX,nodeY,jewellery))
                     this.close();
             }, 150111);
         }

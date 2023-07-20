@@ -42,6 +42,8 @@ public class WorldSettings {
     private int currentEventId;
     private int weekendEventId;
 
+    private long lastChestEventTimestamp;
+
     public WorldSettings() {
         this.bonusXpTimer = new AdjustableLong(0L);
         this.doubleDropRateTimer = new AdjustableLong(0L);
@@ -55,6 +57,14 @@ public class WorldSettings {
         this.skillGainsTimer = new HashMap<>();
         this.skillPowerTimer = new HashMap<>();
         this.skillStationExpirationTimeMS = new AdjustableLong[] {new AdjustableLong(0L),new AdjustableLong(0L),new AdjustableLong(0L),new AdjustableLong(0L),new AdjustableLong(0L)};
+    }
+
+    public void setLastChestEventTimestamp(long lastChestEventTimestamp) {
+        this.lastChestEventTimestamp = lastChestEventTimestamp;
+    }
+
+    public long getLastChestEventTimestamp() {
+        return lastChestEventTimestamp;
     }
 
     public void setActiveSeasonLoot(GameItem[][] activeSeasonLoot) {

@@ -1,5 +1,6 @@
 package ethos.runehub;
 
+import com.dropbox.core.v1.DbxEntry;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
@@ -12,8 +13,10 @@ import org.runehub.api.io.file.Extension;
 import org.runehub.api.io.file.FileRequest;
 import org.runehub.api.io.file.impl.APIFileSystem;
 import org.runehub.api.util.SkillDictionary;
+import org.runehub.api.util.StringUtils;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -25,6 +28,18 @@ public class RunehubUtils {
 
     public static String getBooleanAsOnOrOff(boolean value) {
         return value ? "On" : "Off";
+    }
+
+    public static double applyPercentageRange(double original, double percentage) {
+        double range = original * (percentage / 100);
+        double min = original - range;
+        double max = original + range;
+        return Math.max(1, Math.random() * (max - min + 1) + min);
+    }
+
+    public static String getPercentageStringFromFloat(double value) {
+        DecimalFormat decimalFormat = new DecimalFormat("###.###");
+        return decimalFormat.format(value * 100) + "%";
     }
 
     public static int getMobRespawn(JsonObject mob) {
@@ -116,9 +131,28 @@ public class RunehubUtils {
         return beginsWithVowel(noun) ? "an" : "a";
     }
 
+//    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+//        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+//        list.sort(Map.Entry.comparingByValue());
+//
+//        Map<K, V> result = new LinkedHashMap<>();
+//        for (Map.Entry<K, V> entry : list) {
+//            result.put(entry.getKey(), entry.getValue());
+//        }
+//
+//        return result;
+//    }
+
+    public static double calculatePercentageOver(double over, double base) {
+        double difference = over - base;
+        double percentage = (difference / base) * 100;
+        return percentage;
+    }
+
+
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
-        list.sort(Map.Entry.comparingByValue());
+        list.sort(Map.Entry.comparingByValue(Comparator.reverseOrder())); // Sort in descending order
 
         Map<K, V> result = new LinkedHashMap<>();
         for (Map.Entry<K, V> entry : list) {
@@ -128,14 +162,29 @@ public class RunehubUtils {
         return result;
     }
 
-    public static Set<Long> getPlayPassHiscores() {
+    public static Map<String,Integer> getPlayPassHiscores() {
         final Map<Long,Integer> scoreMap = new HashMap<>();
+        final Map<String,Integer> nameScoreMap = new HashMap<>();
+        final File[] playerFiles = new File("./Characters").listFiles();
+        final List<String> playerNames = new ArrayList<>();
+
+        for (File playerFile:playerFiles) {
+            String fileName = playerFile.getName();
+            playerNames.add(fileName.substring(0,fileName.length() - 4));
+        }
 
         PlayerCharacterContextDataAccessObject.getInstance().getAllEntries().forEach(ctx -> {
             scoreMap.put(ctx.getId(),ctx.getPlayerSaveData().getPlayPassXp());
         });
 
-        return sortByValue(scoreMap).keySet();
+        for (String playerName:playerNames) {
+            long playerId = StringUtils.longFromUUID(StringUtils.stringToUUID(playerName));
+            if (scoreMap.containsKey(playerId)) {
+                nameScoreMap.put(playerName,scoreMap.get(playerId));
+            }
+        }
+
+        return sortByValue(nameScoreMap);
     }
 
 }

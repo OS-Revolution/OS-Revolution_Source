@@ -4,11 +4,14 @@ import ethos.model.players.PlayerHandler;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.db.PlayerCharacterContextDataAccessObject;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangePriceController;
+import ethos.runehub.event.chest.PromotionalChestEventImpl;
 import ethos.runehub.event.dnd.WeekendBonusFixedScheduleEvent;
 import ethos.runehub.world.MembershipController;
 import ethos.runehub.world.WorldSettingsController;
 
+import java.sql.Time;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 
 public class DailyResetEvent extends FixedScheduleEvent {
 
@@ -37,6 +40,15 @@ public class DailyResetEvent extends FixedScheduleEvent {
         } else if (ZonedDateTime.now(ZoneId.of("UTC")).getDayOfWeek().getValue() < DayOfWeek.FRIDAY.getValue()) {
             WorldSettingsController.getInstance().getWorldSettings().setWeekendEventId(0);
         }
+
+        Instant lastEventTimestamp = Instant.ofEpochMilli(WorldSettingsController.getInstance().getWorldSettings().getLastChestEventTimestamp());
+        Instant now = Instant.now();
+
+        Duration durationBetween = Duration.between(lastEventTimestamp, now);
+        if (durationBetween.toDays() >= 14) {
+            FixedScheduledEventController.getInstance().forceEvent(new PromotionalChestEventImpl());
+        }
+
 
         WorldSettingsController.getInstance().saveSettings();
     }

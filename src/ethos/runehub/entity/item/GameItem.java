@@ -1,5 +1,7 @@
 package ethos.runehub.entity.item;
 
+import org.runehub.api.model.entity.item.container.ItemContainer;
+
 public class GameItem {
 
     public static GameItem decodeGameItem(long encoded) {
@@ -25,6 +27,11 @@ public class GameItem {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "GameItem{id=" + id + ",amount=" + amount +"}";
     }
 
     @Override

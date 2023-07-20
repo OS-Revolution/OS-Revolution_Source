@@ -30,7 +30,7 @@ public class FirstClickPortMasterAction extends ClickNpcAction {
     }
 
     private String getTitle() {
-        final int score = this.getActor().getSkillController().getSailing().getScore();
+        final int score = 0;//this.getActor().getSkillController().getSailing().getScore();
         if (score < 400) {
             return "Sailor";
         } else if(score < 800) {

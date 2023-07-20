@@ -1,1 +1,0 @@
-package ethos.runehub.skill.support.sailing;

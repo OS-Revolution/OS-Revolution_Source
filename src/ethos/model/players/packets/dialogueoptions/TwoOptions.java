@@ -144,36 +144,6 @@ public class TwoOptions {
             case 4:
                 DialogueUtils.sendEstateAgentTourDialog(c);
                 break;
-            case 55555:
-                 region = IslandRegionLoader.getInstance().read(0);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 55556:
-                 region = IslandRegionLoader.getInstance().read(4);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
 //		case 16053:
 //			c.getDH().sendDialogues(16054, 5419);
 //			break;
@@ -1099,31 +1069,6 @@ public class TwoOptions {
                                         "Suit yourself.")
                                 .build()
                 );
-                break;
-            case 55555:
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to The Skull")
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                1
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 55556:
-                c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                        .addOptions(55555,
-                                "The Arc",
-                                "The Skull",
-                                "The Hook",
-                                "The Scythe",
-                                "Next"
-                        )
-                        .build());
                 break;
 //		case 15005:
 //			case 450:

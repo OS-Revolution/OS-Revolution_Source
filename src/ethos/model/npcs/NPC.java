@@ -14,11 +14,15 @@ import ethos.model.players.combat.CombatType;
 import ethos.model.players.combat.Hitmark;
 import ethos.runehub.LootTableContainerUtils;
 import ethos.runehub.RunehubUtils;
+import ethos.runehub.content.MobKill;
+import ethos.runehub.content.MobKillDatabase;
+import ethos.runehub.content.PointController;
 import ethos.runehub.content.instance.impl.rift.NephalemRiftInstance;
 import ethos.runehub.content.rift.impl.NephalemRift;
 import ethos.runehub.entity.item.ItemController;
 import ethos.runehub.entity.mob.AnimationDefinitionCache;
 import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
+import ethos.runehub.world.WorldSettingsController;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.util.Stream;
@@ -844,7 +848,28 @@ public class NPC extends Entity implements NonPlayableCharacter {
                 });
             });
         }
+        handleOtherDeathMechanics(player);
+    }
 
+    private void givePvMPoints(Player killer) {
+        int basePointValue = Math.max(1,this.getHealth().getMaximum() / 25);
+        double levelBonus = RunehubUtils.calculatePercentageOver(HostileMobIdContextLoader.getInstance().read(npcType).getCombatLevel(),killer.combatLevel);
+        int finalPointValue = (int) Math.min(50,Math.max(1,basePointValue * levelBonus));
+        if (WorldSettingsController.getInstance().getWorldSettings().getWeekendEventId() == 6) {
+            finalPointValue *= 2;
+        }
+        killer.getAttributes().getPointController().addPoints(PointController.PointType.PVM,finalPointValue);
+
+    }
+
+    private void handleOtherDeathMechanics(Player killer) {
+        MobKillDatabase.getInstance().storeKill(
+                new MobKill(killer.getContext().getId(),1,npcType)
+        );
+//        System.out.println("There are " + (long) MobKillDatabase.getInstance().read(-1, npcType).size() + " recorded kills on this mob");
+//        System.out.println("There are " + (long) MobKillDatabase.getInstance().read(killer.getContext().getId(), -1).size() + " recorded kills by this player");
+//        System.out.println("There are " + (long) MobKillDatabase.getInstance().read(killer.getContext().getId(), npcType).size() + " recorded kills on this mob by this player");
+        givePvMPoints(killer);
     }
 
 

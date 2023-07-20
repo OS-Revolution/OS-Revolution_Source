@@ -7,8 +7,10 @@ import ethos.runehub.ui.event.action.ActionListener;
 import ethos.runehub.ui.event.action.impl.SystemActionListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Button extends UIComponent {
 

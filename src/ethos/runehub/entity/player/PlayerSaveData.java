@@ -3,7 +3,6 @@ package ethos.runehub.entity.player;
 import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.skill.gathering.farming.FarmingConfig;
 import ethos.runehub.skill.gathering.farming.patch.PatchType;
-import ethos.runehub.skill.support.sailing.voyage.Voyage;
 import org.runehub.api.model.math.impl.AdjustableDouble;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.util.SkillDictionary;
@@ -200,134 +199,6 @@ public class PlayerSaveData {
         this.dailyAvailable = dailyAvailable;
     }
 
-    public boolean isCrewAvailable() {
-        return crewAvailable;
-    }
-
-    public int getCrewLevel() {
-        return crewLevel;
-    }
-
-    public int getVoyagesCompleted() {
-        return voyagesCompleted;
-    }
-
-    public int getVoyagesFailed() {
-        return voyagesFailed;
-    }
-
-    public void setCrewAvailable(boolean crewAvailable) {
-        this.crewAvailable = crewAvailable;
-    }
-
-    public void setCrewLevel(int crewLevel) {
-        this.crewLevel = crewLevel;
-    }
-
-    public void setVoyagesCompleted(int voyagesCompleted) {
-        this.voyagesCompleted = voyagesCompleted;
-    }
-
-    public void setVoyagesFailed(int voyagesFailed) {
-        this.voyagesFailed = voyagesFailed;
-    }
-
-    public int getVoyageSpeedLevel() {
-        return voyageSpeedLevel;
-    }
-
-    public void setVoyageSpeedLevel(int voyageSpeedLevel) {
-        this.voyageSpeedLevel = voyageSpeedLevel;
-    }
-
-
-    public List<Voyage> getAvailableVoyages() {
-        if (availableVoyages == null)
-            availableVoyages = new ArrayList<>();
-        return availableVoyages;
-    }
-
-    public void setAvailableVoyages(List<Voyage> availableVoyages) {
-        this.availableVoyages = availableVoyages;
-    }
-
-    public int getVoyagesRerolled() {
-        return voyagesRerolled;
-    }
-
-    public int getVoyageRerolls() {
-        return voyageRerolls;
-    }
-
-    public List<Integer> getIslandsVisited() {
-        if (islandsVisited == null)
-            islandsVisited = new ArrayList<>();
-        return islandsVisited;
-    }
-
-    public List<Integer> getRegionsVisited() {
-        return regionsVisited;
-    }
-
-    public long getLeaguesTravelled() {
-        return leaguesTravelled;
-    }
-
-    public void setRegionsVisited(List<Integer> regionsVisited) {
-        this.regionsVisited = regionsVisited;
-    }
-
-    public void setIslandsVisited(List<Integer> islandsVisited) {
-        this.islandsVisited = islandsVisited;
-    }
-
-    public void setLeaguesTravelled(long leaguesTravelled) {
-        this.leaguesTravelled = leaguesTravelled;
-    }
-
-    public void setVoyagesRerolled(int voyagesRerolled) {
-        this.voyagesRerolled = voyagesRerolled;
-    }
-
-    public void setVoyageRerolls(int voyageRerolls) {
-        this.voyageRerolls = voyageRerolls;
-    }
-
-    public void updateShipSlot(int slot, int index, int value) {
-        if(shipSlot == null)
-            shipSlot = new int[3][4];
-        shipSlot[slot][index] = value;
-    }
-
-
-    public int[][] getShipSlot() {
-        if(shipSlot == null)
-            shipSlot = new int[3][4];
-        return shipSlot;
-    }
-
-    public int[][] getVoyageLoot() {
-        if(voyageLoot == null)
-            voyageLoot = new int[3][3];
-        return voyageLoot;
-    }
-
-    public void setShipSlot(int[][] shipSlot) {
-        this.shipSlot = shipSlot;
-    }
-
-    public long[][] getVoyageTimestamp() {
-        if(voyageTimestamp == null)
-            voyageTimestamp = new long[3][2];
-        return voyageTimestamp;
-    }
-
-    public List<Integer> getStoryVoyagesCompleted() {
-        if (storyVoyagesCompleted == null)
-            storyVoyagesCompleted = new ArrayList<>();
-        return storyVoyagesCompleted;
-    }
-
     public boolean[] getClaimedPassLevel() {
         if(claimedPassLevel == null)
             claimedPassLevel = new boolean[50];
@@ -445,18 +316,6 @@ public class PlayerSaveData {
         this.blackjackTotalWagers = blackjackTotalWagers;
     }
 
-    public int getPreferredRegion() {
-        return preferredRegion;
-    }
-
-    public void setPreferredRegion(int preferredRegion) {
-        this.preferredRegion = preferredRegion;
-    }
-
-    public void setVoyageTimestamp(long[][] voyageTimestamp) {
-        this.voyageTimestamp = voyageTimestamp;
-    }
-
     public int getPortableBankUses() {
         return portableBankUses;
     }
@@ -535,10 +394,6 @@ public class PlayerSaveData {
         if (equippedAmount == null || equippedAmount.length != 10)
             equippedAmount = new int[10];
         return equippedAmount;
-    }
-
-    public long[][] getJob() {
-        return job;
     }
 
     public int getLecternHotspot() {
@@ -798,19 +653,10 @@ public class PlayerSaveData {
         this.bonusXp = new HashMap<>();
         this.bonusXpTimers = new HashMap<>();
         this.teleportCharges = new AdjustableInteger(0);
-        this.availableVoyages = new ArrayList<>();
-        this.islandsVisited = new ArrayList<>();
-        this.regionsVisited = new ArrayList<>();
-        this.storyVoyagesCompleted = new ArrayList<>();
-        this.shipSlot = new int[3][4];
-        this.voyageTimestamp = new long[3][2];
-        this.voyageLoot = new int[3][3];
-        this.preferredRegion = -1;
         this.claimedPassLevel = new boolean[50];
         this.farmingConfigMap = new HashMap<>();
         this.equipment = new int[10];
         this.equippedAmount = new int[10];
-        this.job = new long[2][5];
         this.reclaimableItems = new ArrayList<>();
         this.harvestMap = new HashMap<>();
         this.completedAchievements = new ArrayList<>();
@@ -840,20 +686,6 @@ public class PlayerSaveData {
     private boolean homeUnlocked, initiativePackageClaimed, dailyAvailable;
     private int heraldrySpace, crystalBallSpace, jewelleryBoxSpace, poolSpace, telescopeSpace, lecternSpace, altarSpace, portalSpace, spellSpace, exchangeSlots;
     private List<Long> claimedRewardCodes;
-
-    /**
-     * Sailing Variables
-     */
-    private int[][] voyageLoot;
-    private int[][] shipSlot;
-    private long[][] voyageTimestamp;
-    private int crewLevel, voyagesCompleted, voyagesFailed, voyageSpeedLevel, voyagesRerolled, voyageRerolls,preferredRegion;
-    private boolean crewAvailable;
-    private long leaguesTravelled;
-    private List<Voyage> availableVoyages;
-    private List<Integer> islandsVisited;
-    private List<Integer> regionsVisited;
-    private List<Integer> storyVoyagesCompleted;
 
     /**
      * Portable Bank Chest
@@ -894,11 +726,6 @@ public class PlayerSaveData {
      */
     private int[] equipment;
     private int[] equippedAmount;
-
-    /**
-     * jobs
-     */
-    private long[][] job;
 
     /**
      * hotspots
@@ -963,4 +790,7 @@ public class PlayerSaveData {
     private int idleBrewId;
     private int[] idleBrewingStationUpgrade;
     private int idleBrewedXp;
+
+    private double amountDonatedUSD;
+    private int timesDonated;
 }

@@ -2,9 +2,7 @@ package ethos.runehub.entity.player.action;
 
 import ethos.model.players.Player;
 import ethos.runehub.entity.player.action.impl.*;
-import ethos.runehub.entity.player.action.impl.npc.FirstClickHeadChefAction;
-import ethos.runehub.entity.player.action.impl.npc.FirstClickMartinAction;
-import ethos.runehub.entity.player.action.impl.npc.FirstClickSawmillOperatorAction;
+import ethos.runehub.entity.player.action.impl.npc.*;
 
 import java.util.logging.Logger;
 
@@ -13,6 +11,12 @@ public class FirstClickNPCActionFactory {
     public static ClickNPCAction getAction(Player player, int nodeX, int nodeY, int nodeId, int npcIndex) {
         Logger.getGlobal().fine("First Click NPC Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
+            case 4274:
+                return new FirstClickLeelaAction(player,nodeX,nodeY,nodeId,npcIndex);
+            case 1430:
+                return new FirstClickShipwrightAction(player,nodeX,nodeY,nodeId,npcIndex);
+            case 6999:
+                return new FirstClickPortMasterAction(player,nodeX,nodeY,nodeId,npcIndex);
             case 7727:
             case 5567:
             case 506:

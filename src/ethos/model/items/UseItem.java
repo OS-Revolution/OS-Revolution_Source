@@ -39,6 +39,7 @@ import ethos.model.players.skills.firemake.Firemaking;
 import ethos.model.players.skills.herblore.PoisonedWeapon;
 import ethos.model.players.skills.herblore.UnfCreator;
 import ethos.runehub.RunehubConstants;
+import ethos.runehub.content.job.Job;
 import ethos.runehub.dialog.DialogOption;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.item.*;
@@ -50,6 +51,7 @@ import ethos.runehub.skill.gathering.farming.action.PlantSeedAction;
 import ethos.util.Misc;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
 import org.runehub.api.model.entity.item.ItemContext;
+import org.runehub.api.util.SkillDictionary;
 
 /**
  * @author Sanity
@@ -1506,6 +1508,49 @@ public class UseItem {
             return;
         }
         switch (npcId) {
+            case 4274:
+                if (player.getContext().getPlayerSaveData().getActiveJob() != 0L) {
+                    final Job job = Job.fromBitArray(player.getContext().getPlayerSaveData().getActiveJob());
+                    int targetId = job.getTargetId();
+                    int notedTargetId = ItemIdContextLoader.getInstance().read(targetId).getLinkedIdNoted();
+                    if (job.getSkillId() == SkillDictionary.Skill.SMITHING.getId()
+                            && (itemId == targetId || itemId == notedTargetId)) {
+                        int quota = job.getQuota();
+                        if (player.getItems().playerHasItem(targetId) || player.getItems().playerHasItem(notedTargetId)) {
+                            if (job.getQuota() > job.getCollected()) {
+                                int amount = player.getItems().getItemAmount(targetId);
+                                int amountNoted = player.getItems().getItemAmount(notedTargetId);
+                                int remainingQuota = quota - job.getCollected();
+                                // Subtract from the amount first
+                                if (amount > 0) {
+                                    int amountToSubtract = Math.min(amount, remainingQuota);
+                                    player.getItems().deleteItem2(targetId, amountToSubtract);
+                                    remainingQuota -= amountToSubtract;
+                                }
+                                // Subtract from the notedAmount if needed
+                                if (remainingQuota > 0 && amountNoted > 0) {
+                                    int amountToSubtract = Math.min(amountNoted, remainingQuota);
+                                    player.getItems().deleteItem2(notedTargetId, amountToSubtract);
+                                    remainingQuota -= amountToSubtract;
+                                }
+                                int collected = quota - remainingQuota;
+                                player.getAttributes().getJobController().updateJobProgress(collected);
+                                if (remainingQuota != 0) {
+                                    player.sendMessage("You have deposited " + (quota - remainingQuota) + " items. You need to deposit " + remainingQuota + " more items.");
+                                }
+                            } else {
+                                player.sendMessage("You've collected enough for your current job.");
+                            }
+                        } else {
+                            player.sendMessage("You do not have anything to deposit.");
+                        }
+                    } else {
+                        player.sendMessage("Leela looks at you confused.");
+                    }
+                } else {
+                    player.sendMessage("You are not currently on a job and have nothing you can deposit.");
+                }
+                break;
             case 5449:
 
                 GameItem item = new GameItem(itemId);

@@ -3,6 +3,9 @@ package ethos.runehub.entity.merchant;
 import ethos.runehub.entity.merchant.impl.*;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeCollectionMerchant;
 import ethos.runehub.entity.merchant.impl.exchange.ExchangeMerchant;
+import ethos.runehub.skill.support.sailing.merchant.BoughtTradeGoodMerchant;
+import ethos.runehub.skill.support.sailing.merchant.SailingStockpileMerchant;
+import ethos.runehub.skill.support.sailing.merchant.SoldTradeGoodMerchant;
 import org.runehub.api.io.load.LazyLoader;
 
 public class MerchantCache extends LazyLoader<Integer,Merchant> {
@@ -43,6 +46,16 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
                 return new MasterFarmerMerchant();
             case 7528:
                 return new FermentingVatMerchant();
+            case 50000:
+                return new BoughtTradeGoodMerchant();
+            case 50001:
+                return new SoldTradeGoodMerchant();
+            case 50002:
+                return new SailingStockpileMerchant();
+            case 2658:
+                return new HeadChefMerchant();
+            case 4274:
+                return new LeelaSmithingMerchant();
             default: return null;
         }
     }

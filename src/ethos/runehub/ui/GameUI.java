@@ -34,7 +34,7 @@ public abstract class GameUI {
 
     public void close() {
         this.onClose();
-        player.getPA().closeAllWindows();
+        player.getPA().closeUI();
         player.getAttributes().setActiveUI(null);
         this.setShowing(false);
         this.setState(State.CANCELLED);

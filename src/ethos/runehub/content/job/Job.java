@@ -1,8 +1,5 @@
 package ethos.runehub.content.job;
 
-import ethos.model.players.Player;
-import ethos.runehub.skill.support.sailing.Ship;
-
 public class Job {
 
     public static Job fromBitArray(long bits) {

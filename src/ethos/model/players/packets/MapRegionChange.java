@@ -26,6 +26,7 @@ public class MapRegionChange implements PacketType {
             if (c.getContext().getPlayerSaveData().getLecternHotspot() > 0)
                 c.getPA().checkObjectSpawn(c.getContext().getPlayerSaveData().getLecternHotspot(), 3092, 3223, 1, 10);
         }
+        WorldController.getInstance().loadChunk(regionId);
 //		WorldController.getInstance().loadRegion(RunehubUtils.getRegionId(c.absX,c.absY));
     }
 

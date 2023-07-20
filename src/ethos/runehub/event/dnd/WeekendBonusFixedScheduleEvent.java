@@ -24,7 +24,7 @@ public class WeekendBonusFixedScheduleEvent extends FixedScheduleEvent {
     }
 
     private int getEventId() {
-        int eId = Skill.SKILL_RANDOM.nextInt(4) + 1;
+        int eId = Skill.SKILL_RANDOM.nextInt(6) + 1;
         if (eId == WorldSettingsController.getInstance().getWorldSettings().getWeekendEventId()) {
             return getEventId();
         }

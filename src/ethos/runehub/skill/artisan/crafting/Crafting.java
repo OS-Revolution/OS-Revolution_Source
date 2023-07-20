@@ -6,6 +6,10 @@ import org.runehub.api.util.SkillDictionary;
 
 public class Crafting extends ArtisanSkill {
 
+    public float getUpgradeBonus() {
+        return this.getPlayer().getSkillController().getLevel(SkillDictionary.Skill.CRAFTING.getId()) * 0.005f;
+    }
+
     @Override
     public int getId() {
         return SkillDictionary.Skill.CRAFTING.getId();

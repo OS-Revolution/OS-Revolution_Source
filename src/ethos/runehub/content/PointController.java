@@ -1,11 +1,17 @@
 package ethos.runehub.content;
 
 import ethos.model.players.Player;
+import ethos.util.Misc;
 
 public class PointController {
 
     public enum PointType {
-        JOURNEY
+        JOURNEY,PVM,LOYALTY;
+
+        @Override
+        public String toString() {
+            return Misc.capitalize(name().toLowerCase());
+        }
     }
 
     public int getPoints(PointType type) {

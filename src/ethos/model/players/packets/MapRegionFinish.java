@@ -14,6 +14,7 @@ public class MapRegionFinish implements PacketType {
 		int regionY = c.absY >> 3;
 		int regionId = ((regionX / 8) << 8) + (regionY / 8);
 //		WorldController.getInstance().loadRegion(regionId);
+		WorldController.getInstance().loadChunk(regionId);
 		Server.itemHandler.reloadItems(c);
 		Server.getGlobalObjects().updateRegionObjects(c);
 		System.out.println("Region ID: " + regionId);

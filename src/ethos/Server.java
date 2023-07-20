@@ -32,6 +32,7 @@ import ethos.runehub.RunehubConstants;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.TimeUtils;
 import ethos.runehub.combat.style.WeaponType;
+import ethos.runehub.content.MobKillDatabase;
 import ethos.runehub.content.achievement.Achievement;
 import ethos.runehub.content.achievement.AchievementCache;
 import ethos.runehub.content.achievement.AchievementDAO;
@@ -66,7 +67,10 @@ import ethos.runehub.skill.node.io.*;
 import ethos.runehub.skill.support.slayer.*;
 import ethos.runehub.world.RegionCache;
 import ethos.runehub.world.RegionLoader;
+import ethos.runehub.world.WorldController;
 import ethos.runehub.world.WorldSettingsController;
+import ethos.runehub.world.wushanko.island.Island;
+import ethos.runehub.world.wushanko.island.IslandDAO;
 import ethos.server.data.ServerData;
 import ethos.util.date.GameCalendar;
 import ethos.util.log.Logger;
@@ -97,6 +101,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -1292,6 +1298,15 @@ public class Server {
         }
     };
 
+    private static final Runnable HOURLY_IO_TASKS = () -> {
+        try {
+            MobKillDatabase.getInstance().pushCacheToDisk();
+            // TODO tasks(players online, etc)
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    };
+
 
 
 
@@ -1362,6 +1377,7 @@ public class Server {
             holidayController.initialize();
             Runtime.getRuntime().addShutdownHook(new ShutdownHook());
             Commands.initializeCommands();
+            WorldController.getInstance().startUpdateThread();
             long endTime = System.currentTimeMillis();
             long elapsed = endTime - startTime;
 
@@ -1371,6 +1387,7 @@ public class Server {
             System.out.println(Config.SERVER_NAME + " has successfully started up in " + elapsed + " milliseconds.");
             GAME_THREAD.scheduleAtFixedRate(SERVER_TASKS, 0, 600, TimeUnit.MILLISECONDS);
             IO_THREAD.scheduleAtFixedRate(IO_TASKS, 0, 60, TimeUnit.SECONDS);
+            IO_THREAD.scheduleAtFixedRate(HOURLY_IO_TASKS, 60, 60, TimeUnit.MINUTES);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,6 +5,7 @@ import ethos.runehub.event.chest.PromotionalChestEventImpl;
 import ethos.runehub.event.dnd.*;
 import ethos.runehub.event.mob.MobAggressionEvent;
 import ethos.runehub.event.shop.impl.GeneralStoreRestockEvent;
+import ethos.runehub.event.shop.impl.SpecialtyShopRestockEvent;
 import ethos.runehub.event.skill.cooking.BrewingCycleEvent;
 import ethos.runehub.event.skill.farming.*;
 
@@ -79,6 +80,7 @@ public class FixedScheduledEventController {
                 new TravellingCommodityMerchantEvent(),
                 new PromotionalChestEventImpl(),
                 new GeneralStoreRestockEvent(),
+                new SpecialtyShopRestockEvent(),
                 new DailyResetEvent(),
                 new PlayPassStartSeasonEvent(),
                 new FruitTreePatchGrowthCycleEvent(),

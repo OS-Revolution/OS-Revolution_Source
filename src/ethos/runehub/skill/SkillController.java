@@ -22,7 +22,6 @@ import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.support.SupportSkill;
 import ethos.runehub.skill.support.firemaking.Firemaking;
 import ethos.runehub.skill.support.sailing.Sailing;
-import ethos.runehub.skill.support.sailing.Sailing2;
 import ethos.runehub.skill.support.slayer.Slayer;
 import ethos.runehub.skill.support.thieving.Thieving;
 import ethos.runehub.world.WorldSettingsController;
@@ -186,8 +185,6 @@ public class SkillController {
         switch (skillId) {
             case 17:
                 return thieving;
-            case 23:
-                return sailing;
             default:
                 throw new NullPointerException("No Gathering Skill with ID: " + skillId);
         }
@@ -308,10 +305,6 @@ public class SkillController {
         return fletching;
     }
 
-    public Sailing2 getSailing2() {
-        return sailing2;
-    }
-
     public SkillController(Player player) {
         this.player = player;
         this.woodcutting = new Woodcutting(player);
@@ -331,7 +324,6 @@ public class SkillController {
         this.prayer = new Prayer(player);
         this.firemaking = new Firemaking(player);
         this.fletching = new Fletching(player);
-        this.sailing2 = new Sailing2(player);
     }
 
     private final Player player;
@@ -352,6 +344,5 @@ public class SkillController {
     private final Prayer prayer;
     private final Firemaking firemaking;
     private final Fletching fletching;
-    private final Sailing2 sailing2;
 
 }

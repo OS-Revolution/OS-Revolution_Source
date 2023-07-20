@@ -1,6 +1,7 @@
 package ethos.runehub.skill.artisan.smithing;
 
 import ethos.model.players.Player;
+import ethos.runehub.content.upgrading.UpgradeRule;
 import ethos.runehub.skill.artisan.ArtisanSkill;
 import org.runehub.api.util.SkillDictionary;
 
@@ -24,6 +25,10 @@ public class Smithing extends ArtisanSkill {
         if (!bars.isEmpty())
             return bars.get(0);
         return null;
+    }
+
+    public float getUpgradeBonus() {
+        return this.getPlayer().getSkillController().getLevel(SkillDictionary.Skill.SMITHING.getId()) * 0.005f;
     }
 
     public int getBestSmeltableInInventoryId() {

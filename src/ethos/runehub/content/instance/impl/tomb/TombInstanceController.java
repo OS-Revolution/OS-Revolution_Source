@@ -3,9 +3,12 @@ package ethos.runehub.content.instance.impl.tomb;
 import ethos.Config;
 import ethos.Server;
 import ethos.clip.Region;
+import ethos.model.npcs.NPC;
+import ethos.model.npcs.NPCHandler;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.content.instance.impl.BossArenaInstance;
+import ethos.runehub.content.rift.RiftDifficulty;
 import ethos.runehub.entity.node.Node;
 import ethos.runehub.event.BossInstanceEvent;
 import ethos.runehub.event.TombRaiderInstanceEvent;
@@ -13,6 +16,7 @@ import ethos.runehub.skill.Skill;
 import ethos.runehub.ui.impl.tab.player.InstanceTab;
 import ethos.runehub.ui.impl.tab.player.TombRaiderInstanceTab;
 import ethos.util.Misc;
+import org.runehub.api.model.math.impl.IntegerRange;
 import org.runehub.api.util.math.geometry.Point;
 import org.runehub.api.util.math.geometry.impl.Rectangle;
 
@@ -22,6 +26,7 @@ import java.util.Random;
 
 public class TombInstanceController {
 
+    private static final int MOB_CAP = 50;
     private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
 
     private static TombInstanceController instance = null;
@@ -33,27 +38,27 @@ public class TombInstanceController {
     }
 
 
-
     private String generateRandomWord(int minLength, int maxLength) {
         int length = minLength + Misc.random(maxLength - minLength + 1);
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            int randomIndex = Misc.random(CHARACTERS.length());
+            int randomIndex = new IntegerRange(0,CHARACTERS.length() - 1).getRandomValue();
             char randomChar = CHARACTERS.charAt(randomIndex);
             sb.append(randomChar);
         }
         return sb.toString();
     }
 
-    public boolean createTombRaiderPortal(Player player, int nodeX, int nodeY) {
+
+    public boolean createTombRaiderPortal(Player player, int nodeX, int nodeY, RiftDifficulty difficulty) {
         Node portalNode = new Node(13619, nodeX, nodeY, 0, 0, 10);
-        player.getAttributes().addInstanceNode(RunehubUtils.getRegionId(nodeX,nodeY), portalNode);
+        player.getAttributes().addInstanceNode(RunehubUtils.getRegionId(nodeX, nodeY), portalNode);
         player.getPA().checkObjectSpawn(portalNode);
-        this.startInstance(player);
+        this.startInstance(player, difficulty);
         return true;
     }
 
-    public void startInstance(Player player) {
+    public void startInstance(Player player, RiftDifficulty difficulty) {
         if (player.getAttributes().getInstanceId() == -1) {
             final int instanceIndex = this.getFirstAvailableInstanceIndex();
             if (instanceIndex != -1) {
@@ -64,8 +69,11 @@ public class TombInstanceController {
                         Duration.of(10, ChronoUnit.MINUTES).toMillis(),
                         System.currentTimeMillis(),
                         floorId,
-                        generateRandomWord(4,7));
+                        generateRandomWord(4, 7),
+                        difficulty);
+                this.spawnMobs(instance);
                 player.getAttributes().setInstanceId(instanceIndex);
+                player.getAttributes().setActiveInstance(instance);
                 instances[instanceIndex] = instance;
                 player.sendUI(new TombRaiderInstanceTab(player, instance));
                 Server.getEventHandler().submit(new TombRaiderInstanceEvent(instanceIndex, instance, 1000));
@@ -102,8 +110,8 @@ public class TombInstanceController {
         }
     }
 
-    public void searchSarcophagus(int instanceId, int nodeId, int nodeX, int  nodeY) {
-        TombInstance  instance = this.getInstance(instanceId);
+    public void searchSarcophagus(int instanceId, int nodeId, int nodeX, int nodeY) {
+        TombInstance instance = this.getInstance(instanceId);
         if (!instance.isPasswordFound()) {
             int face = Region.getWorldObject(nodeId, nodeX, nodeY, instance.getOwner().heightLevel).get().face;
             Node openSarcophagusNode = new Node(6630, nodeX, nodeY, instance.getOwner().heightLevel, face, 0);
@@ -121,7 +129,7 @@ public class TombInstanceController {
     }
 
     public void enterTombPassword(int instanceId, String password) {
-        TombInstance  instance = this.getInstance(instanceId);
+        TombInstance instance = this.getInstance(instanceId);
         if (password.equalsIgnoreCase(instance.getPassword())) {
             instance.getOwner().getPA().movePlayer(instance.getOwner().absX, instance.getOwner().absY - 2, instance.getFloodId());
             instance.getOwner().sendMessage("You enter the heart of the tomb and the doors slam shut.");
@@ -137,6 +145,63 @@ public class TombInstanceController {
         return null;
     }
 
+    private void spawnMobs(TombInstance instance) {
+        final Rectangle bossArea = new Rectangle(
+                new Point(3226,9309),
+                new Point(3240,9321)
+        );
+        instance.getArea().getAllPoints().stream()
+                .filter(point -> Region.getClipping(point.getX(), point.getY(), instance.getFloodId()) == 0)
+                .filter(point -> instance.getSpawnedNpcs().size() < 50)
+                .filter(point -> bossArea.getAllPoints().stream().noneMatch(bPoint -> bPoint.getX() == point.getX() && bPoint.getY() == point.getY()))
+                .forEach(point -> {
+                    if (Misc.random(100) <= 8) {
+                        spawnBasicMob(instance, point);
+                    }
+                    if (Misc.random(100) >= 99) {
+                        spawnEliteMob(instance,point);
+                    }
+                });
+
+    }
+
+    private void spawnBasicMob(TombInstance instance, Point point) {
+        final int baseHp = 30;
+        final int maxHit = 5;
+        final int baseAttack = 50;
+        final int baseDefence = 30;
+        NPC npc = NPCHandler.spawnRiftNpc(
+                717,
+                point.getX(),
+                point.getY(),
+                instance.getFloodId(),
+                1,
+                instance.getDifficulty().ordinal() > 0 ? (int) (baseHp + (instance.getDifficulty().getRewardBonus() * 0.5)) : baseHp,
+                instance.getDifficulty().ordinal() > 0 ? maxHit * instance.getDifficulty().ordinal() : maxHit,
+                instance.getDifficulty().ordinal() > 0 ? (int) (baseAttack + (instance.getDifficulty().getRewardBonus() * 0.25)) : baseAttack,
+                instance.getDifficulty().ordinal() > 0 ? (int) (baseDefence + (instance.getDifficulty().getRewardBonus() * 0.25)) : baseDefence
+        );
+        instance.getSpawnedNpcs().add(npc);
+    }
+
+    private void spawnEliteMob(TombInstance instance, Point point) {
+        final int baseHp = 50;
+        final int maxHit = 7;
+        final int baseAttack = 75;
+        final int baseDefence = 50;
+        NPC npc = NPCHandler.spawnRiftNpc(
+                799,
+                point.getX(),
+                point.getY(),
+                instance.getFloodId(),
+                1,
+                instance.getDifficulty().ordinal() > 0 ? (int) (baseHp + (instance.getDifficulty().getRewardBonus() * 0.5)) : baseHp,
+                instance.getDifficulty().ordinal() > 0 ? maxHit * instance.getDifficulty().ordinal() : maxHit,
+                instance.getDifficulty().ordinal() > 0 ? (int) (baseAttack + (instance.getDifficulty().getRewardBonus() * 0.25)) : baseAttack,
+                instance.getDifficulty().ordinal() > 0 ? (int) (baseDefence + (instance.getDifficulty().getRewardBonus() * 0.25)) : baseDefence
+        );
+        instance.getSpawnedNpcs().add(npc);
+    }
 
     private int getFirstAvailableInstanceIndex() {
         for (int i = 0; i < instances.length; i++) {

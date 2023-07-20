@@ -16,13 +16,20 @@ public class Island {
         return id;
     }
 
-    public Island(int id, String name) {
+    public long getTableId() {
+        return tableId;
+    }
+
+    public Island(int id, String name, long tableId) {
         this.id = id;
         this.name = name;
+        this.tableId = tableId;
     }
 
     @StoredValue(type = SqlDataType.INTEGER, parameter = QueryParameter.PRIMARY_KEY, id = true)
     private final int id;
     @StoredValue(type = SqlDataType.TEXT)
     private final String name;
+    @StoredValue(type = SqlDataType.BIGINT)
+    private final long tableId;
 }

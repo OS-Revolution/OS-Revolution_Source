@@ -13,6 +13,7 @@ public class SelectionParentUI extends GameUI {
     @Override
     protected void onOpen() {
         this.clearUI();
+        this.clearListButtons();
         this.registerButton(new UICloseActionListener(), 148114);
     }
 
@@ -56,6 +57,12 @@ public class SelectionParentUI extends GameUI {
             if (listItemButtons[i] != null && !listItemButtons[i].getActionListeners().isEmpty()) {
                 this.registerButton(listItemButtons[i]);
             }
+        }
+    }
+
+    protected void clearListButtons() {
+        for (int i = 0; i < listItemButtons.length; i++) {
+            listItemButtons[i].getActionListeners().clear();
         }
     }
 
@@ -169,7 +176,7 @@ public class SelectionParentUI extends GameUI {
         this.infoLine5Label = new TextComponent(38507);
         this.infoLine6Label = new TextComponent(38508);
         this.listItemLabels = new TextComponent[100];
-        this.items = new GameItem[12];
+        this.items = new GameItem[20];
         this.listItemButtons = new Button[100];
         this.createListItemLabels();
         this.createListItemButtons();

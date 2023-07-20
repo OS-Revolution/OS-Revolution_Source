@@ -36,6 +36,7 @@ public class ClickNPC implements PacketType {
 		c.clickNpcType = 0;
 		c.getPA().resetFollow();
 		c.followId2 = c.npcIndex;
+//		c.getAttributes().setTargetedMobIndex(c.npcIndex);
 		c.getPA().followNpc();
 		if (c.getAttributes().isMovementResricted())
 			return;

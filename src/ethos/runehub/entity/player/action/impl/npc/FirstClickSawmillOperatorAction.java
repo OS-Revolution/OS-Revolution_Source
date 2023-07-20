@@ -61,12 +61,7 @@ public class FirstClickSawmillOperatorAction extends ClickNPCAction {
                 .build();
     }
 
-    private String getScorePercent() {
-        double val = player.getContext().getPlayerSaveData().getJobScore() * 100.D;
-        DecimalFormat df = new DecimalFormat("###.##");
 
-        return df.format(val) + "%";
-    }
 
     private DialogSequence getJobAssignmentDialogSequence() {
         Job job = JobUtils.generateWoodcuttingJob(player.getSkillController().getLevel(SkillDictionary.Skill.WOODCUTTING.getId()), SkillDictionary.Skill.WOODCUTTING.getId(), player.getContext().getPlayerSaveData().getJobScore());
@@ -79,7 +74,7 @@ public class FirstClickSawmillOperatorAction extends ClickNPCAction {
         }
         return new DialogSequence.DialogSequenceBuilder(player)
                 .addNpcChat(NAME, ID,
-                        "Your current score is " + this.getScorePercent() + " that's " + JobUtils.getJobScoreString(player.getContext().getPlayerSaveData().getJobScore()),
+                        "Your current score is " + JobUtils.getScorePercent(player.getContext().getPlayerSaveData().getJobScore()) + " that's " + JobUtils.getJobScoreString(player.getContext().getPlayerSaveData().getJobScore()),
                         "Go and bring me " + NumberFormat.getInstance().format(job.getQuota()) + " " + ItemIdContextLoader.getInstance().read(job.getTargetId()).getName(),
                         "I'll give you a base pay of " + NumberFormat.getInstance().format(job.getBasePay()) + " coins."
                 )

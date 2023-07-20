@@ -967,6 +967,9 @@ public class PlayerAssistant {
     public void removeAllWindows() {
         // synchronized(c) {
         if (c.getOutStream() != null && c != null) {
+            if (c.getAttributes().getActiveUI() != null) {
+                c.getAttributes().getActiveUI().close();
+            }
             c.getPA().resetVariables();
             c.getOutStream().createFrame(219);
             c.flushOutStream();
@@ -977,6 +980,25 @@ public class PlayerAssistant {
     }
 
     public void closeAllWindows() {
+        if (c.getOutStream() != null && c != null) {
+            if (c.getAttributes().getActiveUI() != null) {
+                c.getAttributes().getActiveUI().close();
+            }
+            c.getOutStream().createFrame(219);
+            c.flushOutStream();
+            c.isBanking = false;
+            c.inSafeBox = false;
+            c.viewingLootBag = false;
+            c.addingItemsToLootBag = false;
+            c.viewingRunePouch = false;
+            c.nextChat = 0;
+            c.dialogueOptions = 0;
+            c.placeHolderWarning = false;
+            resetVariables();
+        }
+    }
+
+    public void closeUI() {
         if (c.getOutStream() != null && c != null) {
             c.getOutStream().createFrame(219);
             c.flushOutStream();
@@ -2334,10 +2356,10 @@ public class PlayerAssistant {
             c.sendMessage("You are teleblocked and can't teleport.");
             return;
         }
-        if (c.inClanWars() || c.inClanWarsSafe()) {
-            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
-            return;
-        }
+//        if (c.inClanWars() || c.inClanWarsSafe()) {
+//            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
+//            return;
+//        }
         if (Boundary.isIn(c, Boundary.ICE_PATH) || Boundary.isIn(c, Boundary.ICE_PATH_TOP) && c.heightLevel > 0) {
             c.sendMessage("The cold from the ice-path is preventing you from teleporting.");
             return;
@@ -2442,10 +2464,10 @@ public class PlayerAssistant {
             c.sendMessage("You cannot do this now.");
             return false;
         }
-        if (c.inClanWars() || c.inClanWarsSafe()) {
-            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
-            return false;
-        }
+//        if (c.inClanWars() || c.inClanWarsSafe()) {
+//            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
+//            return false;
+//        }
         if (System.currentTimeMillis() - c.lastSpear < 3000) {
             c.sendMessage("You are stunned and can not teleport!");
             return false;
@@ -2519,10 +2541,10 @@ public class PlayerAssistant {
             c.sendMessage("You cannot do this now.");
             return;
         }
-        if (c.inClanWars() || c.inClanWarsSafe()) {
-            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
-            return;
-        }
+//        if (c.inClanWars() || c.inClanWarsSafe()) {
+//            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
+//            return;
+//        }
         if (c.stopPlayerSkill) {
             SkillHandler.resetPlayerSkillVariables(c);
             c.stopPlayerSkill = false;
@@ -2673,10 +2695,10 @@ public class PlayerAssistant {
             c.sendMessage("You cannot teleport until you finish what you're doing.");
             return;
         }
-        if (c.inClanWars() || c.inClanWarsSafe()) {
-            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
-            return;
-        }
+//        if (c.inClanWars() || c.inClanWarsSafe()) {
+//            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
+//            return;
+//        }
         if (c.inWild() && c.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
             c.sendMessage("You can't teleport above level " + Config.NO_TELEPORT_WILD_LEVEL + " in the wilderness.");
             return;
@@ -2762,10 +2784,10 @@ public class PlayerAssistant {
             c.sendMessage("You cannot teleport until you finish what you're doing.");
             return;
         }
-        if (c.inClanWars() || c.inClanWarsSafe()) {
-            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
-            return;
-        }
+//        if (c.inClanWars() || c.inClanWarsSafe()) {
+//            c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
+//            return;
+//        }
         if (System.currentTimeMillis() - c.lastSpear < 3000) {
             c.sendMessage("You are stunned and can not teleport!");
             return;
@@ -3060,6 +3082,10 @@ public class PlayerAssistant {
                 }
             }
         }
+    }
+
+    public void targetMob() {
+
     }
 
     public void followNpc() {
@@ -4373,10 +4399,10 @@ public class PlayerAssistant {
                 break;
 
             case 13136:
-                if (c.inClanWars() || c.inClanWarsSafe()) {
-                    c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
-                    return;
-                }
+//                if (c.inClanWars() || c.inClanWarsSafe()) {
+//                    c.sendMessage("@cr10@You can not teleport from here, speak to the doomsayer to leave.");
+//                    return;
+//                }
                 if (Server.getMultiplayerSessionListener().inAnySession(c)) {
                     c.sendMessage("You cannot do that right now.");
                     return;

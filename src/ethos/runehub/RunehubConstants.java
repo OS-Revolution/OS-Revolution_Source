@@ -16,6 +16,8 @@ public class RunehubConstants {
     public static final String DB_ROOT = ROOT + "db/";
     public static final String EXCHANGE_DB = DB_ROOT + "exchange.db";
     public static final String PLAYER_DB = DB_ROOT + "players.db";
+    public static final String UPGRADE_DB = DB_ROOT + "upgrades.db";
+    public static final String METRICS_DB = DB_ROOT + "metrics.db";
     public static final String JOURNEY_DB = DB_ROOT + "journey.db";
     public static final String ITEM_INTERACTION_DB = DB_ROOT + "item-interactions.db";
     public static final String OS_DEFINTIONS_DB = DB_ROOT + "os-definitions.db";
@@ -47,5 +49,8 @@ public class RunehubConstants {
 
     public static final int[] CBOW = {9174,9185,11785,21012};
 
+    public static final int JEWEL_ID = 1459;
+
+    public static final int COMPLETE_VOYAGE_COST = 80;
     public static final int ADVANCE_PATCH_GROWTH_COST = 10;
 }

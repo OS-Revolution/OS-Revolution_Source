@@ -13,6 +13,7 @@ import ethos.runehub.skill.artisan.actions.ManualMilkCowAction;
 import ethos.runehub.skill.node.impl.support.SupportNode;
 import ethos.runehub.skill.support.firemaking.action.LightBurnerAction;
 import ethos.runehub.ui.impl.BossInstanceUI;
+import ethos.runehub.ui.impl.ItemUpgradeUI;
 import ethos.runehub.ui.impl.TombRaiderUI;
 import ethos.runehub.ui.impl.cooking.BrewingUI;
 import ethos.runehub.ui.impl.cooking.CookingUI;
@@ -26,6 +27,13 @@ public class FirstClickNodeActionFactory {
     public static ClickNodeAction getAction(Player player, int nodeX, int nodeY, int nodeId) {
         Logger.getGlobal().fine("First Click Action - " + nodeId + " " + nodeX + " " + nodeY);
         switch (nodeId) {
+            case 2279:
+                return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        player.sendUI(new ItemUpgradeUI(player));
+                    }
+                };
             case 13619:
                 return new ClickNodeAction(player,nodeX,nodeY,nodeId) {
                     @Override

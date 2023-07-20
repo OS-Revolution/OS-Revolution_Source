@@ -1,11 +1,5 @@
 package ethos.runehub;
 
-import ethos.runehub.skill.support.sailing.Ship;
-
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.BitSet;
-
 public class RunehubTests {
 
     enum ShipMask {

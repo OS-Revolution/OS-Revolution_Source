@@ -251,6 +251,10 @@ public class WorldSettingsController {
                 return "Double_Slayer_Points_Weekend";
             case 4:
                 return "Boon_of_the_Hoarder";
+            case 5:
+                return "Sailors_Delight";
+            case 6:
+                return "Double_PvM_Points_Weekend";
         }
         return "inactive";
     }

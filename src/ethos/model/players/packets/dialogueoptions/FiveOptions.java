@@ -1,14 +1,9 @@
 package ethos.model.players.packets.dialogueoptions;
 
 import ethos.Config;
-import ethos.Server;
 import ethos.construction.ConstSave;
 import ethos.event.impl.WheatPortalEvent;
-import ethos.model.content.DiceHandler;
-import ethos.model.content.LootValue;
-import ethos.model.content.QuickSets;
-import ethos.model.content.RecolourGraceful;
-import ethos.model.content.StatReset;
+import ethos.model.content.*;
 import ethos.model.content.achievement_diary.ardougne.ArdougneDiaryEntry;
 import ethos.model.content.achievement_diary.falador.FaladorDiaryEntry;
 import ethos.model.content.achievement_diary.kandarin.KandarinDiaryEntry;
@@ -16,16 +11,12 @@ import ethos.model.content.achievement_diary.lumbridge_draynor.LumbridgeDraynorD
 import ethos.model.content.teleportation.TeleportationDevice;
 import ethos.model.npcs.NPC;
 import ethos.model.npcs.NPCHandler;
-import ethos.model.players.Boundary;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerAssistant;
 import ethos.model.players.combat.Degrade;
 import ethos.model.players.combat.Degrade.DegradableItem;
-import ethos.runehub.dialog.Dialog;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.world.wushanko.region.IslandRegion;
-import ethos.runehub.world.wushanko.region.IslandRegionLoader;
-import ethos.world.objects.GlobalObject;
 
 /*
  * @author Matt
@@ -41,36 +32,6 @@ public class FiveOptions {
 	public static void handleOption1(Player c) {
 		IslandRegion region;
 			switch (c.dialogueAction) {
-				case 55555:
-					 region = IslandRegionLoader.getInstance().read(0);
-					c.getDH().sendDialogueSequence(
-							new DialogSequence.DialogSequenceBuilder(c)
-									.addStatement("Preferred Region set to " + region.getName())
-									.addDialogueAction(new Dialog() {
-										@Override
-										public void onSend() {
-											c.getContext().getPlayerSaveData().setPreferredRegion(
-													region.getId()
-											);
-										}
-									})
-									.build());
-					break;
-				case 55556:
-					 region = IslandRegionLoader.getInstance().read(4);
-					c.getDH().sendDialogueSequence(
-							new DialogSequence.DialogSequenceBuilder(c)
-									.addStatement("Preferred Region set to " + region.getName())
-									.addDialogueAction(new Dialog() {
-										@Override
-										public void onSend() {
-											c.getContext().getPlayerSaveData().setPreferredRegion(
-													region.getId()
-											);
-										}
-									})
-									.build());
-					break;
 			case 16054:
 				c.getPA().movePlayer(c.absX, c.absY + 1);
 				break;
@@ -407,36 +368,6 @@ public class FiveOptions {
 	public static void handleOption2(Player c) {
 		IslandRegion region;
 		switch (c.dialogueAction) {
-			case 55555:
-				 region = IslandRegionLoader.getInstance().read(1);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
-			case 55556:
-				region = IslandRegionLoader.getInstance().read(5);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
 		case 16054:
 			c.getPA().movePlayer(c.absX + 1, c.absY);
 			break;
@@ -761,36 +692,6 @@ public class FiveOptions {
 	public static void handleOption3(Player c) {
 		IslandRegion region;
 		switch (c.dialogueAction) {
-			case 55555:
-				 region = IslandRegionLoader.getInstance().read(2);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
-			case 55556:
-				region = IslandRegionLoader.getInstance().read(6);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
 		case 16054:
 			c.getPA().movePlayer(c.absX, c.absY - 1);
 			break;
@@ -1105,36 +1006,6 @@ public class FiveOptions {
 	public static void handleOption4(Player c) {
 		IslandRegion region;
 		switch (c.dialogueAction) {
-			case 55555:
-				 region = IslandRegionLoader.getInstance().read(3);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
-			case 55556:
-				region = IslandRegionLoader.getInstance().read(7);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
 		case 16054:
 			c.getPA().movePlayer(c.absX - 1, c.absY);
 			break;

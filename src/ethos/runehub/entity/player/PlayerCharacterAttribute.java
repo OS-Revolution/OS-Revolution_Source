@@ -12,9 +12,11 @@ import ethos.runehub.content.journey.JourneyController;
 import ethos.runehub.content.rift.RiftFloorDAO;
 import ethos.runehub.content.rift.party.Party;
 import ethos.runehub.content.rift.Rift;
+import ethos.runehub.content.upgrading.UpgradeRule;
 import ethos.runehub.dialog.DialogSequence;
 import ethos.runehub.entity.combat.CombatController;
 import ethos.runehub.entity.combat.impl.PvECombatController;
+import ethos.runehub.entity.item.GameItem;
 import ethos.runehub.entity.item.ItemReactionProcessor;
 import ethos.runehub.entity.node.Node;
 import ethos.runehub.entity.player.action.ActionController;
@@ -27,6 +29,7 @@ import ethos.runehub.world.WorldSettingsController;
 import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.net.Connection;
+import org.runehub.api.util.SkillDictionary;
 import org.runehub.api.util.math.geometry.Point;
 
 import java.util.*;
@@ -46,12 +49,14 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.actionController = new ActionController();
         this.pvECombatController = new PvECombatController(owner);
         this.deployedTrapList = new ArrayList<>(5);
-        this.actionDispatcher.registerButton(actionEvent -> this.getOwner().getPA().closeAllWindows(),250002);
+//        this.actionDispatcher.registerButton(actionEvent -> this.getOwner().getAttributes().getActiveUI().close(),250002);
         this.stepCounter = new AdjustableInteger(0);
         this.achievementController = new AchievementController(owner);
         this.journeyController = new JourneyController(owner);
         this.pointController = new PointController(owner);
         this.jobController = new JobController(owner);
+        this.selectedBuyOffers = new long[5];
+        this.selectedSellOffers = new long[5];
     }
 
     public JobController getJobController() {
@@ -380,6 +385,14 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.tombRaiderPassword = tombRaiderPassword;
     }
 
+    public int getTargetedMobIndex() {
+        return targetedMobIndex;
+    }
+
+    public void setTargetedMobIndex(int targetedMobIndex) {
+        this.targetedMobIndex = targetedMobIndex;
+    }
+
     @Override
     public Player getOwner() {
         return (Player) super.getOwner();
@@ -428,4 +441,110 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     private final JobController jobController;
 
     private String tombRaiderPassword;
+
+    private int targetedMobIndex;
+
+
+
+    /**
+     * sailing temporary variables
+     */
+    public long[] getSelectedBuyOffers() {
+        return selectedBuyOffers;
+    }
+
+    public void setBuyOffer(int index, long gameItem) {
+        selectedBuyOffers[index] = gameItem;
+    }
+
+    public void setSellOffer(int index, long gameItem) {
+        selectedSellOffers[index] = gameItem;
+    }
+
+    public int getSelectedBuySlot() {
+        return selectedBuySlot;
+    }
+
+    public void setSelectedBuySlot(int selectedBuySlot) {
+        this.selectedBuySlot = selectedBuySlot;
+    }
+
+    public double getCargoWeight() {
+        return cargoWeight;
+    }
+
+    public void setCargoWeight(double cargoWeight) {
+        this.cargoWeight = cargoWeight;
+    }
+
+    public int getSelectedShipSlot() {
+        return selectedShipSlot;
+    }
+
+    public void setSelectedShipSlot(int selectedShipSlot) {
+        this.selectedShipSlot = selectedShipSlot;
+    }
+
+    public int getSelectedVoyageIndex() {
+        return selectedVoyageIndex;
+    }
+
+    public void setSelectedVoyageIndex(int selectedVoyageIndex) {
+        this.selectedVoyageIndex = selectedVoyageIndex;
+    }
+
+    public long[] getSelectedSellOffers() {
+        return selectedSellOffers;
+    }
+
+    public int getSelectedSellSlot() {
+        return selectedSellSlot;
+    }
+
+    public void setSelectedSellSlot(int selectedSellSlot) {
+        this.selectedSellSlot = selectedSellSlot;
+    }
+
+    private int selectedVoyageIndex;
+    private int selectedShipSlot;
+    private double cargoWeight;
+    private int selectedBuySlot;
+    private final long[] selectedBuyOffers;
+    private int selectedSellSlot;
+    private final long[] selectedSellOffers;
+
+    /**
+     * Upgrading variables
+     */
+
+    public int getUpgradeAttempts() {
+        return upgradeAttempts;
+    }
+
+    public void setUpgradeAttempts(int upgradeAttempts) {
+        this.upgradeAttempts = upgradeAttempts;
+    }
+
+    public float getCurrentUpgradeSuccessChance(UpgradeRule rule) {
+        float attemptBonus = (rule.getBaseUpgradeChanceIncrease() * rule.getBaseSuccessChance()) * upgradeAttempts;
+//        float attemptBonus = (upgradeAttempts * rule.getBaseUpgradeChanceIncrease());
+        float smithingBonus = this.getOwner().getSkillController().getSmithing().getUpgradeBonus();
+        float craftingBonus = this.getOwner().getSkillController().getCrafting().getUpgradeBonus();
+        float chance = rule.getBaseSuccessChance() + attemptBonus + (rule.getBaseSuccessChance() * smithingBonus) + (rule.getBaseSuccessChance() * craftingBonus);
+        return Math.min(1.0f,chance);
+    }
+
+    public int getCurrentUpgradeCost(UpgradeRule rule) {
+        float amountToIncrease = (rule.getBaseUpgradeCostIncrease() * rule.getUpgradePointCost()) * upgradeAttempts;
+        return (int) Math.min(1000,rule.getUpgradePointCost() + amountToIncrease);
+    }
+
+    public float getCurrentUpgradeFailureChance(UpgradeRule rule) {
+        float total = 1.0f;
+        total -= getCurrentUpgradeSuccessChance(rule);
+        total -= rule.getBaseConsumeChance();
+        return total;
+    }
+
+    private int upgradeAttempts;
 }

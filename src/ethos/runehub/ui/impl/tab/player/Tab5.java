@@ -4,8 +4,10 @@ import ethos.model.players.Player;
 import ethos.runehub.content.journey.Journey;
 import ethos.runehub.content.journey.JourneyCache;
 import ethos.runehub.ui.component.impl.TextComponent;
+import ethos.runehub.ui.impl.JobSummaryUI;
 import ethos.runehub.ui.impl.JobUI;
 import ethos.runehub.ui.impl.JourneyUI;
+import ethos.runehub.ui.impl.PointStatUI;
 import org.apache.poi.hssf.record.formula.functions.T;
 
 import java.util.Arrays;
@@ -45,7 +47,11 @@ public class Tab5 extends InfoTab {
         this.lineLabel = new TextComponent[totalChildren];
 
         lineLabel[0] = new TextComponent(57415,"Active Job");
+        lineLabel[1] = new TextComponent(57416,"Job Summary");
+        lineLabel[2] = new TextComponent(57417,"Point Summary");
         this.registerButton(actionEvent -> player.sendUI(new JobUI(player)),224071);
+        this.registerButton(actionEvent -> player.sendUI(new JobSummaryUI(player)),224072);
+        this.registerButton(actionEvent -> player.sendUI(new PointStatUI(player)),224073);
     }
 
     private final int totalChildren = 30;

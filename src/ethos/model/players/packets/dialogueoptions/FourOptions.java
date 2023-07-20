@@ -1,18 +1,13 @@
 package ethos.model.players.packets.dialogueoptions;
 
-import ethos.runehub.dialog.Dialog;
-import ethos.runehub.dialog.DialogSequence;
-import ethos.runehub.ui.impl.sailing.SailingUI;
-import ethos.runehub.ui.impl.sailing.VoyageUI;
-import ethos.runehub.world.wushanko.region.IslandRegion;
-import ethos.runehub.world.wushanko.region.IslandRegionLoader;
-import org.apache.commons.lang3.RandomUtils;
-
 import ethos.Config;
 import ethos.Server;
 import ethos.model.content.achievement_diary.karamja.KaramjaDiaryEntry;
 import ethos.model.players.Player;
+import ethos.runehub.dialog.DialogSequence;
+import ethos.runehub.world.wushanko.region.IslandRegion;
 import ethos.server.data.SerializablePair;
+import org.apache.commons.lang3.RandomUtils;
 
 /*
  * @author Matt
@@ -74,36 +69,6 @@ public class FourOptions {
                                 "me when you're ready to begin."
                         )
                         .build());
-                break;
-            case 55555:
-                 region = IslandRegionLoader.getInstance().read(0);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 55556:
-                region = IslandRegionLoader.getInstance().read(4);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
                 break;
             case 15001:
                 if (c.hasHouse) {
@@ -226,16 +191,6 @@ public class FourOptions {
     public static void handleOption2(Player c) {
         IslandRegion region;
         switch (c.dialogueAction) {
-            case 1:
-                c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                        .addStatement(
-                                "You have visited: " + c.getContext().getPlayerSaveData().getIslandsVisited().size() + " unique islands.",
-                                "You have visited: " + c.getContext().getPlayerSaveData().getRegionsVisited().size() + " unique regions.",
-                                "You have travelled: " + c.getContext().getPlayerSaveData().getLeaguesTravelled() + " nautical leagues.",
-                                "Your port score is: " + c.getSkillController().getSailing().getScore()
-                        )
-                        .build());
-                break;
             case 15001:
                 if (c.hasHouse) {
                     c.getDH().sendDialogues(15007, 5419);
@@ -251,36 +206,6 @@ public class FourOptions {
 
             case 87:
                 c.getDH().sendDialogues(91, c.npcType);
-                break;
-            case 55555:
-                 region = IslandRegionLoader.getInstance().read(1);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 55556:
-                region = IslandRegionLoader.getInstance().read(5);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
                 break;
 
         }
@@ -421,78 +346,6 @@ public class FourOptions {
     public static void handleOption3(Player c) {
         IslandRegion region;
         switch (c.dialogueAction) {
-            case 55555:
-                 region = IslandRegionLoader.getInstance().read(2);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 55556:
-                region = IslandRegionLoader.getInstance().read(6);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 1:
-                final int bestRegion = c.getSkillController().getSailing().getBestAvailableRegion();
-                if (bestRegion == 0) {
-                    c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                            .addStatement("You may only explore The Arc")
-                            .build());
-                } else if (bestRegion == 1) {
-                    c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                            .addOptions(55555,
-                                    "The Arc",
-                                    "The Skull"
-                            )
-                            .build());
-                } else if (bestRegion == 2) {
-                    c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                            .addOptions(55555,
-                                    "The Arc",
-                                    "The Skull",
-                                    "The Hook"
-                            )
-                            .build());
-                } else if (bestRegion == 3) {
-                    c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                            .addOptions(55555,
-                                    "The Arc",
-                                    "The Skull",
-                                    "The Hook",
-                                    "The Scythe"
-                            )
-                            .build());
-                } else {
-                    c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                            .addOptions(55555,
-                                    "The Arc",
-                                    "The Skull",
-                                    "The Hook",
-                                    "The Scythe",
-                                    "Next"
-                            )
-                            .build());
-                }
-                break;
             case 6500:
                 c.getShops().openShop(121);
                 break;
@@ -649,36 +502,6 @@ public class FourOptions {
      */
     public static void handleOption4(Player c) {
         switch (c.dialogueAction) {
-            case 1:
-                c.sendUI(new SailingUI(c,c.getContext().getPlayerSaveData().getAvailableVoyages()));
-//                c.sendUI(new VoyageUI(c));
-                break;
-            case 55555:
-                IslandRegion region = IslandRegionLoader.getInstance().read(3);
-                c.getDH().sendDialogueSequence(
-                        new DialogSequence.DialogSequenceBuilder(c)
-                                .addStatement("Preferred Region set to " + region.getName())
-                                .addDialogueAction(new Dialog() {
-                                    @Override
-                                    public void onSend() {
-                                        c.getContext().getPlayerSaveData().setPreferredRegion(
-                                                region.getId()
-                                        );
-                                    }
-                                })
-                                .build());
-                break;
-            case 55556:
-                c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
-                        .addOptions(55555,
-                                "The Arc",
-                                "The Skull",
-                                "The Hook",
-                                "The Scythe",
-                                "Next"
-                        )
-                        .build());
-                break;
             case 6500:
                 c.getPA().closeAllWindows();
                 break;

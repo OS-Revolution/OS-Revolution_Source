@@ -2566,6 +2566,25 @@ public class ItemAssistant {
         }
     }
 
+    public void delete(int id, int amount) {
+        int slot = this.getItemSlot(id);
+        if (slot != -1) {
+            int amountInSlot = c.playerItemsN[slot];
+            int remainder = amountInSlot - amount;
+            if (remainder > 0) {
+                c.playerItemsN[slot] = remainder;
+            } else if(remainder == 0) {
+                c.playerItems[slot] = 0;
+                c.playerItemsN[slot] = 0;
+            } else {
+                c.playerItems[slot] = 0;
+                c.playerItemsN[slot] = 0;
+                delete(id,(amount - amountInSlot));
+            }
+            resetItems(3214);
+        }
+    }
+
     public void deleteItem2(int id, int amount) {
         int am = amount;
         for (int slot = 0; slot < c.playerItems.length; slot++) {

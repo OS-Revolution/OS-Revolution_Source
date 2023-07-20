@@ -111,7 +111,7 @@ public class ReceiveString implements PacketType {
             case 10:
                 if (string.length() == 0)
                     return;
-                RewardCodeController.getInstance().redeem(player,string);
+                RewardCodeController.getInstance().redeem(player, string);
                 break;
             case 11:
                 if (string.length() == 0)
@@ -120,6 +120,11 @@ public class ReceiveString implements PacketType {
                         player.getAttributes().getInstanceId(),
                         string
                 );
+                break;
+            case 12:
+                if (string.length() == 0)
+                    return;
+                player.getSkillController().getSailing().addCoinsToCoffer(string);
                 break;
             default:
                 System.out.println("Received string: identifier=" + id + ", string=" + string);

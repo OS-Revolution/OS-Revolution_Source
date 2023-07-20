@@ -15,8 +15,8 @@ public class FirstClickNpcListener {
                 return new FirstClickGuideAction(player,npcId,npcIndex);
             case 5419:
                 return new FirstClickEstateAgentAction(player,npcId,npcIndex);
-            case 6999:
-                return new FirstClickPortMasterAction(player,npcId,npcIndex);
+//            case 6999:
+//                return new FirstClickPortMasterAction(player,npcId,npcIndex);
             case 5055:
                 return GamblingManHostileMob.getInstance(npcIndex).talkTo(player,npcIndex );
             default: throw new NullPointerException("Nothing interesting happens.");

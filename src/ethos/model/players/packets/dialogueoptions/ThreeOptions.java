@@ -22,38 +22,7 @@ public class ThreeOptions {
 	 * Handles all first options on 'Three option' dialogues.
 	 */
 	public static void handleOption1(Player c) {
-		IslandRegion region;
 		switch (c.dialogueAction) {
-			case 55555:
-				 region = IslandRegionLoader.getInstance().read(0);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
-			case 55556:
-				region = IslandRegionLoader.getInstance().read(4);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
 		case 16050:
 			
 			break;
@@ -164,36 +133,6 @@ public class ThreeOptions {
 	public static void handleOption2(Player c) {
 
 		switch (c.dialogueAction) {
-			case 55555:
-				IslandRegion region = IslandRegionLoader.getInstance().read(1);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
-			case 55556:
-				region = IslandRegionLoader.getInstance().read(5);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
 		case 16050:
 			c.getDH().sendDialogues(16052, 5419);
 			break;
@@ -306,21 +245,6 @@ public class ThreeOptions {
 	public static void handleOption3(Player c) {
 		IslandRegion region;
 		switch (c.dialogueAction) {
-			case 55555:
-				 region = IslandRegionLoader.getInstance().read(2);
-				c.getDH().sendDialogueSequence(
-						new DialogSequence.DialogSequenceBuilder(c)
-								.addStatement("Preferred Region set to " + region.getName())
-								.addDialogueAction(new Dialog() {
-									@Override
-									public void onSend() {
-										c.getContext().getPlayerSaveData().setPreferredRegion(
-												region.getId()
-										);
-									}
-								})
-								.build());
-				break;
 			case 55556:
 				c.getDH().sendDialogueSequence(new DialogSequence.DialogSequenceBuilder(c)
 						.addOptions(55555,

@@ -5,6 +5,7 @@ import ethos.runehub.event.FixedScheduleEvent;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.util.Misc;
 
+import java.time.Instant;
 import java.util.Set;
 
 public class PromotionalChestEventImpl extends PromotionalChestEvent{
@@ -18,6 +19,7 @@ public class PromotionalChestEventImpl extends PromotionalChestEvent{
         PromotionalChestEvent event = WorldSettingsController.getInstance().getPromotionalEvents().get(keyArray[eventIndex]);
         if (event.getEventId() != currentEventId) {
             WorldSettingsController.getInstance().getWorldSettings().setCurrentEventId(event.getEventId());
+            WorldSettingsController.getInstance().getWorldSettings().setLastChestEventTimestamp(Instant.now().toEpochMilli());
             WorldSettingsController.getInstance().saveSettings();
             event.onExecute();
 //            PlayerHandler.executeGlobalMessage("^Promo $" + event.getName() + " is now active!");

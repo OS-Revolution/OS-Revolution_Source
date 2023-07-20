@@ -1,20 +1,32 @@
 package ethos.runehub.skill.support.sailing.voyage;
 
-import org.runehub.api.io.data.QueryParameter;
-import org.runehub.api.io.data.SqlDataType;
-import org.runehub.api.io.data.StoredObject;
-import org.runehub.api.io.data.StoredValue;
+import ethos.runehub.world.wushanko.island.IslandLoader;
 
-@StoredObject(tableName = "voyages")
 public class Voyage {
 
-    public int getId() {
-        return id;
+    public long toLong() {
+        long result = 0;
+        result |= ((long) seafaring) << 0;
+        result |= ((long) morale) << 12;
+        result |= ((long) combat) << 24;
+        result |= ((long) distance) << 36;
+        result |= ((long) region) << 49;
+        result |= ((long) island) << 56;
+        return result;
     }
 
-    public String getName() {
-        return name;
+    public static Voyage fromLong(long longValue) {
+        int seafaring = (int) (longValue >> 0) & 0xFFF;
+        int morale = (int) (longValue >> 12) & 0xFFF;
+        int combat = (int) (longValue >> 24) & 0xFFF;
+        int distance = (int) (longValue >> 36) & 0x1FFF;
+        int region = (int) (longValue >> 49) & 0x7F;
+        int island = (int) (longValue >> 56) & 0xFF;
+        return new Voyage(seafaring, morale, combat, distance, region, island);
     }
+
+
+
 
     public int getCombat() {
         return combat;
@@ -40,52 +52,32 @@ public class Voyage {
         return region;
     }
 
-    public boolean isAdventure() {
-        return adventure;
+    @Override
+    public String toString() {
+        return "Voyage{" +
+                "seafaring=" + seafaring +
+                ", morale=" + morale +
+                ", combat=" + combat +
+                ", distance=" + distance +
+                ", region=" + region +
+                ", island=" + island +
+                ", islandName=" + IslandLoader.getInstance().read(island).getName() +
+                '}';
     }
 
-    public boolean isStory() {
-        return story;
-    }
 
-    public VoyageContext getContext() {
-        return context;
-    }
-
-    public Voyage(int id, String name, int seafaring, int morale, int combat, int distance, int region, int island, boolean story, boolean adventure, VoyageContext context) {
-        this.id = id;
-        this.name = name;
+    public Voyage(int seafaring, int morale, int combat, int distance, int region, int island) {
         this.seafaring = seafaring;
         this.morale = morale;
         this.combat = combat;
         this.distance = distance;
         this.island = island;
         this.region = region;
-        this.story = story;
-        this.adventure = adventure;
-        this.context = context;
     }
-
-    @StoredValue(type = SqlDataType.INTEGER, parameter = QueryParameter.PRIMARY_KEY, id = true)
-    private final int id;
-    @StoredValue(type = SqlDataType.TEXT)
-    private final String name;
-    @StoredValue(type = SqlDataType.INTEGER)
     private final int seafaring;
-    @StoredValue(type = SqlDataType.INTEGER)
     private final int morale;
-    @StoredValue(type = SqlDataType.INTEGER)
     private final int combat;
-    @StoredValue(type = SqlDataType.INTEGER)
     private final int distance;
-    @StoredValue(type = SqlDataType.INTEGER)
     private final int region;
-    @StoredValue(type = SqlDataType.INTEGER)
     private final int island;
-    @StoredValue(type = SqlDataType.BOOLEAN)
-    private final boolean story;
-    @StoredValue(type = SqlDataType.BOOLEAN)
-    private final boolean adventure;
-    @StoredValue(type = SqlDataType.JSON)
-    private final VoyageContext context;
 }

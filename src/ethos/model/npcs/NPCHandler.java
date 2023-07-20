@@ -79,6 +79,7 @@ import ethos.runehub.entity.mob.hostile.HostileMobIdContextLoader;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.gathering.hunter.HunterTest;
 import ethos.runehub.skill.gathering.hunter.Trap;
+import ethos.runehub.world.WorldController;
 import ethos.util.Location3D;
 import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
@@ -1496,58 +1497,65 @@ public class NPCHandler {
     /**
      * Handles processes for NPCHandler every 600ms
      */
-    public void process() {
+
+    private void clearMobUpdates() {
         for (int i = 0; i < maxNPCs; i++) {
             if (npcs[i] == null)
                 continue;
             npcs[i].clearUpdateFlags();
         }
+    }
+
+    public void process() {
+        this.clearMobUpdates();
         for (int i = 0; i < maxNPCs; i++) {
             if (npcs[i] != null) {
                 NPC npc = npcs[i];
                 int type = npcs[i].npcType;
-                Player slaveOwner = (PlayerHandler.players[npcs[i].summonedBy]);
-                if (npcs[i] != null && slaveOwner == null && npcs[i].summoner) {
-                    npcs[i].absX = 0;
-                    npcs[i].absY = 0;
-                }
-                if (npcs[i] != null && slaveOwner != null && slaveOwner.hasFollower
-                        && (!slaveOwner.goodDistance(npcs[i].getX(), npcs[i].getY(), slaveOwner.absX, slaveOwner.absY,
-                        15) || slaveOwner.heightLevel != npcs[i].heightLevel)
-                        && npcs[i].summoner) {
-                    npcs[i].absX = slaveOwner.absX;
-                    npcs[i].absY = slaveOwner.absY;
-                    npcs[i].heightLevel = slaveOwner.heightLevel;
-
-                }
-                if (npcs[i].actionTimer > 0) {
-                    npcs[i].actionTimer--;
-                }
-
-                if (npcs[i].freezeTimer > 0) {
-                    npcs[i].freezeTimer--;
-                }
-                if (npcs[i].hitDelayTimer > 0) {
-                    npcs[i].hitDelayTimer--;
-                }
-                if (npcs[i].hitDelayTimer == 1) {
-                    npcs[i].hitDelayTimer = 0;
-                    applyDamage(i);
-                }
-                if (npcs[i].attackTimer > 0) {
-                    npcs[i].attackTimer--;
-                }
-                if (npcs[i].npcType == 7553) {
-                    npc.walkingHome = true;
-                }
-                if (npcs[i].npcType == 7555) {
-                    npc.walkingHome = true;
-                }
-                if (npcs[i].npcType == 3099) {
-                    if (Misc.random(75) == 0) {
-                        npcs[i].forceChat("Woof!");
+                if (WorldController.getInstance().isChunkLoaded(RunehubUtils.getRegionId(npc.absX, npc.absY))) {
+//                    System.out.println("Processing Mob: " + type);
+                    Player slaveOwner = (PlayerHandler.players[npcs[i].summonedBy]);
+                    if (npcs[i] != null && slaveOwner == null && npcs[i].summoner) {
+                        npcs[i].absX = 0;
+                        npcs[i].absY = 0;
                     }
-                }
+                    if (npcs[i] != null && slaveOwner != null && slaveOwner.hasFollower
+                            && (!slaveOwner.goodDistance(npcs[i].getX(), npcs[i].getY(), slaveOwner.absX, slaveOwner.absY,
+                            15) || slaveOwner.heightLevel != npcs[i].heightLevel)
+                            && npcs[i].summoner) {
+                        npcs[i].absX = slaveOwner.absX;
+                        npcs[i].absY = slaveOwner.absY;
+                        npcs[i].heightLevel = slaveOwner.heightLevel;
+
+                    }
+                    if (npcs[i].actionTimer > 0) {
+                        npcs[i].actionTimer--;
+                    }
+
+                    if (npcs[i].freezeTimer > 0) {
+                        npcs[i].freezeTimer--;
+                    }
+                    if (npcs[i].hitDelayTimer > 0) {
+                        npcs[i].hitDelayTimer--;
+                    }
+                    if (npcs[i].hitDelayTimer == 1) {
+                        npcs[i].hitDelayTimer = 0;
+                        applyDamage(i);
+                    }
+                    if (npcs[i].attackTimer > 0) {
+                        npcs[i].attackTimer--;
+                    }
+                    if (npcs[i].npcType == 7553) {
+                        npc.walkingHome = true;
+                    }
+                    if (npcs[i].npcType == 7555) {
+                        npc.walkingHome = true;
+                    }
+                    if (npcs[i].npcType == 3099) {
+                        if (Misc.random(75) == 0) {
+                            npcs[i].forceChat("Woof!");
+                        }
+                    }
 
 //                if (npcs[i].npcType == 3953) {
 //                    npcs[i].startAnimation(346);
@@ -1577,165 +1585,166 @@ public class NPCHandler {
 //                        }
 //                    }
 //                }
-                /**
-                 * Tekton walking
-                 */
-                if (tektonWalking) {
-                    if (npcs[i].npcType == 7544) {
-                        if (npcs[i].getX() != 3308 && npcs[i].getX() != 5296) {
-                            NPCDumbPathFinder.walkTowards(TEKTON, 3308, 5296);
-                        } else {
-                            tektonWalking = false;
+                    /**
+                     * Tekton walking
+                     */
+                    if (tektonWalking) {
+                        if (npcs[i].npcType == 7544) {
+                            if (npcs[i].getX() != 3308 && npcs[i].getX() != 5296) {
+                                NPCDumbPathFinder.walkTowards(TEKTON, 3308, 5296);
+                            } else {
+                                tektonWalking = false;
+                            }
                         }
                     }
-                }
-                if (npcs[i].getHealth().getAmount() > 0 && !npcs[i].isDead) {
-                    if (npcs[i].npcType == 6611 || npcs[i].npcType == 6612) {
-                        if (npcs[i].getHealth().getAmount() < (npcs[i].getHealth().getMaximum() / 2)
-                                && !npcs[i].spawnedMinions) {
-                            NPCHandler.spawnNpc(5054, npcs[i].getX() - 1, npcs[i].getY(), 0, 1, 175, 14, 100, 120);
-                            NPCHandler.spawnNpc(5054, npcs[i].getX() + 1, npcs[i].getY(), 0, 1, 175, 14, 100, 120);
-                            npcs[i].spawnedMinions = true;
+                    if (npcs[i].getHealth().getAmount() > 0 && !npcs[i].isDead) {
+                        if (npcs[i].npcType == 6611 || npcs[i].npcType == 6612) {
+                            if (npcs[i].getHealth().getAmount() < (npcs[i].getHealth().getMaximum() / 2)
+                                    && !npcs[i].spawnedMinions) {
+                                NPCHandler.spawnNpc(5054, npcs[i].getX() - 1, npcs[i].getY(), 0, 1, 175, 14, 100, 120);
+                                NPCHandler.spawnNpc(5054, npcs[i].getX() + 1, npcs[i].getY(), 0, 1, 175, 14, 100, 120);
+                                npcs[i].spawnedMinions = true;
+                            }
                         }
                     }
-                }
-                if (npcs[i].npcType == 6600 && !npcs[i].isDead) {
-                    NPC runiteGolem = getNpc(6600);
-                    if (runiteGolem != null && !runiteGolem.isDead) {
-                        npcs[i].isDead = true;
-                        npcs[i].needRespawn = false;
-                        npcs[i].actionTimer = 0;
+                    if (npcs[i].npcType == 6600 && !npcs[i].isDead) {
+                        NPC runiteGolem = getNpc(6600);
+                        if (runiteGolem != null && !runiteGolem.isDead) {
+                            npcs[i].isDead = true;
+                            npcs[i].needRespawn = false;
+                            npcs[i].actionTimer = 0;
+                        }
                     }
-                }
-                if (npcs[i].spawnedBy > 0) { // delete summons npc
-                    Player spawnedBy = PlayerHandler.players[npcs[i].spawnedBy];
-                    if (spawnedBy == null || spawnedBy.heightLevel != npcs[i].heightLevel || spawnedBy.respawnTimer > 0
-                            || !spawnedBy.goodDistance(npcs[i].getX(), npcs[i].getY(), spawnedBy.getX(),
-                            spawnedBy.getY(),
-                            NPCHandler.isFightCaveNpc(i) ? 60 : NPCHandler.isSkotizoNpc(i) ? 60 : 20)) {
 
-                        npcs[i] = null;
+                    if (npcs[i].spawnedBy > 0) { // delete summons npc
+                        Player spawnedBy = PlayerHandler.players[npcs[i].spawnedBy];
+                        if (spawnedBy == null || spawnedBy.heightLevel != npcs[i].heightLevel || spawnedBy.respawnTimer > 0
+                                || !spawnedBy.goodDistance(npcs[i].getX(), npcs[i].getY(), spawnedBy.getX(),
+                                spawnedBy.getY(),
+                                NPCHandler.isFightCaveNpc(i) ? 60 : NPCHandler.isSkotizoNpc(i) ? 60 : 20)) {
+
+                            npcs[i] = null;
+                        }
                     }
-                }
-                if (npcs[i] == null)
-                    continue;
-                if (npcs[i].lastX != npcs[i].getX() || npcs[i].lastY != npcs[i].getY()) {
-                    npcs[i].lastX = npcs[i].getX();
-                    npcs[i].lastY = npcs[i].getY();
-                }
-                Player glyphSpawner = PlayerHandler.players[npcs[i].spawnedBy];
-                if (type == 7707) {
-                    glyphSpawner.getInferno().glyphX = npc.absX;
-                    glyphSpawner.getInferno().glyphY = npc.absY;
-                    //glyphSpawner.sendMessage("@red@"+glyphSpawner.getInferno().glyphX + " " +glyphSpawner.getInferno().glyphY);
-                }
-                if (type == 7707 && npc.absX == 2270 && npc.absY >= 5361 && glyphSpawner.getInferno().glyphCanMove) { // Move
-                    // forward
-                    npc.moveX = GetMove(npc.absX, 2270);
-                    npc.moveY = GetMove(npc.absY, 5360);
-                    npc.updateRequired = true;
-                    npc.getNextNPCMovement();
-                    npc.walkingHome = false;
-                } else if (type == 7707 && npc.absX == 2270 && npc.absY == 5360
-                        && glyphSpawner.getInferno().glyphCanMove) { // From forward, start left
-                    glyphSpawner.getInferno().glyphCanMove = false;
-                    glyphSpawner.getInferno().glyphMoveLeft = true;
-                    npc.moveX = GetMove(npc.absX, 2257);
-                    npc.moveY = GetMove(npc.absY, 5360);
-                    npc.updateRequired = true;
-                    npc.getNextNPCMovement();
-                    npc.walkingHome = false;
-                } else if (type == 7707 && npc.absY == 5360 && glyphSpawner.getInferno().glyphMoveLeft) { // Once all
-                    // the way
-                    // to the
-                    // left,
-                    // move all
-                    // the way
-                    // to the
-                    // right
-                    if (npc.absX == 2257 && npc.absY == 5360) {
-                        glyphSpawner.getInferno().glyphMoveLeft = false;
-                        glyphSpawner.getInferno().glyphMoveRight = true;
+                    if (npcs[i] == null)
+                        continue;
+                    if (npcs[i].lastX != npcs[i].getX() || npcs[i].lastY != npcs[i].getY()) {
+                        npcs[i].lastX = npcs[i].getX();
+                        npcs[i].lastY = npcs[i].getY();
                     }
-                    npc.moveX = GetMove(npc.absX, 2257);
-                    npc.moveY = GetMove(npc.absY, 5360);
-                    npc.updateRequired = true;
-                    npc.getNextNPCMovement();
-                    npc.walkingHome = false;
-                } else if (type == 7707 && npc.absY == 5360 && glyphSpawner.getInferno().glyphMoveRight) { // Once all
-                    // the way
-                    // to the
-                    // right,
-                    // move all
-                    // the way
-                    // to the
-                    // left
-                    if (npc.absX == 2283 && npc.absY == 5360) {
+                    Player glyphSpawner = PlayerHandler.players[npcs[i].spawnedBy];
+                    if (type == 7707) {
+                        glyphSpawner.getInferno().glyphX = npc.absX;
+                        glyphSpawner.getInferno().glyphY = npc.absY;
+                        //glyphSpawner.sendMessage("@red@"+glyphSpawner.getInferno().glyphX + " " +glyphSpawner.getInferno().glyphY);
+                    }
+                    if (type == 7707 && npc.absX == 2270 && npc.absY >= 5361 && glyphSpawner.getInferno().glyphCanMove) { // Move
+                        // forward
+                        npc.moveX = GetMove(npc.absX, 2270);
+                        npc.moveY = GetMove(npc.absY, 5360);
+                        npc.updateRequired = true;
+                        npc.getNextNPCMovement();
+                        npc.walkingHome = false;
+                    } else if (type == 7707 && npc.absX == 2270 && npc.absY == 5360
+                            && glyphSpawner.getInferno().glyphCanMove) { // From forward, start left
+                        glyphSpawner.getInferno().glyphCanMove = false;
                         glyphSpawner.getInferno().glyphMoveLeft = true;
-                        glyphSpawner.getInferno().glyphMoveRight = false;
+                        npc.moveX = GetMove(npc.absX, 2257);
+                        npc.moveY = GetMove(npc.absY, 5360);
+                        npc.updateRequired = true;
+                        npc.getNextNPCMovement();
+                        npc.walkingHome = false;
+                    } else if (type == 7707 && npc.absY == 5360 && glyphSpawner.getInferno().glyphMoveLeft) { // Once all
+                        // the way
+                        // to the
+                        // left,
+                        // move all
+                        // the way
+                        // to the
+                        // right
+                        if (npc.absX == 2257 && npc.absY == 5360) {
+                            glyphSpawner.getInferno().glyphMoveLeft = false;
+                            glyphSpawner.getInferno().glyphMoveRight = true;
+                        }
+                        npc.moveX = GetMove(npc.absX, 2257);
+                        npc.moveY = GetMove(npc.absY, 5360);
+                        npc.updateRequired = true;
+                        npc.getNextNPCMovement();
+                        npc.walkingHome = false;
+                    } else if (type == 7707 && npc.absY == 5360 && glyphSpawner.getInferno().glyphMoveRight) { // Once all
+                        // the way
+                        // to the
+                        // right,
+                        // move all
+                        // the way
+                        // to the
+                        // left
+                        if (npc.absX == 2283 && npc.absY == 5360) {
+                            glyphSpawner.getInferno().glyphMoveLeft = true;
+                            glyphSpawner.getInferno().glyphMoveRight = false;
+                        }
+                        npc.moveX = GetMove(npc.absX, 2283);
+                        npc.moveY = GetMove(npc.absY, 5360);
+                        npc.updateRequired = true;
+                        npc.getNextNPCMovement();
+                        npc.walkingHome = false;
                     }
-                    npc.moveX = GetMove(npc.absX, 2283);
-                    npc.moveY = GetMove(npc.absY, 5360);
-                    npc.updateRequired = true;
-                    npc.getNextNPCMovement();
-                    npc.walkingHome = false;
-                }
 
-                if (type == 6615) {
-                    if (npcs[i].walkingHome) {
-                        npcs[i].getHealth().setAmount(200);
+                    if (type == 6615) {
+                        if (npcs[i].walkingHome) {
+                            npcs[i].getHealth().setAmount(200);
+                        }
+                        Scorpia.spawnHealer();
                     }
-                    Scorpia.spawnHealer();
-                }
 
-                if (type == 319) {
-                    if (npcs[i].walkingHome) {
-                        npcs[i].getHealth().setAmount(2000);
+                    if (type == 319) {
+                        if (npcs[i].walkingHome) {
+                            npcs[i].getHealth().setAmount(2000);
+                        }
+                        CorporealBeast.checkCore();
                     }
-                    CorporealBeast.checkCore();
-                }
 
-                if (type == 8026 || type == 8027) {
-                    npcs[i].setFacePlayer(false);
-                }
-                if (type == 8028) {
-                    npcs[i].setFacePlayer(true);
-                }
-                if (type >= 2042 && type <= 2044 && npcs[i].getHealth().getAmount() > 0) {
-                    Player player = PlayerHandler.players[npcs[i].spawnedBy];
-                    if (player != null && player.getZulrahEvent().getNpc() != null
-                            && npcs[i].equals(player.getZulrahEvent().getNpc())) {
-                        int stage = player.getZulrahEvent().getStage();
-                        if (type == 2042) {
-                            if (stage == 0 || stage == 1 || stage == 4 || stage == 9 && npcs[i].totalAttacks >= 20
-                                    || stage == 11 && npcs[i].totalAttacks >= 5) {
-                                continue;
+                    if (type == 8026 || type == 8027) {
+                        npcs[i].setFacePlayer(false);
+                    }
+                    if (type == 8028) {
+                        npcs[i].setFacePlayer(true);
+                    }
+                    if (type >= 2042 && type <= 2044 && npcs[i].getHealth().getAmount() > 0) {
+                        Player player = PlayerHandler.players[npcs[i].spawnedBy];
+                        if (player != null && player.getZulrahEvent().getNpc() != null
+                                && npcs[i].equals(player.getZulrahEvent().getNpc())) {
+                            int stage = player.getZulrahEvent().getStage();
+                            if (type == 2042) {
+                                if (stage == 0 || stage == 1 || stage == 4 || stage == 9 && npcs[i].totalAttacks >= 20
+                                        || stage == 11 && npcs[i].totalAttacks >= 5) {
+                                    continue;
+                                }
+                            }
+                            if (type == 2044) {
+                                if ((stage == 5 || stage == 8) && npcs[i].totalAttacks >= 5) {
+                                    continue;
+                                }
                             }
                         }
-                        if (type == 2044) {
-                            if ((stage == 5 || stage == 8) && npcs[i].totalAttacks >= 5) {
-                                continue;
+                    }
+                    /**
+                     * Attacking player
+                     **/
+                    if (isAggressive(i, false) && !npc.underAttack && npc.killerId <= 0 && !npc.isDead
+                            && !switchesAttackers(i) && npc.inMulti() && !Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS)
+                            && !Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
+
+                        Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
+                        if (closestPlayer != null) {
+//                            int closestDistance = Integer.MAX_VALUE;
+//                            God god = GodwarsNPCs.NPCS.get(npc.npcType);
+                            if (closestPlayer.underAttackBy == 0 && closestPlayer.underAttackBy2 == 0) {
+                                npc.killerId = closestPlayer.getIndex();
+                                closestPlayer.underAttackBy = npc.getIndex();
+                                closestPlayer.underAttackBy2 = npc.getIndex();
                             }
                         }
-                    }
-                }
-                /**
-                 * Attacking player
-                 **/
-                if (isAggressive(i, false) && !npc.underAttack && npc.killerId <= 0 && !npc.isDead
-                        && !switchesAttackers(i) && npc.inMulti() && !Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS)
-                        && !Boundary.isIn(npcs[i], Boundary.CORPOREAL_BEAST_LAIR)) {
-
-                    Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
-                    if (closestPlayer != null) {
-                        int closestDistance = Integer.MAX_VALUE;
-                        God god = GodwarsNPCs.NPCS.get(npc.npcType);
-                        if (closestPlayer.underAttackBy == 0 && closestPlayer.underAttackBy2 == 0) {
-                            npc.killerId = closestPlayer.getIndex();
-                            closestPlayer.underAttackBy = npc.getIndex();
-                            closestPlayer.underAttackBy2 = npc.getIndex();
-                        }
-                    }
 //                    for (Player player : PlayerHandler.players) {
 //                        if (player == null) {
 //                            continue;
@@ -1762,120 +1771,120 @@ public class NPCHandler {
 //                    }
 
 
-                } else if (isAggressive(i, false) && !npcs[i].underAttack && !npcs[i].isDead
-                        && (switchesAttackers(i) || Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS))) {
+                    } else if (isAggressive(i, false) && !npcs[i].underAttack && !npcs[i].isDead
+                            && (switchesAttackers(i) || Boundary.isIn(npc, Boundary.GODWARS_BOSSROOMS))) {
 
-                    if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
-                        int playerIndex = getCloseRandomPlayer(i);
-                        if (playerIndex > -1) {
-                            Player player = PlayerHandler.players[playerIndex];
-                            if (player != null) {
-                                npcs[i].killerId = playerIndex;
-                                player.underAttackBy = i;
-                                player.underAttackBy2 = i;
-                                npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+                        if (System.currentTimeMillis() - npcs[i].lastRandomlySelectedPlayer > 10000) {
+                            int playerIndex = getCloseRandomPlayer(i);
+                            if (playerIndex > -1) {
+                                Player player = PlayerHandler.players[playerIndex];
+                                if (player != null) {
+                                    npcs[i].killerId = playerIndex;
+                                    player.underAttackBy = i;
+                                    player.underAttackBy2 = i;
+                                    npcs[i].lastRandomlySelectedPlayer = System.currentTimeMillis();
+                                }
+                            }
+                        }
+                    } else if (isAggressive(i, false) && !npcs[i].isDead && !npcs[i].underAttack) {
+
+                        Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
+                        if (closestPlayer != null) {
+                            if ((closestPlayer.underAttackBy == 0 && closestPlayer.underAttackBy2 == 0) || npc.inMulti()) {
+                                npc.killerId = closestPlayer.getIndex();
+                                closestPlayer.underAttackBy = npc.getIndex();
+                                closestPlayer.underAttackBy2 = npc.getIndex();
                             }
                         }
                     }
-                } else if (isAggressive(i,false) && !npcs[i].isDead && !npcs[i].underAttack) {
 
-                    Player closestPlayer = PlayerHandler.getPlayer(this.getNearestPlayer(i)).orElse(null);
-                    if (closestPlayer != null) {
-                        if ((closestPlayer.underAttackBy == 0 && closestPlayer.underAttackBy2 == 0) || npc.inMulti()) {
-                            npc.killerId = closestPlayer.getIndex();
-                            closestPlayer.underAttackBy = npc.getIndex();
-                            closestPlayer.underAttackBy2 = npc.getIndex();
-                        }
+                    if (System.currentTimeMillis() - npcs[i].lastDamageTaken > 5000 && !npcs[i].underAttack) {
+                        npcs[i].underAttackBy = 0;
+                        npcs[i].underAttack = false;
+                        npcs[i].randomWalk = true;
                     }
-                }
-
-                if (System.currentTimeMillis() - npcs[i].lastDamageTaken > 5000 && !npcs[i].underAttack) {
-                    npcs[i].underAttackBy = 0;
-                    npcs[i].underAttack = false;
-                    npcs[i].randomWalk = true;
-                }
-                if (System.currentTimeMillis() - npcs[i].lastDamageTaken > 10000) {
-                    npcs[i].underAttackBy = 0;
-                    npcs[i].underAttack = false;
-                    npcs[i].randomWalk = true;
-                }
-                if ((npcs[i].killerId > 0 || npcs[i].underAttack) && !npcs[i].walkingHome
-                        && retaliates(npcs[i].npcType)) {
-                    if (!npcs[i].isDead) {
-                        int p = npcs[i].killerId;
-                        if (PlayerHandler.players[p] != null) {
-                            if (!npcs[i].summoner) {
-                                Player c = PlayerHandler.players[p];
-                                followPlayer(i, c.getIndex());
-                                if (npcs[i] == null)
-                                    continue;
-                                if (npcs[i].attackTimer == 0) {
-                                    attackPlayer(c, i);
+                    if (System.currentTimeMillis() - npcs[i].lastDamageTaken > 10000) {
+                        npcs[i].underAttackBy = 0;
+                        npcs[i].underAttack = false;
+                        npcs[i].randomWalk = true;
+                    }
+                    if ((npcs[i].killerId > 0 || npcs[i].underAttack) && !npcs[i].walkingHome
+                            && retaliates(npcs[i].npcType)) {
+                        if (!npcs[i].isDead) {
+                            int p = npcs[i].killerId;
+                            if (PlayerHandler.players[p] != null) {
+                                if (!npcs[i].summoner) {
+                                    Player c = PlayerHandler.players[p];
+                                    followPlayer(i, c.getIndex());
+                                    if (npcs[i] == null)
+                                        continue;
+                                    if (npcs[i].attackTimer == 0) {
+                                        attackPlayer(c, i);
+                                    }
+                                } else {
+                                    Player c = PlayerHandler.players[p];
+                                    if (c.absX == npcs[i].absX && c.absY == npcs[i].absY) {
+                                        stepAway(i);
+                                        npcs[i].randomWalk = false;
+                                        npcs[i].facePlayer(c.getIndex());
+                                    } else {
+                                        followPlayer(i, c.getIndex());
+                                    }
                                 }
                             } else {
-                                Player c = PlayerHandler.players[p];
-                                if (c.absX == npcs[i].absX && c.absY == npcs[i].absY) {
-                                    stepAway(i);
-                                    npcs[i].randomWalk = false;
-                                    npcs[i].facePlayer(c.getIndex());
-                                } else {
-                                    followPlayer(i, c.getIndex());
-                                }
+                                npcs[i].killerId = 0;
+                                npcs[i].underAttack = false;
+                                npcs[i].facePlayer(0);
                             }
-                        } else {
-                            npcs[i].killerId = 0;
-                            npcs[i].underAttack = false;
-                            npcs[i].facePlayer(0);
-                        }
-                    }
-                }
-
-                /**
-                 *
-                 * Random walking and walking home
-                 **/
-                if (npcs[i] == null)
-                    continue;
-                if ((!npcs[i].underAttack) && !isFightCaveNpc(i) && npcs[i].randomWalk && !npcs[i].isDead) {
-                    npcs[i].facePlayer(0);
-                    npcs[i].killerId = 0;
-                    // handleClipping(i);
-                    if (npcs[i].spawnedBy == 0) {
-                        if ((npcs[i].absX > npcs[i].makeX + Config.NPC_RANDOM_WALK_DISTANCE)
-                                || (npcs[i].absX < npcs[i].makeX - Config.NPC_RANDOM_WALK_DISTANCE)
-                                || (npcs[i].absY > npcs[i].makeY + Config.NPC_RANDOM_WALK_DISTANCE)
-                                || (npcs[i].absY < npcs[i].makeY - Config.NPC_RANDOM_WALK_DISTANCE)
-                                && npcs[i].npcType != 1635 && npcs[i].npcType != 1636 && npcs[i].npcType != 1637
-                                && npcs[i].npcType != 1638 && npcs[i].npcType != 1639 && npcs[i].npcType != 1640
-                                && npcs[i].npcType != 1641 && npcs[i].npcType != 1642 && npcs[i].npcType != 1643
-                                && npcs[i].npcType != 1654 && npcs[i].npcType != 7302) {
-                            npcs[i].walkingHome = true;
                         }
                     }
 
-                    if (npcs[i].walkingType >= 0) {
-                        switch (npcs[i].walkingType) {
-                            case 5:
-                                npcs[i].turnNpc(npcs[i].absX - 1, npcs[i].absY);
-                                break;
-                            case 4:
-                                npcs[i].turnNpc(npcs[i].absX + 1, npcs[i].absY);
-                                break;
-                            case 3:
-                                npcs[i].turnNpc(npcs[i].absX, npcs[i].absY - 1);
-                                break;
-                            case 2:
-                                npcs[i].turnNpc(npcs[i].absX, npcs[i].absY + 1);
-                                break;
+                    /**
+                     *
+                     * Random walking and walking home
+                     **/
+                    if (npcs[i] == null)
+                        continue;
+                    if ((!npcs[i].underAttack) && !isFightCaveNpc(i) && npcs[i].randomWalk && !npcs[i].isDead) {
+                        npcs[i].facePlayer(0);
+                        npcs[i].killerId = 0;
+                        // handleClipping(i);
+                        if (npcs[i].spawnedBy == 0) {
+                            if ((npcs[i].absX > npcs[i].makeX + Config.NPC_RANDOM_WALK_DISTANCE)
+                                    || (npcs[i].absX < npcs[i].makeX - Config.NPC_RANDOM_WALK_DISTANCE)
+                                    || (npcs[i].absY > npcs[i].makeY + Config.NPC_RANDOM_WALK_DISTANCE)
+                                    || (npcs[i].absY < npcs[i].makeY - Config.NPC_RANDOM_WALK_DISTANCE)
+                                    && npcs[i].npcType != 1635 && npcs[i].npcType != 1636 && npcs[i].npcType != 1637
+                                    && npcs[i].npcType != 1638 && npcs[i].npcType != 1639 && npcs[i].npcType != 1640
+                                    && npcs[i].npcType != 1641 && npcs[i].npcType != 1642 && npcs[i].npcType != 1643
+                                    && npcs[i].npcType != 1654 && npcs[i].npcType != 7302) {
+                                npcs[i].walkingHome = true;
+                            }
                         }
-                    }
 
-                    if (npcs[i].walkingType == 1 && (!npcs[i].underAttack) && !npcs[i].walkingHome) {
-                        if (System.currentTimeMillis() - npcs[i].getLastRandomWalk() > npcs[i].getRandomWalkDelay()) {
-                            int direction = Misc.random3(8);
-                            int movingToX = npcs[i].getX() + NPCClipping.DIR[direction][0];
-                            int movingToY = npcs[i].getY() + NPCClipping.DIR[direction][1];
-                            final NPC walkingNpc = npcs[i];
+                        if (npcs[i].walkingType >= 0) {
+                            switch (npcs[i].walkingType) {
+                                case 5:
+                                    npcs[i].turnNpc(npcs[i].absX - 1, npcs[i].absY);
+                                    break;
+                                case 4:
+                                    npcs[i].turnNpc(npcs[i].absX + 1, npcs[i].absY);
+                                    break;
+                                case 3:
+                                    npcs[i].turnNpc(npcs[i].absX, npcs[i].absY - 1);
+                                    break;
+                                case 2:
+                                    npcs[i].turnNpc(npcs[i].absX, npcs[i].absY + 1);
+                                    break;
+                            }
+                        }
+
+                        if (npcs[i].walkingType == 1 && (!npcs[i].underAttack) && !npcs[i].walkingHome) {
+                            if (System.currentTimeMillis() - npcs[i].getLastRandomWalk() > npcs[i].getRandomWalkDelay()) {
+                                int direction = Misc.random3(8);
+                                int movingToX = npcs[i].getX() + NPCClipping.DIR[direction][0];
+                                int movingToY = npcs[i].getY() + NPCClipping.DIR[direction][1];
+                                final NPC walkingNpc = npcs[i];
 //                            if (Arrays.stream(HunterTest.HUNTER_MOBS).anyMatch(value -> value == walkingNpc.npcType)) {
 //                                final Rectangle trapArea = new Rectangle(new Point(walkingNpc.absX - 5, walkingNpc.absY - 5),
 //                                        new Point(walkingNpc.absX + 5, walkingNpc.absY + 5));
@@ -1903,465 +1912,468 @@ public class NPCHandler {
 //                                }
 
 //                                NPCDumbPathFinder.walkTowards(walkingNpc,);
-                            if (npcs[i].npcType >= 1635 && npcs[i].npcType <= 1643 || npcs[i].npcType == 1654
-                                    || npcs[i].npcType == 7302) {
-                                NPCDumbPathFinder.walkTowards(npcs[i], npcs[i].getX() - 1 + Misc.random(8),
-                                        npcs[i].getY() - 1 + Misc.random(8));
-                            } else {
-                                if (Math.abs(npcs[i].makeX - movingToX) <= 1 && Math.abs(npcs[i].makeY - movingToY) <= 1
-                                        && NPCDumbPathFinder.canMoveTo(npcs[i], direction)) {
-                                    NPCDumbPathFinder.walkTowards(npcs[i], movingToX, movingToY);
+                                //TODO random walking?
+                                if (npcs[i].npcType >= 1635 && npcs[i].npcType <= 1643 || npcs[i].npcType == 1654
+                                        || npcs[i].npcType == 7302) {
+                                    NPCDumbPathFinder.walkTowards(npcs[i], npcs[i].getX() - 1 + Misc.random(8),
+                                            npcs[i].getY() - 1 + Misc.random(8));
+                                } else {
+                                    if (Math.abs(npcs[i].makeX - movingToX) <= 1 && Math.abs(npcs[i].makeY - movingToY) <= 1
+                                            && NPCDumbPathFinder.canMoveTo(npcs[i], direction)) {
+                                        NPCDumbPathFinder.walkTowards(npcs[i], movingToX, movingToY);
+                                    }
                                 }
+                                npcs[i].setRandomWalkDelay(TimeUnit.SECONDS.toMillis(1 + Misc.random(2)));
+                                npcs[i].setLastRandomWalk(System.currentTimeMillis());
                             }
-                            npcs[i].setRandomWalkDelay(TimeUnit.SECONDS.toMillis(1 + Misc.random(2)));
-                            npcs[i].setLastRandomWalk(System.currentTimeMillis());
                         }
                     }
-                }
-                if (npcs[i].walkingHome) {
-                    if (!npcs[i].isDead) {
-                        NPCDumbPathFinder.walkTowards(npcs[i], npcs[i].makeX, npcs[i].makeY);
-                        if (npcs[i].moveX == 0 && npcs[i].moveY == 0) {
-                            npcs[i].teleport(npcs[i].makeX, npcs[i].makeY, npcs[i].heightLevel);
-                        }
-                        if (npcs[i].absX == npcs[i].makeX && npcs[i].absY == npcs[i].makeY) {
+                    //TODO walking home
+                    if (npcs[i].walkingHome) {
+                        if (!npcs[i].isDead) {
+                            NPCDumbPathFinder.walkTowards(npcs[i], npcs[i].makeX, npcs[i].makeY);
+                            if (npcs[i].moveX == 0 && npcs[i].moveY == 0) {
+                                npcs[i].teleport(npcs[i].makeX, npcs[i].makeY, npcs[i].heightLevel);
+                            }
+                            if (npcs[i].absX == npcs[i].makeX && npcs[i].absY == npcs[i].makeY) {
+                                npcs[i].walkingHome = false;
+                            }
+                        } else {
                             npcs[i].walkingHome = false;
                         }
-                    } else {
-                        npcs[i].walkingHome = false;
                     }
-                }
-                /**
-                 * Npc death
-                 */
+                    /**
+                     * Npc death
+                     */
 
-                if (npcs[i].isDead) {
-                    Player player = PlayerHandler.players[npcs[i].spawnedBy];
-                    if (npcs[i].actionTimer == 0 && !npcs[i].applyDead && !npcs[i].needRespawn) {
-                        if (npcs[i].npcType == 8028) {
-                            CycleEventHandler.getSingleton().addEvent(player, new CycleEvent() {
-                                @Override
-                                public void execute(CycleEventContainer container) {
-                                    Vorkath.drop(player);
-                                    int dropHead = Misc.random(100);
-                                    //player.sendMessage(dropHead + " <- that");
-                                    if (dropHead == 1 || player.getNpcDeathTracker().getTracker().get("vorkath") == 50) {
-                                        Server.itemHandler.createGroundItem(player, 2425, Vorkath.lootCoordinates[0],
-                                                Vorkath.lootCoordinates[1], player.heightLevel, 1, player.getIndex());
-                                    }
-                                    Server.npcHandler.spawnNpc(player, 8026, 2272, 4065, player.getHeight(), 0, 750,
-                                            player.antifireDelay > 0 ? 0 : 61, 560, 114, true, false);
-                                    container.stop();
-                                }
-
-                                @Override
-                                public void stop() {
-                                }
-                            }, 9);
-                        }
-                        /*
-                         * Start Necro
-                         */
-                        if (npcs[i].inNecro()) {
-                            if (npcs[i].npcType == 2805) {
-                                player.chosenCow = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 2692) {
-                                player.chosenChicken = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 2245) {
-                                player.chosenGoblin = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 481) {
-                                player.chosenCaveBug = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 3078) {
-                                player.chosenMan = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 3083) {
-                                player.chosenWoman = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 3088) {
-                                player.chosenFarmer = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 2883) {
-                                player.chosenThug = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 414) {
-                                player.chosenBanshee = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 459) {
-                                player.chosenDesertLizard = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 457) {
-                                player.chosenCrawlingHand = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 955) {
-                                player.chosenKalphiteWorker = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 70) {
-                                player.chosenSkeleton = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 2878) {
-                                player.chosenChaosDruid = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 97) {
-                                player.chosenGhost = true;
-                                Necromancy.main(player);
-                            }
-                            if (npcs[i].npcType == 5935) {
-                                player.chosenSandCrab = true;
-                                Necromancy.main(player);
-                            }
-//                            if (player.getAttributes().getGuardsAttacking().contains(i)) {
-//                                player.getAttributes().getGuardsAttacking().remove(i);
-//                            }
-                        }
-                        /*
-                         * End Necro
-                         */
-                        if (npcs[i].npcType == 6618) {
-                            npcs[i].forceChat("Ow!");
-                        }
-                        if (npcs[i].npcType == 6611) {
-                            npcs[i].requestTransform(6612);
-                            npcs[i].getHealth().reset();
-                            npcs[i].isDead = false;
-                            npcs[i].spawnedMinions = false;
-                            npcs[i].forceChat("Do it again!!");
-                        } else {
-                            if (npcs[i].npcType == 6612) {
-                                npcs[i].npcType = 6611;
-                                npcs[i].spawnedMinions = false;
-                            }
-
-
-                            if (npcs[i].npcType == 1605) {
+                    if (npcs[i].isDead) {
+                        Player player = PlayerHandler.players[npcs[i].spawnedBy];
+                        if (npcs[i].actionTimer == 0 && !npcs[i].applyDead && !npcs[i].needRespawn) {
+                            if (npcs[i].npcType == 8028) {
                                 CycleEventHandler.getSingleton().addEvent(player, new CycleEvent() {
                                     @Override
                                     public void execute(CycleEventContainer container) {
-                                        spawnNpc(player, 1606, 3106, 3934, 0, 1, 30, 24, 70, 60, true, true);
+                                        Vorkath.drop(player);
+                                        int dropHead = Misc.random(100);
+                                        //player.sendMessage(dropHead + " <- that");
+                                        if (dropHead == 1 || player.getNpcDeathTracker().getTracker().get("vorkath") == 50) {
+                                            Server.itemHandler.createGroundItem(player, 2425, Vorkath.lootCoordinates[0],
+                                                    Vorkath.lootCoordinates[1], player.heightLevel, 1, player.getIndex());
+                                        }
+                                        Server.npcHandler.spawnNpc(player, 8026, 2272, 4065, player.getHeight(), 0, 750,
+                                                player.antifireDelay > 0 ? 0 : 61, 560, 114, true, false);
                                         container.stop();
                                     }
 
                                     @Override
                                     public void stop() {
                                     }
-                                }, 5);
+                                }, 9);
                             }
-                            Player killer1 = PlayerHandler.players[npcs[i].spawnedBy];
-                            if (npcs[i].npcType == 1606) {
-                                killer1.roundNpc = 3;
-                                killer1.spawned = false;
-                                checkMa(killer1, i);
+                            /*
+                             * Start Necro
+                             */
+                            if (npcs[i].inNecro()) {
+                                if (npcs[i].npcType == 2805) {
+                                    player.chosenCow = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 2692) {
+                                    player.chosenChicken = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 2245) {
+                                    player.chosenGoblin = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 481) {
+                                    player.chosenCaveBug = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 3078) {
+                                    player.chosenMan = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 3083) {
+                                    player.chosenWoman = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 3088) {
+                                    player.chosenFarmer = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 2883) {
+                                    player.chosenThug = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 414) {
+                                    player.chosenBanshee = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 459) {
+                                    player.chosenDesertLizard = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 457) {
+                                    player.chosenCrawlingHand = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 955) {
+                                    player.chosenKalphiteWorker = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 70) {
+                                    player.chosenSkeleton = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 2878) {
+                                    player.chosenChaosDruid = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 97) {
+                                    player.chosenGhost = true;
+                                    Necromancy.main(player);
+                                }
+                                if (npcs[i].npcType == 5935) {
+                                    player.chosenSandCrab = true;
+                                    Necromancy.main(player);
+                                }
+//                            if (player.getAttributes().getGuardsAttacking().contains(i)) {
+//                                player.getAttributes().getGuardsAttacking().remove(i);
+//                            }
                             }
-                            if (npcs[i].npcType == 1607) {
-                                killer1.spawned = false;
-                                checkMa(killer1, i);
+                            /*
+                             * End Necro
+                             */
+                            if (npcs[i].npcType == 6618) {
+                                npcs[i].forceChat("Ow!");
                             }
-                            if (npcs[i].npcType == 1608) {
-                                killer1.spawned = false;
-                                checkMa(killer1, i);
-                            }
+                            if (npcs[i].npcType == 6611) {
+                                npcs[i].requestTransform(6612);
+                                npcs[i].getHealth().reset();
+                                npcs[i].isDead = false;
+                                npcs[i].spawnedMinions = false;
+                                npcs[i].forceChat("Do it again!!");
+                            } else {
+                                if (npcs[i].npcType == 6612) {
+                                    npcs[i].npcType = 6611;
+                                    npcs[i].spawnedMinions = false;
+                                }
 
-                            if (npcs[i].npcType == 1609) {
-                                if (killer1 != null) {
+
+                                if (npcs[i].npcType == 1605) {
+                                    CycleEventHandler.getSingleton().addEvent(player, new CycleEvent() {
+                                        @Override
+                                        public void execute(CycleEventContainer container) {
+                                            spawnNpc(player, 1606, 3106, 3934, 0, 1, 30, 24, 70, 60, true, true);
+                                            container.stop();
+                                        }
+
+                                        @Override
+                                        public void stop() {
+                                        }
+                                    }, 5);
+                                }
+                                Player killer1 = PlayerHandler.players[npcs[i].spawnedBy];
+                                if (npcs[i].npcType == 1606) {
+                                    killer1.roundNpc = 3;
                                     killer1.spawned = false;
                                     checkMa(killer1, i);
                                 }
-                            }
-                            /*
-                             * if (npcs[i].npcType == 7554) { //TODO animate objec
-                             * player.getRaids().finishRaids(); }
-                             */
-                            npcs[i].updateRequired = true;
-                            npcs[i].facePlayer(0);
-                            Entity killer = npcs[i].calculateKiller();
+                                if (npcs[i].npcType == 1607) {
+                                    killer1.spawned = false;
+                                    checkMa(killer1, i);
+                                }
+                                if (npcs[i].npcType == 1608) {
+                                    killer1.spawned = false;
+                                    checkMa(killer1, i);
+                                }
 
-                            if (killer != null) {
-                                npcs[i].killedBy = killer.getIndex();
-                            }
-                            if (npcs[i].npcType == 963) {
-                                npcs[i].isDead = false;
-                                npcs[i].npcType = 965;
-                                npcs[i].requestTransform(965);
-                                npcs[i].getHealth().reset();
-                            } else if (npcs[i].isDead){
-                                npcs[i].animNumber = getDeadEmote(i); // dead emote
-                                npcs[i].animUpdateRequired = true;
-                            }
-                            npcs[i].freezeTimer = 0;
-                            npcs[i].applyDead = true;
-
-                            if (npcs[i].npcType == 3118) {
-                                spawnNpc(3120, npcs[i].absX, npcs[i].absY, player.heightLevel, 10, 2, 15, 15, 0);
-                                spawnNpc(3120, npcs[i].absX, npcs[i].absY + 1, player.heightLevel, 10, 2, 15, 15, 0);
-                            }
-                            if (player != null) {
-                                this.tzhaarDeathHandler(player, i);
-                                this.infernoDeathHandler(player, i);
-                            }
-                            killedBarrow(i);
-                            npcs[i].actionTimer = getDeathDelay(i);
-                            resetPlayersInCombat(i);
-                        }
-                    } else if (npcs[i].actionTimer == 0 && npcs[i].applyDead && !npcs[i].needRespawn) {
-
-                        int killerIndex = npcs[i].killedBy;
-                        npcs[i].needRespawn = true;
-                        npcs[i].actionTimer = npcs[i].isInstanceSpawn() ? npcs[i].getRespawnTicks() : getRespawnTime(i); // respawn time
-                        dropItems(i);
-                        if (killerIndex < PlayerHandler.players.length - 1) {
-                            Player target = PlayerHandler.players[npcs[i].killedBy];
-
-                            if (target != null) {
-//                                target.getSlayer().killTaskMonster(npcs[i]);
-                                target.getSkillController().getSlayer().onAssignedMobDeath(npcs[i].npcType, npcs[i].absX, npcs[i].absY, npcs[i].heightLevel);
-                                target.getAttributes().getPlayPassController().addPlayPassXPFromMonsterHP(npcs[i].getHealth().getMaximum());
+                                if (npcs[i].npcType == 1609) {
+                                    if (killer1 != null) {
+                                        killer1.spawned = false;
+                                        checkMa(killer1, i);
+                                    }
+                                }
                                 /*
-                                 * if (target.getSlayer().isSuperiorNpc()) {
-                                 * target.getSlayer().handleSuperiorExp(npcs[i]); }
+                                 * if (npcs[i].npcType == 7554) { //TODO animate objec
+                                 * player.getRaids().finishRaids(); }
                                  */
+                                npcs[i].updateRequired = true;
+                                npcs[i].facePlayer(0);
+                                Entity killer = npcs[i].calculateKiller();
+
+                                if (killer != null) {
+                                    npcs[i].killedBy = killer.getIndex();
+                                }
+                                if (npcs[i].npcType == 963) {
+                                    npcs[i].isDead = false;
+                                    npcs[i].npcType = 965;
+                                    npcs[i].requestTransform(965);
+                                    npcs[i].getHealth().reset();
+                                } else if (npcs[i].isDead) {
+                                    npcs[i].animNumber = getDeadEmote(i); // dead emote
+                                    npcs[i].animUpdateRequired = true;
+                                }
+                                npcs[i].freezeTimer = 0;
+                                npcs[i].applyDead = true;
+
+                                if (npcs[i].npcType == 3118) {
+                                    spawnNpc(3120, npcs[i].absX, npcs[i].absY, player.heightLevel, 10, 2, 15, 15, 0);
+                                    spawnNpc(3120, npcs[i].absX, npcs[i].absY + 1, player.heightLevel, 10, 2, 15, 15, 0);
+                                }
+                                if (player != null) {
+                                    this.tzhaarDeathHandler(player, i);
+                                    this.infernoDeathHandler(player, i);
+                                }
+                                killedBarrow(i);
+                                npcs[i].actionTimer = getDeathDelay(i);
+                                resetPlayersInCombat(i);
                             }
-                        }
-                        if (npcs[i].inRaids()) {
+                        } else if (npcs[i].actionTimer == 0 && npcs[i].applyDead && !npcs[i].needRespawn) {
+
+                            int killerIndex = npcs[i].killedBy;
+                            npcs[i].needRespawn = true;
+                            npcs[i].actionTimer = npcs[i].isInstanceSpawn() ? npcs[i].getRespawnTicks() : getRespawnTime(i); // respawn time
+                            dropItems(i);
+                            if (killerIndex < PlayerHandler.players.length - 1) {
+                                Player target = PlayerHandler.players[npcs[i].killedBy];
+
+                                if (target != null) {
+//                                target.getSlayer().killTaskMonster(npcs[i]);
+                                    target.getSkillController().getSlayer().onAssignedMobDeath(npcs[i].npcType, npcs[i].absX, npcs[i].absY, npcs[i].heightLevel);
+                                    target.getAttributes().getPlayPassController().addPlayPassXPFromMonsterHP(npcs[i].getHealth().getMaximum());
+                                    /*
+                                     * if (target.getSlayer().isSuperiorNpc()) {
+                                     * target.getSlayer().handleSuperiorExp(npcs[i]); }
+                                     */
+                                }
+                            }
+                            if (npcs[i].inRaids()) {
+                                Player killer = PlayerHandler.players[npcs[i].killedBy];
+                                killer.getRaids().raidLeader.getRaids().handleMobDeath(npcs[i].npcType);
+                            }
+                            appendBossKC(i);
+                            appendKillCount(i);
+                            handleGodwarsDeath(npc);
+                            handleDiaryKills(npc);
+                            handleDailyKills(npc);
+                            npcs[i].absX = npcs[i].makeX;
+                            npcs[i].absY = npcs[i].makeY;
+                            npcs[i].getHealth().reset();
+                            npcs[i].animNumber = 0x328;
+                            npcs[i].updateRequired = true;
+                            npcs[i].animUpdateRequired = true;
                             Player killer = PlayerHandler.players[npcs[i].killedBy];
-                            killer.getRaids().raidLeader.getRaids().handleMobDeath(npcs[i].npcType);
-                        }
-                        appendBossKC(i);
-                        appendKillCount(i);
-                        handleGodwarsDeath(npc);
-                        handleDiaryKills(npc);
-                        handleDailyKills(npc);
-                        npcs[i].absX = npcs[i].makeX;
-                        npcs[i].absY = npcs[i].makeY;
-                        npcs[i].getHealth().reset();
-                        npcs[i].animNumber = 0x328;
-                        npcs[i].updateRequired = true;
-                        npcs[i].animUpdateRequired = true;
-                        Player killer = PlayerHandler.players[npcs[i].killedBy];
-                        if (killer != null && killer.getAttributes().getRift() != null) {
-                            npcs[i] = null;
-                            if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getTrashMobPool()).anyMatch(value -> value == npc.npcType))) {
-                                killer.getAttributes().getRift().increaseProgress(0.1f);
-                            } else if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getEliteMobPool()).anyMatch(value -> value == npc.npcType))) {
-                                killer.getAttributes().getRift().increaseProgress(0.3f);
-                            }
-                            return;
-                        }
-
-                        /**
-                         * Actions on certain npc deaths
-                         */
-                        switch (npcs[i].npcType) {
-                            case 965:
-                                npcs[i].npcType = 963;
-                                break;
-                            case 5129:
-                                Glod.rewardPlayers(player);
-                                Glod.specialAmount = 0;
-                                break;
-                            case 6295:
-                                dg.specialAmount = 0;
-                                break;
-                            case 3127:
-                                player.getFightCave().stop();
-                                break;
-                            /*
-                             * case 5762: //Not in use case 5744: player.raidPoints += 1;
-                             * player.sendMessage("You currently have @red@" + player.raidPoints +
-                             * "@bla@ Assault Points."); break; case 7595: player.raidPoints += 2;
-                             * player.sendMessage("You currently have @red@" + player.raidPoints +
-                             * "@bla@ Assault Points."); break;
-                             */
-                            case 6367:
-                            case 6369:
-                            case 6370:
-                            case 6371:
-                            case 6372:
-                            case 6373:
-                            case 6374:
-                            case 6375:
-                            case 6376:
-                            case 6377:
-                            case 6378:
-                                RecipeForDisaster rfd = player.getrecipeForDisaster();
-                                if (player.rfdWave < 5) {
-                                    rfd.wave();
-                                }
-                                player.rfdWave++;
-                                player.rfdGloves++;
-
-                                switch (player.rfdWave) {
-                                    case 0:
-                                        player.getDH().sendNpcChat1("You DARE come HERE?!?!", 6368, "Culinaromancer");
-                                        player.nextChat = -1;
-                                        break;
-
-                                    case 1:
-                                    case 2:
-                                    case 3:
-                                    case 4:
-                                    case 5:
-                                        player.getDH().sendNpcChat1("NOOOooo...", 6368, "Culinaromancer");
-                                        player.nextChat = -1;
-                                        break;
-
-                                    case 6:
-                                        player.getDH().sendNpcChat2("You have caused me enough grief!",
-                                                "I guess I'll have to finish you off myself!", 6368, "Culinaromancer");
-                                        player.nextChat = -1;
-                                        break;
-                                }
-                                break;
-                            case 6368:
-                                RecipeForDisaster rfdd = player.getrecipeForDisaster();
-                                if (rfdd != null) {
-                                    rfdd.end(DisposeTypes.COMPLETE);
-                                }
-                                break;
-
-                            case 5862:
-                                Cerberus cerb = player.getCerberus();
-                                if (cerb != null) {
-                                    cerb.end(DisposeTypes.COMPLETE);
-                                }
-                                break;
-
-                            case Skotizo.SKOTIZO_ID:
-                                if (player.getSkotizo() != null) {
-                                    player.getSkotizo().end(DisposeTypes.COMPLETE);
-                                }
-                                break;
-
-                            case InfernoWave.TZKAL_ZUK:
-                                if (player.getInferno() != null) {
-                                    player.getInferno().end(DisposeTypes.COMPLETE);
-                                }
-                                break;
-
-                            case Skotizo.AWAKENED_ALTAR_NORTH:
-                                Server.getGlobalObjects().remove(28923, 1694, 9904, player.getSkotizo().getHeight()); // Remove
-                                // North
-                                // -
-                                // Awakened
-                                // Altar
-                                Server.getGlobalObjects().add(new GlobalObject(28924, 1694, 9904,
-                                        player.getSkotizo().getHeight(), 2, 10, -1, -1)); // North - Empty Altar
-                                player.getPA().sendChangeSprite(29232, (byte) 0);
-                                player.getSkotizo().altarCount--;
-                                player.getSkotizo().northAltar = false;
-                                player.getSkotizo().altarMap.remove(1);
-                                break;
-                            case Skotizo.AWAKENED_ALTAR_SOUTH:
-                                Server.getGlobalObjects().remove(28923, 1696, 9871, player.getSkotizo().getHeight()); // Remove
-                                // South
-                                // -
-                                // Awakened
-                                // Altar
-                                Server.getGlobalObjects().add(new GlobalObject(28924, 1696, 9871,
-                                        player.getSkotizo().getHeight(), 0, 10, -1, -1)); // South - Empty Altar
-                                player.getPA().sendChangeSprite(29233, (byte) 0);
-                                player.getSkotizo().altarCount--;
-                                player.getSkotizo().southAltar = false;
-                                player.getSkotizo().altarMap.remove(2);
-                                break;
-                            case Skotizo.AWAKENED_ALTAR_WEST:
-                                Server.getGlobalObjects().remove(28923, 1678, 9888, player.getSkotizo().getHeight()); // Remove
-                                // West
-                                // -
-                                // Awakened
-                                // Altar
-                                Server.getGlobalObjects().add(new GlobalObject(28924, 1678, 9888,
-                                        player.getSkotizo().getHeight(), 1, 10, -1, -1)); // West - Empty Altar
-                                player.getPA().sendChangeSprite(29234, (byte) 0);
-                                player.getSkotizo().altarCount--;
-                                player.getSkotizo().westAltar = false;
-                                player.getSkotizo().altarMap.remove(3);
-                                break;
-                            case Skotizo.AWAKENED_ALTAR_EAST:
-                                Server.getGlobalObjects().remove(28923, 1714, 9888, player.getSkotizo().getHeight()); // Remove
-                                // East
-                                // -
-                                // Awakened
-                                // Altar
-                                Server.getGlobalObjects().add(new GlobalObject(28924, 1714, 9888,
-                                        player.getSkotizo().getHeight(), 3, 10, -1, -1)); // East - Empty Altar
-                                player.getPA().sendChangeSprite(29235, (byte) 0);
-                                player.getSkotizo().altarCount--;
-                                player.getSkotizo().eastAltar = false;
-                                player.getSkotizo().altarMap.remove(4);
-                                break;
-                            case Skotizo.DARK_ANKOU:
-                                player.getSkotizo().ankouSpawned = false;
-                                break;
-
-                            case 6615:
-                                Scorpia.stage = 0;
-                                break;
-
-                            case 319:
-                                CorporealBeast.stage = 0;
-                                break;
-
-
-                            case 6600:
-                                spawnNpc(6601, npcs[i].absX, npcs[i].absY, 0, 0, 0, 0, 0, 0);
-                                break;
-
-                            case 6601:
-                                spawnNpc(6600, npcs[i].absX, npcs[i].absY, 0, 0, 0, 0, 0, 0);
+                            if (killer != null && killer.getAttributes().getRift() != null) {
                                 npcs[i] = null;
-                                NPC golem = getNpc(6600);
-                                if (golem != null) {
-                                    golem.actionTimer = 150;
+                                if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getTrashMobPool()).anyMatch(value -> value == npc.npcType))) {
+                                    killer.getAttributes().getRift().increaseProgress(0.1f);
+                                } else if (RiftFloorDAO.getInstance().getAllEntries().stream().anyMatch(riftFloor -> Arrays.stream(riftFloor.getEliteMobPool()).anyMatch(value -> value == npc.npcType))) {
+                                    killer.getAttributes().getRift().increaseProgress(0.3f);
                                 }
-                                break;
-                        }
-
-                        if (DagannothMother.RANGE_OF_IDS.contains(npcs[i].npcType)) {
-                            DagannothMother dm = player.getDagannothMother();
-
-                            if (dm != null) {
-                                dm.end(DisposeType.COMPLETE);
+                                return;
                             }
+
+                            /**
+                             * Actions on certain npc deaths
+                             */
+                            switch (npcs[i].npcType) {
+                                case 965:
+                                    npcs[i].npcType = 963;
+                                    break;
+                                case 5129:
+                                    Glod.rewardPlayers(player);
+                                    Glod.specialAmount = 0;
+                                    break;
+                                case 6295:
+                                    dg.specialAmount = 0;
+                                    break;
+                                case 3127:
+                                    player.getFightCave().stop();
+                                    break;
+                                /*
+                                 * case 5762: //Not in use case 5744: player.raidPoints += 1;
+                                 * player.sendMessage("You currently have @red@" + player.raidPoints +
+                                 * "@bla@ Assault Points."); break; case 7595: player.raidPoints += 2;
+                                 * player.sendMessage("You currently have @red@" + player.raidPoints +
+                                 * "@bla@ Assault Points."); break;
+                                 */
+                                case 6367:
+                                case 6369:
+                                case 6370:
+                                case 6371:
+                                case 6372:
+                                case 6373:
+                                case 6374:
+                                case 6375:
+                                case 6376:
+                                case 6377:
+                                case 6378:
+                                    RecipeForDisaster rfd = player.getrecipeForDisaster();
+                                    if (player.rfdWave < 5) {
+                                        rfd.wave();
+                                    }
+                                    player.rfdWave++;
+                                    player.rfdGloves++;
+
+                                    switch (player.rfdWave) {
+                                        case 0:
+                                            player.getDH().sendNpcChat1("You DARE come HERE?!?!", 6368, "Culinaromancer");
+                                            player.nextChat = -1;
+                                            break;
+
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 4:
+                                        case 5:
+                                            player.getDH().sendNpcChat1("NOOOooo...", 6368, "Culinaromancer");
+                                            player.nextChat = -1;
+                                            break;
+
+                                        case 6:
+                                            player.getDH().sendNpcChat2("You have caused me enough grief!",
+                                                    "I guess I'll have to finish you off myself!", 6368, "Culinaromancer");
+                                            player.nextChat = -1;
+                                            break;
+                                    }
+                                    break;
+                                case 6368:
+                                    RecipeForDisaster rfdd = player.getrecipeForDisaster();
+                                    if (rfdd != null) {
+                                        rfdd.end(DisposeTypes.COMPLETE);
+                                    }
+                                    break;
+
+                                case 5862:
+                                    Cerberus cerb = player.getCerberus();
+                                    if (cerb != null) {
+                                        cerb.end(DisposeTypes.COMPLETE);
+                                    }
+                                    break;
+
+                                case Skotizo.SKOTIZO_ID:
+                                    if (player.getSkotizo() != null) {
+                                        player.getSkotizo().end(DisposeTypes.COMPLETE);
+                                    }
+                                    break;
+
+                                case InfernoWave.TZKAL_ZUK:
+                                    if (player.getInferno() != null) {
+                                        player.getInferno().end(DisposeTypes.COMPLETE);
+                                    }
+                                    break;
+
+                                case Skotizo.AWAKENED_ALTAR_NORTH:
+                                    Server.getGlobalObjects().remove(28923, 1694, 9904, player.getSkotizo().getHeight()); // Remove
+                                    // North
+                                    // -
+                                    // Awakened
+                                    // Altar
+                                    Server.getGlobalObjects().add(new GlobalObject(28924, 1694, 9904,
+                                            player.getSkotizo().getHeight(), 2, 10, -1, -1)); // North - Empty Altar
+                                    player.getPA().sendChangeSprite(29232, (byte) 0);
+                                    player.getSkotizo().altarCount--;
+                                    player.getSkotizo().northAltar = false;
+                                    player.getSkotizo().altarMap.remove(1);
+                                    break;
+                                case Skotizo.AWAKENED_ALTAR_SOUTH:
+                                    Server.getGlobalObjects().remove(28923, 1696, 9871, player.getSkotizo().getHeight()); // Remove
+                                    // South
+                                    // -
+                                    // Awakened
+                                    // Altar
+                                    Server.getGlobalObjects().add(new GlobalObject(28924, 1696, 9871,
+                                            player.getSkotizo().getHeight(), 0, 10, -1, -1)); // South - Empty Altar
+                                    player.getPA().sendChangeSprite(29233, (byte) 0);
+                                    player.getSkotizo().altarCount--;
+                                    player.getSkotizo().southAltar = false;
+                                    player.getSkotizo().altarMap.remove(2);
+                                    break;
+                                case Skotizo.AWAKENED_ALTAR_WEST:
+                                    Server.getGlobalObjects().remove(28923, 1678, 9888, player.getSkotizo().getHeight()); // Remove
+                                    // West
+                                    // -
+                                    // Awakened
+                                    // Altar
+                                    Server.getGlobalObjects().add(new GlobalObject(28924, 1678, 9888,
+                                            player.getSkotizo().getHeight(), 1, 10, -1, -1)); // West - Empty Altar
+                                    player.getPA().sendChangeSprite(29234, (byte) 0);
+                                    player.getSkotizo().altarCount--;
+                                    player.getSkotizo().westAltar = false;
+                                    player.getSkotizo().altarMap.remove(3);
+                                    break;
+                                case Skotizo.AWAKENED_ALTAR_EAST:
+                                    Server.getGlobalObjects().remove(28923, 1714, 9888, player.getSkotizo().getHeight()); // Remove
+                                    // East
+                                    // -
+                                    // Awakened
+                                    // Altar
+                                    Server.getGlobalObjects().add(new GlobalObject(28924, 1714, 9888,
+                                            player.getSkotizo().getHeight(), 3, 10, -1, -1)); // East - Empty Altar
+                                    player.getPA().sendChangeSprite(29235, (byte) 0);
+                                    player.getSkotizo().altarCount--;
+                                    player.getSkotizo().eastAltar = false;
+                                    player.getSkotizo().altarMap.remove(4);
+                                    break;
+                                case Skotizo.DARK_ANKOU:
+                                    player.getSkotizo().ankouSpawned = false;
+                                    break;
+
+                                case 6615:
+                                    Scorpia.stage = 0;
+                                    break;
+
+                                case 319:
+                                    CorporealBeast.stage = 0;
+                                    break;
+
+
+                                case 6600:
+                                    spawnNpc(6601, npcs[i].absX, npcs[i].absY, 0, 0, 0, 0, 0, 0);
+                                    break;
+
+                                case 6601:
+                                    spawnNpc(6600, npcs[i].absX, npcs[i].absY, 0, 0, 0, 0, 0, 0);
+                                    npcs[i] = null;
+                                    NPC golem = getNpc(6600);
+                                    if (golem != null) {
+                                        golem.actionTimer = 150;
+                                    }
+                                    break;
+                            }
+
+                            if (DagannothMother.RANGE_OF_IDS.contains(npcs[i].npcType)) {
+                                DagannothMother dm = player.getDagannothMother();
+
+                                if (dm != null) {
+                                    dm.end(DisposeType.COMPLETE);
+                                }
+                            }
+                        } else if (npcs[i].actionTimer == 0 && npcs[i].needRespawn && npcs[i].npcType != 1739
+                                && npcs[i].npcType != 1740 && npcs[i].npcType != 1741 && npcs[i].npcType != 1742) {
+                            if (player != null) {
+                                npcs[i] = null;
+                            } else {
+                                int newType = npcs[i].npcType;
+                                int newX = npcs[i].makeX;
+                                int newY = npcs[i].makeY;
+                                int newH = npcs[i].heightLevel;
+                                int newWalkingType = npcs[i].walkingType;
+                                int newHealth = npcs[i].getHealth().getMaximum();
+                                int newMaxHit = npcs[i].maxHit;
+                                int newAttack = npcs[i].attack;
+                                int newDefence = npcs[i].defence;
+                                npcs[i] = null;
+                                newNPC(newType, newX, newY, newH, newWalkingType, newHealth, newMaxHit, newAttack,
+                                        newDefence);
+                            }
+                            /*
+                             * } else { for(MonsterHunt.Npcs hunt : MonsterHunt.Npcs.values()) {
+                             * if(npcs[i].npcType == hunt.getNpcId()) { npcs[i] = null; return; } } }
+                             */
                         }
-                    } else if (npcs[i].actionTimer == 0 && npcs[i].needRespawn && npcs[i].npcType != 1739
-                            && npcs[i].npcType != 1740 && npcs[i].npcType != 1741 && npcs[i].npcType != 1742) {
-                        if (player != null) {
-                            npcs[i] = null;
-                        } else {
-                            int newType = npcs[i].npcType;
-                            int newX = npcs[i].makeX;
-                            int newY = npcs[i].makeY;
-                            int newH = npcs[i].heightLevel;
-                            int newWalkingType = npcs[i].walkingType;
-                            int newHealth = npcs[i].getHealth().getMaximum();
-                            int newMaxHit = npcs[i].maxHit;
-                            int newAttack = npcs[i].attack;
-                            int newDefence = npcs[i].defence;
-                            npcs[i] = null;
-                            newNPC(newType, newX, newY, newH, newWalkingType, newHealth, newMaxHit, newAttack,
-                                    newDefence);
-                        }
-                        /*
-                         * } else { for(MonsterHunt.Npcs hunt : MonsterHunt.Npcs.values()) {
-                         * if(npcs[i].npcType == hunt.getNpcId()) { npcs[i] = null; return; } } }
-                         */
                     }
                 }
             }

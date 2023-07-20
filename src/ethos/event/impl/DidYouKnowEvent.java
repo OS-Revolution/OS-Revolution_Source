@@ -43,7 +43,8 @@ public class DidYouKnowEvent extends Event<Object> {
 		if (position >= MESSAGES.size()) {
 			position = 0;
 		}
-		List<String> messages = Arrays.asList(WordUtils.wrap(MESSAGES.get(position), 75).split("\\n"));
+//		WordUtils.wrap(MESSAGES.get(position), 75).split("\\n")
+		List<String> messages = Arrays.asList(MESSAGES.get(position));
 //		messages.set(0, "@cr10@ " + messages.get(0));
 		PlayerHandler.nonNullStream().forEach(player -> {
 //			if (player.getBankPin().getPin().length() == 0) {
@@ -51,7 +52,7 @@ public class DidYouKnowEvent extends Event<Object> {
 //			}
 			if (player.didYouKnow)
 				messages.forEach(message -> {
-					final String text = MarkupParser.parseMarkup("^Tips " + message).getText();
+					final String text = MarkupParser.parseMarkup("[" + "@pur@Tips@bla@] " + message).getText();
 
 					player.sendMessage(text);
 				});

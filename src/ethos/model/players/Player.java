@@ -1792,7 +1792,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             if (this.getContext().getPlayerSaveData() == null || this.getContext().getPlayerSaveData().getLogoutTimestamp() == 0L) {
                 this.newAccountInitialization();
             }
-
+         
             this.getAttributes().setMovementResricted(false);
             this.getContext().getPlayerSaveData().setLoginTimestamp(System.currentTimeMillis());
             this.initializePlayerShips();

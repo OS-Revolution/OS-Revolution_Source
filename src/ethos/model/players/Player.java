@@ -89,6 +89,8 @@ import ethos.model.players.combat.magic.MagicData;
 import ethos.model.players.combat.melee.QuickPrayers;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.mode.Mode;
+import ethos.model.players.mode.ModeType;
+import ethos.model.players.mode.OsrsMode;
 import ethos.model.players.skills.*;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.agility.impl.*;
@@ -1803,6 +1805,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             setStopPlayer();
             getPlayerAction().setAction(false);
             getPlayerAction().canWalk(true);
+            this.setMode(new OsrsMode(ModeType.OSRS));
             getPA().sendFrame126(this.getRunEnergyPercentString(), 149);
             isFullHelm = Item.isFullHat(playerEquipment[playerHat]);
             isFullMask = Item.isFullMask(playerEquipment[playerHat]);

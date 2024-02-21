@@ -34,7 +34,7 @@ public class LootContainerUI extends GameUI {
         this.registerButton(actionEvent -> spin(1), 183156);
         this.registerButton(actionEvent -> {
             if (this.getPlayer().getAttributes().isMember())
-                spin(this.getPlayer().getItems().getItemAmount(consumedItem.getItemId()) / consumedItem.getAmount());
+                spin(this.getPlayer().getItems().getItemAmount(consumedItem.getId()) / consumedItem.getAmount());
             else
                 this.getPlayer().sendMessage("You must be a member to do this.");
         }, 183164);

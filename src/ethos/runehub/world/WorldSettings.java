@@ -32,6 +32,7 @@ public class WorldSettings {
     private final Map<Integer, AdjustableLong> skillGainsTimer;
 
     private long lastDailyResetTimestamp;
+    private long weeklyResetTimestamp;
     private long commodityTraderVisitTimestamp;
 
     private AdjustableLong[] skillStationExpirationTimeMS;
@@ -51,12 +52,21 @@ public class WorldSettings {
         this.efficiencyModifier = 1.5D;
         this.gainsModifier = 1.5D;
         this.lastDailyResetTimestamp = LocalTime.of(0, 0).getLong(ChronoField.HOUR_OF_DAY);
+        this.weeklyResetTimestamp = LocalTime.of(0, 0).getLong(ChronoField.HOUR_OF_DAY);
         this.activeSeason = 1;
         this.activeSeasonLoot = new GameItem[50][3];
         this.skillEfficiencyTimer = new HashMap<>();
         this.skillGainsTimer = new HashMap<>();
         this.skillPowerTimer = new HashMap<>();
         this.skillStationExpirationTimeMS = new AdjustableLong[] {new AdjustableLong(0L),new AdjustableLong(0L),new AdjustableLong(0L),new AdjustableLong(0L),new AdjustableLong(0L)};
+    }
+
+    public long getWeeklyResetTimestamp() {
+        return weeklyResetTimestamp;
+    }
+
+    public void setWeeklyResetTimestamp(long weeklyResetTimestamp) {
+        this.weeklyResetTimestamp = weeklyResetTimestamp;
     }
 
     public void setLastChestEventTimestamp(long lastChestEventTimestamp) {

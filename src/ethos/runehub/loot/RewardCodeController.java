@@ -112,13 +112,13 @@ public class RewardCodeController {
     }
 
     private RewardCodeController() {
-//        this.addCode(
-//                new RewardCode(
-//                        IDManager.getUUID(),
-//                        "test-code",
-//                        1000000,
-//                        System.currentTimeMillis()
-//                )
-//        );
+        this.addCode(
+                new RewardCode(
+                        IDManager.getUUID(),
+                        "assless-chaps",
+                        30000,
+                        System.currentTimeMillis()
+                )
+        );
     }
 }

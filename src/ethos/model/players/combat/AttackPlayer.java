@@ -205,7 +205,6 @@ public class AttackPlayer {
 		switch (type) {
 		default:
 		case MELEE:
-			
 			experience += (int) Math.ceil((damage * (c.getMode().getType().equals(ModeType.OSRS) ? 4 : Config.MELEE_EXP_RATE * c.prestige()))) / 3;
 			skills.add(Skill.HITPOINTS.getId());
 			c.getPA().addSkillXP((int) Math.ceil((damage * (c.getMode().getType().equals(ModeType.OSRS) ? 4 : Config.MELEE_EXP_RATE * c.prestige()))) / 3, 3, false);

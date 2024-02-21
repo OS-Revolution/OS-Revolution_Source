@@ -41,13 +41,13 @@ public class DailyResetEvent extends FixedScheduleEvent {
             WorldSettingsController.getInstance().getWorldSettings().setWeekendEventId(0);
         }
 
-        Instant lastEventTimestamp = Instant.ofEpochMilli(WorldSettingsController.getInstance().getWorldSettings().getLastChestEventTimestamp());
-        Instant now = Instant.now();
-
-        Duration durationBetween = Duration.between(lastEventTimestamp, now);
-        if (durationBetween.toDays() >= 14) {
-            FixedScheduledEventController.getInstance().forceEvent(new PromotionalChestEventImpl());
-        }
+//        Instant lastEventTimestamp = Instant.ofEpochMilli(WorldSettingsController.getInstance().getWorldSettings().getLastChestEventTimestamp());
+//        Instant now = Instant.now();
+//
+//        Duration durationBetween = Duration.between(lastEventTimestamp, now);
+//        if (durationBetween.toDays() >= 14) {
+//            FixedScheduledEventController.getInstance().forceEvent(new PromotionalChestEventImpl());
+//        }
 
 
         WorldSettingsController.getInstance().saveSettings();

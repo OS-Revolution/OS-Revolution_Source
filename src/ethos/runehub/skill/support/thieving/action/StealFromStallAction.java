@@ -13,8 +13,13 @@ import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.support.SupportSkillAction;
 import ethos.util.PreconditionUtils;
 import ethos.world.objects.GlobalObject;
+import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.model.entity.item.loot.Loot;
 import org.runehub.api.util.SkillDictionary;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -106,13 +111,15 @@ public class StealFromStallAction extends SupportSkillAction {
     protected void onFailure() {
         this.getActor().sendMessage("You failed!");
         this.getActor().getAttributes().setCaughtThievingTimestamp(System.currentTimeMillis());
-        this.onSuccess();
+//        this.onSuccess();
     }
 
     protected void onSuccess() {
         if (this.isEventTick()) {
             this.onEvent();
         }
+        Collection<Loot> loot = LootTableLoader.getInstance().read(targetedNodeContext.getNode().getGatherableItemTableId()).roll(0);
+        loot.forEach(loot1 -> {this.getActor().getItems().addItem((int) loot1.getId(), (int) loot1.getAmount());});
         this.addXp(targetedNodeContext.getNode().getInteractionExperience());
         if (this.depleteNode()) {
             this.onDeplete();

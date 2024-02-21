@@ -17,7 +17,7 @@ public class OpenLootContainerEvent extends Event<Player> {
     @Override
     public void initialize() {
         try {
-            Preconditions.checkArgument(this.getAttachment().getItems().playerHasItem(consumedItem.getItemId(),consumedItem.getAmount()), "You need at least $" + consumedItem.getAmount() + " @" + consumedItem.getItemId() + " to do that.");
+            Preconditions.checkArgument(this.getAttachment().getItems().playerHasItem(consumedItem.getId(),consumedItem.getAmount()), "You need at least $" + consumedItem.getAmount() + " @" + consumedItem.getId() + " to do that.");
         } catch (Exception e) {
             this.getAttachment().sendMessage(e.getMessage());
             this.stop();
@@ -34,7 +34,7 @@ public class OpenLootContainerEvent extends Event<Player> {
 
     private void getLoot() {
         for (int i = 0; i < lootPool.size(); i++) {
-            getAttachment().getItems().deleteItem(consumedItem.getItemId(), consumedItem.getAmount());
+            getAttachment().getItems().deleteItem(consumedItem.getId(), consumedItem.getAmount());
             final String name = ItemIdContextLoader.getInstance().read((int) lootPool.get(i).getId()).getName();
             final Tier tier = getPrizeTier(lootPool.get(i));
             final int amountWon = (int) lootPool.get(i).getAmount();

@@ -1,5 +1,8 @@
 package ethos.runehub;
 
+import ethos.scaperune.entity.node.impl.RenewableNode;
+import ethos.scaperune.skill.gathering.GatheringNode;
+
 public class RunehubTests {
 
     enum ShipMask {
@@ -21,7 +24,15 @@ public class RunehubTests {
 //        return ship;
 //    }
 
+    private static void createWoodcuttingNodes() {
+        GatheringNode tree1 = new GatheringNode(1278,1342,67,-1,
+                8,25,1,
+                28,165,-1L);
+
+    }
+
     public static void main(String[] args) {
+createWoodcuttingNodes();
 //        Ship ship = new Ship(2, 15, 15, 10, 15, 15);
 //        long shipBits = ship.toBitArray();
 //        System.out.println(ship.getSeafaring());

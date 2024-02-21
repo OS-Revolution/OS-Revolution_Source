@@ -152,7 +152,7 @@ public class JobUtils {
         int difficulty = getDifficulty(level,score);
         int quota = 50 + ((15 * difficulty) * (5 * difficulty)) + Misc.random(200);
         int basePay = 5000 + (difficulty * 2500) * difficulty;
-        Job job = new Job(targetId, quota, 0, difficulty, basePay, 8);
+        Job job = new Job(targetId, quota, 0, difficulty, basePay, 7);
 
         return job;
     }

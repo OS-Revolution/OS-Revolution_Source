@@ -27,6 +27,20 @@ public class FirstClickItemActionFactory {
                         player.sendMessage("You received #" + 1 + " $" + PointController.PointType.JOURNEY + " $point. You now have #"+ player.getAttributes().getPointController().getPoints(PointController.PointType.JOURNEY) + " $" + PointController.PointType.JOURNEY + " $points.");
                     }
                 };
+            case 9083:
+                return new ClickItemAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        LootboxController.getInstance().openLootboxWithoutUI(player, LootTableContainerUtils.getLootTableContainer(nodeId, ContainerType.ITEM).orElse(null),5);
+                    }
+                };
+            case 6198:
+                return new ClickItemAction(player,nodeX,nodeY,nodeId) {
+                    @Override
+                    public void perform() {
+                        LootboxController.getInstance().openLootboxWithoutUI(player, LootTableContainerUtils.getLootTableContainer(nodeId, ContainerType.ITEM).orElse(null),1);
+                    }
+                };
             case 19887:
                 return new ClickItemAction(player,nodeX,nodeY,nodeId) {
                     @Override

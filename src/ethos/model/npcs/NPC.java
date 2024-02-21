@@ -142,6 +142,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
             defence = HostileMobIdContextLoader.getInstance().read(npcType).getDefenceLevel();
             maxHit = HostileMobIdContextLoader.getInstance().read(npcType).getMaxHit();
         } catch (Exception e) {
+            Logger.getGlobal().severe("Definition not found for: " + npcType);
         }
         if (_npcType == 2888) {
             System.out.println(definition);
@@ -859,7 +860,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
             finalPointValue *= 2;
         }
         killer.getAttributes().getPointController().addPoints(PointController.PointType.PVM,finalPointValue);
-
+        killer.sendMessage("You received #" + finalPointValue + " $PvM $Points");
     }
 
     private void handleOtherDeathMechanics(Player killer) {

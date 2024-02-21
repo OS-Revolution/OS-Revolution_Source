@@ -90,12 +90,12 @@ public class DialogueHandler {
 	}
 
 	public void sendDialogues(int dialogue, int npcId) {
-//		c.talkingNpc = npcId;
+		c.talkingNpc = npcId;
 //		if (dialogue == 0 && npcId == -1 && c.getCurrentCombination().isPresent()) {
 //			c.getCurrentCombination().get().sendCombineConfirmation(c);
 //			return;
 //		}
-//		switch (dialogue) {
+		switch (dialogue) {
 //
 //		case 15000:
 //			sendNpcChat4("Hello, are you looking to buy a House?", "DUH!, of course you are... Well i'll tell you what", "there isn't anything on the housing market at the", "current moment. You know how it is.", 5419, "Estate Agent");
@@ -3295,11 +3295,11 @@ public class DialogueHandler {
 //			c.dialogueAction = 12700;
 //			break;
 //
-//		case 633:
-//			sendOption5("10 Waves - Fire Cape", "20 Waves - Fire Cape", "63 Waves - Fire Cape", "How does it work?",
-//					"What are my rankings?");
-//			c.dialogueAction = 128;
-//			break;
+		case 633:
+			sendOption5("10 Waves - Fire Cape", "20 Waves - Fire Cape", "63 Waves - Fire Cape", "How does it work?",
+					"What are my rankings?");
+			c.dialogueAction = 128;
+			break;
 //
 //		case 634:
 //			this.sendStatement("The minigame is fairly straightforward.",
@@ -3323,16 +3323,16 @@ public class DialogueHandler {
 //			c.nextChat = 0;
 //			break;
 //
-//		case 637:
-//			sendNpcChat("Hello " + c.playerName + ".", "Are you looking to fight Zulrah?");
-//			c.nextChat = 638;
-//			break;
+		case 637:
+			sendNpcChat("Hello " + c.playerName + ".", "Are you looking to fight Zulrah?");
+			c.nextChat = 638;
+			break;
 //
-//		case 638:
-//			sendOptions("Yes, take me there.", "No, I was hoping to get my items back.",
-//					"No, I was wondering who holds the current record.", "Nevermind");
-//			c.dialogueAction = 129;
-//			break;
+		case 638:
+			sendOptions("Yes, take me there.", "No, I was hoping to get my items back.",
+					"No, I was wondering who holds the current record.", "Nevermind");
+			c.dialogueAction = 129;
+			break;
 //
 //		case 639:
 //			sendNpcChat("You don't have any items that are lost.");
@@ -3984,7 +3984,7 @@ public class DialogueHandler {
 //		case 166:
 //			c.getMageArena().start();
 //			break;
-//		}
+		}
 
 	}
 

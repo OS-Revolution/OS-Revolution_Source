@@ -13,6 +13,7 @@ import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.PlayerHandler;
 import ethos.model.players.skills.SkillHandler;
+import ethos.scaperune.action.impl.WalkToLocationAction;
 import ethos.util.Misc;
 
 /**
@@ -25,6 +26,7 @@ public class Walking implements PacketType {
 		c.nextChat = 0;
 		c.dialogueOptions = 0;
 		c.homeTeleport = 50;
+//		c.getAttributes().getActionScheduler().schedule(new WalkToLocationAction());
 		if (c.teleporting) {
 			return;
 		}

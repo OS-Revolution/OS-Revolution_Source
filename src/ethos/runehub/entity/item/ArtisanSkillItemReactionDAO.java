@@ -15,6 +15,6 @@ public class ArtisanSkillItemReactionDAO extends BetaAbstractDataAcessObject<Art
     }
 
     private ArtisanSkillItemReactionDAO() {
-        super("C:\\Users\\quint\\Desktop\\rsps\\OS-Revolution\\Server\\Data\\runehub\\db\\item-interactions.db", ArtisanSkillItemReaction.class);
+        super("C:\\Users\\quint\\Desktop\\Work\\Projects\\Games\\rsps\\OS-Revolution\\Server\\Data\\runehub\\db\\item-interactions.db", ArtisanSkillItemReaction.class);
     }
 }

@@ -54,11 +54,10 @@ import ethos.runehub.skill.gathering.farming.action.ActiveForagingSkillAction;
 import ethos.runehub.skill.gathering.farming.action.ActiveRenewableForagingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAction;
+import ethos.scaperune.action.impl.CountAction;
 import ethos.util.Location3D;
-import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 import org.runehub.api.util.math.geometry.Point;
-import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -97,6 +96,7 @@ public class ObjectOptionOne {
                     obY,
                     c.heightLevel)
             );
+//            c.getAttributes().getActionScheduler().schedule(new CountAction());
             return;
         }
 //        Mineral mineral = Mineral.forObjectId(objectType);

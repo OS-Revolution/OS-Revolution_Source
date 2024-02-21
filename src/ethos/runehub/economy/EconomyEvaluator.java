@@ -2,10 +2,18 @@ package ethos.runehub.economy;
 
 import ethos.runehub.RunehubConstants;
 import org.runehub.api.io.data.impl.ItemContextDAO;
+import org.runehub.api.io.data.impl.LootTableContainerDAO;
+import org.runehub.api.io.data.impl.LootTableDAO;
 import org.runehub.api.io.load.impl.ItemIdContextLoader;
+import org.runehub.api.model.entity.item.loot.LootTable;
+import org.runehub.api.model.entity.item.loot.LootTableContainer;
+import org.runehub.api.model.entity.item.loot.LootTableContainerEntry;
+import org.runehub.api.model.entity.item.loot.LootTableEntry;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.model.math.impl.AdjustableLong;
+import org.runehub.api.model.math.impl.IntegerRange;
 import org.runehub.api.util.APILogger;
+import org.runehub.api.util.IDManager;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -15,6 +23,26 @@ import java.text.NumberFormat;
 import java.util.*;
 
 public class EconomyEvaluator {
+
+    private static void addDrops() {
+        long tableId = IDManager.getUUID(); //Unique table ID for each table
+        LootTable drops = new LootTable(tableId,List.of(  //list of all drops on table
+                new LootTableEntry(1040,new IntegerRange(1,1),0.0004D) //Item ID, amount as a range 1-1 for 1, chance 1.0 is 100%
+        ));
+        long containerUUID = IDManager.getUUID();//unique container Id for each container
+        LootTableContainer container = new LootTableContainer(containerUUID,100,List.of(//The unique container ID, the npc,object,or item ID of the container, list of tables in the container
+                new LootTableContainerEntry(tableId,1.0d)
+        ));
+
+
+        //adds the table to the database
+        LootTableDAO.getInstance().create(drops);
+        //adds the container to the database
+        LootTableContainerDAO.getInstance().create(container);
+
+
+
+    }
 
     public static void main(String[] args) throws Exception {
         APILogger.debug_level = RunehubConstants.DEBUG_LEVEL;

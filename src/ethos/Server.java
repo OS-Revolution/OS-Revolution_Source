@@ -71,6 +71,7 @@ import ethos.runehub.world.WorldController;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.world.wushanko.island.Island;
 import ethos.runehub.world.wushanko.island.IslandDAO;
+import ethos.scaperune.io.OSRFileSystem;
 import ethos.server.data.ServerData;
 import ethos.util.date.GameCalendar;
 import ethos.util.log.Logger;

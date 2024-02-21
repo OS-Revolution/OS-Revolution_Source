@@ -1512,8 +1512,7 @@ public class NPCHandler {
             if (npcs[i] != null) {
                 NPC npc = npcs[i];
                 int type = npcs[i].npcType;
-                if (WorldController.getInstance().isChunkLoaded(RunehubUtils.getRegionId(npc.absX, npc.absY))) {
-//                    System.out.println("Processing Mob: " + type);
+//                if (WorldController.getInstance().isChunkLoaded(RunehubUtils.getRegionId(npc.absX, npc.absY))) {
                     Player slaveOwner = (PlayerHandler.players[npcs[i].summonedBy]);
                     if (npcs[i] != null && slaveOwner == null && npcs[i].summoner) {
                         npcs[i].absX = 0;
@@ -1808,6 +1807,7 @@ public class NPCHandler {
                         npcs[i].underAttack = false;
                         npcs[i].randomWalk = true;
                     }
+
                     if ((npcs[i].killerId > 0 || npcs[i].underAttack) && !npcs[i].walkingHome
                             && retaliates(npcs[i].npcType)) {
                         if (!npcs[i].isDead) {
@@ -1973,75 +1973,75 @@ public class NPCHandler {
                             /*
                              * Start Necro
                              */
-                            if (npcs[i].inNecro()) {
-                                if (npcs[i].npcType == 2805) {
-                                    player.chosenCow = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 2692) {
-                                    player.chosenChicken = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 2245) {
-                                    player.chosenGoblin = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 481) {
-                                    player.chosenCaveBug = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 3078) {
-                                    player.chosenMan = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 3083) {
-                                    player.chosenWoman = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 3088) {
-                                    player.chosenFarmer = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 2883) {
-                                    player.chosenThug = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 414) {
-                                    player.chosenBanshee = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 459) {
-                                    player.chosenDesertLizard = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 457) {
-                                    player.chosenCrawlingHand = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 955) {
-                                    player.chosenKalphiteWorker = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 70) {
-                                    player.chosenSkeleton = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 2878) {
-                                    player.chosenChaosDruid = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 97) {
-                                    player.chosenGhost = true;
-                                    Necromancy.main(player);
-                                }
-                                if (npcs[i].npcType == 5935) {
-                                    player.chosenSandCrab = true;
-                                    Necromancy.main(player);
-                                }
+//                            if (npcs[i].inNecro()) {
+//                                if (npcs[i].npcType == 2805) {
+//                                    player.chosenCow = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 2692) {
+//                                    player.chosenChicken = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 2245) {
+//                                    player.chosenGoblin = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 481) {
+//                                    player.chosenCaveBug = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 3078) {
+//                                    player.chosenMan = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 3083) {
+//                                    player.chosenWoman = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 3088) {
+//                                    player.chosenFarmer = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 2883) {
+//                                    player.chosenThug = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 414) {
+//                                    player.chosenBanshee = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 459) {
+//                                    player.chosenDesertLizard = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 457) {
+//                                    player.chosenCrawlingHand = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 955) {
+//                                    player.chosenKalphiteWorker = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 70) {
+//                                    player.chosenSkeleton = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 2878) {
+//                                    player.chosenChaosDruid = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 97) {
+//                                    player.chosenGhost = true;
+//                                    Necromancy.main(player);
+//                                }
+//                                if (npcs[i].npcType == 5935) {
+//                                    player.chosenSandCrab = true;
+//                                    Necromancy.main(player);
+//                                }
 //                            if (player.getAttributes().getGuardsAttacking().contains(i)) {
 //                                player.getAttributes().getGuardsAttacking().remove(i);
 //                            }
-                            }
+//                            }
                             /*
                              * End Necro
                              */
@@ -2377,7 +2377,7 @@ public class NPCHandler {
                     }
                 }
             }
-        }
+//        }
     }
 
     /**

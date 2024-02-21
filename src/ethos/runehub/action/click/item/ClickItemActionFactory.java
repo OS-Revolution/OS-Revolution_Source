@@ -2,6 +2,7 @@ package ethos.runehub.action.click.item;
 
 import ethos.Server;
 import ethos.model.players.Player;
+import ethos.runehub.LootTableContainerUtils;
 import ethos.runehub.RunehubConstants;
 import ethos.runehub.action.click.item.consumable.MembershipBond;
 import ethos.runehub.action.click.item.consumable.PortableBankChargeScroll;
@@ -13,8 +14,11 @@ import ethos.runehub.action.click.item.consumable.star.ClickSkillLampAction;
 import ethos.runehub.action.click.item.consumable.star.ClickSkillStarAction;
 import ethos.runehub.action.click.item.consumable.tablet.BreakTeleportTabletAction;
 import ethos.runehub.entity.item.impl.PortableBankChest;
+import ethos.runehub.loot.LootboxController;
+import org.runehub.api.io.data.impl.LootTableContainerDAO;
 import org.runehub.api.io.load.impl.LootTableContainerLoader;
 import org.runehub.api.io.load.impl.LootTableLoader;
+import org.runehub.api.model.entity.item.loot.ContainerType;
 import org.runehub.api.model.entity.item.loot.Loot;
 
 import java.util.ArrayList;
@@ -100,16 +104,17 @@ public class ClickItemActionFactory {
                         slot
                 );
                 break;
-            case 6198:
-                player.getItems().deleteItem(itemId, slot, 1);
-                double playerMF = player.getContext().getPlayerSaveData().getMagicFind().value();
-                float mf = (float) playerMF;
-                final Loot lootTable = new ArrayList<>(LootTableContainerLoader.getInstance().readAll().stream().filter(lootTableContainer -> lootTableContainer.getContainerId() == itemId).findAny().orElseThrow().roll(mf)).get(0);
-
-                LootTableLoader.getInstance().read(lootTable.getId()).roll(mf).forEach(loot -> {
-                    player.getItems().addItem((int) loot.getId(), (int) loot.getAmount());
-                });
-                break;
+//            case 6198:
+//                player.getItems().deleteItem(itemId, slot, 1);
+////                double playerMF = player.getContext().getPlayerSaveData().getMagicFind().value();
+////                float mf = (float) playerMF;
+//                LootboxController.getInstance().openLootboxWithoutUI(player,LootTableContainerUtils.getLootTableContainer(itemId, ContainerType.ITEM).orElse(null),1);
+////                final Loot lootTable = new ArrayList<>(LootTableContainerLoader.getInstance().readAll().stream().filter(lootTableContainer -> lootTableContainer.getContainerId() == itemId).findAny().orElseThrow().roll(mf)).get(0);
+////
+////                LootTableLoader.getInstance().read(lootTable.getId()).roll(mf).forEach(loot -> {
+////                    player.getItems().addItem((int) loot.getId(), (int) loot.getAmount());
+////                });
+//                break;
             case 2396:
                 action = new TeleportChargeScroll(player, 1, slot);
                 break;

@@ -26,6 +26,7 @@ import ethos.runehub.ui.ActionDispatcher;
 import ethos.runehub.ui.GameUI;
 import ethos.runehub.ui.impl.tab.TabUI;
 import ethos.runehub.world.WorldSettingsController;
+import ethos.scaperune.action.ActionScheduler;
 import org.runehub.api.model.entity.user.character.CharacterEntityAttribute;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.net.Connection;
@@ -57,6 +58,11 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
         this.jobController = new JobController(owner);
         this.selectedBuyOffers = new long[5];
         this.selectedSellOffers = new long[5];
+        this.actionScheduler = new ActionScheduler(1,5);
+    }
+
+    public ActionScheduler getActionScheduler() {
+        return actionScheduler;
     }
 
     public JobController getJobController() {
@@ -547,4 +553,7 @@ public class PlayerCharacterAttribute extends CharacterEntityAttribute {
     }
 
     private int upgradeAttempts;
+
+
+    private final ActionScheduler actionScheduler;
 }

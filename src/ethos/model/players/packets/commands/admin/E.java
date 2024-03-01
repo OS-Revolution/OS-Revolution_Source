@@ -1,12 +1,28 @@
 package ethos.model.players.packets.commands.admin;
 
+import ethos.Server;
+import ethos.clip.Region;
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;
+import ethos.model.players.packets.commands.owner.Object;
+import ethos.runehub.RunehubUtils;
 import ethos.runehub.entity.merchant.MerchantCache;
+import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
 import ethos.runehub.skill.support.sailing.Sailing;
 import ethos.runehub.skill.support.sailing.ship.Ship;
 import ethos.runehub.ui.impl.ItemUpgradeUI;
 import ethos.runehub.ui.impl.PlayPassHiscoreUI;
+import ethos.runehub.world.WorldController;
+import ethos.world.objects.GlobalObject;
+import ethos.world.objects.GlobalObjects;
+import org.runehub.api.model.world.region.location.Location;
+import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
 /**
  * Force the player to perform a given emote.
@@ -119,184 +135,34 @@ public class E extends Command {
     @Override
     public void execute(Player c, String input) {
         String[] args = input.split(" ");
-//c.sendUI(new PlayPassHiscoreUI(c));
-//        c.sendUI(new ItemUpgradeUI(c));
-//        try {
-//            if (args[0].equalsIgnoreCase("1")) {
-                c.getSailingSaveData().setShipSlot(0,0);
-//            }else  if (args[0].equalsIgnoreCase("2")) {
-////                MerchantCache.getInstance().read(50002).openShop(c);
-//            } else {
-//                Sailing.sendTestUI(c);
-//            }
-//        } catch (Exception e) {
-//            Sailing.sendTestUI(c);
-//        }
+//        int pos = Integer.parseInt(args[0]);
+//        c.getPA().createObjectHints(3125,3241,0,pos);
 
-
-//        c.getPA().sendChangeSprite(57001,(byte) 1);
-//        JourneyPathCache.getInstance().createAndPush(1,new JourneyPath(1,new int[] {2},new int[]{},"The Lumberjack"));
-//        c.getPA().walkableInterface(53000);
-//        int type = Integer.parseInt(args[0]);
-//        if (type == 0) {
-//            c.getContext().getPlayerSaveData().setActiveJob(JobUtils.generateWoodcuttingJob(
-//                    c.getSkillController().getLevel(8), 8, c.getContext().getPlayerSaveData().getJobScore()).toBitArray());
-//        } else {
-//            System.out.println(Job.fromBitArray(c.getContext().getPlayerSaveData().getActiveJob()));
-//        }
-        //        List<Job> jobs = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            jobs.add(JobUtils.generateWoodcuttingJob(c.getSkillController().getLevel(8),
-//                    8,Float.parseFloat(args[0])));
-//        }
-//        System.out.println("Score tested: " + c.getContext().getPlayerSaveData().getJobScore());
-//        System.out.println("Logs: " + jobs.stream().filter(job -> job.getTargetId() == 1511).count());
-//        System.out.println("Oak Logs: " + jobs.stream().filter(job -> job.getTargetId() == 1521).count());
-//        System.out.println("Willow Logs: " + jobs.stream().filter(job -> job.getTargetId() == 1519).count());
-//        System.out.println("Difficulty 0: " + jobs.stream().filter(job -> job.getDifficulty() == 0).count());
-//        System.out.println("Difficulty 1: " + jobs.stream().filter(job -> job.getDifficulty() == 1).count());
-//        System.out.println("Difficulty 2: " + jobs.stream().filter(job -> job.getDifficulty() == 2).count());
-//        System.out.println("Difficulty 3: " + jobs.stream().filter(job -> job.getDifficulty() == 3).count());
-//        System.out.println("Difficulty 4: " + jobs.stream().filter(job -> job.getDifficulty() == 4).count());
-//        JobUtils.generateWoodcuttingJob(c.getSkillController().getLevel(8),8,c.getContext().getPlayerSaveData().getJobScore());
-//        AdjustableInteger index = new AdjustableInteger(0);
-//
-//        FixedScheduledEventController.getInstance().startEvent(new FixedScheduleEvent(Duration.ofSeconds(4).toMillis(),"anim") {
-//            @Override
-//            public void execute() {
-//                c.sendMessage("Performing anim: " + anims[index.value()]);
-//                c.startAnimation(anims[index.value()]);
-//                index.increment();
-//            }
-//        });
-
-//        c.sendUI(new JourneySelectionUI(c));
-
-//        c.getSkillController().getSailing2().assignShipToSlot(100,0);
-//        c.getSkillController().getSailing2().assignShipToSlot(0,1);
-//        c.getSkillController().getSailing2().assignShipToSlot(0,2);
-//        c.getSkillController().getSailing2().generateDailyVoyages();
-//        if (args.length == 1) {
-//            c.getSkillController().getSailing2().generateDailyVoyages();
-//        }
-//        c.sendUI(new PortUI(c));
+        Point location = new Point(c.absX,c.absY);
+        Rectangle rectangle = new Rectangle(
+                new Point(location.getX() - 10, location.getY() - 10),
+        new Point(location.getX() + 10, location.getY() + 10));
 
 
 
+        int nodeId = Integer.parseInt(args[0]);
+//        int x = Integer.parseInt(args[1]);
+//        int y = Integer.parseInt(args[2]);
+        System.out.println(Region.objectExists(RunehubUtils.getRegionId(3118,3215),1278,3118,3215,c.height));
 
-
-
-//        int slot = Integer.parseInt(args[0]);
-//        if (args.length > 1) {
-//            int id = Integer.parseInt(args[1]);
-//            c.getSkillController().getSailing2().assignShipToSlot(id,slot);
-//        } else {
-//            getShip(c,slot);
-//        }
-//        Point point = RegionCache.getInstance().read(-4977701290314478696L).getBoundingShape().getAllPoints().get(
-//                Misc.random(RegionCache.getInstance().read(-4977701290314478696L).getBoundingShape().getAllPoints().size())
-//        );
-////        c.getPA().movePlayer(point.getX(),point.getY());
-//        System.out.println(RegionCache.getInstance().read(-4977701290314478696L).getBoundingShape().contains(
-//                new Point(c.absX,c.absY)
-//        ));
-//        FarmingConfig config = c.getContext().getPlayerSaveData().farmingConfig().get(RunehubUtils.getRegionId(c.absX,c.absY)).get(3);
-//        config.setDiseased(!config.diseased());
-//        config.setWatered(!config.watered());
-//        System.out.println("Patch: " + config.getPatch());
-//        System.out.println("Diseased: " + config.diseased());
-//        System.out.println("Watered: " + config.watered());
-//        System.out.println("Sending bits: " + config.varbit());
-//        c.getPA().sendConfig(529,config.varbit());
-//        int water = Integer.parseInt(args[0]);
-//        int disease = Integer.parseInt(args[1]);
-//        int child = Integer.parseInt(args[2]);
-//        int stage = Integer.parseInt(args[3]);
-//        int patch = Integer.parseInt(args[4]);
-//                FarmingConfig config = new FarmingConfig(
-//                stage,
-//                patch,
-//                water == 1,
-//                disease == 1,
-//                PatchType.HERB.ordinal(),
-//                5291,
-//                0
-//        );
-////        System.out.println("Child: " + Herb.values()[(config.isWatered() << 6 | config.isDiseased() << 7)]);
-//        System.out.println(child + config.getStage() + ((config.isWatered() << 6 | config.isDiseased()) << 7));
-//        int val = (child + config.getStage() + (config.isWatered() << 6 | config.isDiseased() << 7) << config.getPatch());
-//        System.out.println("Val: " + val);
-////        System.out.println("Child: " + Herb.children[val]);
-//        System.out.println("Varbit: " + config.varbit());
-//        System.out.println("Stage: " + config.getStage());
-//        System.out.println("Water: " + config.isWatered());
-//        System.out.println("Disease: " + (config.isWatered() << 6 | config.isDiseased() << 7));
-//        System.out.println("Patch: " + config.getPatch());
-//        c.getPA().sendConfig(529,val);
-//        Server.getEventHandler().submit(new PoisonEvent(c,3, Optional.empty()));
-//        c.getSkillController().getFletching().sendItemSelectionFrame(1511);
-//        System.out.println(TimeUtils.getZDTString(FixedScheduledEventController.getInstance().getNextCycle(FixedScheduledEventController.getInstance().getFixedScheduleEvents()[3])));
-//        LootTable lootTable = LootTableLoader.getInstance().read(-2682234896335024906L);
-//        List<LootTableEntry> newEntries = new ArrayList<>();
-//        List<LootTableEntry> removedEntries = new ArrayList<>();
-//        lootTable.getLootTableEntries().stream().filter(lootTableEntry -> RunehubConstants.STAR_IDS.contains(lootTableEntry.getId())).forEach(star -> {
-//            System.out.println(ItemIdContextLoader.getInstance().read(star.getId()).getName() + " is Tier: " + Tier.getTier(star.getChance()) + " @ " + star.getChance() + "%");
-//            String name = ItemIdContextLoader.getInstance().read(star.getId()).getName();
-//            if (name.toLowerCase().contains("dull")) {
-//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.6D));
-//            } else if (name.toLowerCase().contains("shining")) {
-//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.006D));
-//            } else if (name.toLowerCase().contains("glorious")) {
-//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.0006D));
-//            } else {
-//                newEntries.add(new LootTableEntry(star.getId(),star.getAmount(),0.03D));
-//            }
-//            removedEntries.add(star);
-//        });
-//        removedEntries.forEach(lootTableEntry -> lootTable.getLootTableEntries().remove(lootTableEntry));
-//        lootTable.getLootTableEntries().addAll(newEntries);
-//
-//        LootTableDAO.getInstance().update(lootTable);
-
-        
-//        for (int i = 0; i < 52; i++) {
-//            if (i < 7) {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 0, i));
-//            } else if (i < 13) {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 1, i));
-//            } else if (i < 22) {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 2, i));
-//            } else if (i < 27) {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 3, i));
-//            }  else if (i < 34) {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 4, i));
-//            } else if (i < 41) {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 5, i));
-//            }  else {
-//                VoyageDAO.getInstance().create(this.getVoyage(i, 6, i));
+//        for (Point point: rectangle.getAllPoints()) {
+//            System.out.println("Checking point " + point);
+//            if (Region.objectExists(RunehubUtils.getRegionId(point.getX(),point.getY()),nodeId,point.getX(),point.getY(),c.height)) {
+//                System.out.println("Object exists at " + point);
 //            }
 //        }
-//
-//        VoyageDAO.getInstance().create(this.getVoyage(2,0,0));
-//        VoyageDAO.getInstance().create(this.getVoyage(3,0,0));
-//        VoyageDAO.getInstance().create(this.getVoyage(4,0,0));
-//        VoyageDAO.getInstance().create(this.getVoyage(5,0,0));
-//        VoyageDAO.getInstance().create(this.getVoyage(6,0,0));
-//        VoyageDAO.getInstance().create(this.getVoyage(1,0,0));
-//        VoyageDAO.getInstance().create(this.getVoyage(1,0,0));
-//        ExchangePriceController.getInstance().updatePrices();
-//        TimedInstance instance = new TimedInstance(6,c,new Rectangle(new Point(0,0),new Point(0,0)),10000);
-//        c.getAttributes().setInstanceDurationMS(instance.getDurationMS());
-//        c.getAttributes().setInstanceStartTimestamp(System.currentTimeMillis());
-//        c.sendUI(new InstanceTab(c,instance));
-//        BossArenaInstanceController.getInstance().createInstanceForPlayer(c);
-//        RunehubUtils.getPlayPassHiscores().forEach(aLong -> System.out.println("ID: " + aLong + " score: " + PlayerCharacterContextDataAccessObject.getInstance().read(aLong).getPlayerSaveData().getPlayPassXp()));
-//        c.getPA().showInterface(50100);
-//
-//        c.getPA().showInterface(49000);
-//        for (int i = 0; i < 15; i++) {
-//            c.getPA().itemOnInterface(1038 + (i * 2),1,49006,i);
-//        }
+        List<Point> points = rectangle.getAllPoints().stream().filter(point -> Server.getGlobalObjects().exists(nodeId,point.getX(),point.getY()) ||
+                        Region.objectExists(RunehubUtils.getRegionId(point.getX(),point.getY()),nodeId,point.getX(),point.getY(),0))
+                .collect(Collectors.toList());
+        Queue<Point> pointQueue = new LinkedList<>(points);
 
+
+
+//        c.getSkillController().getWoodcutting().train(new ActiveWoodcuttingSkillAction(c,8,nodeId,x,y,0));
     }
 }

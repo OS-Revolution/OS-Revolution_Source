@@ -34,7 +34,7 @@ public class ChopCinnamonTreeSkillAction extends GatheringSkillAction {
 
     @Override
     protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
-        return this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool();
+        return this.getActor().getSkillController().getWoodcutting().getBestAvailableTool();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ChopCinnamonTreeSkillAction extends GatheringSkillAction {
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
             this.getActor().startAnimation(this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
                     this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().get(this.getSkillId()) :
-                    this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool().getAnimationId());
+                    this.getActor().getSkillController().getWoodcutting().getBestAvailableTool().getAnimationId());
         }
     }
 

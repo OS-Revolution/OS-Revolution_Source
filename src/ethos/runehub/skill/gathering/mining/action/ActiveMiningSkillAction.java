@@ -53,7 +53,7 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
     protected void updateAnimation() {
         Logger.getGlobal().finer("Updating Animation");
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
-            this.getActor().startAnimation(this.getActor().getSkillController().getMining().getGetBestAvailableTool().getAnimationId());
+            this.getActor().startAnimation(this.getActor().getSkillController().getMining().getBestAvailableTool().getAnimationId());
         }
     }
 
@@ -68,7 +68,7 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
 
     @Override
     protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
-        return this.getActor().getSkillController().getMining().getGetBestAvailableTool();
+        return this.getActor().getSkillController().getMining().getBestAvailableTool();
     }
 
 

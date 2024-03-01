@@ -9,12 +9,12 @@ public class FirstClickAbyssalWoodcuttingAction extends FirstClickAbyssalNodeAct
 
     @Override
     protected void validate() {
-        Preconditions.checkArgument(this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool() != null, "You need an axe.");
+        Preconditions.checkArgument(this.getActor().getSkillController().getWoodcutting().getBestAvailableTool() != null, "You need an axe.");
     }
 
     @Override
     protected void onActionStart() {
-        this.getActor().startAnimation(this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool().getAnimationId());
+        this.getActor().startAnimation(this.getActor().getSkillController().getWoodcutting().getBestAvailableTool().getAnimationId());
     }
 
     @Override

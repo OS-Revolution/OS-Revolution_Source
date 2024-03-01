@@ -2978,6 +2978,7 @@ public class ItemAssistant {
         c.getOutStream().writeByteS(0);
         c.getOutStream().writeWord(itemID);
         c.flushOutStream();
+        System.out.println("Removed ground item");
         // }
     }
 

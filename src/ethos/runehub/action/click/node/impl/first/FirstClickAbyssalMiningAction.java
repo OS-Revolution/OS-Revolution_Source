@@ -12,12 +12,12 @@ public class FirstClickAbyssalMiningAction extends FirstClickAbyssalNodeAction {
 //                .filter(tool -> tool.getSkillId() == this.getSkillId())
 //                .map(GatheringTool::getItemId)
 //                .collect(Collectors.toList());
-        Preconditions.checkArgument(this.getActor().getSkillController().getMining().getGetBestAvailableTool() != null, "You need a pickaxe.");
+        Preconditions.checkArgument(this.getActor().getSkillController().getMining().getBestAvailableTool() != null, "You need a pickaxe.");
     }
 
     @Override
     protected void onActionStart() {
-        this.getActor().startAnimation(this.getActor().getSkillController().getMining().getGetBestAvailableTool().getAnimationId());
+        this.getActor().startAnimation(this.getActor().getSkillController().getMining().getBestAvailableTool().getAnimationId());
     }
 
     @Override

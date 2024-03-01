@@ -18,13 +18,13 @@ public class ActiveRenewableForagingSkillAction extends GatheringSkillAction {
 
     @Override
     protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
-        return this.getActor().getSkillController().getForaging().getGetBestAvailableTool();
+        return this.getActor().getSkillController().getForaging().getBestAvailableTool();
     }
 
     @Override
     protected void updateAnimation() {
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
-            this.getActor().startAnimation(this.getActor().getSkillController().getForaging().getGetBestAvailableTool().getAnimationId());
+            this.getActor().startAnimation(this.getActor().getSkillController().getForaging().getBestAvailableTool().getAnimationId());
         }
     }
 

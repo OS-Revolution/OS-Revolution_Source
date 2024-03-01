@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import ethos.Server;
 import ethos.model.players.Player;
 import ethos.runehub.skill.Skill;
+import ethos.runehub.skill.gathering.GatheringSkill;
 import ethos.runehub.skill.node.context.impl.FishingNodeContext;
 import ethos.util.PreconditionUtils;
 

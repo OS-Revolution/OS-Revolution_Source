@@ -10,7 +10,7 @@ import java.util.logging.Level;
 public class RunehubConstants {
 
     public static boolean DEBUG = false;
-    public static Level DEBUG_LEVEL = Level.SEVERE;
+    public static Level DEBUG_LEVEL = Level.INFO;
 
     public static final String ROOT = "./Data/runehub/";
     public static final String DB_ROOT = ROOT + "db/";

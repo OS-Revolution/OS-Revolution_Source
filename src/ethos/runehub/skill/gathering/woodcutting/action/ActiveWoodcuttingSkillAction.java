@@ -1,10 +1,7 @@
 package ethos.runehub.skill.gathering.woodcutting.action;
 
 import ethos.Server;
-import ethos.model.items.GroundItem;
-import ethos.model.npcs.drops.DropManager;
 import ethos.model.players.Player;
-import ethos.model.players.skills.firemake.Firemaking;
 import ethos.model.players.skills.firemake.LogData;
 import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.skill.Skill;
@@ -34,7 +31,7 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
 
     @Override
     protected GatheringTool getGetBestAvailableTool() throws NullPointerException {
-        return this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool();
+        return this.getActor().getSkillController().getWoodcutting().getBestAvailableTool();
     }
 
     @Override
@@ -58,10 +55,10 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
                         this.getActor().getSkillController().addXP(SkillDictionary.Skill.FIREMAKING.getId(), (int) Objects.requireNonNull(LogData.getLogData(this.getActor(), logId.value())).getExperience());
                     }
                 } else {
-                    this.addItems();
+//                    this.addItems();
                 }
             } else {
-                this.addItems();
+//                this.addItems();
             }
         }
         this.addXp(this.getTargetedNodeContext().getNode().getInteractionExperience());
@@ -117,7 +114,7 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
             this.getActor().startAnimation(this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().containsKey(this.getSkillId()) ?
                     this.getActor().getContext().getPlayerSaveData().getSkillAnimationOverrideMap().get(this.getSkillId()) :
-                    this.getActor().getSkillController().getWoodcutting().getGetBestAvailableTool().getAnimationId());
+                    this.getActor().getSkillController().getWoodcutting().getBestAvailableTool().getAnimationId());
         }
     }
 

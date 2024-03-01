@@ -6,7 +6,12 @@ package ethos.model.items;
  * @author Jason MacKeigan
  * @date Feb 10, 2015, 4:08:14 PM
  */
-public class GroundItem {
+public class GroundItem implements Comparable<GroundItem> {
+
+	@Override
+	public int compareTo(GroundItem o) {
+		return Integer.compare(id, o.id);
+	}
 
 	/**
 	 * The identification value of the item that makes it unique from the rest

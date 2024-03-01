@@ -180,7 +180,7 @@ public class Farming extends GatheringSkill {
     }
 
     @Override
-    public GatheringTool getGetBestAvailableTool() {
+    public GatheringTool getBestAvailableTool() {
         final List<GatheringTool> availableTools = GatheringToolLoader.getInstance().readAll().stream()
                 .filter(tool -> tool.getSkillId() == this.getId())
                 .filter(tool -> this.getPlayer().getItems().playerHasItem(tool.getItemId()) || this.getPlayer().getItems().isWearingItem(tool.getItemId()))

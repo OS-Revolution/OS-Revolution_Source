@@ -68,7 +68,7 @@ public class FishingSkillAction extends GatheringSkillAction {
     protected void updateAnimation() {
 //        this.setTool(this.getActor().getSkillController().getFishing().getGetBestAvailableTool());
         if (super.getElapsedTicks() == 4 || super.getElapsedTicks() % 4 == 0) {
-            this.getActor().startAnimation(this.getActor().getSkillController().getFishing().getGetBestAvailableTool().getAnimationId());
+            this.getActor().startAnimation(this.getActor().getSkillController().getFishing().getBestAvailableTool().getAnimationId());
         }
     }
 

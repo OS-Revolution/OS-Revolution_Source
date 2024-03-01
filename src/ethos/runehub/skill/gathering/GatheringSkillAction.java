@@ -9,7 +9,6 @@ import ethos.runehub.RunehubUtils;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
-import ethos.runehub.skill.gathering.tool.GatheringToolLoader;
 import ethos.runehub.skill.node.context.impl.GatheringNodeContext;
 import ethos.runehub.skill.node.impl.RenewableNode;
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
@@ -17,10 +16,8 @@ import ethos.util.PreconditionUtils;
 import ethos.world.objects.GlobalObject;
 import org.runehub.api.io.load.impl.LootTableLoader;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public abstract class GatheringSkillAction extends SkillAction {
 
@@ -71,7 +68,7 @@ public abstract class GatheringSkillAction extends SkillAction {
 
     @Override
     protected void validateItemRequirements() {
-        Preconditions.checkArgument(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getGetBestAvailableTool() != null, "You do not have a valid tool.");
+        Preconditions.checkArgument(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getBestAvailableTool() != null, "You do not have a valid tool.");
     }
 
     @Override
@@ -112,28 +109,15 @@ public abstract class GatheringSkillAction extends SkillAction {
         Logger.getGlobal().fine("depleting node roll");
         final RenewableNode node = RenewableNodeLoader.getInstance().read(this.getTargetedNodeContext().getNode().getId());
         final int baseMinRoll = node.getDepletionMinRoll();
-        final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getDepletionOdds());
+        final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(GatheringSkill.DEPLETION_ODDS);
         final double minRollModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEfficiencyBonus();
         final double minRoll = baseMinRoll + minRollModifier;
 
         return baseMinRoll <= 0 || playerBaseRoll >= minRoll;
     }
 
-//    protected boolean canGather() {
-//        Logger.getGlobal().fine("harvest roll");
-//        final int minRoll = this.getTargetedNodeContext().getNode().getGatherMinRoll();
-//        final int playerBaseRoll = Skill.SKILL_RANDOM.nextInt(
-//                Skill.SKILL_RANDOM.nextInt(this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getGatherOdds())
-//                        + 1);
-//        final int playerRollModifier = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPower();
-//        final int playerRoll = playerBaseRoll + playerRollModifier;
-//
-//        return playerRoll >= minRoll;
-//    }
-
     protected boolean isEventTick() {
         final int ROLL = this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getEventOdds();
-        System.out.println("Roll: " + ROLL);
         return (Skill.SKILL_RANDOM.nextInt(ROLL) + 1) == ROLL;
     }
 

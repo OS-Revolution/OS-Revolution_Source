@@ -48,6 +48,9 @@ public class NpcOptionThree {
 				player.getPA().startTeleport(2911, 4832, 0, "modern", false);
 //				player.getAttributes().getJourneyController().checkJourney(-4963837951524320731L,1);
 				player.getAttributes().getJourneyController().checkJourney(npcType,1, JourneyStepType.NPC_TELEPORT_ACTION);
+				if (Boundary.isIn(player, Boundary.VARROCK_BOUNDARY)) {
+					player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.TELEPORT_ESSENCE_VAR);
+				}
 				break;
 		case 1428:
 			player.getPrestige().openShop();
@@ -122,11 +125,11 @@ public class NpcOptionThree {
 			break;
 		case 5449:
 			PotionMixing.decantInventory(player);
-			player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.POTION_DECANT);
+			//player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.POTION_DECANT);
 			break;
 		case 2580:
 			if (Boundary.isIn(player, Boundary.VARROCK_BOUNDARY)) {
-				player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.TELEPORT_ESSENCE_VAR);
+				//player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.TELEPORT_ESSENCE_VAR);
 			}
 			if (Boundary.isIn(player, Boundary.ARDOUGNE_BOUNDARY)) {
 				player.getDiaryManager().getArdougneDiary().progress(ArdougneDiaryEntry.TELEPORT_ESSENCE_ARD);

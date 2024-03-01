@@ -20,8 +20,8 @@ public class ReceiveString implements PacketType {
         int index = text.indexOf(",");
         int id = Integer.parseInt(text.substring(0, index));
         String string = text.substring(index + 1);
-        Logger.getGlobal().fine("ID: " + id + " | String: " + string);
-        System.out.println("ID: " + id + " | String: " + string);
+      //  Logger.getGlobal().fine("ID: " + id + " | String: " + string);
+      //  System.out.println("ID: " + id + " | String: " + string);
         switch (id) {
             case 0:
                 if (player.clan != null) {

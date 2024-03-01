@@ -274,7 +274,7 @@ public class WoodcuttingEvent extends Event<Player> {
 					attachment.getDiaryManager().getFaladorDiary().progress(FaladorDiaryEntry.CHOP_YEW);
 				}
 				if (Boundary.isIn(attachment, Boundary.VARROCK_BOUNDARY)) {
-					attachment.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.YEWS_AND_BURN);
+					//attachment.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.YEWS_AND_BURN);
 				}
 				DailyTasks.increase(attachment, PossibleTasks.YEW_LOGS);
 				break;

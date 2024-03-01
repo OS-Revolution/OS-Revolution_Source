@@ -203,7 +203,16 @@ public class Boundary {
 	public static final Boundary WATERBIRTH_ISLAND_BOUNDARY = new Boundary(2495, 3711, 2559, 3772);
 	public static final Boundary MISCELLANIA_BOUNDARY = new Boundary(2493, 3835, 2628, 3921);
 	public static final Boundary WOODCUTTING_GUILD_BOUNDARY = new Boundary(1608,3479,1657,3516);
+	//MICHAEL ADDED BOUNDARIES
+	public static final Boundary HOME_BOUNDARY = new Boundary(3093, 3239, 3117, 3258);
+	public static final Boundary S0_BOUNDARY = new Boundary(2302, 5244, 2367, 5186);
 
+	public static final Boundary S1_BOUNDARY = new Boundary(1917, 5185, 1885, 5247);
+	public static final Boundary S2_BOUNDARY = new Boundary(2048, 5186, 1985, 5246);
+	public static final Boundary S3_BOUNDARY = new Boundary(2175, 5248, 2116, 5309);
+	
+	public static final Boundary W_BOUNDARY = new Boundary(3923, 2543, 1005, 4103);
+	public static final Boundary PORT_BOUNDARY = new Boundary(3022, 3178, 2969, 3228);
 	/**
 	 * Halloween
 	 */

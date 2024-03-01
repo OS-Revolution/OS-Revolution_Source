@@ -179,16 +179,16 @@ public class PlayerAssistant {
     }
 
     public void appendRetribution(Player o) {
-        System.out.println("here");
+       // System.out.println("here");
         if (o != null && checkRetributionReqsSingle(c.getIndex())) {
-            System.out.println("here1");
+        //    System.out.println("here1");
             if (!c.goodDistance(o.getX(), o.getY(), c.getX(), c.getY(), 1))
                 return;
             int damage = (int) (getLevelForXP(c.playerXP[5]) * 2.50 / 10);
             if (o.getLevelForXP(c.playerXP[3]) - damage < 0) {
                 damage = o.getLevelForXP(c.playerXP[3]);
             }
-            System.out.println("here2");
+         //   System.out.println("here2");
             c.gfx0(437);
             c.appendDamage(damage, Hitmark.HIT);
             c.getPA().refreshSkill(3);
@@ -316,16 +316,17 @@ public class PlayerAssistant {
      * @param componentId the interface
      * @param index       the index in the array
      */
-    public void sendChangeSprite(int componentId, byte index) {
-        if (c == null || c.getOutStream() == null) {
-            return;
-        }
-        Stream stream = c.getOutStream();
-        stream.createFrame(7);
-        stream.writeDWord(componentId);
-        stream.writeByte(index);
-        c.flushOutStream();
-    }
+	public void sendChangeSprite(int componentId, byte index) {
+		if (c == null || c.getOutStream() == null) {
+			return;
+		}
+		Stream stream = c.getOutStream();
+		stream.createFrame(7);
+		stream.writeDWord(componentId);
+		stream.writeByte(index);
+		c.flushOutStream();
+	}
+
 
     public static void sendItems(Player player, int componentId, List<GameItem> items, int capacity) {
         if (player == null || player.getOutStream() == null) {
@@ -2864,10 +2865,26 @@ public class PlayerAssistant {
     public void processTeleport() {
         if (c.isDead) {
             return;
-        }
+        } 
         c.teleportToX = c.teleX;
         c.teleportToY = c.teleY;
         c.heightLevel = c.teleHeight;
+        if (c.recent1_Name.isEmpty()) {
+			c.getTeleport().handleRecentsOne(c);
+			c.recent1_TeleportX = c.absX;
+			c.recent1_TeleportY = c.absY;
+			c.recent1_TeleportZ = c.heightLevel;
+		} else if (c.recent2_Name.isEmpty()) {
+			c.getTeleport().handleRecentsTwo(c);
+			c.recent2_TeleportX = c.absX;
+			c.recent2_TeleportY = c.absY;
+			c.recent2_TeleportZ = c.heightLevel;
+		} else if (c.recent3_Name.isEmpty()) {
+			c.getTeleport().handleRecentsThree(c);
+			c.recent3_TeleportX = c.absX;
+			c.recent3_TeleportY = c.absY;
+			c.recent3_TeleportZ = c.heightLevel;
+		}
         if (c.teleEndAnimation > 0) {
             c.startAnimation(c.teleEndAnimation);
         }

@@ -1,4 +1,4 @@
-package ethos.model.players.packets.commands.owner;
+package ethos.model.players.packets.commands.all;
 
 import ethos.model.players.Player;
 import ethos.model.players.packets.commands.Command;

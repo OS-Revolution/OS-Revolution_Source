@@ -113,7 +113,7 @@ public class Thieving {
         }
         switch (stall) {
             case Food:
-                player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.TEA_STALL);
+              //  player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.TEA_STALL);
                 break;
             case Crafting:
                 if (Boundary.isIn(player, Boundary.ARDOUGNE_BOUNDARY)) {

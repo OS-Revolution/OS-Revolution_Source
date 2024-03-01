@@ -231,7 +231,7 @@ public final class TeleportationInterface {
 
 	public enum TeleportData {
 		/**
-		 * Player killing teleports
+		 * Location Teleports
 		 */
 		WILDERNESS_PORTALS(62151, 2980, 3871, 0, "Find yourself at one of the wilderness portals \\n @red@Be aware, this is within the wilderness"),
 		WEST_DRAGONS(62152, 2979, 3597, 0, "Find yourself to the west dragons area \\n @red@Be aware, this is within the wilderness"),

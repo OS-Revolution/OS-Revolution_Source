@@ -139,6 +139,14 @@ public class ClickingButtons implements PacketType {
                 c.sendMessage("You need to be inside your house to use this.");
             }
         }
+        if (actionButtonId == 166013) {
+        	c.sendMessage("Talk to the Jewel Merchant for a Membership Bond.");
+
+        }
+        if (actionButtonId == 166009) {
+        	c.sendMessage("Yea, yea... We're working on it.");
+
+        }
 
         // (TeleportationInterface.actions(c, actionButtonId)) {
         // return;
@@ -1003,12 +1011,12 @@ public class ClickingButtons implements PacketType {
                 c.getAchievements().currentInterface = 0;
                 c.getAchievements().drawInterface(0);
                 break;
-
+            case 223129:
             case 179183:
                 c.getAchievements().currentInterface = 1;
                 c.getAchievements().drawInterface(1);
                 break;
-
+            case 223130:
             case 179184:
                 c.getAchievements().currentInterface = 2;
                 c.getAchievements().drawInterface(2);
@@ -1225,6 +1233,10 @@ public class ClickingButtons implements PacketType {
                     c.sendMessage("You're currently do not have membership, head over to the store to pick it up!");
                 }
                 break;
+            case 166009:
+                c.forcedChat("It would be nice if this worked...");
+                c.sendMessage("Yea, yea... We're working on it...");
+                break;
             case 39247:
                 c.forcedChat("I currently have: " + c.getSlayer().getPoints() + " Slayer Points.");
                 c.sendMessage("@blu@I currently have: " + c.getSlayer().getConsecutiveTasks() + " consecutive slayer tasks.");
@@ -1292,6 +1304,7 @@ public class ClickingButtons implements PacketType {
             case 185152:
                 c.sendUI(new PlayPassUI(c));
                 break;
+            case 223128:
             case 185148:
                 c.getPA().showInterface(36000);
                 c.getAchievements().drawInterface(0);
@@ -1748,36 +1761,47 @@ public class ClickingButtons implements PacketType {
                     }
                 }
                 break;
+            case 223028:
             case 115040:
                 c.getDiaryManager().getVarrockDiary().display();
                 break;
+            case 223029:
             case 115041:
                 c.getDiaryManager().getArdougneDiary().display();
                 break;
+            case 223030:
             case 115042:
                 c.getDiaryManager().getDesertDiary().display();
                 break;
+            case 223031:
             case 115043:
                 c.getDiaryManager().getFaladorDiary().display();
                 break;
+            case 223032:
             case 115044:
                 c.getDiaryManager().getFremennikDiary().display();
                 break;
+            case 223033:
             case 115045:
                 c.getDiaryManager().getKandarinDiary().display();
                 break;
+            case 223034:
             case 115046:
                 c.getDiaryManager().getKaramjaDiary().display();
                 break;
+            case 223035:
             case 115047:
                 c.getDiaryManager().getLumbridgeDraynorDiary().display();
                 break;
+            case 223036:
             case 115048:
                 c.getDiaryManager().getMorytaniaDiary().display();
                 break;
+            case 223037:
             case 115049:
                 c.getDiaryManager().getWesternDiary().display();
                 break;
+            case 223038:
             case 115050:
                 c.getDiaryManager().getWildernessDiary().display();
                 break;

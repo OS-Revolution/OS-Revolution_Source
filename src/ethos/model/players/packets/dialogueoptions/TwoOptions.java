@@ -26,6 +26,9 @@ public class TwoOptions {
         Player other = c.getItemOnPlayer();
         IslandRegion region;
         switch (c.dialogueAction) {
+    	case 2879:
+			c.getTeleport().teleportToFavourites(c);
+			break;
             case 1:
                 c.getDH().sendDialogueSequence(GuideNpcUtils.getOptionOneSequence(c));
                 break;
@@ -1050,6 +1053,29 @@ public class TwoOptions {
         Logger.getGlobal().fine("Dialogue Option 2 for ID: " + c.dialogueAction);
         IslandRegion region;
         switch (c.dialogueAction) {
+    	case 2879:
+			if (c.selectedFavourite == 1) {
+				c.Favourites_1 = "";
+			} else if (c.selectedFavourite == 2) {
+				c.Favourites_2 = "";
+			} else if (c.selectedFavourite == 3) {
+				c.Favourites_3 = "";
+			} else if (c.selectedFavourite == 4) {
+				c.Favourites_4 = "";
+			} else if (c.selectedFavourite == 5) {
+				c.Favourites_5 = "";
+			} else if (c.selectedFavourite == 6) {
+				c.Favourites_6 = "";
+			} else if (c.selectedFavourite == 7) {
+				c.Favourites_7 = "";
+			} else if (c.selectedFavourite == 8) {
+				c.Favourites_8 = "";
+
+
+			}
+			c.sendMessage("Your favourite you selected has been removed.");
+			c.getTeleport().openInterface();
+			break;
             case 1:
                 c.getDH().sendDialogueSequence(GuideNpcUtils.getOptionTwoSequence(c));
                 break;

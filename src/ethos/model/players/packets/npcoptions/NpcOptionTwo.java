@@ -264,9 +264,7 @@ public class NpcOptionTwo {
 //		case 3106:
 //			player.getThieving().steal(Pickpocket.HERO, NPCHandler.npcs[player.rememberNpcIndex]);
 //			break;
-		case 637:
-			player.getShops().openShop(6);
-			break;
+
 		case 3219:
 			player.getShops().openShop(113);
 			break;

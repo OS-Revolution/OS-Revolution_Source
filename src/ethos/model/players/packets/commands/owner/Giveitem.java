@@ -19,7 +19,7 @@ public class Giveitem extends Command {
 	@Override
 	public void execute(Player c, String input) {
 		try {
-			String args[] = input.split("-");
+			String args[] = input.split(" ");
 			if (args.length != 3) {
 				throw new IllegalArgumentException();
 			}

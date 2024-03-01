@@ -2,13 +2,6 @@ package ethos.model.content.teleportation;
 
 import ethos.Config;
 import ethos.event.impl.WheatPortalEvent;
-import ethos.model.content.achievement_diary.ardougne.ArdougneDiaryEntry;
-import ethos.model.content.achievement_diary.falador.FaladorDiaryEntry;
-import ethos.model.content.achievement_diary.fremennik.FremennikDiaryEntry;
-import ethos.model.content.achievement_diary.kandarin.KandarinDiaryEntry;
-import ethos.model.content.achievement_diary.lumbridge_draynor.LumbridgeDraynorDiaryEntry;
-import ethos.model.content.achievement_diary.morytania.MorytaniaDiaryEntry;
-import ethos.model.content.achievement_diary.western_provinces.WesternDiaryEntry;
 import ethos.model.players.Player;
 
 /**
@@ -25,102 +18,248 @@ public class TeleportHandler {
 		this.c = player;
 	}
 
-	String[] monsterNames = { "@yel@Select Your Monster Teleport", "@or1@Cows @gre@(Level-2)", "@or1@Rock Crabs @gre@(Level-13)", "@or1@Chaos Druids @gre@(Level-13) @red@(Wilderness)", "@or1@Yaks @gre@(Level-22)",
-			"@or1@Skeletons @gre@(Level-22)", "@or1@Hill Giants @gre@(Level-28)", "@or1@Desert Bandits @yel@(Level-74)", "@or1@Dagannoths @yel@(Level-74)", "@or1@Elf Warriors @yel@(Level-108)", "@or1@Smoke Devils @red@(Level-160)",
-			"@or1@Demonic Gorillas @red@(Level-275)", "@or1@Mithril Dragons @red@(Level-304)", "@or1@Slayer Tower @mag@(Variety)", "@or1@Taverly Dungeon @mag@(Variety)", "@or1@Stronghold Cave @mag@(Variety)", "", "", "", "", "" };
-	String[] minigameNames = { "@yel@Select Your Minigame Teleportt", "@gre@Raids @or1@(Great Rewards)", "@gre@Warriors Guild @or1@(Defenders)", "@gre@Pest Control @or1@(Void)",
-			"@gre@Fight Caves @or1@(Firecape)", "@gre@Barrows @or1@(Barrows Armor)", "@gre@Clan Wars @red@(Under Construction)", "@gre@Shayzien Assault @or1@(Fighter Torso)", "@gre@Mage Arena @red@(Under Construction)", "@gre@Duel Arena @or1@(Gamble/1v1)", "", "", "", "", "",
-			"", "", "", "", "", "" };
-	String[] bossNames = { "@yel@Select Your @yel@Boss @yel@Teleport", "@or1@Difficulty: @gre@Easy @yel@Barrelchest", "@or1@Difficulty: @gre@Easy @yel@Dagannoth Kings",
-			"@or1@Difficulty: @gre@Easy @yel@King Black Dragon @red@(Wilderness)", "@or1@Difficulty: @gre@Easy @yel@Giant Mole @red@(Wilderness)", "@or1@Difficulty: @or1@Hard @yel@Kalphite Queen", "@or1@Difficulty: @gre@Normal @yel@Godwars Dungeon @mag@(Variety)",
-			"@or1@Difficulty: @red@Extremely Hard @yel@Corporeal Beast", "@or1@Difficulty: @or1@Hard @yel@Dagannoth Mother", "@or1@Difficulty: @yel@Medium @yel@Kraken", "@or1@Difficulty: @yel@Medium @yel@Zulrah", "@or1@Difficulty: @yel@Medium @yel@Cerberus", "@or1@Difficulty: @gre@Easy @yel@Thermonuclear Smoke Devil",
-			"@or1@Difficulty: @yel@Medium @yel@Abyssal Sire", "@or1@Difficulty: @yel@Medium @yel@Demonic Gorillas", "@or1@Difficulty: @gre@Easy @yel@Lizardman Shaman", "@or1@Difficulty: @or1@Hard @yel@Vorkath", "", "", "", "" };
-	String[] wildernessNames = { "@yel@Select Your @red@Wilderness @yel@Teleport", "@gre@West Dragons @red@(10)", "@gre@Mage Bank @or1@(Safe)",
-			"@gre@Dark Castle @red@(15)", "@or1@Hill Giants (Multi) @red@(18)", "@or1@Wilderness Agility Course @red@(52)",
-			"@mag@Vet'ion @red@(40) ", "@mag@Callisto @red@(43)", "@mag@Scorpia @red@(54)", "@mag@Venenatis @red@(28)",
-			"@mag@Chaos Elemental @red@(50)", "@mag@Chaos Fanatic @red@(41)", "@mag@Crazy Archaeologist @red@(23)", "", "", "", "", "",
-			"", "", "" };
-	String[] cityNames = { "@yel@Select Your City Teleport", "@yel@Varrock", "@yel@Yanille", "@yel@Edgeville", "@yel@Lumbridge", "@yel@Ardougne",
-			"@yel@Neitiznot", "@yel@Karamja", "@yel@Falador", "@yel@Taverley", "@yel@Camelot", "@yel@Catherby", "@yel@Al Kharid", "", "", "", "", "", "",
-			"", "" };
-	String[] donatorNames = { "@yel@Select Your Dungeon Teleport", "@yel@Catacombs", "@yel@Fremennik Slayer Dungeon",
-			"@yel@Taverley Dungeon", "@yel@Skeletal Wyverns", "@yel@Asgarnian Ice Dungeon", "@yel@Brimhaven Dungeon", "", "", "", "", "",
-			"", "", "", "", "", "", "", "", "" };
-	String[] otherNames = { "@yel@Select Your Skilling Teleport", "@yel@Slayer Master's House", "@yel@Skill House (Cooking / Crafting / Smithing / Combat)", "@yel@Mining (Falador Mining)",
-			"@yel@Woodcutting", "@yel@Farming", "@yel@Agility @or1@(Gnome)", "@yel@Hunter @or1@(Animals)", "@yel@Hunter @or1@(Implings)", "@yel@Fishing (Fishing Guild)", "@yel@Thieving Stalls (Ardougne)", "",
-			"", "", "", "", "", "", "", "", "" };
+	public String[] monsterNames = { "Rock Crabs", "Sand Crabs", "Yaks", "Mithril Dragons", "Kalphite", "Demonic Gorillas", "Wyverns", "Mini Hydra", "Cows", "Desert Bandits", "Elf Warriors", "Dagganoths", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A",};
+	
+	public String[] monsterPrices = { "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE"};
+	
+	public String[] monsterDangers = { "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",
+			"@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous",};
 
+	
+	public String[] dungeonNames = { "Slayer Tower", "Edgeville Dungeon", "Taverley Dungeon", "Brimhaven Dungeon", "Rellekka Dungeon", "Iletya Elves", "Catacombs", "Karuulm Dungeon", "Lithkren Vault", "Ice Dungeon", "Smoke Dungeon", "Kraken Cave", "Nieve's Cave", "Crystal Cave", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A",};
+	public String[] dungeonPrices = { "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE"};
+	public String[] dungeonDangers = { "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",
+					"@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",};
+
+	
+	public String[] bossNames = { "Hydra", "Zulrah", "Godwars", "Vorkath", "Lizardman Shaman", "King Black Dragon", "Abyssal Sire", "Corporeal Beast", "Chaos Elemental", "Callisto", "Venenatis", "Vet'ion", "Crazy Archaeologist", "Giant Mole", "Barrelchest", "Dagannoth Kings", "Cerberus", "Thermonuclear smoke devil", "N/A", "N/A",};
+	public String[] bossPrices = { "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE"};
+	public String[] bossDangers = { "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@red@Dangerous", "@red@Dangerous", "@red@Dangerous", "@red@Dangerous",
+			"@red@Dangerous", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",};
+
+	
+	public String[] minigameNames = { "Gambling", "Pest control", "Chambers Of Xeric", "Gulag", "Fight Caves", "Inferno", "Warriors Guild", "Barrows", "Mage Arena", "Mage Arena 2", "Duel Arena", "Lighthouse", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A",};
+	public String[] minigamePrices = { "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE"};
+	public String[] minigameDangers = { "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",
+			"@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",};
+	public String[] skillingNames = { "Skilling Centre", "Woodcutting Guild", "Fishing Guild", "Mining Guild", "Barb Fishing", "Crafting guild", "Gnome Agility", "Barb Agility", "Wildy Agility", "Lumbridge", "Varrock", "Falador", "Camelot", "Ardougne", "Hunter", "Puro Puro", "Farming", "N/A", "N/A", "N/A",};
+	public String[] skillingPrices = { "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE"};
+	public String[] skillingDangers = { "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@gre@Safe", "@gre@Safe",
+			"@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe", "@gre@Safe",};
+	
+	public String[] playerKillingNames = { "Information Center", "Grand Exchange", "West Dragons", "Chaos Temple", "Chinchompa Hills", "Revenants Cave", "Graves", "Greator Demons", "Level 44 obelisk", "Level 50 obelisk", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A",};
+	public String[] playerKillingPrices = { "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE", "FREE"};
+	public String[] playerKillingDangers = { "@gre@Safe", "@gre@Safe", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous",
+			"@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous", "@gre@Safe", "@red@Dangerous",};
+	
+	public void openInterface() {
+		c.getPA().showInterface(31000);
+		c.getTeleport().selection(c, 0);
+	}
 	public void loadMonsterTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
+		c.getPA().sendFrame126("Monsters", 31003);
+		c.getPA().sendFrame126(""+c.recent1_Name+"", 31017);
+		c.getPA().sendFrame126(""+c.recent2_Name+"", 31018);
+		c.getPA().sendFrame126(""+c.recent3_Name+"", 31019);
+		
+		c.getPA().sendFrame126(""+c.getFavouriteOne()+"", 31009);
+		c.getPA().sendFrame126(""+c.Favourites_2+"", 31010);
+		c.getPA().sendFrame126(""+c.Favourites_3+"", 31011);
+		c.getPA().sendFrame126(""+c.Favourites_4+"", 31012);
+		c.getPA().sendFrame126(""+c.Favourites_5+"", 31013);
+		c.getPA().sendFrame126(""+c.Favourites_6+"", 31014);
+		c.getPA().sendFrame126(""+c.Favourites_7+"", 31015);
+		c.getPA().sendFrame126(""+c.Favourites_8+"", 31016);
+		int[] cost = { 31053, 31058, 31063, 31068, 31073, 31078, 31083, 31088, 31093, 31098, 31103, 31108, 31113, 31118, 31123, 31128, 31133, 31138, 31143, 31148};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(monsterPrices[j], cost[j]);
+
+		}
+		int[] zones = { 31054, 31059, 31064, 31069, 31074, 31079, 31084, 31089, 31094, 31099, 31104, 31109, 31114, 31119, 31124, 31129, 31134, 31139, 31144, 31149};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(monsterDangers[j], zones[j]);
+
+		}
+		int[] ids = { 31052, 31057, 31062, 31067, 31072, 31077, 31082, 31087, 31092, 31097, 31102, 31107, 31112, 31117, 31122, 31127, 31132, 31137, 31142, 31147};
+		for (int j = 0; j <= 19; j++) {
 			c.getPA().sendFrame126(monsterNames[j], ids[j]);
+
 		}
 	}
 
-	public void loadMinigameTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
-			c.getPA().sendFrame126(minigameNames[j], ids[j]);
+	public void loadDungeonsTab() {
+		c.getPA().sendFrame126("Dungeons", 31003);	
+		c.getPA().sendFrame126(""+c.recent1_Name+"", 31017);
+		c.getPA().sendFrame126(""+c.recent2_Name+"", 31018);
+		c.getPA().sendFrame126(""+c.recent3_Name+"", 31019);
+		
+		c.getPA().sendFrame126(""+c.Favourites_1+"", 31009);
+		c.getPA().sendFrame126(""+c.Favourites_2+"", 31010);
+		c.getPA().sendFrame126(""+c.Favourites_3+"", 31011);
+		c.getPA().sendFrame126(""+c.Favourites_4+"", 31012);
+		c.getPA().sendFrame126(""+c.Favourites_5+"", 31013);
+		c.getPA().sendFrame126(""+c.Favourites_6+"", 31014);
+		c.getPA().sendFrame126(""+c.Favourites_7+"", 31015);
+		c.getPA().sendFrame126(""+c.Favourites_8+"", 31016);
+		
+		int[] cost = { 31053, 31058, 31063, 31068, 31073, 31078, 31083, 31088, 31093, 31098, 31103, 31108, 31113, 31118, 31123, 31128, 31133, 31138, 31143, 31148};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(dungeonPrices[j], cost[j]);
+
+		}
+		int[] zones = { 31054, 31059, 31064, 31069, 31074, 31079, 31084, 31089, 31094, 31099, 31104, 31109, 31114, 31119, 31124, 31129, 31134, 31139, 31144, 31149};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(dungeonDangers[j], zones[j]);
+
+		}
+		int[] ids = { 31052, 31057, 31062, 31067, 31072, 31077, 31082, 31087, 31092, 31097, 31102, 31107, 31112, 31117, 31122, 31127, 31132, 31137, 31142, 31147};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(dungeonNames[j], ids[j]);
+
 		}
 	}
 
-	public void loadBossTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
+	public void loadBossesTab() {
+		c.getPA().sendFrame126("Bosses", 31003);	
+		c.getPA().sendFrame126(""+c.recent1_Name+"", 31017);
+		c.getPA().sendFrame126(""+c.recent2_Name+"", 31018);
+		c.getPA().sendFrame126(""+c.recent3_Name+"", 31019);
+		
+		c.getPA().sendFrame126(""+c.Favourites_1+"", 31009);
+		c.getPA().sendFrame126(""+c.Favourites_2+"", 31010);
+		c.getPA().sendFrame126(""+c.Favourites_3+"", 31011);
+		c.getPA().sendFrame126(""+c.Favourites_4+"", 31012);
+		c.getPA().sendFrame126(""+c.Favourites_5+"", 31013);
+		c.getPA().sendFrame126(""+c.Favourites_6+"", 31014);
+		c.getPA().sendFrame126(""+c.Favourites_7+"", 31015);
+		c.getPA().sendFrame126(""+c.Favourites_8+"", 31016);
+
+		int[] cost = { 31053, 31058, 31063, 31068, 31073, 31078, 31083, 31088, 31093, 31098, 31103, 31108, 31113, 31118, 31123, 31128, 31133, 31138, 31143, 31148};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(bossPrices[j], cost[j]);
+
+		}
+		int[] zones = { 31054, 31059, 31064, 31069, 31074, 31079, 31084, 31089, 31094, 31099, 31104, 31109, 31114, 31119, 31124, 31129, 31134, 31139, 31144, 31149};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(bossDangers[j], zones[j]);
+
+		}
+		int[] ids = { 31052, 31057, 31062, 31067, 31072, 31077, 31082, 31087, 31092, 31097, 31102, 31107, 31112, 31117, 31122, 31127, 31132, 31137, 31142, 31147};
+		for (int j = 0; j <= 19; j++) {
 			c.getPA().sendFrame126(bossNames[j], ids[j]);
+
+		}
+	} 
+	
+	public void loadMinigamesTab() {
+		c.getPA().sendFrame126("Minigames", 31003);	
+		c.getPA().sendFrame126(""+c.recent1_Name+"", 31017);
+		c.getPA().sendFrame126(""+c.recent2_Name+"", 31018);
+		c.getPA().sendFrame126(""+c.recent3_Name+"", 31019);
+		
+		c.getPA().sendFrame126(""+c.Favourites_1+"", 31009);
+		c.getPA().sendFrame126(""+c.Favourites_2+"", 31010);
+		c.getPA().sendFrame126(""+c.Favourites_3+"", 31011);
+		c.getPA().sendFrame126(""+c.Favourites_4+"", 31012);
+		c.getPA().sendFrame126(""+c.Favourites_5+"", 31013);
+		c.getPA().sendFrame126(""+c.Favourites_6+"", 31014);
+		c.getPA().sendFrame126(""+c.Favourites_7+"", 31015);
+		c.getPA().sendFrame126(""+c.Favourites_8+"", 31016);
+		
+
+		int[] cost = { 31053, 31058, 31063, 31068, 31073, 31078, 31083, 31088, 31093, 31098, 31103, 31108, 31113, 31118, 31123, 31128, 31133, 31138, 31143, 31148};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(minigamePrices[j], cost[j]);
+
+		}
+		int[] zones = { 31054, 31059, 31064, 31069, 31074, 31079, 31084, 31089, 31094, 31099, 31104, 31109, 31114, 31119, 31124, 31129, 31134, 31139, 31144, 31149};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(minigameDangers[j], zones[j]);
+
+		}
+		int[] ids = { 31052, 31057, 31062, 31067, 31072, 31077, 31082, 31087, 31092, 31097, 31102, 31107, 31112, 31117, 31122, 31127, 31132, 31137, 31142, 31147};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(minigameNames[j], ids[j]);
+
+		}
+	}
+	public void loadSkillingTab() {
+		c.getPA().sendFrame126("Skilling", 31003);	
+		c.getPA().sendFrame126(""+c.recent1_Name+"", 31017);
+		c.getPA().sendFrame126(""+c.recent2_Name+"", 31018);
+		c.getPA().sendFrame126(""+c.recent3_Name+"", 31019);
+		c.getPA().sendFrame126(""+c.Favourites_1+"", 31009);
+		c.getPA().sendFrame126(""+c.Favourites_2+"", 31010);
+		c.getPA().sendFrame126(""+c.Favourites_3+"", 31011);
+		c.getPA().sendFrame126(""+c.Favourites_4+"", 31012);
+		c.getPA().sendFrame126(""+c.Favourites_5+"", 31013);
+		c.getPA().sendFrame126(""+c.Favourites_6+"", 31014);
+		c.getPA().sendFrame126(""+c.Favourites_7+"", 31015);
+		c.getPA().sendFrame126(""+c.Favourites_8+"", 31016);
+
+		int[] cost = { 31053, 31058, 31063, 31068, 31073, 31078, 31083, 31088, 31093, 31098, 31103, 31108, 31113, 31118, 31123, 31128, 31133, 31138, 31143, 31148};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(skillingPrices[j], cost[j]);
+
+		}
+		int[] zones = { 31054, 31059, 31064, 31069, 31074, 31079, 31084, 31089, 31094, 31099, 31104, 31109, 31114, 31119, 31124, 31129, 31134, 31139, 31144, 31149};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(skillingDangers[j], zones[j]);
+
+		}
+		int[] ids = { 31052, 31057, 31062, 31067, 31072, 31077, 31082, 31087, 31092, 31097, 31102, 31107, 31112, 31117, 31122, 31127, 31132, 31137, 31142, 31147};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(skillingNames[j], ids[j]);
+
+		}
+	}
+	
+	public void loadPlayerKillingTab() {
+		c.getPA().sendFrame126("Locations", 31003);	
+		c.getPA().sendFrame126(""+c.recent1_Name+"", 31017);
+		c.getPA().sendFrame126(""+c.recent2_Name+"", 31018);
+		c.getPA().sendFrame126(""+c.recent3_Name+"", 31019);
+		
+		c.getPA().sendFrame126(""+c.Favourites_1+"", 31009);
+		c.getPA().sendFrame126(""+c.Favourites_2+"", 31010);
+		c.getPA().sendFrame126(""+c.Favourites_3+"", 31011);
+		c.getPA().sendFrame126(""+c.Favourites_4+"", 31012);
+		c.getPA().sendFrame126(""+c.Favourites_5+"", 31013);
+		c.getPA().sendFrame126(""+c.Favourites_6+"", 31014);
+		c.getPA().sendFrame126(""+c.Favourites_7+"", 31015);
+		c.getPA().sendFrame126(""+c.Favourites_8+"", 31016);
+
+		int[] cost = { 31053, 31058, 31063, 31068, 31073, 31078, 31083, 31088, 31093, 31098, 31103, 31108, 31113, 31118, 31123, 31128, 31133, 31138, 31143, 31148};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(playerKillingPrices[j], cost[j]);
+
+		}
+		int[] zones = { 31054, 31059, 31064, 31069, 31074, 31079, 31084, 31089, 31094, 31099, 31104, 31109, 31114, 31119, 31124, 31129, 31134, 31139, 31144, 31149};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(playerKillingDangers[j], zones[j]);
+
+		}
+		int[] ids = { 31052, 31057, 31062, 31067, 31072, 31077, 31082, 31087, 31092, 31097, 31102, 31107, 31112, 31117, 31122, 31127, 31132, 31137, 31142, 31147};
+		for (int j = 0; j <= 19; j++) {
+			c.getPA().sendFrame126(playerKillingNames[j], ids[j]);
+
 		}
 	}
 
-	public void loadWildernessTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
-			c.getPA().sendFrame126(wildernessNames[j], ids[j]);
-		}
-	}
-
-	public void loadCityTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
-			c.getPA().sendFrame126(cityNames[j], ids[j]);
-		}
-	}
-
-	public void loadDonatorTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
-			c.getPA().sendFrame126(donatorNames[j], ids[j]);
-		}
-	}
-
-	public void loadOtherTab() {
-		int[] ids = { 44505, 40505, 40506, 40507, 40508, 40509, 40510, 40511, 40512, 40513, 40514, 40515, 40516, 40517,
-				40518, 40519, 40520, 40521, 40522, 40523/* , 65085, 65087, 65089 */ };
-		for (int j = 0; j <= 17; j++) {
-			c.getPA().sendFrame126(otherNames[j], ids[j]);
-		}
-	}
 
 	public void loadTab(Player player, int tab) {
 		if (player.teleSelected == 0) {
 			loadMonsterTab();
 		} else if (player.teleSelected == 1) {
-			loadMinigameTab();
+			loadDungeonsTab();
 		} else if (player.teleSelected == 2) {
-			loadBossTab();
+			loadBossesTab();
 		} else if (player.teleSelected == 3) {
-			loadWildernessTab();
+			loadMinigamesTab();
 		} else if (player.teleSelected == 4) {
-			loadCityTab();
+			loadSkillingTab();
 		} else if (player.teleSelected == 5) {
-			loadDonatorTab();
-		} else if (player.teleSelected == 6) {
-			loadOtherTab();
+			loadPlayerKillingTab();
 		}
 	}
 
@@ -128,597 +267,2546 @@ public class TeleportHandler {
 		player.teleSelected = i;
 		loadTab(player, i);
 	}
-
-	public boolean teleportCheck(Player player) {
-		/*
-		 * if (!player.modeTut) { player.
-		 * sendMessage("You must finish the tutorial before teleporting anywhere.");
-		 * return false; }
-		 */
-		return true;
+	public void handleRecentsOne(Player c) {
+		if (c.teleSelected == 0) {
+			if (c.recent1_Name == c.getTeleport().monsterNames[c.teleportSelected]) {
+			} else {
+				c.recent1_Name = c.getTeleport().monsterNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 1) {
+			if (c.recent1_Name == c.getTeleport().dungeonNames[c.teleportSelected]) {
+			} else {
+				c.recent1_Name = c.getTeleport().dungeonNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 2) {
+			if (c.recent1_Name == c.getTeleport().bossNames[c.teleportSelected]) {
+			} else {
+				c.recent1_Name = c.getTeleport().bossNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 3) {
+			if (c.recent1_Name == c.getTeleport().minigameNames[c.teleportSelected]) {
+			} else {
+				c.recent1_Name = c.getTeleport().minigameNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 4) {
+			if (c.recent1_Name == c.getTeleport().skillingNames[c.teleportSelected]) {
+			} else {
+				c.recent1_Name = c.getTeleport().skillingNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 5) {
+			if (c.recent1_Name == c.getTeleport().playerKillingNames[c.teleportSelected]) {
+			} else {
+				c.recent1_Name = c.getTeleport().playerKillingNames[c.teleportSelected];
+			}
+		}
 	}
+	public void handleRecentsTwo(Player c) {
+		if (c.teleSelected == 0) {
+			if (c.recent2_Name == c.getTeleport().monsterNames[c.teleportSelected]) {
+			} else {
+				c.recent2_Name = c.getTeleport().monsterNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 1) {
+			if (c.recent2_Name == c.getTeleport().dungeonNames[c.teleportSelected]) {
+			} else {
+				c.recent2_Name = c.getTeleport().dungeonNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 2) {
+			if (c.recent2_Name == c.getTeleport().bossNames[c.teleportSelected]) {
+			} else {
+				c.recent2_Name = c.getTeleport().bossNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 3) {
+			if (c.recent2_Name == c.getTeleport().minigameNames[c.teleportSelected]) {
+			} else {
+				c.recent2_Name = c.getTeleport().minigameNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 4) {
+			if (c.recent2_Name == c.getTeleport().skillingNames[c.teleportSelected]) {
+			} else {
+				c.recent2_Name = c.getTeleport().skillingNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 5) {
+			if (c.recent2_Name == c.getTeleport().playerKillingNames[c.teleportSelected]) {
+			} else {
+				c.recent2_Name = c.getTeleport().playerKillingNames[c.teleportSelected];
+			}
+		}
+	}
+	public void handleRecentsThree(Player c) {
+		if (c.teleSelected == 0) {
+			if (c.recent3_Name == c.getTeleport().monsterNames[c.teleportSelected]) {
+			} else {
+				c.recent3_Name = c.getTeleport().monsterNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 1) {
+			if (c.recent3_Name == c.getTeleport().dungeonNames[c.teleportSelected]) {
+			} else {
+				c.recent3_Name = c.getTeleport().dungeonNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 2) {
+			if (c.recent3_Name == c.getTeleport().bossNames[c.teleportSelected]) {
+			} else {
+				c.recent3_Name = c.getTeleport().bossNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 3) {
+			if (c.recent3_Name == c.getTeleport().minigameNames[c.teleportSelected]) {
+			} else {
+				c.recent3_Name = c.getTeleport().minigameNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 4) {
+			if (c.recent3_Name == c.getTeleport().skillingNames[c.teleportSelected]) {
+			} else {
+				c.recent3_Name = c.getTeleport().skillingNames[c.teleportSelected];
+			}
+		} else if (c.teleSelected == 5) {
+			if (c.recent3_Name == c.getTeleport().playerKillingNames[c.teleportSelected]) {
+			} else {
+				c.recent3_Name = c.getTeleport().playerKillingNames[c.teleportSelected];
+			}
+		}
+	}
+	public void updateInterface() {
+		c.getPA().showInterface(31000);
+		c.getTeleport().selection(c, c.teleSelected);
+	}
+	public void handleFavourites() { 
+		if (!c.Favourites_1.isEmpty() && c.Favourites_1 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_2.isEmpty() && c.Favourites_2 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_3.isEmpty() && c.Favourites_3 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_4.isEmpty() && c.Favourites_4 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_5.isEmpty() && c.Favourites_5 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_6.isEmpty() && c.Favourites_6 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_7.isEmpty() && c.Favourites_7 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_8.isEmpty() && c.Favourites_8 == c.getTeleport().monsterNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_1.isEmpty() && c.Favourites_1 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_2.isEmpty() && c.Favourites_2 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_3.isEmpty() && c.Favourites_3 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_4.isEmpty() && c.Favourites_4 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_5.isEmpty() && c.Favourites_5 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_6.isEmpty() && c.Favourites_6 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_7.isEmpty() && c.Favourites_8 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_8.isEmpty() && c.Favourites_8 == c.getTeleport().dungeonNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_1.isEmpty() && c.Favourites_1 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_2.isEmpty() && c.Favourites_2 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_3.isEmpty() && c.Favourites_3 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_4.isEmpty() && c.Favourites_4 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_5.isEmpty() && c.Favourites_5 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_6.isEmpty() && c.Favourites_6 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_7.isEmpty() && c.Favourites_7 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_8.isEmpty() && c.Favourites_8 == c.getTeleport().bossNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_1.isEmpty() && c.Favourites_1 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_2.isEmpty() && c.Favourites_2 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_3.isEmpty() && c.Favourites_3 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_4.isEmpty() && c.Favourites_4 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_5.isEmpty() && c.Favourites_5 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_6.isEmpty() && c.Favourites_6 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_7.isEmpty() && c.Favourites_7 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_8.isEmpty() && c.Favourites_8 == c.getTeleport().minigameNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_1.isEmpty() && c.Favourites_1 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_2.isEmpty() && c.Favourites_2 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_3.isEmpty() && c.Favourites_3 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_4.isEmpty() && c.Favourites_4 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_5.isEmpty() && c.Favourites_5 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_6.isEmpty() && c.Favourites_6 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_7.isEmpty() && c.Favourites_7 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_8.isEmpty() && c.Favourites_8 == c.getTeleport().skillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_1.isEmpty() && c.Favourites_1 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_2.isEmpty() && c.Favourites_2 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_3.isEmpty() && c.Favourites_3 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_4.isEmpty() && c.Favourites_4 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_5.isEmpty() && c.Favourites_5 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_6.isEmpty() && c.Favourites_6 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_7.isEmpty() && c.Favourites_7 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (!c.Favourites_8.isEmpty() && c.Favourites_8 == c.getTeleport().playerKillingNames[c.favouritesSelected]) {
+			c.sendMessage("This location is already listed as a favourite.");
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_1.isEmpty()) {
+			c.Favourites_1 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_1.isEmpty()) {
+			c.Favourites_1 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_1.isEmpty()) {
+			c.Favourites_1 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_1.isEmpty()) {
+			c.Favourites_1 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_1.isEmpty()) {
+			c.Favourites_1 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_1.isEmpty()) {
+			c.Favourites_1 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_2.isEmpty()) {
+			c.Favourites_2 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_2.isEmpty()) {
+			c.Favourites_2 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_2.isEmpty()) {
+			c.Favourites_2 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_2.isEmpty()) {
+			c.Favourites_2 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_2.isEmpty()) {
+			c.Favourites_2 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_2.isEmpty()) {
+			c.Favourites_2 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_3.isEmpty()) {
+			c.Favourites_3 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_3.isEmpty()) {
+			c.Favourites_3 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_3.isEmpty()) {
+			c.Favourites_3 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_3.isEmpty()) {
+			c.Favourites_3 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_3.isEmpty()) {
+			c.Favourites_3 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_3.isEmpty()) {
+			c.Favourites_3 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_4.isEmpty()) {
+			c.Favourites_4 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_4.isEmpty()) {
+			c.Favourites_4 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_4.isEmpty()) {
+			c.Favourites_4 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_4.isEmpty()) {
+			c.Favourites_4 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_4.isEmpty()) {
+			c.Favourites_4 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_4.isEmpty()) {
+			c.Favourites_4 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_5.isEmpty()) {
+			c.Favourites_5 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_5.isEmpty()) {
+			c.Favourites_5 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_5.isEmpty()) {
+			c.Favourites_5 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_5.isEmpty()) {
+			c.Favourites_5 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_5.isEmpty()) {
+			c.Favourites_5 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_5.isEmpty()) {
+			c.Favourites_5 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_6.isEmpty()) {
+			c.Favourites_6 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_6.isEmpty()) {
+			c.Favourites_6 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_6.isEmpty()) {
+			c.Favourites_6 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_6.isEmpty()) {
+			c.Favourites_6 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_6.isEmpty()) {
+			c.Favourites_6 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_6.isEmpty()) {
+			c.Favourites_6 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_7.isEmpty()) {
+			c.Favourites_7 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_7.isEmpty()) {
+			c.Favourites_7 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_7.isEmpty()) {
+			c.Favourites_7 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_7.isEmpty()) {
+			c.Favourites_7 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_7.isEmpty()) {
+			c.Favourites_7 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_7.isEmpty()) {
+			c.Favourites_7 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+		if (c.teleSelected == 0 && c.Favourites_8.isEmpty()) {
+			c.Favourites_8 = c.getTeleport().monsterNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 1 && c.Favourites_8.isEmpty()) {
+			c.Favourites_8 = c.getTeleport().dungeonNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 2 && c.Favourites_8.isEmpty()) {
+			c.Favourites_8 = c.getTeleport().bossNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 3 && c.Favourites_8.isEmpty()) {
+			c.Favourites_8 = c.getTeleport().minigameNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 4 && c.Favourites_8.isEmpty()) {
+			c.Favourites_8 = c.getTeleport().skillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		} else if (c.teleSelected == 5 && c.Favourites_8.isEmpty()) {
+			c.Favourites_8 = c.getTeleport().playerKillingNames[c.favouritesSelected];
+			updateInterface();
+			return;
+		}
+	}
+	public void teleportToFavourites(Player c) {
+			if (c.selectedFavourite == 1 && c.Favourites_1 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Dagganoths") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+
+				//favorite 2
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Rock Crabs") {
+					c.getPA().spellTeleport(2672, 3710, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Sand Crabs") {
+					c.getPA().spellTeleport(1683, 3487, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Yaks") {
+					c.getPA().spellTeleport(2323, 3804, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Mithril Dragons") {
+					c.getPA().spellTeleport(1748, 5330, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Kalphite") {
+					c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Demonic Gorillas") {
+					c.getPA().spellTeleport(2130,5646, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Wyverns") {
+					c.getPA().spellTeleport(3056,9555, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Mini Hydra") {
+					c.getPA().spellTeleport(1351,10259, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Cows") {
+					c.getPA().spellTeleport(3259,3261, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Desert Bandits") {
+					c.getPA().spellTeleport(3176,2987, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Elf Warriors") {
+					c.getPA().spellTeleport(2897,2725, 0, false);
+				} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Dagganoths") {
+					c.getPA().spellTeleport(1913,4367, 0, false);
+
+
+				//favorite 3
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Dagganoths") {
+				c.getPA().spellTeleport(1913,4367, 0, false);
+
+				//favorite 4
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Dagganoths") {
+				c.getPA().spellTeleport(1913,4367, 0, false);
+
+				//favorite 5
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Dagganoths") {
+				c.getPA().spellTeleport(1913,4367, 0, false);
+
+
+				//favorite 6
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Dagganoths") {
+				c.getPA().spellTeleport(1913,4367, 0, false);
+
+				//favorite 7
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Dagganoths") {
+				c.getPA().spellTeleport(1913,4367, 0, false);
+
+				//favorite 8
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Rock Crabs") {
+				c.getPA().spellTeleport(2672, 3710, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Sand Crabs") {
+				c.getPA().spellTeleport(1683, 3487, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Yaks") {
+				c.getPA().spellTeleport(2323, 3804, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Mithril Dragons") {
+				c.getPA().spellTeleport(1748, 5330, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Kalphite") {
+				c.getPA().spellTeleport(3507,9493, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Demonic Gorillas") {
+				c.getPA().spellTeleport(2130,5646, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Wyverns") {
+				c.getPA().spellTeleport(3056,9555, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Mini Hydra") {
+				c.getPA().spellTeleport(1351,10259, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Cows") {
+				c.getPA().spellTeleport(3259,3261, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Desert Bandits") {
+				c.getPA().spellTeleport(3176,2987, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Elf Warriors") {
+				c.getPA().spellTeleport(2897,2725, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Dagganoths") {
+				c.getPA().spellTeleport(1913,4367, 0, false);
+				//monster tab
+
+				// dungeons tab
+				//favorite 1
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favourite 2
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favorite 3
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favorite 4
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favorite 5
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favorite 6
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favorite 7
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//favorite 8
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Slayer Tower") {
+				c.getPA().spellTeleport(3425, 3538, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Edveville Dungeon") {
+				c.getPA().spellTeleport(3097, 9869, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Taverly Dungeon") {
+				c.getPA().spellTeleport(2884, 9798, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Brimhaven Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Rellekka Dungeon") {
+				c.getPA().spellTeleport(2688, 9564, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Iletya Elves") {
+				c.getPA().spellTeleport(2352, 3156, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Catacombs") {
+				c.getPA().spellTeleport(1666, 10047, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Karuulm Dungeon") {
+				c.getPA().spellTeleport(1311, 10222, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Lithkren Vault") {
+				c.getPA().spellTeleport(1567, 5074, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Ice Dungeon") {
+				c.getPA().spellTeleport(3035, 9581, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Smoke Dungeon") {
+				c.getPA().spellTeleport(2381, 9463, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Kraken") {
+				c.getPA().spellTeleport(2276, 9989, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Nieve's Cave") {
+				c.getPA().spellTeleport(2412, 9785, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Crystal Cave") {
+				c.getPA().spellTeleport(3274, 6054, 0, false);
+
+				//bosses tab
+				//favorite 1
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+				//favorite 2
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+				//favorite 3
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+				//favorite 4
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+				//favorite 5
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+				//favorite 6
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 6&& c.Favourites_6 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+
+				//favorite 7
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7== "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+
+				//favorite 8
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Hydra") {
+				c.getPA().spellTeleport(1351, 10259, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Zulrah") {
+				c.getPA().spellTeleport(2199, 3056, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Godwars") {
+				c.getPA().spellTeleport(2880, 5313, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Vorkath") {
+				c.getPA().spellTeleport(2272, 4048, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Lizardman Shaman") {
+				c.getPA().spellTeleport(1477, 3690, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "King Black Dragon") {
+				c.getPA().spellTeleport(2271, 4680, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Abyssal Sire") {
+				c.getPA().spellTeleport(3039, 4976, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Corporeal Beast") {
+				c.getPA().spellTeleport(2969, 4384, 2, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Chaos Elemental") {
+				c.getPA().spellTeleport(3285, 3907, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Callisto") {
+				c.getPA().spellTeleport(3313, 3826, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Venenatis") {
+				c.getPA().spellTeleport(3343, 3741, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Vet'ion") {
+				c.getPA().spellTeleport(3179, 3774, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Crazy Archaeologist") {
+				c.getPA().spellTeleport(2983, 3675, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Giant Mole") {
+				c.getPA().spellTeleport(1760, 5163, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Barrelchest") {
+				c.getPA().spellTeleport(1226, 3498, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Dagannoth Kings") {
+				c.getPA().spellTeleport(1913, 4367, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Cerberus") {
+				c.getPA().spellTeleport(1309, 1253, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Thermonuclear smoke devil") {
+				c.getPA().spellTeleport(2376, 9452, 0, false);
+
+			//minigames tab
+				//favorites 1
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 1
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 2
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 3
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 4
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 5
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 6
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 7
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+				//favorites 8
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Gambling") {
+				c.getPA().spellTeleport(3160, 9491, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Pest control") {
+				c.getPA().spellTeleport(2657, 2649, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Chambers Of Xeric") {
+				c.getPA().spellTeleport(3033, 6067, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Gulag") {
+				c.getPA().spellTeleport(3080, 3504, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Fight Caves") {
+				c.getPA().spellTeleport(2439, 5169, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Warriors Guild") {
+				c.getPA().spellTeleport(2496, 5113, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Barrows") {
+				c.getPA().spellTeleport(3565, 3307, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Mage Arena") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Mage Arena 2") {
+				c.sendMessage("No Teleport Found");
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Duel Arena") {
+				c.getPA().spellTeleport(3364, 3267, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Lighthouse") {
+				c.getPA().spellTeleport(2514, 3621, 0, false);
+
+			//skilling
+				//favorite 1
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//favorite 2
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//favourite 3
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//favorite 4
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//favorite 5
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//favorite 6
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+
+				//favorite 7
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//favorite 8
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Skilling Centre") {
+				c.getPA().spellTeleport(3803, 3539, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Woodcutting Guild") {
+				c.getPA().spellTeleport(1656, 3505, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Fishing Guild") {
+				c.getPA().spellTeleport(2611, 3400, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Mining Guild") {
+				c.getPA().spellTeleport(3046, 9754, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Barb Fishing") {
+				c.getPA().spellTeleport(2505, 3488, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Crafting guild") {
+				c.getPA().spellTeleport(2933, 3285, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Gnome Agility") {
+				c.getPA().spellTeleport(2468, 3435, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Barb Agility") {
+				c.getPA().spellTeleport(2552, 3558, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Wildy Agility") {
+				c.getPA().spellTeleport(2998, 3913, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Lumbridge") {
+				c.getPA().spellTeleport(3222, 3219, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Varrock") {
+				c.getPA().spellTeleport(3212, 3429, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Falador") {
+				c.getPA().spellTeleport(2964, 3379, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Camelot") {
+				c.getPA().spellTeleport(2757, 3477, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Ardougne") {
+				c.getPA().spellTeleport(2661, 3310, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Hunter") {
+				c.getPA().spellTeleport(1580, 3437, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Puro Puro") {
+				c.getPA().spellTeleport(2592, 4317, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Farming") {
+				c.getPA().spellTeleport(3003, 3376, 0, false);
+
+				//Locations
+				//favourite 1
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Casino") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 1 && c.Favourites_1 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 2
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Casino") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 2 && c.Favourites_2 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 3
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "West Dragons") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 3 && c.Favourites_3 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 4
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "West Dragons") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 4 && c.Favourites_4 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 5
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "West Dragons") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 5 && c.Favourites_5 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 6
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "West Dragons") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 6 && c.Favourites_6 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 6
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "West Dragons") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 7 && c.Favourites_7 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+				//favourite 8
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Information Center") {
+				c.getPA().spellTeleport(2541, 4715, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Grand Exchange") {
+				c.getPA().spellTeleport(3319, 3690, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "West Dragons") {
+				c.getPA().spellTeleport(2985, 3596, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Chaos Temple") {
+				c.getPA().spellTeleport(3237, 3633, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Chinchompa Hills") {
+				c.getPA().spellTeleport(3138, 3785, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Revenants Cave") {
+				c.getPA().spellTeleport(3127, 3832, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Graves") {
+				c.getPA().spellTeleport(3149, 3671, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Greator Demons") {
+				c.getPA().spellTeleport(3288, 3866, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Level 44 obelisk") {
+				c.getPA().spellTeleport(2980, 3866, 0, false);
+			} else if (c.selectedFavourite == 8 && c.Favourites_8 == "Level 50 obelisk") {
+				c.getPA().spellTeleport(3307, 3916, 0, false);
+
+
+			}
+		}
+
+
 
 	public void handleTeleports(Player player, int Id) {
+
+
 		if (player.inWild() && player.wildLevel > Config.NO_TELEPORT_WILD_LEVEL) {
-			// player.sendMessage("You can not open a teleport interface while above level
-			// 20 wilderness.");
 			return;
 		}
-		if (player.isFrozen == true) {
-			return;
-		}
-
 		switch (Id) {
-		// Handle Magic Book Teleports
-		case 4140: // Monsters
-		case 50235:
-		case 117112:
-			// player.getPA().showInterface(65000);
-			// selection(player, 0);
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121033:
+			c.selectedFavourite = 1;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 4143: // Minigames
-		case 50245:
-		case 117123:
-			// player.getPA().showInterface(65000);
-			// selection(player, 1);
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121034:
+			c.selectedFavourite = 2;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 4146: // Bosses
-		case 50253:
-		case 117131:
-			// player.getPA().showInterface(65000);
-			// selection(player, 2);
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121035:
+			c.selectedFavourite = 3;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 4150: // Wilderness
-		case 51005:
-		case 117154:
-			// player.getPA().showInterface(65000);
-			// selection(player, 3);
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121036:
+			c.selectedFavourite = 4;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 6004: // City
-		case 51013:
-		case 117162:
-			// player.getPA().showInterface(65000);
-			// selection(player, 4);
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121037:
+			c.selectedFavourite = 5;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 6005: // Donator
-		case 51023:
-		case 117186:
-			// if (player.getRights().isDonator() || player.getRights().isSuperDonator() ||
-			// player.getRights().isLegendaryDonator() ||
-			// player.getRights().isExtremeDonator() ||
-			// c.getRights().isOrInherits(Right.OWNER)) {
-			// player.getPA().showInterface(65000);
-			// selection( player, 5);
-			// } else {
-			// player.sendMessage("You must be a donator to use this.");
-			// }
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121038:
+			c.selectedFavourite = 6;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 29031: // Other
-		case 51031:
-		case 117194:
-			// player.getPA().showInterface(65000);
-			// selection(player, 6);
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121039:
+			c.selectedFavourite = 7;
+			c.getDH().sendDialogues(2879, 5314);
 			break;
-		case 51039:
-		case 72038:
-		case 117210:
-			// player.sendMessage("If you wish to teleport, please talk to Wizard Mizgog in
-			// Edgeville.");
+		case 121040:
+			c.selectedFavourite = 8;
+			c.getDH().sendDialogues(2879, 5314);
+			break;
+		case 121026: //close button
+			player.getPA().closeAllWindows();
+			break;
+		case 121079:
+			c.favouritesSelected = 0;
+			handleFavourites();
+			break;
+		case 121084:
+			c.favouritesSelected = 1;
+			handleFavourites();
+			break;
+		case 121089:
+			c.favouritesSelected = 2;
+			handleFavourites();
+			break;
+		case 121094:
+			c.favouritesSelected = 3;
+			handleFavourites();
+			break;
+		case 121099:
+			c.favouritesSelected = 4;
+			handleFavourites();
+			break;
+		case 121104:
+			c.favouritesSelected = 5;
+			handleFavourites();
+			break;
+		case 121109:
+			c.favouritesSelected = 6;
+			handleFavourites();
+			break;
+		case 121114:
+			c.favouritesSelected = 7;
+			handleFavourites();
+			break;
+		case 121119:
+			c.favouritesSelected = 8;
+			handleFavourites();
+			break;
+		case 121124:
+			c.favouritesSelected = 9;
+			handleFavourites();
+			break;
+		case 121129:
+			c.favouritesSelected = 10;
+			handleFavourites();
+			break;
+		case 121134:
+			c.favouritesSelected = 11;
+			handleFavourites();
+			break;
+		case 121139:
+			c.favouritesSelected = 12;
+			handleFavourites();
+			break;
+		case 121144:
+			c.favouritesSelected = 13;
+			handleFavourites();
+			break;
+		case 121149:
+			c.favouritesSelected = 14;
+			handleFavourites();
+			break;
+		case 121154:
+			c.favouritesSelected = 15;
+			handleFavourites();
+			break;
+		case 121159:
+			c.favouritesSelected = 16;
+			handleFavourites();
+			break;
+		case 121164:
+			c.favouritesSelected = 17;
+			handleFavourites();
+			break;
+		case 121169:
+			c.favouritesSelected = 18;
+			handleFavourites();
+			break;
+		case 121174:
+			c.favouritesSelected = 19;
+			handleFavourites();
+			break;
+		case 121041: //Recents 1
+			if (player.recent1_TeleportX == 0 && player.recent1_TeleportY == 0 && player.recent1_TeleportZ == 0) {
+				player.sendMessage("You need to teleport somewhere first.");
+				return;
+			}
+			player.usingRecents = true;
+			player.getPA().startTeleport(player.recent1_TeleportX, player.recent1_TeleportY, player.recent1_TeleportZ, "modern", false);
+			break;
+		case 121042: //recents 2
+			if (player.recent2_TeleportX == 0 && player.recent2_TeleportY == 0 && player.recent2_TeleportZ == 0) {
+				player.sendMessage("You need to teleport somewhere first.");
+				return;
+			}
+			player.usingRecents = true;
+			player.getPA().startTeleport(player.recent1_TeleportX, player.recent1_TeleportY, player.recent1_TeleportZ, "modern", false);
+			break;
+		case 121043: //recents 3
+			if (player.recent3_TeleportX == 0 && player.recent3_TeleportY == 0 && player.recent3_TeleportZ == 0) {
+				player.sendMessage("You need to teleport somewhere first.");
+				return;
+			}
+			player.usingRecents = true;
+			player.getPA().startTeleport(player.recent1_TeleportX, player.recent1_TeleportY, player.recent1_TeleportZ, "modern", false);
 			break;
 
-		// Start of Tabs
-		case 161033: // Monsters Tab
+		case 121045: // Monsters Tab
 			selection(player, 0);
 			break;
-		case 161036: // Minigames Tab
+		case 121046: // Dungeons Tab
 			selection(player, 1);
 			break;
-		case 165018: // Bosses Tab
+		case 121047: // Bosses Tab
 			selection(player, 2);
 			break;
-		case 165015: // Wilderness Tab
+		case 121048: // Minigames Tab
 			selection(player, 3);
 			break;
-		case 165024: // City Tab
+		case 121049: // Skilling Tab
 			selection(player, 4);
 			break;
-		case 165027: // Donator Tab
-			// if (player.getRights().isDonator() || player.getRights().isSuperDonator() ||
-			// player.getRights().isLegendaryDonator() ||
-			// player.getRights().isExtremeDonator() ||
-			// c.getRights().isOrInherits(Right.OWNER))
+		case 121050: // Locations Tab
 			selection(player, 5);
-			// else
-			// player.sendMessage("You must be a donator to use this.");
 			break;
-		case 165021: // Other Tab
-			selection(player, 6);
-			break;
-		// End of Tabs
+			//NOTE put the spell teleport underneeth teleport select because if not the code runs to fast and ignores the code until next time.
 
-		// Start of Buttons
-		case 180181: // Button 1
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Cows
-				player.getPA().startTeleport(3260, 3272, 0, "modern", false);
-			} else if (player.teleSelected == 1) { // Minigames - Raids
-				player.getPA().startTeleport(1255, 3562, 0, "modern", false); // change
-				// player.sendMessage("Teleporting to "+minigameNames[1]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Barrelchest
-				player.getPA().startTeleport(1229, 3497, 0, "modern", false);// change
-				// player.sendMessage("Teleporting to "+bossNames[1]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Green Dragons
-				player.getPA().startTeleport(2976, 3591, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[1]+".");
-			} else if (player.teleSelected == 4) { // City - Varrock
-				player.getPA().startTeleport(3210, 3424, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[1]+".");
-			} else if (player.teleSelected == 5) { // Donator - Donator Lobby
-				player.getPA().startTeleport(1661, 10049, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Other - Slayer Masters
-				player.getPA().startTeleport(3094, 3267, 0, "modern", false); // change
-				// player.sendMessage("Teleporting to "+otherNames[1]+".");
-			}
-			break;
-		case 180184: // Button 2
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monster - Rock Crabs
-				player.getPA().startTeleport(2673, 3710, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[2]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Warriors Guild
-				player.getPA().startTeleport(2874, 3546, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[2]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Daggononoth Kings
-				player.getPA().startTeleport(1913, 4367, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[2]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Mage Bank
-				player.getPA().startTeleport(2539, 4716, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[2]+".");
-			} else if (player.teleSelected == 4) { // City - Yanille
-				player.getPA().startTeleport(2606, 3093, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[2]+".");
-			} else if (player.teleSelected == 5) { // Donator - Basic Slayer
-				player.getPA().startTeleport(2807, 10003, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Other - Lands end
-				player.getPA().startTeleport(3033, 3284, 0, "modern", false); // change
-				// player.sendMessage("Teleporting to "+otherNames[2]+".");
-			}
-			break;
-
-		case 180188: //button 3
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monster - Chaos Druids
-				player.getPA().startTeleport(3114, 9930, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[3]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Pest Control
-				player.getPA().startTeleport(2660, 2648, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[3]+".");
-				player.getDiaryManager().getWesternDiary().progress(WesternDiaryEntry.PEST_CONTROL_TELEPORT);
-			} else if (player.teleSelected == 2) { // Bosses - King Black Dragon
-				player.getPA().startTeleport(3005, 3849, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[3]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Dark Castle
-				player.getPA().startTeleport(3020, 3632, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[3]+".");
-			} else if (player.teleSelected == 4) { // City - Edgeville
-				player.getPA().startTeleport(3093, 3493, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[3]+".");
-			} else if (player.teleSelected == 5) { // Super - Advanced Slayer
-				player.getPA().startTeleport(2883, 9800, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Other - Skillers Cove
-				player.getPA().startTeleport(3058, 9776, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[3]+".");
-			}
-			break;
-		case 180191: //button 4
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Yaks
-				player.getPA().startTeleport(2326, 3801, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[4]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Fight Caves
-				player.getPA().startTeleport(2444, 5179, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[4]+".");
-				player.sendMessage("The minigame entrance can be found to the south!");
-			} else if (player.teleSelected == 2) { // Bosses - Giant Mole
-				player.getPA().startTeleport(3078, 3924, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[4]+".");
-				// player.sendMessage("Right click and Look-inside mole hills to fight the Giant
-				// Mole!");
-			} else if (player.teleSelected == 3) { // Wilderness - Hill Giants Multi
-				player.getPA().startTeleport(3304, 3657, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[4]+".");
-			} else if (player.teleSelected == 4) { // City - Lumbridge
-				player.getPA().startTeleport(3222, 3218, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[4]+".");
-				c.getDiaryManager().getLumbridgeDraynorDiary().progress(LumbridgeDraynorDiaryEntry.LUMBRIDGE_TELEPORT);
-			} else if (player.teleSelected == 5) { // Super - Basic Skilling
-				player.getPA().startTeleport(3066, 9544, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Other - Woodcutting Guild
-				player.getPA().startTeleport(1658, 3505, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[4]+".");
-			}
-			break;
-		case 180194: //button 5
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Skeletons
-				player.getPA().startTeleport(3102, 9908, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[5]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Barrows
-				player.getPA().startTeleport(3565, 3316, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[5]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Kalphite Queen Tunnels
-				player.getPA().startTeleport(3510, 9496, 2, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[5]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Wilderness Agility Course
-				player.getPA().startTeleport(3003, 3934, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[5]+".");
-			} else if (player.teleSelected == 4) { // City - Ardougne
-				player.getPA().startTeleport(2662, 3305, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[5]+".");
-				c.getDiaryManager().getArdougneDiary().progress(ArdougneDiaryEntry.TELEPORT_ARDOUGNE);
-			} else if (player.teleSelected == 5) { // Super - Demons
-				player.getPA().startTeleport(3048, 9582, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Other - Farming Patches
-				player.getPA().startTeleport(3003, 3376, 0, "modern", false);
-			} 
-			break;
-		case 180197: //button 6
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Hill Giants
-				player.getPA().startTeleport(3117, 9853, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[6]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Clan Wars
-				player.getPA().startTeleport(3387, 3158, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[6]+".");
-			} else if (player.teleSelected == 2) { // Bosses - God Wars Dungeon
-				player.getPA().startTeleport(2881, 5310, 2, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[6]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Vet'ion
-				player.getPA().startTeleport(3200, 3794, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[6]+".");
-			} else if (player.teleSelected == 4) { // City - Neitiznot
-				player.getPA().startTeleport(2321, 3804, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[6]+".");
-			} else if (player.teleSelected == 5) { // Extreme - Advanced Skilling
-				player.getPA().startTeleport(2710, 9466, 0, "modern", false);
-			} else if (player.teleSelected == 6) { // Other - Agility - Grace
-				player.getPA().startTeleport(2480, 3437, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[6]+".");
-			}
-			break;
-		case 180200://button 7
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Desert Bandits
-				player.getPA().startTeleport(3169, 2990, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[7]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Shayzien Assault
-				player.getPA().startTeleport(1461, 3689, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[7]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Corporeal Beast
-				player.getPA().startTeleport(2964, 4382, 2, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[7]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Callisto
-				player.getPA().startTeleport(3325, 3845, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[7]+".");
-			} else if (player.teleSelected == 4) { // City - Karamja
-				player.getPA().startTeleport(2948, 3147, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[7]+".");
-			} else if (player.teleSelected == 5) { // Extreme - Dragons(Hides)
-
-			} else if (player.teleSelected == 6) { // Other - Hunter
-				player.getPA().startTeleport(1580, 3437, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[7]+".");
-			}
-			break;
-		case 180203: //button 8
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Dagannoths
-				player.getPA().startTeleport(2442, 10147, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[8]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Mage Arena
-				player.getPA().startTeleport(2541, 4716, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[8]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Daggonoth Mother
-				player.getPA().startTeleport(2508, 3643, 0, "modern", false);
-				 player.sendMessage("Enter underground to fight boss. Buy the books with the rusty casket she drops.");
-			} else if (player.teleSelected == 3) { // Wilderness - Scorpia
-				player.getPA().startTeleport(3233, 3945, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[8]+".");
-			} else if (player.teleSelected == 4) { // City - Falador
-				player.getPA().startTeleport(2964, 3378, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[8]+".");
-				c.getDiaryManager().getFaladorDiary().progress(FaladorDiaryEntry.TELEPORT_TO_FALADOR);
-			} else if (player.teleSelected == 5) { // Extreme - Dragons(Metal)
-
-			} else if (player.teleSelected == 6) { // Other - Puro Puro
-				if (WheatPortalEvent.xLocation > 0 && WheatPortalEvent.yLocation > 0) {
-					player.getPA().spellTeleport(WheatPortalEvent.xLocation + 1, WheatPortalEvent.yLocation + 1, 0,
-							false);
-				} else {
-					player.sendMessage("There is currently no portal available, wait 5 minutes.");
-					return;
-				}
-			}
-			break;
-		case 180206: //button 9
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Elf Warriors
-				player.getPA().startTeleport(2897, 2725, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[9]+".");
-			} else if (player.teleSelected == 1) { // Minigames - Duel Arena
-				player.getPA().startTeleport(3365, 3266, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+minigameNames[9]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Kraken
-				player.getPA().startTeleport(2280, 10016, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[9]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Venenatis
-				player.getPA().startTeleport(3345, 3754, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[9]+".");
-			} else if (player.teleSelected == 4) { // City - Taverly
-				player.getPA().startTeleport(2928, 3451, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[9]+".");
-			} else if (player.teleSelected == 5) { // Extreme - Smoke Devil
-
-			} else if (player.teleSelected == 6) { // Other - Fishing Guild
-				player.getPA().startTeleport(2604, 3401, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[9]+".");
-			} 
-			break;
-		case 180212: //button 10
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Demonic Gorillas
-				player.getPA().startTeleport(2119, 5660, 0, "modern", false);
-			} else if (player.teleSelected == 3) {
-				player.getPA().startTeleport(2978, 3833, 0, "modern", false);
-			} else if (player.teleSelected == 2) {
-				player.getPA().startTeleport(1310, 1237, 0, "modern", false);
-			} else if (player.teleSelected == 4) {
-				player.getPA().startTeleport(2804, 3432, 0, "modern", false);
-			} 
-			break;
-		case 180215:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Mithril Dragons
-				player.getPA().startTeleport(1736, 5342, 0, "modern", false);
-			} else if (player.teleSelected == 3) {
-				player.getPA().startTeleport(2979, 3697, 0, "modern", false);
-			} else if (player.teleSelected == 2) {
-				player.getPA().startTeleport(2404, 9415, 0, "modern", false);
-			} else if (player.teleSelected == 4) {
-				player.getPA().startTeleport(3293, 3179, 0, "modern", false);
-			}
-			break;
-		case 180221:
-			if (player.teleSelected == 0) { // Monsters - Taverly Dungeon
-				player.getPA().startTeleport(2884, 9800, 0, "modern", false);
-			} else if (player.teleSelected == 2) {
-				player.getPA().startTeleport(2124, 5660, 0, "modern", false);
-			}
-			break;
-		case 180224:
-			if (player.teleSelected == 0) { // Monsters - Stronghold Cave
-				player.getPA().startTeleport(2452, 9832, 0, "modern", false);
-			} else if (player.teleSelected == 2) {
-				player.getPA().startTeleport(1558, 3696, 0, "modern", false);
-			}
-			break;
-		case 180227: //vorkath
-			player.getPA().startTeleport(2272, 4050, 0, "modern", false);
-			//player.sendMessage("This has been temporarily disabled");
-			break;
-		case 180218:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Slayer Tower
-				player.getPA().startTeleport(3428, 3538, 0, "modern", false);
-			} else if (player.teleSelected == 2) {
-				player.getPA().startTeleport(3037, 4765, 0, "modern", false);
-			} else if (player.teleSelected == 4) {
-				player.getPA().startTeleport(3293, 3179, 0, "modern", false);
-			}
-			break;
-		case 180209: //button 10
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Smoke Devils
-				player.getPA().startTeleport(2404, 9415, 0, "modern", false);
-			} else if (player.teleSelected == 2) { // Bosses - Zulrah - Instanced
-				player.getPA().startTeleport(2202, 3056, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[10]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Chaos Elemental
-				player.getPA().startTeleport(3281, 3910, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[10]+".");
-			} else if (player.teleSelected == 4) { // City - Camelot
-				player.getPA().startTeleport(2757, 3477, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[10]+".");
-				c.getDiaryManager().getKandarinDiary().progress(KandarinDiaryEntry.CAMELOT_TELEPORT);
-			} else if (player.teleSelected == 5) { // Legendary - Skeletal Wyverns
-				
-			}else if (player.teleSelected == 6) { // Other - Theiving
-				player.getPA().startTeleport(2661, 3305, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+otherNames[9]+".");
-			}
-			break;
-		case 254046:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 2) { // Bosses - Cerberus
-				player.getPA().startTeleport(2873, 9847, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[11]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Chaos Fanatic
-				player.getPA().startTeleport(2981, 3836, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[11]+".");
-			} else if (player.teleSelected == 4) { // City - Catherby
-				player.getPA().startTeleport(2813, 3447, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[11]+".");
-				c.getDiaryManager().getKandarinDiary().progress(KandarinDiaryEntry.CATHERY_TELEPORT);
-			} else if (player.teleSelected == 5) { // Legendary - Fanatic/Archaeologist
-
-			}
-			break;
-		case 254048:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 2) { // Bosses - Thermonuclear Smoke Devil
-				if (player.playerLevel[18] < 93) {
-					player.sendMessage("You need a Slayer level of 93 to kill these.");
-					return;
-				}
-				player.getPA().startTeleport(2376, 9452, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[12]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Crazy Archaeologist
-				player.getPA().startTeleport(2984, 3713, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[12]+".");
-			} else if (player.teleSelected == 4) { // City - Al Kharid
-				player.getPA().startTeleport(3293, 3174, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[12]+".");
-			} /*
-				 * else if (c.getRights().isOrInherits(Right.VIP) ||
-				 * c.getRights().isOrInherits(Right.OWNER)) { if (player.teleSelected == 5) { //
-				 * Legendary - Runecrafting player.getPA().showInterface(26100);
-				 * //player.getPA().startTeleport(1992,4530, 3, "modern");
-				 * player.sendMessage("Opening "+donatorNames[12]+" Interface."); } }
-				 */
-			break;
-		case 254050:
-			if (!teleportCheck(player))
-				return;
+		case 121075: //LOCATION 1
 			if (player.teleSelected == 0) {
-				player.getPA().startTeleport(3428, 3538, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[13]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Abyssal Sire
-				player.getPA().startTeleport(3039, 4788, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[13]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Skeletal Wyverns
-				player.getPA().startTeleport(2963, 3916, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[13]+".");
-			} else if (player.teleSelected == 4) { // City - Morytania
-				player.getPA().startTeleport(3432, 3451, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[13]+".");
-				c.getDiaryManager().getMorytaniaDiary().progress(MorytaniaDiaryEntry.MORYTANIA_SWAMP);
-			}
-			break;
-		case 254052:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) {
-				player.getPA().startTeleport(1746, 5323, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[14]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Demonic Gorillas
-				player.getPA().startTeleport(2130, 5647, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[14]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - East Dragons
-				player.getPA().startTeleport(3351, 3659, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[14]+".");
-			} else if (player.teleSelected == 4) { // City - Shilo Village
-				player.getPA().startTeleport(2827, 2995, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[14]+".");
-			}
-			break;
-		case 254054:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Asgarnian Ice Cave
-				player.getPA().startTeleport(3029, 9582, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[15]+".");
-			} else if (player.teleSelected == 2) { // Bosses - Lizardman Shaman
-				player.getPA().startTeleport(1469, 3687, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+bossNames[15]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Wildy Volcano
-				player.getPA().startTeleport(3366, 3935, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[15]+".");
-			} else if (player.teleSelected == 4) { // City - Waterbirth Tele
-				player.getPA().startTeleport(2508, 3725, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[15]+".");
-				c.getDiaryManager().getFremennikDiary().progress(FremennikDiaryEntry.WATERBIRTH_TELEPORT);
-			}
-			break;
-		case 254056:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Catacombs
-				player.getPA().startTeleport(1630, 3673, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[16]+".");
-				player.sendMessage("Click on the statue to enter the Catacombs!");
-			} else if (player.teleSelected == 3) { // Wilderness - Chaos Altar
-				player.getPA().startTeleport(3236, 3628, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[16]+".");
-			} else if (player.teleSelected == 4) { // City - Lletya
-				player.getPA().startTeleport(2352, 3162, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[16]+".");
-			}
-			break;
-		case 254058:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Cave Kraken
-				player.getPA().startTeleport(2277, 10001, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[17]+".");
-			} else if (player.teleSelected == 3) { // Wilderness - Lava Dragons
-				player.getPA().startTeleport(3202, 3860, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+wildernessNames[17]+".");
-			} else if (player.teleSelected == 4) { // City - Brimhaven
-				player.getPA().startTeleport(2898, 3546, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[17]+".");
-			}
-			break;
-		case 254060:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 0) { // Monsters - Smoke Devils
-				if (player.playerLevel[18] < 93) {
-					player.sendMessage("You need a Slayer level of 93 to kill these.");
-					return;
+						c.getPA().spellTeleport(2672, 3710, 0, false);//Rock Crabs
+						player.teleportSelected = 0;
+						player.getPA().startTeleport(player.recent1_TeleportX, player.recent1_TeleportY, player.recent1_TeleportZ, "modern", false);
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(3425, 3538, 0, false);//Slayer Tower
+	            		player.teleportSelected = 0;
+	    				player.getPA().startTeleport(3428, 3538, 0, "modern", false);
+				} else if (player.teleSelected == 2) {
+						player.teleportSelected = 0;
+						c.getPA().spellTeleport(1351,10259, 0, false);//Hydra
+				} else if (player.teleSelected == 3) {
+						player.teleportSelected = 0;
+						c.getPA().spellTeleport(3160, 3491, 0, false);//Gambling zone
+				} else if (player.teleSelected == 4) {
+						player.teleportSelected = 0;
+						player.getPA().startTeleport(3803, 3539, 0, "modern", false);
+				} else if (player.teleSelected == 5) {
+						player.teleportSelected = 0;
+						c.getPA().spellTeleport(2541,4715, 0, false);//Mage Bank
 				}
-				player.getPA().startTeleport(2404, 9415, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+monsterNames[18]+".");
-			} else if (player.teleSelected == 4) { // City - Entrana
-				player.getPA().startTeleport(2827, 3336, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[18]+".");
-			}
-		case 254062:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 4) { // City - Draynor
-				player.getPA().startTeleport(3077, 3252, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[19]+".");
+			break;
+		case 121080: //LOCATION 2
+			if (player.teleSelected == 0) {
+					c.getPA().spellTeleport(1683, 3487, 0, false);//Sand Crabs
+					c.teleportSelected = 1;
+					player.getPA().startTeleport(player.recent1_TeleportX, player.recent1_TeleportY, player.recent1_TeleportZ, "modern", false);
+				} else if (player.teleSelected == 1) {
+				       c.getPA().spellTeleport(3097, 9869, 0, false);//Edge Dung
+		               player.teleportSelected = 1;
+				} else if (player.teleSelected == 2) {
+		               player.teleportSelected = 1;
+		               c.getPA().spellTeleport(2199, 3056, 0, false);//Zulrah
+				} else if (player.teleSelected == 3) {
+		               player.teleportSelected = 1;
+		               c.getPA().spellTeleport(2657, 2649, 0, false);//Pest control
+				} else if (player.teleSelected == 4) {
+		               player.teleportSelected = 1;
+		               c.getPA().spellTeleport(1656, 3505, 0, false);//Woodcutting guild
+				} else if (player.teleSelected == 5) {
+		               player.teleportSelected = 1;
+		               c.getPA().spellTeleport(3319, 3690, 0, false);//East dragons (22)
+				}
+			break;
+		case 121085: //LOCATION 3
+			if (player.teleSelected == 0) {
+				c.getPA().spellTeleport(2323, 3804, 0, false);//Yaks
+	            player.teleportSelected = 2;
+				player.getPA().startTeleport(player.recent1_TeleportX, player.recent1_TeleportY, player.recent1_TeleportZ, "modern", false);
+	            } else if (player.teleSelected == 1) {
+	            	  c.getPA().spellTeleport(2884, 9798, 0, false);//taverly dung
+		               player.teleportSelected = 2;
+				} else if (player.teleSelected == 2) {
+		               player.teleportSelected = 2;
+		               c.getPA().spellTeleport(2880, 5313, 2, false);
+				} else if (player.teleSelected == 3) {
+		               player.teleportSelected = 2;
+		               c.getPA().spellTeleport(3033, 6067, 0, false);//Chambers of xeric
+				} else if (player.teleSelected == 4) {
+		               player.teleportSelected = 2;
+		               c.getPA().spellTeleport(2611, 3400, 0, false);//Fishcutting guild
+				} else if (player.teleSelected == 5) {
+		               player.teleportSelected = 2;
+		               c.getPA().spellTeleport(2985, 3596, 0, false);//Woodcutting guild
+				}
+			break;
+		case 121090: //LOCATION 4
+			if (player.teleSelected == 0) {
+				c.getPA().spellTeleport(1748, 5330, 0, false);//Mithril Dragons
+	               player.teleportSelected = 3;
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(2688, 9564, 0, false);//Brimhaven Dung
+		               player.teleportSelected = 3;
+				} else if (player.teleSelected == 2) {
+		               player.teleportSelected = 3;
+		               c.getPA().spellTeleport(2272, 4048, 0, false);//Vorkath
+				} else if (player.teleSelected == 3) { //gulag
+				     	c.getPA().startTeleport(3080, 3504, 0, "modern", false);
+		               player.teleportSelected = 3;
+				} else if (player.teleSelected == 4) {
+					   player.getPA().spellTeleport(3046, 9754, 0, false);//mining guild
+		               player.teleportSelected = 3;
+				} else if (player.teleSelected == 5) {
+		               player.teleportSelected = 3;
+		               c.getPA().spellTeleport(3237, 3633, 0, false);//Chaos temple (15)
+				}
+			break;
+		case 121095: //LOCATION 5
+			if (player.teleSelected == 0) {
+				c.getPA().spellTeleport(3507, 9493, 0, false);//Kalphite
+	               player.teleportSelected = 4;
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(2806, 10002, 0, false);//Rellekka dung
+		               player.teleportSelected = 4;
+				} else if (player.teleSelected == 2) {
+		               player.teleportSelected = 4;
+		               c.getPA().spellTeleport(1477, 3690, 0, false);//Lizardman
+				} else if (player.teleSelected == 3) {
+					c.getPA().spellTeleport(2439, 5169, 0, false);//Fight caves
+		               player.teleportSelected = 4;
+				} else if (player.teleSelected == 4) {
+					c.getPA().spellTeleport(2505, 3488, 0, false);//Barb fishing
+		               player.teleportSelected = 4;
+				} else if (player.teleSelected == 5) {
+					c.getPA().spellTeleport(3138, 3785, 0, false);//Chincompia hills
+		               player.teleportSelected = 4;
+				}
+			break;
+		case 121100: //LOCATION 6
+			if (player.teleSelected == 0) {
+				c.getPA().spellTeleport(2130, 5646, 0, false);//Demonic Gorillas
+	               player.teleportSelected = 5;
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(2352, 3156, 0, false);//lletya elves
+		               player.teleportSelected = 5;
+				} else if (player.teleSelected == 2) {
+					c.getPA().spellTeleport(2271, 4680, 0, false);//KBD
+		               player.teleportSelected = 5;
+				} else if (player.teleSelected == 3) {
+					c.getPA().spellTeleport(2496, 5113, 0, false);//inferno
+		               player.teleportSelected = 5;
+				} else if (player.teleSelected == 4) {
+					c.getPA().spellTeleport(2933,3285, 0, false);//crafting guild
+		               player.teleportSelected = 5;
+				} else if (player.teleSelected == 5) {
+					c.getPA().spellTeleport(3127,3832, 0, false);//Rev caves
+		               player.teleportSelected = 5;
+				}
+			break;
+		case 121105: //LOCATION 7
+			if (player.teleSelected == 0) {
+					c.getPA().spellTeleport(3056, 9555, 0, false);//werns
+	               player.teleportSelected = 6;
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(1666, 10047, 0, false);//Catacombs
+		               player.teleportSelected = 6;
+				} else if (player.teleSelected == 2) {
+					c.getPA().spellTeleport(3039, 4796, 0, false);//abyssal sire
+		               player.teleportSelected = 6;
+				} else if (player.teleSelected == 3) {
+					c.getPA().spellTeleport(2869, 3545, 0, false);//warriors guild
+		               player.teleportSelected = 6;
+				} else if (player.teleSelected == 4) {
+					c.getPA().spellTeleport(2468, 3435, 0, false);//gnome agility
+		               player.teleportSelected = 6;
+				} else if (player.teleSelected == 5) {
+					c.getPA().spellTeleport(3149, 3671, 0, false);//Graves
+		               player.teleportSelected = 6;
+				}
+			break;
+		case 121110: //LOCATION 8
+			if (player.teleSelected == 0) {
+					c.getPA().spellTeleport(1309, 10232, 0, false);//mini hydra
+	               player.teleportSelected = 7;
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(1311, 10222, 0, false);//Krumm dung
+		               player.teleportSelected = 7;
+				} else if (player.teleSelected == 2) { //corps beast (add later)
+	            	c.getPA().spellTeleport(2969, 4384, 2, false);//Krumm dung
+		               player.teleportSelected = 7;
+				} else if (player.teleSelected == 3) {
+					c.getPA().spellTeleport(3565, 3307, 0, false);//Barrows
+		               player.teleportSelected = 7;
+				} else if (player.teleSelected == 4) {
+					c.getPA().spellTeleport(2552, 3558, 0, false);//barb agility
+		               player.teleportSelected = 7;
+				} else if (player.teleSelected == 5) {
+					c.getPA().spellTeleport(3288, 3886, 0, false);//greater demons
+		               player.teleportSelected = 7;
+				}
+			break;
+		case 121115: //LOCATION 9
+			if (player.teleSelected == 0) {
+				   player.getPA().startTeleport(3259, 3261, 0, "modern", false);
+	               player.teleportSelected = 8;
+	            } else if (player.teleSelected == 1) {
+	            	c.getPA().spellTeleport(1567, 5074, 0, false);//LITHKREN VAULT
+		               player.teleportSelected = 8;
+				} else if (player.teleSelected == 2) {
+					c.getPA().spellTeleport(3285, 3907, 0, false);//Chaos elemental
+		               player.teleportSelected = 8;
+				} else if (player.teleSelected == 3) {
+					c.getPA().spellTeleport(2541,4715, 0, false);//Mage arena
+		               player.teleportSelected = 8;
+				} else if (player.teleSelected == 4) {
+					c.getPA().spellTeleport(2998, 3913, 0, false);//wildy agility
+		               player.teleportSelected = 8;
+				} else if (player.teleSelected == 5) {
+					c.getPA().spellTeleport(2980, 3866, 0, false);//obelisk 44wild
+		               player.teleportSelected = 8;
+				}
+			break;
+		case 121120: //LOCATION 10
+			if (player.teleSelected == 0) {
+				   player.getPA().startTeleport(3176, 2987, 0, "modern", false); //desert bandit
+	               player.teleportSelected = 9;
+            } else if (player.teleSelected == 1) {
+            	c.getPA().spellTeleport(3035, 9581, 0, false);//ice dungeon
+	               player.teleportSelected = 9;
+			} else if (player.teleSelected == 2) {
+				c.getPA().spellTeleport(3313, 3826, 0, false);//callisto
+	               player.teleportSelected = 9;
+			} else if (player.teleSelected == 3) {
+				//Mage arena 2
+	               player.teleportSelected = 9;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().spellTeleport(3222, 3219, 0, false);//lumbridge
+	               player.teleportSelected = 9;
+			} else if (player.teleSelected == 5) {
+				c.getPA().spellTeleport(3307, 3916, 0, false);//50s obelisk
+	               player.teleportSelected = 9;
 			}
 			break;
-		case 254064:
-			if (!teleportCheck(player))
-				return;
-			if (player.teleSelected == 4) { // City - Trollheim
-				player.getPA().startTeleport(2911, 3612, 0, "modern", false);
-				// player.sendMessage("Teleporting to "+cityNames[20]+".");
-				c.getDiaryManager().getFremennikDiary().progress(FremennikDiaryEntry.TROLLHEIM_TELEPORT);
+		case 121125: //LOCATION 11
+			if (player.teleSelected == 0) {
+				   player.getPA().startTeleport(2897, 2725, 0, "modern", false); //elf warriors
+	               player.teleportSelected = 10;
+            } else if (player.teleSelected == 1) {
+            	   c.getPA().spellTeleport(2381, 9463, 0, false);//smoke dungeon
+	               player.teleportSelected = 10;
+			} else if (player.teleSelected == 2) {
+				c.getPA().spellTeleport(3343, 3741, 0, false);//venenatis
+	               player.teleportSelected = 10;
+			} else if (player.teleSelected == 3) {
+				c.getPA().spellTeleport(3364, 3267, 0, false);//duel arena
+	               player.teleportSelected = 10;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().spellTeleport(3212, 3429, 0, false);//varrock
+	               player.teleportSelected = 10;
+			} else if (player.teleSelected == 5) {
+				//PVP tab #11
+	               player.teleportSelected = 10;
 			}
 			break;
-		// End of Buttons
+		case 121130: //LOCATION 12
+			if (player.teleSelected == 0) {
+				   player.getPA().startTeleport(1913, 4367, 0, "modern", false); //dagganoths
+	               player.teleportSelected = 11;
+            } else if (player.teleSelected == 1) {
+            	c.getPA().spellTeleport(2276, 9989, 0, false);//Kraken Caves
+	               player.teleportSelected = 11;
+			} else if (player.teleSelected == 2) {
+				c.getPA().spellTeleport(3179, 3774, 0, false);//vet'ion
+	               player.teleportSelected = 11;
+			} else if (player.teleSelected == 3) {
+				c.getPA().spellTeleport(2514, 3621, 0, false);//Lighthouse
+	               player.teleportSelected = 11;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().spellTeleport(2964, 3379, 0, false);//falador
+	               player.teleportSelected = 11;
+			} else if (player.teleSelected == 5) {
+				//PVP #10
+	               player.teleportSelected = 11;
+			}
+			break;
+		case 121135: //LOCATION 13
+			if (player.teleSelected == 0) {
+				//Monster #10
+	               player.teleportSelected = 12;
+            } else if (player.teleSelected == 1) {
+            	c.getPA().spellTeleport(2412, 9785, 0, false);//Nieves cave
+	               player.teleportSelected = 12;
+			} else if (player.teleSelected == 2) {
+				c.getPA().spellTeleport(2983, 3675, 0, false);//crazy arch
+	               player.teleportSelected = 12;
+			} else if (player.teleSelected == 3) {
+				//Minigame #13
+	               player.teleportSelected = 12;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().spellTeleport(2757,3477, 0, false);//camelot
+	               player.teleportSelected = 12;
+			} else if (player.teleSelected == 5) {
+				//Pvp #13
+	               player.teleportSelected = 12;
+			}
+			break;
+		case 121140: //LOCATION 14
+			if (player.teleSelected == 0) {
+				//Monster #14
+	               player.teleportSelected = 13;
+            } else if (player.teleSelected == 1) {
+				   c.getPA().spellTeleport(3274, 6054, 0, false);//crystal  cave
+	               player.teleportSelected = 13;
+			} else if (player.teleSelected == 2) {
+				c.getPA().spellTeleport(1760, 5163, 0, false);//Mole
+	               player.teleportSelected = 13;
+			} else if (player.teleSelected == 3) {
+				//Minigames #14
+	               player.teleportSelected = 13;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().spellTeleport(2661, 3310, 0, false);//ardougne
+	               player.teleportSelected = 13;
+			} else if (player.teleSelected == 5) {
+				//Pvp #14
+	               player.teleportSelected = 13;
+			}
+			break;
+		case 121145: //LOCATION 15
+			if (player.teleSelected == 0) {
+				//Monster #15
+	               player.teleportSelected = 14;
+            } else if (player.teleSelected == 1) {
+            	//Dungeon #15
+	               player.teleportSelected = 14;
+			} else if (player.teleSelected == 2) {
+			       player.getPA().startTeleport(1226, 3498, 0, "modern", false);
+	               player.teleportSelected = 14;
+			} else if (player.teleSelected == 3) {
+				//Minigames #15
+	               player.teleportSelected = 14;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().startTeleport(1580, 3437, 0, "modern", false);
+	               player.teleportSelected = 14;
+			} else if (player.teleSelected == 5) {
+				//Pvp #15
+	               player.teleportSelected = 14;
+			}
+			break;
+		case 121150: //LOCATION 16
+			if (player.teleSelected == 0) {
+	               player.teleportSelected = 15;
+            } else if (player.teleSelected == 1) {
+            	//Dungeon #16
+	               player.teleportSelected = 15;
+			} else if (player.teleSelected == 2) {
+				   player.getPA().startTeleport(1913, 4367, 0, "modern", false); //dagganoths kings
+	               player.teleportSelected = 15;
+			} else if (player.teleSelected == 3) {
+				//Minigame #16
+	               player.teleportSelected = 15;
+			} else if (player.teleSelected == 4) {
+				   player.getPA().startTeleport(2592, 4317, 0, "modern", false); //dagganoths kings
+	               player.teleportSelected = 15;
+			} else if (player.teleSelected == 5) {
+				//Pvp #16
+	               player.teleportSelected = 15;
+			}
+			break;
+		case 121155: //LOCATION 17
+			if (player.teleSelected == 0) {
+	               player.teleportSelected = 16;
+            } else if (player.teleSelected == 1) {
+            	//Dungeon #17
+	               player.teleportSelected = 16;
+			} else if (player.teleSelected == 2) {
+				   player.getPA().startTeleport(1309, 1253, 0, "modern", false); //cerberus
+	               player.teleportSelected = 16;
+			} else if (player.teleSelected == 3) {
+				//Minigame #17
+	               player.teleportSelected = 16;
+			} else if (player.teleSelected == 4) {
+				player.getPA().startTeleport(3003, 3376, 0, "modern", false); //farming
+	               player.teleportSelected = 16;
+			} else if (player.teleSelected == 5) {
+				//Pvp #17
+	               player.teleportSelected = 16;
+			}
+			break;
+		case 121160: //LOCATION 18
+			if (player.teleSelected == 0) {
+				//Monster #18
+	               player.teleportSelected = 17;
+            } else if (player.teleSelected == 1) {
+            	//Dungeon #18
+	               player.teleportSelected = 17;
+			} else if (player.teleSelected == 2) {
+					if (player.playerLevel[18] < 93) { //thermo
+						player.sendMessage("You need a Slayer level of 93 to kill these.");
+						return;
+					}
+					player.getPA().startTeleport(2376, 9452, 0, "modern", false);
+	               player.teleportSelected = 17;
+			} else if (player.teleSelected == 3) {
+				//Minigame #18
+	               player.teleportSelected = 17;
+			} else if (player.teleSelected == 4) {
+				//skilling #18
+	               player.teleportSelected = 17;
+			} else if (player.teleSelected == 5) {
+				//Pvp #18
+	               player.teleportSelected = 17;
+			}
+			break;
+		case 121165: //LOCATION 19
+			if (player.teleSelected == 0) {
+				//Monster #19
+	               player.teleportSelected = 18;
+            } else if (player.teleSelected == 1) {
+            	//dungeon #19
+	               player.teleportSelected = 18;
+			} else if (player.teleSelected == 2) {
+				//bossing #19
+	               player.teleportSelected = 18;
+			} else if (player.teleSelected == 3) {
+				//Minigame #19
+	               player.teleportSelected = 18;
+			} else if (player.teleSelected == 4) {
+				//Skilling #19
+	               player.teleportSelected = 18;
+			} else if (player.teleSelected == 5) {
+				//Pvp #19
+	               player.teleportSelected = 18;
+			}
+			break;
+		case 121170: //LOCATION 20
+			if (player.teleSelected == 0) {
+				//Monster #20
+	               player.teleportSelected = 19;
+            } else if (player.teleSelected == 1) {
+            	//Dungeon #20
+	               player.teleportSelected = 19;
+			} else if (player.teleSelected == 2) {
+				//bosses #20
+	               player.teleportSelected = 19;
+			} else if (player.teleSelected == 3) {
+				//minigame #20
+	               player.teleportSelected = 19;
+			} else if (player.teleSelected == 4) {
+				//skilling #20
+	               player.teleportSelected = 19;
+			} else if (player.teleSelected == 5) {
+				//pvp #20
+				player.teleportSelected = 19;
+			}
+			break;
+
 		}
 	}
 }

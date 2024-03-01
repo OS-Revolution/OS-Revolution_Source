@@ -89,8 +89,6 @@ import ethos.model.players.combat.magic.MagicData;
 import ethos.model.players.combat.melee.QuickPrayers;
 import ethos.model.players.combat.monsterhunt.MonsterHunt;
 import ethos.model.players.mode.Mode;
-import ethos.model.players.mode.ModeType;
-import ethos.model.players.mode.OsrsMode;
 import ethos.model.players.skills.*;
 import ethos.model.players.skills.agility.AgilityHandler;
 import ethos.model.players.skills.agility.impl.*;
@@ -577,6 +575,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public int doricQuest = 0;
     public int teleGrabItem;
     public int teleGrabX;
+	public int previousTab;
     public int teleGrabY;
     public int duelCount;
     public int underAttackBy;
@@ -772,7 +771,54 @@ public class Player extends Entity implements PlayerCharacterEntity {
     public final int walkingQueueSize = 50;
     public static int playerCrafting = 12, playerSmithing = 13;
     private int numTravelBackSteps = 0, packetsReceived;
+    /*
+	 * new teleport
+	 */
+	public int selectedFavourite;
+	public String getFavouriteOne(){
+		return Favourites_1;
+	}
+	public String getFavouriteTwo(){
+		return Favourites_3;
+	}
+	public String getFavouriteThree(){
+		return Favourites_3;
+	}
+	public String getFavouriteFour(){
+		return Favourites_4;
+	}
+	public String getFavouriteFive(){
+		return Favourites_5;
+	}
+	public String getFavouriteSix(){
+		return Favourites_6;
+	}
+	public String getFavouriteSeven(){
+		return Favourites_7;
+	}
+	public String getFavouriteEight(){
+		return Favourites_8;
+	}
+	public boolean recent1_Teleport = false, recent2_Teleport = false, recent3_Teleport = false, usingRecents = false;
+	public int recent1_TeleportX, recent1_TeleportY, recent1_TeleportZ;
+	public int recent2_TeleportX, recent2_TeleportY, recent2_TeleportZ;
+	public int recent3_TeleportX, recent3_TeleportY, recent3_TeleportZ;
+	public int teleportSelected;
+	public int favouritesSelected = 0;
+	public String recent1_Name = "";
+	public String recent2_Name = "";
+	public String recent3_Name = "";
 
+	public String Favourites_1 = "";
+	public String Favourites_2 = "";
+	public String Favourites_3 = "";
+	public String Favourites_4 = "";
+	public String Favourites_5 = "";
+	public String Favourites_6 = "";
+	public String Favourites_7 = "";
+	public String Favourites_8 = "";
+
+	/*
     /**
      * Arrays
      */
@@ -1805,7 +1851,6 @@ public class Player extends Entity implements PlayerCharacterEntity {
             setStopPlayer();
             getPlayerAction().setAction(false);
             getPlayerAction().canWalk(true);
-            this.setMode(new OsrsMode(ModeType.OSRS));
             getPA().sendFrame126(this.getRunEnergyPercentString(), 149);
             isFullHelm = Item.isFullHat(playerEquipment[playerHat]);
             isFullMask = Item.isFullMask(playerEquipment[playerHat]);
@@ -2169,12 +2214,12 @@ public class Player extends Entity implements PlayerCharacterEntity {
         getPA().sendFrame126("@or1@@cr21@ Inventory Weight = @gre@" + this.getInventoryWeight(), 10230);
         //getPA().sendFrame126("@or1@@cr25@ Shayzien points = @gre@" + this.shayPoints, 10230);
 
-        getPA().sendFrame126(">@or1@View Play Pass", 47512);
-        getPA().sendFrame126(">@or1@View the forums", 47514);
-        getPA().sendFrame126(">@or1@View vote page", 47515);
-        getPA().sendFrame126(">@or1@View online store", 47516);
-        getPA().sendFrame126(">@or1@View the rules", 47517);
-        getPA().sendFrame126(">@or1@View community guides ", 47518);
+        getPA().sendFrame126("", 47512); //OLD SITE LINKS MICHAEL
+        getPA().sendFrame126(" >@or1@ Forums", 47514);
+        getPA().sendFrame126(" >@or1@ Vote", 47515);
+        getPA().sendFrame126(" >@or1@ Jewel Store", 47516);
+        getPA().sendFrame126(" >@or1@ Rules", 47517);
+        getPA().sendFrame126(" >@or1@ Guides ", 47518);
 
     }
 
@@ -2547,7 +2592,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     }
 
     private void depleteEnergy() {
-        skillController.addXP(SkillDictionary.Skill.AGILITY.getId(), 1);
+        skillController.addXP(SkillDictionary.Skill.AGILITY.getId(), 5);
         runningDistanceTravelled = 0;
         runEnergy -= this.getEnergyDepletedPerTick();
         playerAssistant.sendFrame126(this.getRunEnergyPercentString(), 149);
@@ -2738,7 +2783,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
             }
             getPA().showOption(3, 0, "Attack", 1);
             if (Config.BOUNTY_HUNTER_ACTIVE && !inClanWars()) {
-                System.out.println("BH2");
+              //  System.out.println("BH2");
                 getPA().walkableInterface(28000);
                 getPA().sendFrame171(1, 28070);
                 getPA().sendFrame171(0, 196);
@@ -2760,7 +2805,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
         } else if (inEdgeville()) {
             if (Config.BOUNTY_HUNTER_ACTIVE) {
                 if (bountyHunter.hasTarget()) {
-                    System.out.println("In BH");
+                   // System.out.println("In BH");
                     getPA().walkableInterface(28000);
                     getPA().sendFrame171(0, 28070);
                     getPA().sendFrame171(1, 196);
@@ -4409,7 +4454,7 @@ public class Player extends Entity implements PlayerCharacterEntity {
     }
 
     public boolean inFunPk() { // Michael - FunPK
-        return absX > 3072 && absX < 3080 && absY > 3255 && absY < 3262;
+    return absX > 0000 && absX < 0000 && absY > 0000 && absY < 0000;
 
     }
 
@@ -4433,8 +4478,8 @@ public class Player extends Entity implements PlayerCharacterEntity {
                 || Boundary.isIn(this, Boundary.SKOTIZO_BOSSROOM) || Boundary.isIn(this, Boundary.LIZARDMAN_CANYON)
                 || Boundary.isIn(this, Boundary.BANDIT_CAMP_BOUNDARY) || Boundary.isIn(this, Boundary.COMBAT_DUMMY)
                 || Boundary.isIn(this, Boundary.TEKTON) || Boundary.isIn(this, Boundary.SKELETAL_MYSTICS)
-                || Boundary.isIn(this, Boundary.RAIDS) || Boundary.isIn(this, Boundary.OLM)
-                || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.CATACOMBS)) {
+                || Boundary.isIn(this, Boundary.RAIDS) || Boundary.isIn(this, Boundary.HOME_BOUNDARY) || Boundary.isIn(this, Boundary.OLM)
+                || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.PORT_BOUNDARY)  || Boundary.isIn(this, Boundary.S0_BOUNDARY)  || Boundary.isIn(this, Boundary.S1_BOUNDARY) || Boundary.isIn(this, Boundary.S2_BOUNDARY) || Boundary.isIn(this, Boundary.W_BOUNDARY) || Boundary.isIn(this, Boundary.S3_BOUNDARY)    || Boundary.isIn(this, Boundary.CATACOMBS)) {
             return true;
         }
         if (inRevs()) {

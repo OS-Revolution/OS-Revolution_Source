@@ -21,7 +21,7 @@ public enum Mineral {
 	
 			CLAY(new int[] { 7487, 7454 }, "none", 1, 18, 0, 3, 15, 30000, true, generateExclusive(434)), 
 			COPPER(new int[] { 7484, 11961, 11960, 11962, 13709 }, "bronze", 1, 18, 5, 5, 15, 15000, true, generateExclusive(436)), 
-			TIN(new int[] { 7485, 9714, 9716, 11957, 11958, 11959, 13712 }, "bronze", 1, 18, 5, 5, 15, 15000, true, generateExclusive(438)), 
+			TIN(new int[] { 7485, 7486, 9714, 9716, 11957, 11958, 11959, 13712 }, "bronze", 1, 18, 5, 5, 15, 15000, true, generateExclusive(438)), 
 			IRON(new int[] { 7488, 11954, 11955, 11956, 13710, 13444, 13445, 13446, 7455 }, "iron", 15, 35, 5, 8, 17, 14800, true, generateExclusive(440)), 
 			COAL(new int[] { 7489, 9717, 9718, 9719, 2096, 13714, 13706 }, "none", 30, 50, 3, 15, 29, 14600, true, generateExclusive(453)), 
 			GOLD(new int[] { 7491, 7458, 9722, 9720, 13707, 14962, 14963, 14964, 13441, 13442, 13443, 8728, 8975 }, "gold", 40, 65, 3, 25, 32, 14200, true, generateExclusive(444)), 

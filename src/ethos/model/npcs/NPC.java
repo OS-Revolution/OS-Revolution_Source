@@ -128,6 +128,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
 
     public NPC(int _npcId, int _npcType, NPCDefinitions definition) {
         super(_npcId, definition.getNpcName());
+      //  System.out.println(definition);
         this.definition = definition;
         npcType = _npcType;
         direction = -1;
@@ -142,10 +143,11 @@ public class NPC extends Entity implements NonPlayableCharacter {
             defence = HostileMobIdContextLoader.getInstance().read(npcType).getDefenceLevel();
             maxHit = HostileMobIdContextLoader.getInstance().read(npcType).getMaxHit();
         } catch (Exception e) {
-            Logger.getGlobal().severe("Definition not found for: " + npcType);
+            System.out.println("Failed to load HostileMobContext for npcType: " + npcType);
+            e.printStackTrace();
         }
         if (_npcType == 2888) {
-            System.out.println(definition);
+        //    System.out.println(definition);
         }
     }
 
@@ -684,7 +686,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
                 || Boundary.isIn(this, Boundary.BANDIT_CAMP_BOUNDARY) || Boundary.isIn(this, Boundary.ABYSSAL_SIRE)
                 || Boundary.isIn(this, Boundary.COMBAT_DUMMY) || Boundary.isIn(this, Boundary.TEKTON)
                 || Boundary.isIn(this, Boundary.SKELETAL_MYSTICS) || Boundary.isIn(this, Boundary.RAID_MAIN)
-                || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.CATACOMBS)) {
+                || Boundary.isIn(this, Boundary.ICE_DEMON) || Boundary.isIn(this, Boundary.PORT_BOUNDARY) || Boundary.isIn(this, Boundary.W_BOUNDARY) || Boundary.isIn(this, Boundary.S0_BOUNDARY) || Boundary.isIn(this, Boundary.S2_BOUNDARY)  || Boundary.isIn(this, Boundary.S1_BOUNDARY) || Boundary.isIn(this, Boundary.S3_BOUNDARY)  || Boundary.isIn(this, Boundary.HOME_BOUNDARY) || Boundary.isIn(this, Boundary.CATACOMBS)) {
             return true;
         }
 
@@ -860,7 +862,7 @@ public class NPC extends Entity implements NonPlayableCharacter {
             finalPointValue *= 2;
         }
         killer.getAttributes().getPointController().addPoints(PointController.PointType.PVM,finalPointValue);
-        killer.sendMessage("You received #" + finalPointValue + " $PvM $Points");
+
     }
 
     private void handleOtherDeathMechanics(Player killer) {

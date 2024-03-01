@@ -96,6 +96,10 @@ public class DialogueHandler {
 //			return;
 //		}
 		switch (dialogue) {
+		case 2879:
+			sendOption2("Teleport", "Remove Favourite");
+			c.dialogueAction = 2879;
+		break;
 //
 //		case 15000:
 //			sendNpcChat4("Hello, are you looking to buy a House?", "DUH!, of course you are... Well i'll tell you what", "there isn't anything on the housing market at the", "current moment. You know how it is.", 5419, "Estate Agent");

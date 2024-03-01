@@ -1,6 +1,9 @@
 package ethos.runehub.skill.gathering.mining.action;
 
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
+import ethos.runehub.content.journey.JourneyStepType;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
 import ethos.runehub.skill.node.context.impl.MiningNodeContext;
@@ -57,13 +60,21 @@ public class ActiveMiningSkillAction extends GatheringSkillAction {
         }
     }
 
-    @Override
     protected void addItems(int id, int amount) {
         this.getActor().sendMessage("You manage to mine some @" + id);
         super.addItems(id, amount);
+		Achievements.increase(this.getActor(), AchievementType.MINE, 1);
+
+        // Update journey steps for collection and challenge
+        this.getActor().getAttributes().getJourneyController().checkJourney(id, amount, JourneyStepType.COLLECTION);
+        this.getActor().getAttributes().getJourneyController().checkJourney(id, amount, JourneyStepType.CHALLENGE);
+
+        // Example logic for a specific item ID, similar to the woodcutting skill action
         if (id == 434) {
             this.getActor().getAttributes().getAchievementController().completeAchievement(-6598849538144907698L);
         }
+
+        // Add any additional special cases or logic here as needed
     }
 
     @Override

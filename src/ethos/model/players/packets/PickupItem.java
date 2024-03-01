@@ -64,13 +64,13 @@ public class PickupItem implements PacketType {
 		if (item == null) {
 			return;
 		}
-		if (!c.inClanWars() && !c.inClanWarsSafe()) {
+		/* if (!c.inClanWars() && !c.inClanWarsSafe()) {
 			Player owner = PlayerHandler.getPlayer(item.getController());
 			if (owner == null || !c.playerName.equalsIgnoreCase(item.getController())) {
 				c.sendMessage("Your mode restricts you from picking up items that are not yours.");
 				return;
 			}
-		}
+		} */
 		if (c.getInterfaceEvent().isActive()) {
 			c.sendMessage("Please finish what you're doing.");
 			return;
@@ -99,7 +99,6 @@ public class PickupItem implements PacketType {
 					if (!c.walkingToItem)
 						container.stop();
 					if (c.getX() == c.itemX && c.getY() == c.itemY) {
-						System.out.println("PICKING UP ITEM");
 						Server.itemHandler.removeGroundItem(c, c.itemId, c.itemX, c.itemY, c.heightLevel, true);
 						container.stop();
 					}

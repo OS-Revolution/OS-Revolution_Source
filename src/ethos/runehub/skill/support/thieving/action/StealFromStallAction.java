@@ -4,19 +4,21 @@ import com.google.common.base.Preconditions;
 import ethos.Server;
 import ethos.clip.Region;
 import ethos.clip.WorldObject;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
 import ethos.runehub.skill.Skill;
 import ethos.runehub.skill.node.context.impl.GatheringNodeContext;
 import ethos.runehub.skill.node.context.impl.ThievingStallNodeContext;
 import ethos.runehub.skill.node.impl.RenewableNode;
+
 import ethos.runehub.skill.node.io.RenewableNodeLoader;
 import ethos.runehub.skill.support.SupportSkillAction;
 import ethos.util.PreconditionUtils;
 import ethos.world.objects.GlobalObject;
+import org.runehub.api.util.SkillDictionary;
 import org.runehub.api.io.load.impl.LootTableLoader;
 import org.runehub.api.model.entity.item.loot.Loot;
-import org.runehub.api.util.SkillDictionary;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -111,7 +113,7 @@ public class StealFromStallAction extends SupportSkillAction {
     protected void onFailure() {
         this.getActor().sendMessage("You failed!");
         this.getActor().getAttributes().setCaughtThievingTimestamp(System.currentTimeMillis());
-//        this.onSuccess();
+        this.onSuccess();
     }
 
     protected void onSuccess() {
@@ -119,8 +121,10 @@ public class StealFromStallAction extends SupportSkillAction {
             this.onEvent();
         }
         Collection<Loot> loot = LootTableLoader.getInstance().read(targetedNodeContext.getNode().getGatherableItemTableId()).roll(0);
+
         loot.forEach(loot1 -> {this.getActor().getItems().addItem((int) loot1.getId(), (int) loot1.getAmount());});
         this.addXp(targetedNodeContext.getNode().getInteractionExperience());
+		Achievements.increase(this.getActor(), AchievementType.THIEV, 1);
         if (this.depleteNode()) {
             this.onDeplete();
         }

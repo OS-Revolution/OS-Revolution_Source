@@ -138,7 +138,7 @@ public class Herblore {
 							player.getDiaryManager().getArdougneDiary().progress(ArdougneDiaryEntry.SUPER_COMBAT_ARD);
 						}
 						if (Boundary.isIn(player, Boundary.VARROCK_BOUNDARY)) {
-							player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.SUPER_COMBAT);
+							//player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.SUPER_COMBAT);
 						}
 						break;
 					case ANTI_VENOM:
@@ -211,7 +211,7 @@ public class Herblore {
 	 */
 	private boolean containsSecondaries(FinishedPotions p) {
 		int required = p.getIngredients().length;
-		System.out.println(""+required);
+		//System.out.println(""+required);
 
 		for (GameItem ingredient : p.getIngredients()) {
 			if (player.getItems().playerHasItem(ingredient.getId(), ingredient.getAmount())) {

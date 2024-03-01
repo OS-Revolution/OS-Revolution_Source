@@ -2,6 +2,8 @@ package ethos.runehub.skill.support.thieving.action;
 
 import com.google.common.base.Preconditions;
 import ethos.Server;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.items.ItemAssistant;
 import ethos.model.npcs.animations.AttackAnimation;
 import ethos.model.players.Player;
@@ -42,6 +44,7 @@ public class PickpocketAction extends SupportSkillAction {
             } else {
                 this.getLootRoll().forEach(loot -> this.getActor().getItems().addItem((int) loot.getId(), (int) loot.getAmount()));
                 this.getActor().getSkillController().addXP(this.getSkillId(), pickpocket.getInteractionExperience());
+        		Achievements.increase(this.getActor(), AchievementType.THIEV, 1);
                 if (pickpocket.getId() == 3086) {
                     this.getActor().getAttributes().getAchievementController().completeAchievement(7411212671349704401L);
                 }

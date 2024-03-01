@@ -1,6 +1,9 @@
 package ethos.runehub.skill.artisan.runecraft.action;
 
 import com.google.common.base.Preconditions;
+
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
 import ethos.runehub.skill.SkillAction;
 import ethos.runehub.skill.artisan.runecraft.Runecraft;
@@ -72,6 +75,7 @@ public class CraftRuneAction extends SkillAction {
         essenceTypes.forEach(itemId -> this.getActor().getItems().deleteItem2(itemId, totalEssenceUsed));
         this.addXp(totalEssenceUsed * node.getInteractionExperience());
         this.addItems(node.getRuneId(),totalEssenceUsed * this.getMultiplier());
+		Achievements.increase(this.getActor(), AchievementType.RUNECRAFTING, 1);
         this.stop();
     }
 

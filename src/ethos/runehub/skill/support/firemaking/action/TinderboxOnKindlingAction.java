@@ -3,6 +3,8 @@ package ethos.runehub.skill.support.firemaking.action;
 import com.google.common.base.Preconditions;
 import ethos.Server;
 import ethos.clip.Region;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.entity.item.ItemInteractionContext;
@@ -43,6 +45,7 @@ public class TinderboxOnKindlingAction extends SkillAction {
                 this.getActor().sendMessage("You successfully light the @" + kindling.getItemId());
                 this.getActor().getSkillController().addXP(this.getSkillId(), kindling.getBaseXp());
                 this.stop();
+        		Achievements.increase(this.getActor(), AchievementType.FLETCH, 1);
             }
         } catch (Exception e) {
             this.getActor().sendMessage(e.getMessage());

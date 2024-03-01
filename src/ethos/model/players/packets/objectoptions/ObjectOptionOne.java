@@ -54,10 +54,11 @@ import ethos.runehub.skill.gathering.farming.action.ActiveForagingSkillAction;
 import ethos.runehub.skill.gathering.farming.action.ActiveRenewableForagingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ActiveWoodcuttingSkillAction;
 import ethos.runehub.skill.gathering.woodcutting.action.ChopCinnamonTreeSkillAction;
-import ethos.scaperune.action.impl.CountAction;
 import ethos.util.Location3D;
+import ethos.util.Misc;
 import ethos.world.objects.GlobalObject;
 import org.runehub.api.util.math.geometry.Point;
+import org.runehub.api.util.math.geometry.impl.Rectangle;
 
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -96,7 +97,6 @@ public class ObjectOptionOne {
                     obY,
                     c.heightLevel)
             );
-//            c.getAttributes().getActionScheduler().schedule(new CountAction());
             return;
         }
 //        Mineral mineral = Mineral.forObjectId(objectType);
@@ -495,26 +495,7 @@ public class ObjectOptionOne {
             case 12941:
                 PlayerAssistant.refreshSpecialAndHealth(c);
                 break;
-            case 29349:// miniportal
-                // c.getDH().sendDialogues(402, 403);
-                c.getPA().showInterface(65000);
-                c.getTeleport().loadMinigameTab();
-                break;
-            case 29347:// bossportal
-                // c.getDH().sendDialogues(404, 406);
-                c.getPA().showInterface(65000);
-                c.getTeleport().loadBossTab();
-                break;
-            case 29345:// Training
-                // c.getDH().sendDialogues(400, 399);
-                c.getPA().showInterface(65000);
-                c.getTeleport().loadMonsterTab();
-                break;
-            case 29346:// Wilderness
-                // c.getDH().sendDialogues(401, 0);
-                c.getPA().showInterface(65000);
-                c.getTeleport().loadWildernessTab();
-                break;
+        
             /*
              * case 29747: //Ice Demon Brazziers if (c.getItems().playerHasItem(20799, 1)) {
              * Server.getGlobalObjects().replace(new GlobalObject(29747, obX, obY,
@@ -537,7 +518,31 @@ public class ObjectOptionOne {
             case 31558:
                 c.getPA().movePlayer(3126, 3833);
                 break;
+            // MICHAEL - ADDED OBJECT TELES
+            case 19032:
+                if (obX == 3081 && obY == 3240) {
 
+                    if (c.playerLevel[Skill.AGILITY.getId()] < 15) {
+                        c.sendMessage("You need an agility level of 15 to crawl under this wall.");
+                        return;
+                    }
+                    c.getPA().movePlayer(3078, 3240, 0);
+                    c.getSkillController().addXP(Skill.AGILITY.getId(), 15); // Add 15 XP to Agility skill
+                }
+                break;
+
+            case 19036:
+            	if (obX == 3079 && obY == 3240) {
+            		if (c.playerLevel[Skill.AGILITY.getId()] < 15) {
+                        c.sendMessage("You need an agility level of 15 to crawl under this wall.");
+                        return;
+                    }
+                    c.getPA().movePlayer(3082, 3240, 0);
+                    c.getSkillController().addXP(Skill.AGILITY.getId(), 15); // Add 15 XP to Agility skill
+                }
+            	break;
+                
+            // END
             case 7811:
                 if (!c.inClanWarsSafe()) {
                     return;
@@ -950,7 +955,7 @@ public class ObjectOptionOne {
                 break;
             case 1805:
                 if (c.getDiaryManager().getVarrockDiary().hasCompleted("EASY")) {
-                    c.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.CHAMPIONS_GUILD);
+                   // c.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.CHAMPIONS_GUILD);
                     if (c.absY == 3362)
                         c.getPA().movePlayer(c.absX, 3363);
                     else
@@ -2584,7 +2589,6 @@ public class ObjectOptionOne {
                     c.getPA().movePlayer(c.absX, c.absY + 6400, 0);
                 break;
             case 1557:
-            case 1558:
             case 7169:
                 if ((c.objectX == 3106 || c.objectX == 3105) && c.objectY == 9944) {
                     if (c.getY() > c.objectY)
@@ -2687,7 +2691,7 @@ public class ObjectOptionOne {
             try {
                 c.getAttributes().getActionController().submit(FirstClickNodeActionFactory.getAction(c,obX,obY,objectType));
             } catch (NullPointerException e1) {
-                c.sendMessage("Nothing interesting happens.");
+              //  c.sendMessage("Nothing interesting happens.");
             }
         }
     }

@@ -1,6 +1,9 @@
 package ethos.runehub.skill.artisan.fletching.action;
 
 import com.google.common.base.Preconditions;
+
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
 import ethos.runehub.RunehubUtils;
 import ethos.runehub.skill.SkillAction;
@@ -29,6 +32,7 @@ public class FletchBoltTipsAction extends SkillAction {
             this.getActor().getSkillController().addXP(this.getSkillId(),fletchable.getBaseXp() * fletchable.getAmountProduced());
             this.getActor().getItems().addItem(fletchable.getProductId(),fletchable.getAmountProduced());
             amount--;
+    		Achievements.increase(this.getActor(), AchievementType.FLETCH, 1);
         } else {
             this.stop();
         }

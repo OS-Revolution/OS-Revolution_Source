@@ -427,7 +427,7 @@ case 4625:
 				player.getItems().deleteItem(225, 1);
 				player.getItems().deleteItem(223, 1);
 				player.getItems().addItem(115, 1);
-				player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.APOTHECARY_STRENGTH);
+				//player.getDiaryManager().getVarrockDiary().progress(VarrockDiaryEntry.APOTHECARY_STRENGTH);
 			} else {
 				player.sendMessage("You must have limpwurt root and red spiders' eggs to do this.");
 				return;

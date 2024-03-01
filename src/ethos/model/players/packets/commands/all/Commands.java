@@ -30,7 +30,7 @@ public class Commands extends Command {
 		c.getPA().sendFrame126("", counter++);
 		c.getPA().sendFrame126("@dre@Community", counter++);
 		c.getPA().sendFrame126("", counter++);
-		c.getPA().sendFrame126("@blu@Rules & Guidelines: @bla@[rules]", counter++);
+		c.getPA().sendFrame126("@blue@", counter++);
 		c.getPA().sendFrame126("@blu@Discord: @bla@[dc] - [discord] - [disc] - [connect]", counter++);
 		c.getPA().sendFrame126("@blu@Forums: @bla@[Forum]", counter++);
 		c.getPA().sendFrame126("@blu@Vote: @bla@[vote]", counter++);

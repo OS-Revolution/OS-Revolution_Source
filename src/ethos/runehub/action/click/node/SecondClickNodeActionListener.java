@@ -9,7 +9,17 @@ public class SecondClickNodeActionListener {
 
     public static ClickNodeAction onClick(Player player, int nodeId, int nodeX, int nodeY, int nodeZ) {
         switch (nodeId) {
-            case 11730:
+            case 11730: 	
+            case 6574:
+            case 635:
+            case 20350:
+            case 11729:
+            case 7053:
+            case 11732:
+            case 4277:
+            case 11734:
+            case 11733:
+            case 11731:
                 return new ClickStallAction(player,nodeId,nodeX,nodeY,nodeZ);
             case 29183:
             case 29191:

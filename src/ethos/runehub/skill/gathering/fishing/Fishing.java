@@ -1,14 +1,17 @@
 package ethos.runehub.skill.gathering.fishing;
 
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
 import ethos.runehub.skill.gathering.GatheringSkill;
 
 import java.util.Arrays;
 
 public class Fishing extends GatheringSkill {
-
+private Player c;
     @Override
     protected double getEquipmentBonuses() {
+
         return Arrays.stream(this.getPlayer().playerEquipment).mapToDouble(equippedItem ->{
             switch (equippedItem) {
                 case 13258:
@@ -22,13 +25,14 @@ public class Fishing extends GatheringSkill {
                 case 3742:
                     return 0.5;
             }
-            return 0D;
+            return 0D;	
         }).sum() + super.getEquipmentBonuses();
     }
 
     @Override
     public int getId() {
         return 10;
+
     }
 
     public Fishing(Player player) {

@@ -351,6 +351,22 @@ public class PlayerSave {
 //							break;
 //						}
 //						p.getTutorial().setStage(stage);
+					} else if (token.equals("favourites-one")) {
+						p.Favourites_1 = token2;
+					} else if (token.equals("favourites-two")) {
+						p.Favourites_2 = token2;
+					} else if (token.equals("favourites-three")) {
+						p.Favourites_3 = token2;
+					} else if (token.equals("favourites-four")) {
+						p.Favourites_4 = token2;
+					} else if (token.equals("favourites-five")) {
+						p.Favourites_5 = token2;
+					} else if (token.equals("favourites-six")) {
+						p.Favourites_6 = token2;
+					} else if (token.equals("favourites-seven")) {
+						p.Favourites_7 = token2;
+					} else if (token.equals("favourites-eight")) {
+						p.Favourites_8 = token2;
 					} else if (token.equals("character-title-updated")) {
 						p.getTitles().setCurrentTitle(token2);
 					} else if (token.equals("experience-counter")) {
@@ -1308,6 +1324,22 @@ public class PlayerSave {
 			characterfile.write("accept-aid = " + p.acceptAid);
 			characterfile.newLine();
 			characterfile.write("did-you-know = " + p.didYouKnow);
+			characterfile.newLine();
+			characterfile.write("favourites-one = " + p.getFavouriteOne());
+			characterfile.newLine();
+			characterfile.write("favourites-two = " + p.getFavouriteTwo());
+			characterfile.newLine();
+			characterfile.write("favourites-three = " + p.getFavouriteThree());
+			characterfile.newLine();
+			characterfile.write("favourites-four = " + p.getFavouriteFour());
+			characterfile.newLine();
+			characterfile.write("favourites-five = " + p.getFavouriteFive());
+			characterfile.newLine();
+			characterfile.write("favourites-six = " + p.getFavouriteSix());
+			characterfile.newLine();
+			characterfile.write("favourites-seven = " + p.getFavouriteSeven());
+			characterfile.newLine();
+			characterfile.write("favourites-eight = " + p.getFavouriteEight());
 			characterfile.newLine();
 			characterfile.write("lootvalue = " + p.lootValue);
 			characterfile.newLine();

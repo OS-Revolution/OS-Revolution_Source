@@ -18,7 +18,11 @@ public class FirstClickNPCActionFactory {
             case 6999:
                 return new FirstClickPortMasterAction(player,nodeX,nodeY,nodeId,npcIndex);
             case 7727:
+            case 921:
             case 5567:
+            case 6059:
+            case 1079:
+            case 2471:
             case 506:
                 return new ClickOpenShopAction(player, nodeX, nodeY, nodeId, npcIndex);
             case 637:

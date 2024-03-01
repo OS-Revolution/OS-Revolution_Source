@@ -117,7 +117,7 @@ public class FirstClickRiftPortal extends ClickNodeAction {
             case 0:
                 return 995;
             case 1:
-                return 1040; //todo change to keystone
+                return 995; //todo change to keystone
         }
         return 995;
     }

@@ -35,6 +35,16 @@ public class MerchantCache extends LazyLoader<Integer,Merchant> {
                 return new DeathMerchant();
             case 506:
                 return new GeneralMerchant();
+            case 921:
+                return new HolyMerchant();
+            case 637:
+                return new AubreyMerchant();
+            case 6059:
+                return new HomeArchMerchant();
+            case 2471:
+                return new HomeWeaponMerchant();
+            case 1079:
+                return new HomeClothingMerchant();
             case 401:
             case 402:
             case 403:

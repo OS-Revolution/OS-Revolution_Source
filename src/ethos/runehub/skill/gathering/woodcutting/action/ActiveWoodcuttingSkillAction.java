@@ -1,6 +1,8 @@
 package ethos.runehub.skill.gathering.woodcutting.action;
 
 import ethos.Server;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.items.GroundItem;
 import ethos.model.npcs.drops.DropManager;
 import ethos.model.players.Player;
@@ -65,6 +67,7 @@ public class ActiveWoodcuttingSkillAction extends GatheringSkillAction {
             }
         }
         this.addXp(this.getTargetedNodeContext().getNode().getInteractionExperience());
+		Achievements.increase(this.getActor(), AchievementType.WOODCUT, 1);
         if (this.depleteNode()) {
             this.onDeplete();
         }

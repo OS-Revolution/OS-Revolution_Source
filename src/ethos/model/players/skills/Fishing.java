@@ -116,7 +116,7 @@ public class Fishing extends SkillHandler {
 					return;
 				}
 				player.sendMessage("You start fishing.");
-				System.out.println(player.playerSkillProp[10][0]);
+				//System.out.println(player.playerSkillProp[10][0]);
 				player.startAnimation(player.playerSkillProp[10][0]);
 				player.stopPlayerSkill = true;
 

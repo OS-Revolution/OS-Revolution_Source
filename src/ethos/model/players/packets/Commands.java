@@ -330,6 +330,10 @@ public class Commands implements PacketType {
 			c.getPA().sendFrame126("@dre@YouTube", 8144);		
 			c.getPA().sendFrame126("The Official Channel of Os-Revolution!", 8148);
 			}
+		if (playerCommand.startsWith("port")) {
+			c.getTeleport().openInterface();
+			c.sendMessage("You have opened the Tele Menu.");
+			}
 		if (playerCommand.startsWith("yt")) {
 			c.getPA().sendFrame126("https://www.youtube.com/channel/UC3A7h_IabQW3TD92Cm3BHeQ", 12000);
 			c.getPA().showInterface(8134);

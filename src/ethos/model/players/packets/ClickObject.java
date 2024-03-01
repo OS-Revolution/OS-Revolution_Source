@@ -12,6 +12,7 @@ import ethos.model.multiplayer_session.MultiplayerSessionStage;
 import ethos.model.multiplayer_session.MultiplayerSessionType;
 import ethos.model.multiplayer_session.duel.DuelSession;
 import ethos.model.players.Boundary;
+import ethos.model.players.DialogueHandler;
 import ethos.model.players.PacketType;
 import ethos.model.players.Player;
 import ethos.model.players.skills.agility.AgilityHandler;
@@ -147,6 +148,7 @@ public class ClickObject implements PacketType {
                         c.getInfernoMinigame().leaveGame();
                         break;
                     case 25016:
+
                     case 25017:
                     case 25018:
                     case 25029:
@@ -401,6 +403,23 @@ public class ClickObject implements PacketType {
                     case 26502:
                         c.objectDistance = 1;
                         break;
+                    // GANGPLANKS
+                    case 2083:
+                    c.sendMessage("I don't think they are ready to embark yet, I should come back when the captain is here.");
+                    break;
+                    
+                    case 2593:
+                    case 14304:
+                    case 27779:
+                    case 17404:
+                    case 2412:
+                    c.sendMessage("I have my own ship docked in Draynor at the Port. I should stay off this one.");
+                    break;
+                    
+                    case 31756:
+                    c.sendMessage("I should talk to the Trader Crewmember before trying to board their ship.");
+                    break;
+                    // END
                     case 20720:
                     case 20721:
                     case 20722:
@@ -734,11 +753,11 @@ public class ClickObject implements PacketType {
                     case 2478:
                     case 2483:
                     case 2484:
-                    case 11734:
-                    case 11731:
-                    case 11729:
-                    case 11730:
-                    case 11733:
+                  //  case 11734:
+                   // case 11731:
+                  //  case 11729:
+                   // case 11730:
+                   // case 11733:
                     case 14011:
                     case 4277:
                     case 5595:

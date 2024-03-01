@@ -88,7 +88,7 @@ public class FirstClickNodeActionListener {
             case 4964:
             case 23972:
             case 1560:
-            case 1558:
+//            case 1558:
             case 2108:
             case 2111:
             case 2100:

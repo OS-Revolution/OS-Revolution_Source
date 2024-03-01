@@ -1,6 +1,9 @@
 package ethos.runehub.skill.artisan.herblore.action;
 
 import com.google.common.base.Preconditions;
+
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.items.ItemAssistant;
 import ethos.model.players.Player;
 import ethos.model.players.skills.herblore.Herb;
@@ -36,10 +39,10 @@ public class CleanHerbAction extends SkillAction {
 
     @Override
     protected void onTick() {
-//        if(this.amountSelected > 0) {
         this.addItems(-1, 1);
         this.addXp(herb.getExperience());
-//        }
+		Achievements.increase(this.getActor(), AchievementType.HERB, 1);
+
     }
 
     @Override

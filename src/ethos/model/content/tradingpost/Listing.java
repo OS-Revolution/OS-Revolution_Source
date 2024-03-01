@@ -707,6 +707,7 @@ public class Listing {
 				}
 			break;
 			
+			case 140162:
 			case 59229: //Close select item
 				c.getPA().closeAllWindows();
 				resetEverything(c);

@@ -4,8 +4,9 @@ import com.google.common.base.Preconditions;
 import ethos.Server;
 import ethos.clip.Region;
 import ethos.clip.WorldObject;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
-import ethos.runehub.LootTableContainerUtils;
 import ethos.runehub.skill.gathering.GatheringSkillAction;
 import ethos.runehub.skill.gathering.fishing.FishLevel;
 import ethos.runehub.skill.gathering.tool.GatheringTool;
@@ -17,13 +18,14 @@ import ethos.runehub.skill.node.io.FishLevelLoader;
 import ethos.util.PreconditionUtils;
 import ethos.world.objects.GlobalObject;
 import org.runehub.api.io.load.impl.LootTableLoader;
-import org.runehub.api.model.entity.item.loot.Loot;
 import org.runehub.api.model.math.AdjustableNumber;
 import org.runehub.api.model.math.impl.AdjustableInteger;
 import org.runehub.api.model.math.impl.IntegerRange;
 import org.runehub.api.util.SkillDictionary;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class FishingAction extends GatheringSkillAction {
@@ -66,24 +68,19 @@ public abstract class FishingAction extends GatheringSkillAction {
 
     @Override
     protected boolean isSuccessful(int min, int max) {
-//        Collection<Loot> lootCollection = LootTableContainerUtils.open(
-//                LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()),
-//                this.getFishingLevelBonus()
-//        );
-        final List<Loot> fishLoot = new ArrayList<>(LootTableContainerUtils.open(
-                LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()),
-                this.getFishingLevelBonus()
-        ));
-        System.out.println(this.getFishingLevelBonus());
-        System.out.println(fishLoot.size());
-        if (!fishLoot.isEmpty()) {
-            int fish = Math.toIntExact(fishLoot.get(0).getId());
-            boolean canCatch = this.canCatchFish(FishLevelLoader.getInstance().read(fish));
-            int minRoll = (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus());
-            int maxRoll = (int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus());
-            return canCatch && super.isSuccessful(minRoll, maxRoll);
-        }
-        return false;
+        final AdjustableNumber<Integer> canCatch = new AdjustableInteger(0);
+        LootTableLoader.getInstance().read(this.getTargetedNodeContext().getNode().getGatherableItemTableId()).roll(this.getFishingLevelBonus()).forEach(loot -> {
+            final int itemId = Math.toIntExact(loot.getId());
+            final FishLevel fish = FishLevelLoader.getInstance().read(itemId);
+            if (canCatchFish(fish)) {
+                canCatch.setValue(1);
+            } else {
+                canCatch.setValue(0);
+            }
+        });
+        return canCatch.value() == 1 && super.isSuccessful(
+                (int) (targetedNodeContext.getNode().getMinRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus()),
+                (int) (targetedNodeContext.getNode().getMaxRoll() * this.getActor().getSkillController().getGatheringSkill(this.getSkillId()).getPowerBonus()));
     }
 
     @Override
@@ -101,6 +98,7 @@ public abstract class FishingAction extends GatheringSkillAction {
         if (caughtFish.getItemId() == 321) {
             this.getActor().getAttributes().getAchievementController().completeAchievement(5566337423378434124L);
         }
+		Achievements.increase(this.getActor(), AchievementType.FISH, 1);
     }
 
     @Override
@@ -154,11 +152,11 @@ public abstract class FishingAction extends GatheringSkillAction {
     }
 
     private float getFishingLevelBonus() {
-//        float baseMagicFind = 1.0f;
+        float baseMagicFind = 1.0f;
         float adjustmentPerLevel = 3.267f;
         float playerLevelAdjustment = this.getActor().getSkillController().getLevel(this.getSkillId()) * adjustmentPerLevel;
         float magicFindBonus = playerLevelAdjustment * 0.001f;
-        return magicFindBonus;
+        return baseMagicFind - magicFindBonus;
     }
 
     @Override
@@ -176,11 +174,14 @@ public abstract class FishingAction extends GatheringSkillAction {
     }
 
 
+
     public FishingAction(Player player, GatheringNodeContext<?> targetedNodeContext, int ticks) {
         super(player, SkillDictionary.Skill.FISHING.getId(), targetedNodeContext, ticks);
         this.durationTicks = new IntegerRange(280, 530).getRandomValue();//280,530
 //        this.getActor().getSkillController().getFishing().setGains(this.getActor().getSkillController().getFishing().getGains() + this.getEquipmentBonuses());
         System.out.println("Fishing Gains: " + this.getActor().getSkillController().getFishing().getGainsBonus());
+        
+
     }
 
     private FishLevel caughtFish;

@@ -71,7 +71,6 @@ import ethos.runehub.world.WorldController;
 import ethos.runehub.world.WorldSettingsController;
 import ethos.runehub.world.wushanko.island.Island;
 import ethos.runehub.world.wushanko.island.IslandDAO;
-import ethos.scaperune.io.OSRFileSystem;
 import ethos.server.data.ServerData;
 import ethos.util.date.GameCalendar;
 import ethos.util.log.Logger;
@@ -935,7 +934,7 @@ public class Server {
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(1, "Malevolent Masquerade", 400, "Learn to assemble a Slayer helmet, which requires level 55 Crafting. ", false));
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(2, "Ring Bling", 300, "Learn to craft a Slayer ring, which requires level 75 Crafting. ", false));
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(3, "Seeing Red", 50, "Konar, Duradel, and Nieve will be able to assign you red dragons as your task. ", false));
-        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(4, "I hope you mith me", 80, "Konar, Duradel, and Nieve will be able to assign you mithril dragons as your task. ", false));
+        SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(4, "I hope you're mith me", 80, "Konar, Duradel, and Nieve will be able to assign you mithril dragons as your task. ", false));
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(5, "Watch the birdie ", 80, "Konar, Duradel, Nieve, Chaeldar, and Krystilia will be able to assign you Aviansie as your task. ", false));
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(6, "Hot stuff", 100, "Duradel, Nieve, and Chaeldar will be able to assign TzHaar as your task. You may also be offered a chance to slay TzTok-Jad.", false));
         SlayerKnowledgeRewardDAO.getInstance().create(new SlayerKnowledgeReward(7, "Reptile got ripped", 75, "Konar, Duradel, Nieve, and Chaeldar will be able to assign Lizardmen as your task.", false));

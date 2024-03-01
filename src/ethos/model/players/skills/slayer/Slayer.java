@@ -186,6 +186,7 @@ public class Slayer {
 						player.getPA().addSkillXP((int) (player.getRechargeItems().hasAnyItem(13113, 13114, 13115) && Boundary.isIn(player, Boundary.SLAYER_TOWER_BOUNDARY) ? (int) (task.getExperience() * 1.10) * (player.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.SLAYER_EXPERIENCE * player.prestige())
 						: task.getExperience() * (player.getMode().getType().equals(ModeType.OSRS) ? 3 : Config.SLAYER_EXPERIENCE * player.prestige())),
 									Skill.SLAYER.getId(), true);
+						Achievements.increase(player, AchievementType.SLAY, 1);
 						break;
 					case 7663:
 						if (npc.inWild()) {
@@ -193,6 +194,7 @@ public class Slayer {
 							player.getPA().addSkillXP((int) (player.getRechargeItems().hasAnyItem(13113, 13114, 13115) && Boundary.isIn(player, Boundary.SLAYER_TOWER_BOUNDARY) ? (int) (task.getExperience() * 1.10) * (player.getMode().getType().equals(ModeType.OSRS) ? 1 : Config.SLAYER_EXPERIENCE * player.prestige())
 							: task.getExperience() * (player.getMode().getType().equals(ModeType.OSRS) ? 3 : Config.SLAYER_EXPERIENCE * player.prestige())),
 									Skill.SLAYER.getId(), true);
+							Achievements.increase(player, AchievementType.SLAY, 1);
 							break;
 						}
 					}
@@ -241,15 +243,16 @@ public class Slayer {
 						switch (m.getId()) {
 						case 402:
 							player.getDiaryManager().getMorytaniaDiary().progress(MorytaniaDiaryEntry.MAZCHNA);
+							Achievements.increase(player, AchievementType.SLAY, 1);
 							break;
 							
 						case 6797:
 							player.getPA().addSkillXP((int) (BOSS_TASK_EXPERIENCE * player.prestige()), Skill.SLAYER.getId(), true);
 							player.sendMessage("You have completed a boss task and have gained an additional "
 									+ Misc.insertCommas(Integer.toString((int) (BOSS_TASK_EXPERIENCE * player.prestige()))) + " experience.", 255); 
+							Achievements.increase(player, AchievementType.SLAY, 1);
 							break;
 						}
-						Achievements.increase(player, AchievementType.SLAY, 1);
 					}
 				});
 			}
@@ -866,7 +869,7 @@ public class Slayer {
 	}
 	
 	public void revertHelmet(int helmet) {
-		System.out.println("Name: " + ItemAssistant.getItemName(helmet));
+	//	System.out.println("Name: " + ItemAssistant.getItemName(helmet));
 			if (ItemAssistant.getItemName(helmet).contains("(i)")) {
 				player.getItems().deleteItem(helmet, 1);
 				player.getItems().addItem(SLAYER_HELMETS.REVERT.getImbued(), 1);

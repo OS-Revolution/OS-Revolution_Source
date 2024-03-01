@@ -1,6 +1,8 @@
 package ethos.runehub.skill.gathering.fishing;
 
 import ethos.Server;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.PlayerHandler;
 import ethos.runehub.skill.Skill;
 import ethos.world.objects.GlobalObject;

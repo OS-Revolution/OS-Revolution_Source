@@ -2,6 +2,8 @@ package ethos.runehub.skill.artisan.cooking.action;
 
 import com.google.common.base.Preconditions;
 import ethos.Server;
+import ethos.model.content.achievement.AchievementType;
+import ethos.model.content.achievement.Achievements;
 import ethos.model.players.Player;
 import ethos.runehub.entity.item.ItemInteractionContext;
 import ethos.runehub.skill.artisan.ArtisanSkillAction;
@@ -53,6 +55,8 @@ public class CookOnFireAction extends ArtisanSkillAction {
         super(player, 7, 4, reaction, context);
         player.getAttributes().setIntegerInput(actions);
         this.setAnimationId(897);
+		Achievements.increase(player, AchievementType.COOK, 1);
+
     }
 
 //    private int actions, actionsDone;

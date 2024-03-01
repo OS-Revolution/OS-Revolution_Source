@@ -45,16 +45,17 @@ public class Tab5 extends InfoTab {
         registerButton(actionEvent -> getPlayer().sendUI(new PlayerTabUI(player)), 224057);
 
         this.lineLabel = new TextComponent[totalChildren];
-
-        lineLabel[0] = new TextComponent(57415,"Active Job");
-        lineLabel[1] = new TextComponent(57416,"Job Summary");
-        lineLabel[2] = new TextComponent(57417,"Point Summary");
+        
+        lineLabel[0] = new TextComponent(57415,"");
+        lineLabel[1] = new TextComponent(57416,"Active Job");
+        lineLabel[2] = new TextComponent(57417,"Job Summary");
+        lineLabel[3] = new TextComponent(57418,"Point Summary");
         this.registerButton(actionEvent -> player.sendUI(new JobUI(player)),224071);
         this.registerButton(actionEvent -> player.sendUI(new JobSummaryUI(player)),224072);
         this.registerButton(actionEvent -> player.sendUI(new PointStatUI(player)),224073);
     }
 
-    private final int totalChildren = 30;
+    private final int totalChildren = 31;
     private final int startIndex = 57415;
     private final TextComponent[] lineLabel;
 //    private final TextComponent[] journeyNameLabel, journeySecondaryLabel;

@@ -50,4 +50,15 @@ public enum LogData {
 		}
 		return null;
 	}
+	
+	public static boolean isLog(Player player, int itemId) {
+		for(final LogData l : LogData.values()) {
+			if(itemId == l.getlogId()) {
+				return true;
+			}
+		}
+		
+		
+		return false;
+	}
 };
